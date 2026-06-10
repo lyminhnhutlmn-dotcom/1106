@@ -23,25 +23,27 @@ export default async function handler(req, res) {
         prompt: prompt.slice(0, 1000),
         n: 1,
         size: '1536x1024',
-        quality: quality,
-        output_format: 'url'
+        quality: quality
       })
     });
 
-    const data = await response.json();
-    
+    const text = await response.text();
+    let data;
+    try { data = JSON.parse(text); }
+    catch(e) { return res.status(500).json({ error: 'OpenAI returned non-JSON: ' + text.slice(0,200) }); }
+
     if (!response.ok) {
-      console.error('OpenAI error:', JSON.stringify(data));
       return res.status(response.status).json({ error: data.error?.message || JSON.stringify(data) });
     }
 
     const imageData = data.data?.[0];
     if (!imageData) return res.status(500).json({ error: 'Không nhận được ảnh.' });
 
-    res.status(200).json({
-      url: imageData.url || null,
-      b64: imageData.b64_json || null
-    });
+    // gpt-image-1 returns b64_json by default
+    const b64 = imageData.b64_json;
+    const url = imageData.url;
+
+    res.status(200).json({ url: url || null, b64: b64 || null });
 
   } catch (err) {
     res.status(500).json({ error: err.message });
