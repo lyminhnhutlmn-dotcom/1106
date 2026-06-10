@@ -742,6 +742,66 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       <div id="kb-shots-wrap" style="display:none">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
           <div class="lbl" style="margin-bottom:0"><span class="tag">Shot đề xuất — nhấp để áp dụng từng shot</span></div>
+          <div style="margin-top:10px;padding:10px;background:var(--card);border-radius:8px;border:1px solid var(--gold)">
+            <div style="font-size:10px;color:var(--gold);font-weight:500;letter-spacing:.5px;margin-bottom:8px">⚙️ ÁP DỤNG NHANH CHO TẤT CẢ (hoặc chỉnh từng shot bên dưới)</div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap">
+
+              <div style="flex:1;min-width:150px">
+                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">🎥 Cú máy</div>
+                <select id="kb-global-cumay" style="font-size:11px;width:100%" onchange="apCuMayChoTatCa(this.value)">
+                  <option value="">-- Giữ nguyên --</option>
+                  <optgroup label="Cơ bản">
+                    <option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option>
+                  </optgroup>
+                  <optgroup label="Dolly">
+                    <option>Dolly tiến</option><option>Dolly lùi</option><option>Dolly ngang</option><option>Dolly chéo 45°</option><option>Pull-Back chậm</option><option>Push-In mạnh</option>
+                  </optgroup>
+                  <optgroup label="Arc / Orbital">
+                    <option>Arc 180°</option><option>Orbital 360°</option>
+                  </optgroup>
+                  <optgroup label="Crane">
+                    <option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option>
+                  </optgroup>
+                  <optgroup label="Chuyên nghiệp">
+                    <option>Steadicam</option><option>Tracking</option><option>Fly-through</option><option>Xoắn ốc</option>
+                  </optgroup>
+                  <optgroup label="Đặc biệt">
+                    <option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option>
+                  </optgroup>
+                </select>
+              </div>
+
+              <div style="flex:1;min-width:140px">
+                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">🎬 Cỡ cảnh</div>
+                <select id="kb-global-size" style="font-size:11px;width:100%" onchange="apSizeChoTatCa(this.value)">
+                  <option value="">-- Giữ nguyên --</option>
+                  <option value="ECU — Cực cận">ECU — Cực cận</option>
+                  <option value="CU — Cận mặt">CU — Cận mặt</option>
+                  <option value="MCU — Nửa ngực">MCU — Nửa ngực</option>
+                  <option value="MS — Ngang lưng">MS — Ngang lưng</option>
+                  <option value="MWS — 3/4 người">MWS — 3/4 người</option>
+                  <option value="WS — Toàn thân">WS — Toàn thân</option>
+                  <option value="ELS — Toàn cảnh">ELS — Toàn cảnh</option>
+                </select>
+              </div>
+
+              <div style="flex:1;min-width:140px">
+                <div style="font-size:10px;color:var(--muted);margin-bottom:4px">🔭 Tiêu cự</div>
+                <select id="kb-global-lens" style="font-size:11px;width:100%" onchange="apLensChoTatCa(this.value)">
+                  <option value="">-- Giữ nguyên --</option>
+                  <option value="14mm ultra wide">14mm ultra wide</option>
+                  <option value="24mm wide">24mm wide</option>
+                  <option value="35mm">35mm</option>
+                  <option value="50mm standard">50mm standard</option>
+                  <option value="85mm portrait">85mm portrait</option>
+                  <option value="100mm macro">100mm macro</option>
+                  <option value="135mm telephoto">135mm telephoto</option>
+                  <option value="Anamorphic">Anamorphic</option>
+                </select>
+              </div>
+
+            </div>
+          </div>
           <button onclick="apDungTatCa()" style="padding:6px 14px;border-radius:7px;border:none;background:var(--green);color:#0d0d0d;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">⚡ Thêm Tất Cả → Dựng Cảnh</button>
         </div>
         <div id="kb-shots-list" style="display:flex;flex-direction:column;gap:8px"></div>
@@ -1994,44 +2054,9 @@ function veShot(){
         <div><div class="slbl">⏱ Kết thúc (giây)</div><input type="number" value="${s.end}" min="0" max="999" step="0.5" style="width:72px" placeholder="5" oninput="updShot(${s.id},'end',+this.value);veShot()"></div>
         <div style="font-size:11px;color:var(--muted);padding-bottom:6px">→ <span style="color:var(--gold)">${s.end>s.start?(s.end-s.start).toFixed(1):'?'}s</span></div>
       </div>
-      <!-- CÚ MÁY -->
-      <div style="margin-bottom:8px">
-        <div class="slbl" style="margin-bottom:4px">🎥 Cú máy di chuyển</div>
-        <div class="schips" style="flex-wrap:wrap;gap:4px">
-          ${CM_DS.map(cm=>`<span class="schip${s.cuMay===cm?' s on':''}" onclick="chonCM(${s.id},'${cm}')">${cm}</span>`).join('')}
-        </div>
-      </div>
-      <!-- GÓC + TIÊU CỰ + TỐC ĐỘ -->
-      <div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:8px">
-        <div style="flex:1;min-width:130px">
-          <div class="slbl" style="margin-bottom:4px">📐 Góc máy</div>
-          <select onchange="updShot(${s.id},'angle',this.value)" style="font-size:11px">
-            <option value="">-- Chọn góc --</option>
-            ${['Ngang tầm mắt','Góc thấp','Góc cao','Bird eye','Worm eye','OTS','POV','Dutch angle 20°','Overhead 45°'].map(a=>`<option value="${a}" ${s.angle===a?'selected':''}>${a}</option>`).join('')}
-          </select>
-        </div>
-        <div style="flex:1;min-width:130px">
-          <div class="slbl" style="margin-bottom:4px">🔭 Tiêu cự</div>
-          <select onchange="updShot(${s.id},'lens',this.value)" style="font-size:11px">
-            <option value="">-- Chọn lens --</option>
-            ${['14mm ultra wide','24mm wide','35mm','50mm standard','85mm portrait','100mm macro','135mm telephoto','Anamorphic'].map(l=>`<option value="${l}" ${s.lens===l?'selected':''}>${l}</option>`).join('')}
-          </select>
-        </div>
-        <div style="flex:1;min-width:130px">
-          <div class="slbl" style="margin-bottom:4px">⚡ Tốc độ</div>
-          <select onchange="updShot(${s.id},'speed',this.value)" style="font-size:11px">
-            <option value="">-- Tốc độ --</option>
-            ${['0.3ft/s siêu chậm','0.5ft/s chậm','1ft/s vừa','2ft/s nhanh','4ft/s rất nhanh','Slow-mo 0.5x','Slow-mo 0.25x','Speed ramp'].map(sp=>`<option value="${sp}" ${s.speed===sp?'selected':''}>${sp}</option>`).join('')}
-          </select>
-        </div>
-      </div>
-      <!-- CỠ CẢNH -->
-      <div style="margin-bottom:8px">
-        <div class="slbl" style="margin-bottom:4px">🎬 Cỡ cảnh</div>
-        <div class="schips" style="gap:4px">
-          ${['ECU — Cực cận','CU — Cận mặt','MCU — Nửa ngực','MS — Ngang lưng','MWS — 3/4 người','WS — Toàn thân','ELS — Toàn cảnh'].map(sz=>`<span class="schip${s.shotSize===sz?' s on':''}" onclick="updShot(${s.id},'shotSize','${sz}');veShot()">${sz}</span>`).join('')}
-        </div>
-      </div>
+
+      
+
       <!-- KỸ THUẬT ĐẶC BIỆT -->
       <div style="margin-bottom:8px">
         <div class="slbl" style="margin-bottom:5px">✨ Kỹ thuật đặc biệt cho Shot này</div>
@@ -6219,8 +6244,39 @@ function hienShotCards(text){
           <button class="btn-i" onclick="apDungTatCa()" style="font-size:10px;border-color:#ff6b6b;color:#ff6b6b">⚡ Tất Cả</button>
         </div>
       </div>
-      <div style="padding:10px 13px;font-size:11px;color:var(--ink);line-height:1.7;cursor:pointer" onclick="this.style.maxHeight=this.style.maxHeight==='none'?'80px':'none'">
+      <div style="padding:10px 13px;font-size:11px;color:var(--ink);line-height:1.7">
         ${s.action || s.fullBlock.slice(0, 200)}
+      </div>
+      <div style="padding:8px 13px;background:var(--card2);border-top:1px solid var(--bdr);display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎥 Cú máy</div>
+          <select id="kb-cumay-${s.idx}" style="font-size:10px" onchange="kbShotData[${s.idx-1}].cuMay=this.value">
+            <option value="">-- Chọn --</option>
+            <optgroup label="Cơ bản"><option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option></optgroup>
+            <optgroup label="Dolly"><option>Dolly tiến</option><option>Dolly lùi</option><option>Dolly ngang</option><option>Dolly chéo 45°</option><option>Pull-Back chậm</option><option>Push-In mạnh</option></optgroup>
+            <optgroup label="Arc"><option>Arc 180°</option><option>Orbital 360°</option></optgroup>
+            <optgroup label="Crane"><option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option></optgroup>
+            <optgroup label="Pro"><option>Steadicam</option><option>Tracking</option><option>Fly-through</option><option>Xoắn ốc</option></optgroup>
+            <optgroup label="Đặc biệt"><option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option></optgroup>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎬 Cỡ cảnh</div>
+          <select id="kb-size-${s.idx}" style="font-size:10px" onchange="kbShotData[${s.idx-1}].shotSize=this.value">
+            <option value="">-- Chọn --</option>
+            <option>ECU — Cực cận</option><option>CU — Cận mặt</option><option>MCU — Nửa ngực</option>
+            <option>MS — Ngang lưng</option><option>MWS — 3/4 người</option><option>WS — Toàn thân</option><option>ELS — Toàn cảnh</option>
+          </select>
+        </div>
+        <div>
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🔭 Tiêu cự</div>
+          <select id="kb-lens-${s.idx}" style="font-size:10px" onchange="kbShotData[${s.idx-1}].lens=this.value">
+            <option value="">-- Chọn --</option>
+            <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option><option>50mm standard</option>
+            <option>85mm portrait</option><option>100mm macro</option><option>135mm telephoto</option><option>Anamorphic</option>
+          </select>
+        </div>
+        <button class="btn-i" onclick="apDungMot(${s.idx-1})" style="font-size:10px;border-color:var(--green);color:var(--green);margin-left:auto">🎥 → Dựng Cảnh</button>
       </div>
     </div>`).join('');
 }
@@ -6234,8 +6290,8 @@ function apDungMot(idx){
   const end = timeMatch ? parseFloat(timeMatch[2]) : (start + 5);
   cacShot.unshift({
     id: soId, start, end, tg: end - start,
-    cuMay: s.cam || '', angle: '', lens: '', speed: '',
-    shotSize: '', specialFx: '',
+    cuMay: s.cuMay || s.cam || '', angle: '', lens: s.lens || '', speed: '',
+    shotSize: s.shotSize || '', specialFx: '',
     moTa: s.prompt || s.action || '',
     thoai: 'Không thoại'
   });
@@ -6269,6 +6325,26 @@ function apDungTatCa(){
     btn.innerHTML = '✓ Đã thêm ' + kbShotData.length + ' shots!';
     setTimeout(() => btn.innerHTML = o, 2500);
   });
+}
+
+
+// ===== ÁP DỤNG CÚ MÁY + TIÊU CỰ + KHUNG HÌNH CHO TẤT CẢ SHOTS =====
+function apCuMayChoTatCa(val){
+  if(!val) return;
+  cacShot.forEach(s => s.cuMay = val);
+  veShot();
+}
+
+function apLensChoTatCa(val){
+  if(!val) return;
+  cacShot.forEach(s => s.lens = val);
+  veShot();
+}
+
+function apSizeChoTatCa(val){
+  if(!val) return;
+  cacShot.forEach(s => s.shotSize = val);
+  veShot();
 }
 
 // ===== INIT =====
