@@ -732,9 +732,13 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <div style="background:var(--card);border:1px solid var(--bdr);border-radius:9px;overflow:hidden">
           <div style="padding:9px 13px;background:var(--card2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between">
             <span id="kb-result-title" style="font-size:11px;color:#ff6b6b;font-weight:500">🎯 Kết quả phân tích</span>
-            <button class="btn-i" onclick="document.getElementById('kb-result').style.display='none'" style="font-size:10px">✕</button>
+            <div style="display:flex;gap:5px">
+              <button class="btn-i" id="kb-edit-btn" onclick="batDauChinhSuaKB()" style="display:none;font-size:10px;border-color:var(--gold);color:var(--gold)">✏️ Chỉnh sửa</button>
+              <button class="btn-i" id="kb-save-btn" onclick="luuChinhSuaKB()" style="display:none;font-size:10px;border-color:var(--green);color:var(--green)">💾 Lưu</button>
+              <button class="btn-i" onclick="document.getElementById('kb-result').style.display='none'" style="font-size:10px">✕</button>
+            </div>
           </div>
-          <div id="kb-output" style="padding:13px;font-size:11.5px;line-height:1.9;white-space:pre-wrap;color:var(--ink);overflow-y:visible;font-family:'IBM Plex Mono',monospace;word-break:break-word"></div>
+          <div id="kb-output" style="padding:13px;font-size:11.5px;line-height:1.9;white-space:pre-wrap;color:var(--ink);overflow-y:visible;font-family:'IBM Plex Mono',monospace;word-break:break-word;outline:none"></div>
         </div>
       </div>
 
@@ -2051,7 +2055,7 @@ function themShot(){
   cacShot.unshift({
     id: soId, start: newStart, end: newEnd, tg: 5,
     cuMay: '', angle: '', lens: '', speed: '',
-    shotSize: '', specialFx: '', moTa: '', thoai: 'Không thoại'
+    shotSize: '', specialFx: '', moTa: '', shotPrompt: '', thoai: 'Không thoại'
   });
   veShot();
   // Auto open first shot
@@ -2065,6 +2069,7 @@ function veShot(){
       <span class="shot-num">SỰ KIỆN ${i+1}</span>
       <span class="shot-title">${s.cuMay||'Chưa chọn'}${s.moTa?' — '+s.moTa.slice(0,30)+'...':''}</span>
       <span class="shot-dur">${s.tg}s</span>
+      <button onclick="event.stopPropagation();taoPromptShot(${s.id})" style="background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer;font-family:'IBM Plex Mono',monospace">✨ Prompt</button>
       <button class="sdel" onclick="event.stopPropagation();xoaShot(${s.id})">✕</button>
     </div>
     <div class="shot-bd" id="sb-${s.id}">
@@ -2103,6 +2108,18 @@ function veShot(){
         </div>
         <textarea id="mota-${s.id}" rows="5" placeholder="Chi tiết cú máy, diễn xuất, cảm xúc nhân vật, ánh sáng đặc biệt, chuyển động chi tiết..." oninput="updShot(${s.id},'moTa',this.value)" style="font-size:11px;min-height:100px;resize:vertical">${s.moTa||''}</textarea>
       </div>
+      <!-- PROMPT TỪNG SHOT -->
+      <div id="shot-prompt-wrap-${s.id}" style="display:${s.shotPrompt?'':'none'};margin-top:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="slbl" style="color:var(--gold)">✨ Prompt Shot này</div>
+          <div style="display:flex;gap:5px">
+            <button class="btn-i" onclick="copyShot(${s.id})" style="font-size:10px;border-color:var(--green);color:var(--green)">⊕ Copy</button>
+            <button class="btn-i" onclick="xoaPromptShot(${s.id})" style="font-size:10px">✕</button>
+          </div>
+        </div>
+        <div id="shot-prompt-${s.id}" style="background:var(--bg);border:1px solid var(--gold);border-radius:7px;padding:10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;cursor:text" contenteditable="true" onblur="luuShotPrompt(${s.id},this.textContent)">${s.shotPrompt||''}</div>
+      </div>
+
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
     </div></div>`).join('');
 }
@@ -3416,6 +3433,8 @@ PROMPT NHÁP:
     kbKetQua = acc;
     hienShotCards(acc);
     document.getElementById('kb-result-title').textContent = '🎯 Phân tích hoàn tất';
+    const kbEditBtn = document.getElementById('kb-edit-btn');
+    if(kbEditBtn) kbEditBtn.style.display = '';
     document.getElementById('kb-btn-stop').style.display = 'none';
     const nutPT2 = document.getElementById('nut-phan-tich');
     if(nutPT2) nutPT2.disabled = false;
@@ -6440,6 +6459,153 @@ document.addEventListener('click', e => {
 document.addEventListener('keydown', e => {
   if(e.key === 'Escape') dongModalShot();
 });
+
+
+// ===== TẠO PROMPT TỪNG SHOT =====
+async function taoPromptShot(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s) return;
+
+  // Build context from Khung Sườn
+  const {nv, nvp, dd} = layChung();
+  const genre = SS.genre || '';
+  const style = (MM.director||[]).slice(0,2).join(', ');
+  const lighting = (MM.light_type||[]).slice(0,2).join(', ');
+  const emotion = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
+  const skin = SS.skin_level || '';
+  const color = SS.pal || '';
+
+  // Build shot info
+  const cam = [s.cuMay, s.shotSize, s.lens].filter(Boolean).join(', ') || 'Máy tĩnh';
+  const fx = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
+  const content = s.moTa || '';
+  const timing = `${s.start}s → ${s.end}s (${s.tg}s)`;
+
+  // Show loading
+  const wrap = document.getElementById('shot-prompt-wrap-' + id);
+  const el = document.getElementById('shot-prompt-' + id);
+  if(wrap) wrap.style.display = '';
+  if(el) el.textContent = '⏳ Đang tạo prompt...';
+
+  const system = `You are a master cinematographer and AI video prompt engineer.
+Create a complete, ready-to-use cinematic prompt for ONE specific shot.
+Format: write in English, professional cinematic language.
+Include: shot size, camera movement, lens, timing, action, emotion, lighting, skin detail, constraints.
+Output ONLY the prompt — no explanation, no preamble.`;
+
+  const userMsg = `Create a cinematic prompt for this shot:
+
+SHOT INFO:
+- Timing: ${timing}
+- Camera: ${cam}${fx ? '\n- Special FX: ' + fx : ''}
+- Content: ${content || 'Shot from scene'}
+
+SCENE CONTEXT:
+- Genre: ${genre || 'Cinematic Drama'}
+- Subject: ${nv || 'Young person'}
+${emotion ? '- Emotion: ' + emotion : ''}
+${lighting ? '- Lighting: ' + lighting : ''}
+${style ? '- Style ref: ' + style : ''}
+${skin ? '- Skin level: ' + skin : ''}
+${color ? '- Color: ' + color : ''}
+
+Write a complete Seedance/Veo3 ready prompt for this single shot.`;
+
+  let acc = '';
+  try {
+    await goiClaude(system, userMsg, (chunk) => {
+      acc += chunk;
+      if(el) el.textContent = acc;
+    });
+
+    // Save to shot
+    s.shotPrompt = acc;
+    if(el){ el.textContent = acc; el.contentEditable = 'true'; }
+    if(wrap) wrap.style.display = '';
+
+  } catch(e) {
+    if(el) el.textContent = '❌ Lỗi: ' + e.message;
+  }
+}
+
+function copyShot(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s.shotPrompt) return;
+  robustCopy(s.shotPrompt, null);
+  const btn = document.querySelector(`[onclick="copyShot(${id})"]`);
+  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã copy!'; setTimeout(()=>btn.innerHTML=o, 2000); }
+}
+
+function xoaPromptShot(id){
+  const s = cacShot.find(x => x.id === id);
+  if(s) s.shotPrompt = '';
+  const wrap = document.getElementById('shot-prompt-wrap-' + id);
+  if(wrap) wrap.style.display = 'none';
+}
+
+function luuShotPrompt(id, text){
+  const s = cacShot.find(x => x.id === id);
+  if(s) s.shotPrompt = text;
+}
+
+
+// ===== CHỈNH SỬA KẾT QUẢ PHÂN TÍCH KỊCH BẢN =====
+function batDauChinhSuaKB(){
+  const el = document.getElementById('kb-output');
+  if(!el) return;
+
+  // Make editable
+  el.contentEditable = 'true';
+  el.style.border = '1px solid var(--gold)';
+  el.style.borderRadius = '7px';
+  el.style.padding = '13px';
+  el.style.background = 'var(--card)';
+  el.focus();
+
+  // Move cursor to end
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  range.collapse(false);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+
+  // Toggle buttons
+  document.getElementById('kb-edit-btn').style.display = 'none';
+  document.getElementById('kb-save-btn').style.display = '';
+
+  document.getElementById('kb-result-title').textContent = '✏️ Đang chỉnh sửa...';
+  document.getElementById('kb-result-title').style.color = 'var(--gold)';
+}
+
+function luuChinhSuaKB(){
+  const el = document.getElementById('kb-output');
+  if(!el) return;
+
+  // Save to kbKetQua
+  kbKetQua = el.textContent || el.innerText;
+
+  // Lock editing
+  el.contentEditable = 'false';
+  el.style.border = 'none';
+  el.style.borderRadius = '0';
+  el.style.background = 'transparent';
+
+  // Toggle buttons
+  document.getElementById('kb-edit-btn').style.display = '';
+  document.getElementById('kb-save-btn').style.display = 'none';
+
+  document.getElementById('kb-result-title').textContent = '✅ Đã lưu chỉnh sửa';
+  document.getElementById('kb-result-title').style.color = 'var(--green)';
+
+  // Re-parse shot cards with updated content
+  hienShotCards(kbKetQua);
+
+  setTimeout(() => {
+    const titleEl = document.getElementById('kb-result-title');
+    if(titleEl){ titleEl.textContent = '🎯 Phân tích hoàn tất'; titleEl.style.color = '#ff6b6b'; }
+  }, 2000);
+}
 
 // ===== INIT =====
 napPromptMau();
