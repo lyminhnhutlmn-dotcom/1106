@@ -1998,7 +1998,8 @@ function themShot(){
   cacShot.unshift({
     id: soId, start: newStart, end: newEnd, tg: 5,
     cuMay: '', angle: '', lens: '', speed: '',
-    shotSize: '', specialFx: '', moTa: '', shotPrompt: '', thoai: 'Không thoại'
+    shotSize: '', specialFx: '', moTa: '', shotPrompt: '',
+    image: '', imageName: '', sbPrompt: '', thoai: 'Không thoại'
   });
   veShot();
   // Auto open first shot
@@ -2013,6 +2014,7 @@ function veShot(){
       <span class="shot-title">${s.cuMay||'Chưa chọn'}${s.moTa?' — '+s.moTa.slice(0,30)+'...':''}</span>
       <span class="shot-dur">${s.tg}s</span>
       <button onclick="event.stopPropagation();taoPromptShot(${s.id})" style="background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer;font-family:'IBM Plex Mono',monospace">✨ Prompt</button>
+      <button onclick="event.stopPropagation();taoStoryboardPrompt(${s.id})" style="background:transparent;border:1px solid #818cf8;color:#818cf8;border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer;font-family:'IBM Plex Mono',monospace">🎨 Storyboard</button>
       <button class="sdel" onclick="event.stopPropagation();xoaShot(${s.id})">✕</button>
     </div>
     <div class="shot-bd" id="sb-${s.id}">
@@ -2051,6 +2053,19 @@ function veShot(){
         </div>
         <textarea id="mota-${s.id}" rows="5" placeholder="Chi tiết cú máy, diễn xuất, cảm xúc nhân vật, ánh sáng đặc biệt, chuyển động chi tiết..." oninput="updShot(${s.id},'moTa',this.value)" style="font-size:11px;min-height:100px;resize:vertical">${s.moTa||''}</textarea>
       </div>
+      <!-- STORYBOARD PROMPT -->
+      <div id="shot-sb-wrap-${s.id}" style="display:${s.sbPrompt?'block':'none'};margin-top:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="slbl" style="color:#818cf8">🎨 Prompt Storyboard</div>
+          <div style="display:flex;gap:5px">
+            <button class="btn-i" onclick="copySBPrompt(${s.id})" style="font-size:10px;border-color:#818cf8;color:#818cf8">⊕ Copy</button>
+            <button class="btn-i" onclick="document.getElementById('shot-sb-wrap-${s.id}').style.display='none'" style="font-size:10px">✕</button>
+          </div>
+        </div>
+        <div id="shot-sb-${s.id}" style="background:var(--bg);border:1px solid #818cf8;border-radius:7px;padding:10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;cursor:text" contenteditable="true" onblur="luuSBPrompt(${s.id},this.textContent)">${s.sbPrompt||''}</div>
+        <div style="margin-top:5px;font-size:10px;color:var(--muted)">→ Paste vào Midjourney, DALL-E 3, Ideogram, Flux để tạo ảnh storyboard</div>
+      </div>
+
       <!-- PROMPT TỪNG SHOT -->
       <div id="shot-prompt-wrap-${s.id}" style="display:${s.shotPrompt?'':'none'};margin-top:8px">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
@@ -2061,6 +2076,27 @@ function veShot(){
           </div>
         </div>
         <div id="shot-prompt-${s.id}" style="background:var(--bg);border:1px solid var(--gold);border-radius:7px;padding:10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;cursor:text" contenteditable="true" onblur="luuShotPrompt(${s.id},this.textContent)">${s.shotPrompt||''}</div>
+      </div>
+
+      <!-- ẢNH MINH HOẠ -->
+      <div style="margin-top:6px;margin-bottom:6px">
+        <div class="slbl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <span>🖼️ Ảnh minh hoạ</span>
+          <div style="display:flex;gap:5px">
+            <button onclick="taoAnhStoryboard(${s.id})" style="background:transparent;border:1px solid #818cf8;color:#818cf8;border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer">🖼️ Tạo ảnh AI</button>
+            <label style="font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid var(--bdr);color:var(--muted);cursor:pointer">
+              📎 Upload
+              <input type="file" accept="image/*" style="display:none" onchange="uploadAnhShot(${s.id}, this)">
+            </label>
+          </div>
+        </div>
+        <div id="img-shot-${s.id}" style="display:${s.image?'block':'none'}">
+          ${s.image ? `<img src="${s.image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid var(--bdr);cursor:pointer" onclick="xemAnhLon('${s.id}')" title="Click để xem lớn">
+          <div style="display:flex;gap:5px;margin-top:4px">
+            <button class="btn-i" onclick="guiAnhChoAI(${s.id})" style="font-size:10px;border-color:var(--gold);color:var(--gold)">✨ Gửi AI phân tích</button>
+            <button class="btn-i" onclick="xoaAnhShot(${s.id})" style="font-size:10px">✕ Xoá</button>
+          </div>` : ''}
+        </div>
       </div>
 
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
@@ -6045,6 +6081,265 @@ function taoKBShotSetup(n){
         </div>
       </div>
     </div>`).join('');
+}
+
+
+// ===== ẢNH MINH HOẠ TRONG SHOT =====
+function uploadAnhShot(id, input){
+  const file = input.files[0];
+  if(!file) return;
+  if(file.size > 5 * 1024 * 1024){ alert('Ảnh tối đa 5MB.'); return; }
+
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    const s = cacShot.find(x => x.id === id);
+    if(!s) return;
+    s.image = e.target.result; // base64
+    s.imageName = file.name;
+
+    // Update display
+    const wrap = document.getElementById('img-shot-' + id);
+    if(wrap){
+      wrap.style.display = 'block';
+      wrap.innerHTML = `
+        <img src="${e.target.result}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid var(--bdr);cursor:pointer" onclick="xemAnhLon(${id})" title="Click để xem lớn">
+        <div style="display:flex;gap:5px;margin-top:4px">
+          <button class="btn-i" onclick="guiAnhChoAI(${id})" style="font-size:10px;border-color:var(--gold);color:var(--gold)">✨ Gửi AI phân tích</button>
+          <button class="btn-i" onclick="xoaAnhShot(${id})" style="font-size:10px">✕ Xoá</button>
+        </div>`;
+    }
+  };
+  reader.readAsDataURL(file);
+}
+
+function xoaAnhShot(id){
+  const s = cacShot.find(x => x.id === id);
+  if(s){ s.image = ''; s.imageName = ''; }
+  const wrap = document.getElementById('img-shot-' + id);
+  if(wrap){ wrap.style.display = 'none'; wrap.innerHTML = ''; }
+}
+
+function xemAnhLon(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s.image) return;
+  // Open in lightbox
+  const overlay = document.createElement('div');
+  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer';
+  overlay.onclick = () => document.body.removeChild(overlay);
+  const img = document.createElement('img');
+  img.src = s.image;
+  img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px';
+  overlay.appendChild(img);
+  document.body.appendChild(overlay);
+}
+
+async function guiAnhChoAI(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s.image){ alert('Chưa có ảnh.'); return; }
+
+  // Show loading in moTa
+  const ta = document.getElementById('mota-' + id);
+  if(ta) ta.value = '⏳ AI đang phân tích ảnh...';
+
+  // Extract base64 data
+  const base64 = s.image.split(',')[1];
+  const mediaType = s.image.split(';')[0].split(':')[1];
+
+  const system = `Bạn là chuyên gia quay phim điện ảnh. Phân tích ảnh minh hoạ và mô tả chi tiết:
+- Bố cục, góc máy, cỡ cảnh
+- Ánh sáng: hướng, màu sắc, Kelvin ước tính
+- Cảm xúc, không khí
+- Đề xuất cú máy cho AI video
+Trả lời ngắn gọn, súc tích bằng tiếng Việt.`;
+
+  try {
+    // Send image to backend via vision API
+    const res = await fetch('/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system,
+        message: 'Phân tích ảnh minh hoạ này cho shot video.',
+        image: { base64, mediaType },
+        max_tokens: 1000
+      })
+    });
+
+    if(!res.ok) throw new Error('Backend error ' + res.status);
+
+    const reader = res.body.getReader();
+    const decoder = new TextDecoder();
+    let acc = '';
+    let buf = '';
+
+    while(true){
+      const {done, value} = await reader.read();
+      if(done) break;
+      buf += decoder.decode(value, {stream:true});
+      const lines = buf.split('\n');
+      buf = lines.pop();
+      for(const line of lines){
+        if(line.startsWith('data: ')){
+          const data = line.slice(6);
+          if(data === '[DONE]') break;
+          try{
+            const j = JSON.parse(data);
+            if(j.text){ acc += j.text; if(ta) ta.value = acc; }
+          }catch(e){}
+        }
+      }
+    }
+
+    // Save analysis to moTa
+    if(s) s.moTa = acc;
+    if(ta) ta.value = acc;
+
+  } catch(e) {
+    if(ta) ta.value = '❌ ' + e.message;
+  }
+}
+
+
+// ===== STORYBOARD PROMPT GENERATOR =====
+async function taoStoryboardPrompt(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s) return;
+
+  // Show wrap
+  const wrap = document.getElementById('shot-sb-wrap-' + id);
+  const el = document.getElementById('shot-sb-' + id);
+  if(wrap) wrap.style.display = 'block';
+  if(el) el.textContent = '⏳ Đang tạo prompt storyboard...';
+
+  // Build camera info
+  const cam = s.cuMay || 'Máy tĩnh';
+  const lens = s.lens || '50mm';
+  const size = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS';
+  const angle = s.angle || 'eye level';
+  const timing = `${s.start}s → ${s.end}s`;
+  const content = s.moTa || s.shotPrompt || '';
+  const fx = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
+
+  // Get context from Khung Suon
+  const {nv, hd} = layChung();
+  const genre = SS.genre || 'cinematic drama';
+  const emo = (MM.emo||[]).slice(0,2).map(e=>e.replace(/^\S+\s/,'')).join(', ');
+  const lighting = SS.ls || (MM.light_type||[]).slice(0,1).join('');
+  const colorPal = SS.pal || '';
+
+  const system = `You are a professional storyboard artist and cinematographer.
+Create a detailed image generation prompt for ONE storyboard frame.
+The prompt must be optimized for Midjourney / DALL-E 3 / Flux / Ideogram.
+
+RULES:
+- Describe the exact camera angle and framing
+- Include lighting details
+- Describe character pose/action
+- Add cinematic style references
+- End with technical modifiers
+- Output ONLY the prompt, no explanation`;
+
+  const userMsg = `Create a storyboard image prompt for this shot:
+
+CAMERA: ${cam} | ${lens} | ${size} | ${angle}
+TIMING: ${timing}
+CONTENT: ${content || 'Scene from ' + genre}
+${fx ? 'EFFECT: ' + fx : ''}
+SUBJECT: ${nv || 'character'}
+${emo ? 'EMOTION: ' + emo : ''}
+${lighting ? 'LIGHTING: ' + lighting : ''}
+${colorPal ? 'COLOR: ' + colorPal : ''}
+GENRE: ${genre}
+
+Format: [shot size] [subject description and action], [camera angle], [lens mm], [lighting description], [color palette], cinematic storyboard, film still, [director reference if any], professional illustration --ar 16:9`;
+
+  let acc = '';
+  try {
+    await goiClaude(system, userMsg, (chunk) => {
+      acc += chunk;
+      if(el) el.textContent = acc;
+    });
+    // Save
+    s.sbPrompt = acc;
+    if(el){ el.textContent = acc; }
+  } catch(e) {
+    if(el) el.textContent = '❌ ' + e.message;
+  }
+}
+
+function copySBPrompt(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s.sbPrompt) return;
+  robustCopy(s.sbPrompt, null);
+  const btn = document.querySelector(`[onclick="copySBPrompt(${id})"]`);
+  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã copy!'; setTimeout(()=>btn.innerHTML=o, 2000); }
+}
+
+function luuSBPrompt(id, text){
+  const s = cacShot.find(x => x.id === id);
+  if(s) s.sbPrompt = text;
+}
+
+
+// ===== TẠO ẢNH STORYBOARD QUA OPENAI =====
+async function taoAnhStoryboard(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s) return;
+
+  const wrap = document.getElementById('img-shot-' + id);
+  if(wrap){
+    wrap.style.display = 'block';
+    wrap.innerHTML = '<div style="padding:20px;text-align:center;color:var(--gold);font-size:11px">⏳ Đang tạo ảnh storyboard...</div>';
+  }
+
+  // Build storyboard prompt from shot data
+  const cam = s.cuMay || 'static shot';
+  const lens = s.lens || '50mm';
+  const size = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : '';
+  const content = s.moTa || s.shotPrompt || '';
+  const genre = SS.genre || 'cinematic drama';
+  const emo = (MM.emo||[]).slice(0,2).map(e=>e.replace(/^\S+\s/,'')).join(', ');
+  const lighting = (MM.light_type||[]).slice(0,1).join('') || 'natural cinematic light';
+  const pal = SS.pal || 'cinematic color grade';
+  const nv = SS['subject-desc'] || '';
+
+  const prompt = `${size ? size + ', ' : ''}${content || 'cinematic scene'}, ${cam}, ${lens} lens, ${lighting}, ${pal}, ${emo ? emo + ', ' : ''}${genre} film still, photorealistic storyboard, professional cinematography, 16:9 aspect ratio`;
+
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: prompt.slice(0, 1000),
+        size: '1536x1024',
+        quality: 'medium'
+      })
+    });
+
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
+
+    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
+    if(!imgSrc) throw new Error('Không nhận được ảnh');
+
+    // Save and display
+    s.image = imgSrc;
+    s.imageName = 'storyboard-shot-' + id + '.png';
+
+    if(wrap){
+      wrap.style.display = 'block';
+      wrap.innerHTML = `
+        <img src="${imgSrc}" style="width:100%;border-radius:6px;border:1px solid #818cf8;cursor:pointer" onclick="xemAnhLon(${id})" title="Click để xem lớn">
+        <div style="display:flex;gap:5px;margin-top:4px;flex-wrap:wrap">
+          <button class="btn-i" onclick="taoAnhStoryboard(${id})" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
+          <button class="btn-i" onclick="xoaAnhShot(${id})" style="font-size:9px">✕ Xoá</button>
+          <a href="${imgSrc}" download="storyboard-shot-${id}.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇ Tải ảnh</a>
+        </div>`;
+    }
+
+  } catch(e) {
+    if(wrap) wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px">❌ ${e.message}</div>`;
+  }
 }
 
 // ===== INIT =====
