@@ -1,0 +1,8 @@
+{
+  "name": "annahousestudio",
+  "version": "1.0.0",
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.27.0"
+  },
+  "engines": { "node": ">=18.0.0" }
+}
