@@ -1,4 +1,5 @@
-<!DOCTYPE html>
+// API via goiClaude
+  <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
@@ -4190,12 +4191,7 @@ async function taoAnh(){
   const promptText = document.getElementById('img-prompt-input')?.value.trim();
   if(!promptText){alert('Nhập prompt tạo ảnh trước.');return;}
 
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key:');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
+  // API via goiClaude
 
   const ratio = SS.img_ratio || '16:9';
   const style = SS.img_style || 'Cinematic still';
@@ -4208,11 +4204,10 @@ async function taoAnh(){
 
   // Step 1: Ask AI to create optimized image prompt
   try{
-    const optRes = await fetch('https://api.anthropic.com/v1/messages',{
+    const optRes = await fetch((typeof BACKEND!=='undefined'?BACKEND:'')+'/api/claude',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'x-api-key':aiKey,
         'anthropic-version':'2023-06-01',
         'anthropic-dangerous-direct-browser-access':'true'
       },
@@ -4437,13 +4432,6 @@ async function batDauTouuHoa(){
   const nd = dangHien==='en' ? kqEN : kqVI;
   if(!nd){alert('Không có prompt để tối ưu.');return;}
 
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):\n\nLấy tại: console.anthropic.com');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
-
   const target = parseInt(document.getElementById('opt-target')?.value) || 3500;
   const chars = nd.length;
   const words = nd.trim().split(/\s+/).filter(Boolean).length;
@@ -4498,11 +4486,10 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
   let acc = '';
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch((typeof BACKEND!=='undefined'?BACKEND:'')+'/api/claude',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'x-api-key':aiKey,
         'anthropic-version':'2023-06-01',
         'anthropic-dangerous-direct-browser-access':'true'
       },
@@ -4787,12 +4774,8 @@ async function taoCharPromptAI(){
     return;
   }
 
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
+  // API via goiClaude
+  
 
   const el = document.getElementById('char-preview');
   if(el) el.innerHTML = '<span style="color:var(--gold)">✨ AI đang tạo Character Lock Prompt...</span>';
@@ -4812,42 +4795,17 @@ async function taoCharPromptAI(){
   ].filter(Boolean).join('\n');
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':aiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
-        max_tokens:4000,
-        messages:[{role:'user',content:`Create a professional CHARACTER CONSISTENCY LOCK prompt in English for AI video generation (Seedance 2.0 on Higgsfield).
-
-Character description (Vietnamese):
-${input}
-
-Requirements:
-1. Convert all Vietnamese descriptions to precise English cinematic terminology
-2. Include specific PBR material properties for skin, eyes, hair
-3. Include exact color values where possible
-4. Format with clear sections: FACE, EYES, HAIR, COSTUME, IDENTIFYING MARKS
-5. End with CHARACTER CONSISTENCY RULES (5-7 rules)
-6. Include @material[character_reference] placeholder
-7. Make it copy-paste ready to prepend to any shot prompt
-
-Output ONLY the prompt, no explanations.`}]
-      })
+    let result = '';
+    await goiClaude(systemPrompt, userPrompt, (chunk) => {
+      result += chunk;
     });
-
-    const data = await res.json();
-    charPromptText = data.content?.[0]?.text || '';
-    if(el) el.textContent = charPromptText;
+    charPromptText = result.trim();
+    document.getElementById('char-preview').textContent = charPromptText;
     document.getElementById('nut-cp-char').style.display = '';
     document.getElementById('nut-add-char').style.display = '';
-
-  }catch(e){
+    const indicator = document.getElementById('char-lock-active');
+    if(indicator) indicator.style.display = '';
+    }catch(e){
     if(el) el.innerHTML = '<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
   }
 }
@@ -4970,42 +4928,21 @@ async function taoImgPromptNhanVat(){
   const raw = gVal('char-img-prompt');
   if(!raw){ layCharPromptChoAnh(); return; }
 
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
-
-  const statusEl = document.getElementById('char-img-status');
-  if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu...';
-
-  try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':aiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
-        max_tokens:400,
-        messages:[{role:'user',content:`Optimize this character image prompt for AI image generation (Ideogram/Midjourney/DALL-E).
-Make it more specific and professional. Add technical photography terms.
-Keep it under 150 words. Output ONLY the optimized prompt.
-
-Input: ${raw}`}]
-      })
+  // Use goiClaude via backend
+  const system = 'You are a cinematic image prompt optimizer. Improve the given prompt for photorealistic AI image generation. Keep all technical specs. Output only the improved prompt.';
+  let improved = '';
+  try {
+    await goiClaude(system, raw, (chunk) => {
+      improved += chunk;
+      const statusEl = document.getElementById('char-img-status');
+      if(statusEl) statusEl.textContent = improved.slice(0,100) + '...';
     });
-    const data = await res.json();
-    const opt = data.content?.[0]?.text || raw;
-    const ta = document.getElementById('char-img-prompt');
-    if(ta) ta.value = opt;
+    const el = document.getElementById('char-img-prompt');
+    if(el && improved) el.value = improved;
+    const statusEl = document.getElementById('char-img-status');
     if(statusEl) statusEl.textContent = '✅ Đã tối ưu!';
-    setTimeout(()=>{ if(statusEl) statusEl.textContent=''; }, 3000);
-  }catch(e){
+  } catch(e) {
+    const statusEl = document.getElementById('char-img-status');
     if(statusEl) statusEl.textContent = '❌ ' + e.message;
   }
 }
@@ -5014,9 +4951,8 @@ async function taoAnhNhanVat(){
   const promptText = gVal('char-img-prompt');
   if(!promptText){ alert('Nhập prompt tạo ảnh trước.'); return; }
 
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key để tối ưu prompt:');
-    if(!k){ moThangCongCu(promptText); return; }
+  // API via goiClaude
+  
     aiKey = k.trim();
     sessionStorage.setItem('annahouseKey', aiKey);
   }
@@ -5028,11 +4964,10 @@ async function taoAnhNhanVat(){
   if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu prompt...';
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
+    const res = await fetch((typeof BACKEND!=='undefined'?BACKEND:'')+'/api/claude',{
       method:'POST',
       headers:{
         'Content-Type':'application/json',
-        'x-api-key':aiKey,
         'anthropic-version':'2023-06-01',
         'anthropic-dangerous-direct-browser-access':'true'
       },
