@@ -2172,7 +2172,7 @@ function taoVI(){
 
   // ===== CHARACTER LOCK — auto-include if set =====
   if(charPromptText){
-    L.push('[CHARACTER LOCK — NHÂN VẬT NHẤT QUÁN]');
+    L.push('[NHÂN VẬT NHẤT QUÁN — CHARACTER LOCK]');
     L.push(charPromptText);
     L.push('');
   }
@@ -2215,19 +2215,19 @@ function taoVI(){
   const _bd=(document.getElementById('breath-desc')||{}).value||'';
   const _cwi=SS.chaos_water_intensity?`intensity ${SS.chaos_water_intensity}/100 — ${getChaosLabel(SS.chaos_water_intensity,CHAOS_WATER_LABELS)}`:'';const _cbi=SS.chaos_breath_intensity?`intensity ${SS.chaos_breath_intensity}/100 — ${getChaosLabel(SS.chaos_breath_intensity,CHAOS_BREATH_LABELS)}`:'';const _cei=SS.chaos_env_intensity?`density ${SS.chaos_env_intensity}/100 — ${getChaosLabel(SS.chaos_env_intensity,CHAOS_ENV_LABELS)}`:'';
   if(_cw.length||_wd.trim()){
-    L.push('[WATER PHYSICS]'+((_cwi)?' — Intensity: '+_cwi:''));
+    L.push('[VẬT LÝ NƯỚC]'+((_cwi)?' — Cường độ: '+_cwi:''));
     _cw.forEach(w=>L.push('• '+w));
     if(_wd.trim())L.push(_wd.trim());
     L.push('');
   }
   if(_cb.length||_bd.trim()){
-    L.push('[BREATH & BODY]'+((_cbi)?' — Intensity: '+_cbi:''));
+    L.push('[HƠI THỞ & CƠ THỂ]'+((_cbi)?' — Cường độ: '+_cbi:''));
     _cb.forEach(b=>L.push('• '+b));
     if(_bd.trim())L.push(_bd.trim());
     L.push('');
   }
   if(_ce.length){
-    L.push('[PARTICLE & ENVIRONMENT]'+((_cei)?' — Density: '+_cei:''));
+    L.push('[HẠT & MÔI TRƯỜNG]'+((_cei)?' — Mật độ: '+_cei:''));
     _ce.forEach(e=>L.push('• '+e));
     L.push('');
   }
@@ -2236,12 +2236,12 @@ function taoVI(){
     // Separate hand anatomy constraints for emphasis
     const handConstraints = MM.prohibit.filter(p => p.includes('ngón') || p.includes('bàn tay') || p.includes('tay'));
     const otherConstraints = MM.prohibit.filter(p => !handConstraints.includes(p));
-    if(handConstraints.length) L.push('[HAND ANATOMY] Exactly 5 fingers per hand. No extra fingers. No finger duplication or merging. Anatomically correct hand structure. No hand warping.');
+    if(handConstraints.length) L.push('[GIẢI PHẪU BÀN TAY] Đúng 5 ngón mỗi bàn tay. Không ngón thừa. Không nhân đôi ngón. Giải phẫu chính xác. Không biến dạng bàn tay.');
     if(otherConstraints.length) L.push('Cấm: '+otherConstraints.join(', ')+'.');
   }if(MM.consist.length)L.push('Nhất quán: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[LỜI THOẠI]');const fmt=SS.thoai_format||'Kịch bản phim chuẩn';dsThoai.forEach(t=>{const ten=(t.ten||'NV').toUpperCase();const loi=t.loi||'...';const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(thì thầm)','Độc thoại':'(độc thoại)'};if(fmt.includes('phim'))L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+loi);else if(fmt.includes('Truyện'))L.push(ten+(t.loai.includes('Nội tâm')?` nghĩ: "${loi}"`:`: "${loi}"`));else L.push('['+ten+'] '+loi+(t.loai!=='Thoại thường'?' ('+t.loai+')':''));});L.push('');}
   if(cacShot.length){
-    L.push('[SHOT BREAKDOWN]');
+    L.push('[PHÂN CẢNH]');
     cacShot.forEach((s,i)=>{
       const parts=[];
       if(s.shotSize) parts.push(s.shotSize);
@@ -2252,14 +2252,14 @@ function taoVI(){
       if(s.specialFx && s.specialFx!=='Không') parts.push(s.specialFx);
       // Add camera details block
       const camDetails=[];
-      if(s.angle) camDetails.push(`Angle: ${s.angle}`);
-      if(s.lens) camDetails.push(`Lens: ${s.lens}`);
-      if(s.speed) camDetails.push(`Speed: ${s.speed}`);
-      if(s.shotSize) camDetails.push(`Frame: ${s.shotSize}`);
-      if(s.specialFx && s.specialFx!=='Không') camDetails.push(`FX: ${s.specialFx}`);
+      if(s.angle) camDetails.push(`Góc: ${s.angle}`);
+      if(s.lens) camDetails.push(`Tiêu cự: ${s.lens}`);
+      if(s.speed) camDetails.push(`Tốc độ: ${s.speed}`);
+      if(s.shotSize) camDetails.push(`Cỡ cảnh: ${s.shotSize}`);
+      if(s.specialFx && s.specialFx!=='Không') camDetails.push(`Kỹ thuật: ${s.specialFx}`);
       const timing=`${s.start}s→${s.end}s (${s.tg}s)`;
       const shotLabel = parts.length ? parts.join(', ') : 'Máy tĩnh';
-      L.push(`Shot ${i+1} [${timing}]: ${shotLabel}`);
+      L.push(`SỰ KIỆN ${i+1} [${timing}]: ${shotLabel}`);
       if(camDetails.length) L.push(`  📷 ${camDetails.join(' | ')}`);
       if(s.moTa) L.push(`  📝 ${s.moTa}`);
     });
