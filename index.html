@@ -378,74 +378,14 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <div class="fw-head" onclick="moRong('chaos')">
     <span class="fw-num">03</span>
     <span class="fw-key" data-en="CHAOS ELEMENTS">YẾU TỐ CHAOS</span>
-    <span class="fw-desc" data-en="Water physics · Breath · Particle · Environmental texture">Vật lý nước · Hơi thở · Hạt · Kết cấu môi trường</span>
+    <span class="fw-desc" data-en="Water physics · Breath · Particle · Environmental texture">Hạt · Môi trường · Khí quyển · Ánh sáng</span>
     <span class="fw-check" id="ck-chaos">○</span>
   </div>
   <div class="fw-body" id="fb-chaos">
 
-    <!-- WATER PHYSICS -->
-    <div style="margin-bottom:12px">
-      <div class="lbl" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <span class="lbl-tag" style="background:#0a1a2a;border-color:#3b82f6;color:#60a5fa" data-en="💧 WATER PHYSICS">💧 VẬT LÝ NƯỚC</span>
-        <span style="font-size:10px;color:var(--muted)">Cường độ:</span>
-        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
-          <input type="range" id="chaos-water-int" min="1" max="100" value="50"
-            style="flex:1;accent-color:#3b82f6;height:4px"
-            oninput="updChaosInt('water',this.value)">
-          <span id="chaos-water-int-val" style="font-size:11px;color:#60a5fa;font-weight:500;min-width:28px">50</span>
-          <span id="chaos-water-int-label" style="font-size:10px;color:var(--muted);min-width:80px">Vừa</span>
-        </div>
-      </div>
-      <div class="chips" style="gap:5px;margin-bottom:6px">
-        <span class="chip" data-g="chaos_water">Giọt mưa riêng lẻ — trajectory tự nhiên</span>
-        <span class="chip" data-g="chaos_water">Surface tension trên da — giọt đọng</span>
-        <span class="chip" data-g="chaos_water">Nước chảy theo trọng lực xuống má</span>
-        <span class="chip" data-g="chaos_water">Tóc ướt dính vào da — wet weight</span>
-        <span class="chip" data-g="chaos_water">Nước đọng tại xương quai xanh</span>
-        <span class="chip" data-g="chaos_water">Giọt khúc xạ ánh sáng bokeh nền</span>
-        <span class="chip" data-g="chaos_water">Micro goosebumps — lạnh thấy trên cổ</span>
-        <span class="chip" data-g="chaos_water">Màng nước mỏng trên môi</span>
-        <span class="chip" data-g="chaos_water">Mưa nặng hạt — splatter khi chạm da</span>
-        <span class="chip" data-g="chaos_water">Sương mù mỏng — mist atmospheric</span>
-        <span class="chip" data-g="chaos_water">Mồ hôi + mưa lẫn nhau</span>
-        <span class="chip" data-g="chaos_water">Giọt nước mắt + giọt mưa — không phân biệt</span>
-      </div>
-      <div><div class="slbl" style="margin-bottom:4px">Mô tả water physics tùy chỉnh</div>
-        <textarea id="water-desc" rows="2" placeholder="VD: Rain droplets track down right cheek, pool at jawline, single large drop hangs 2 seconds before falling..." oninput="capNhat()" style="font-size:11px"></textarea>
-      </div>
-    </div>
 
-    <!-- BREATH -->
-    <div style="margin-bottom:12px">
-      <div class="lbl" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
-        <span class="lbl-tag" style="background:#0a1a14;border-color:#10b981;color:#34d399" data-en="🌬️ BREATH & BODY">🌬️ HƠI THỞ & CƠ THỂ</span>
-        <span style="font-size:10px;color:var(--muted)">Cường độ:</span>
-        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
-          <input type="range" id="chaos-breath-int" min="1" max="100" value="40"
-            style="flex:1;accent-color:#10b981;height:4px"
-            oninput="updChaosInt('breath',this.value)">
-          <span id="chaos-breath-int-val" style="font-size:11px;color:#34d399;font-weight:500;min-width:28px">40</span>
-          <span id="chaos-breath-int-label" style="font-size:10px;color:var(--muted);min-width:80px">Run rẩy</span>
-        </div>
-      </div>
-      <div class="chips" style="gap:5px;margin-bottom:6px">
-        <span class="chip" data-g="chaos_breath">Hơi thở ngưng tụ — visible mist lạnh</span>
-        <span class="chip" data-g="chaos_breath">Thở gấp — chest 2cm mỗi 3 giây</span>
-        <span class="chip" data-g="chaos_breath">Thở nín — không thở trong 4 giây</span>
-        <span class="chip" data-g="chaos_breath">Môi run nhẹ — micro tremor</span>
-        <span class="chip" data-g="chaos_breath">Vai căng — cơ bắp bề mặt visible</span>
-        <span class="chip" data-g="chaos_breath">Cổ họng co bóp — nuốt nước bọt</span>
-        <span class="chip" data-g="chaos_breath">Lồng ngực nén — sobbing rhythm</span>
-        <span class="chip" data-g="chaos_breath">Thở dài 1 lần — exhale visible</span>
-        <span class="chip" data-g="chaos_breath">Cằm run — jaw micro-tremor</span>
-        <span class="chip" data-g="chaos_breath">Lông mi ướt — blink chậm 0.5s</span>
-        <span class="chip" data-g="chaos_breath">Gân cổ visible khi căng thẳng</span>
-        <span class="chip" data-g="chaos_breath">Nhịp tim trên thái dương — pulse visible</span>
-      </div>
-      <div><div class="slbl" style="margin-bottom:4px">Mô tả breath tùy chỉnh</div>
-        <textarea id="breath-desc" rows="2" placeholder="VD: Faint breath condensation 0.3s wisps between sobs. Chest compression: 2cm rise every 4 seconds..." oninput="capNhat()" style="font-size:11px"></textarea>
-      </div>
-    </div>
+
+
 
     <!-- PARTICLE & ENVIRONMENT -->
     <div>
@@ -2097,7 +2037,7 @@ function veShot(){
 
         <div style="font-size:10px;color:#f87171;font-weight:500;margin-bottom:4px;letter-spacing:.5px">⏳ HIỆU ỨNG THỜI GIAN</div>
         <div class="schips" style="flex-wrap:wrap;gap:4px">
-          ${['⏩ Timelapse 10x — tua nhanh','🔁 Loop liền mạch','⏪ Chuyển động ngược','🌀 Dolly Zoom Vertigo','📸 Strobe nhấp nháy 4Hz'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
+          ${['⏩ Timelapse 10x — tua nhanh','🔁 Loop liền mạch','⏪ Chuyển động ngược','🌀 Dolly Zoom — Hiệu ứng Vertigo','📸 Strobe nhấp nháy 4Hz'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
         </div>
       </div>
       <!-- MÔ TẢ + ÂM THANH -->
@@ -2210,25 +2150,11 @@ function taoVI(){
   if(cl.length){L.push('[CHẤT LƯỢNG]');L.push(cl.join(', ')+'.');L.push('');}
   if(MM.emo.length||MM.sub.length||MM.body.length){L.push('[CẢM XÚC]');if(MM.emo.length)L.push('Cảm xúc: '+MM.emo.map(e=>e.replace(/^\S+\s/,'')).join(', ')+'.');if(MM.sub.length)L.push('Nội tâm ẩn: '+MM.sub.join(', ')+'.');if(MM.body.length)L.push('Biểu hiện: '+MM.body.join(', ')+'.');L.push('Nguyên tắc: Thể hiện qua hành động — không khai báo trực tiếp.');L.push('');}
   // ===== CHAOS ELEMENTS =====
-  const _cw=MM.chaos_water||[], _cb=MM.chaos_breath||[], _ce=MM.chaos_env||[];
-  const _wd=(document.getElementById('water-desc')||{}).value||'';
-  const _bd=(document.getElementById('breath-desc')||{}).value||'';
-  const _cwi=SS.chaos_water_intensity?`intensity ${SS.chaos_water_intensity}/100 — ${getChaosLabel(SS.chaos_water_intensity,CHAOS_WATER_LABELS)}`:'';const _cbi=SS.chaos_breath_intensity?`intensity ${SS.chaos_breath_intensity}/100 — ${getChaosLabel(SS.chaos_breath_intensity,CHAOS_BREATH_LABELS)}`:'';const _cei=SS.chaos_env_intensity?`density ${SS.chaos_env_intensity}/100 — ${getChaosLabel(SS.chaos_env_intensity,CHAOS_ENV_LABELS)}`:'';
-  if(_cw.length||_wd.trim()){
-    L.push('[VẬT LÝ NƯỚC]'+((_cwi)?' — Cường độ: '+_cwi:''));
-    _cw.forEach(w=>L.push('• '+w));
-    if(_wd.trim())L.push(_wd.trim());
-    L.push('');
-  }
-  if(_cb.length||_bd.trim()){
-    L.push('[HƠI THỞ & CƠ THỂ]'+((_cbi)?' — Cường độ: '+_cbi:''));
-    _cb.forEach(b=>L.push('• '+b));
-    if(_bd.trim())L.push(_bd.trim());
-    L.push('');
-  }
+  const _ce = MM.chaos_env || [];
+  const _cei = SS.chaos_env_intensity ? `mật độ ${SS.chaos_env_intensity}/100 — ${getChaosLabel(SS.chaos_env_intensity, CHAOS_ENV_LABELS)}` : '';
   if(_ce.length){
-    L.push('[HẠT & MÔI TRƯỜNG]'+((_cei)?' — Mật độ: '+_cei:''));
-    _ce.forEach(e=>L.push('• '+e));
+    L.push('[HẠT & MÔI TRƯỜNG]' + (_cei ? ' — ' + _cei : ''));
+    _ce.forEach(e => L.push('• ' + e));
     L.push('');
   }
 
@@ -6384,16 +6310,18 @@ async function apDungMot(idx){
 
 function apDungTatCa(){
   if(!kbShotData.length){ alert('Chưa có shot nào.'); return; }
-  [...kbShotData].reverse().forEach((s, i) => {
+  // Clear existing shots and add in correct order
+  kbShotData.forEach((s, i) => {
     soId++;
     const timeMatch = s.time ? s.time.match(/(\d+(?:\.\d+)?)\s*[s–\-]\s*(\d+(?:\.\d+)?)/) : null;
     const start = timeMatch ? parseFloat(timeMatch[1]) : (i * 5);
     const end = timeMatch ? parseFloat(timeMatch[2]) : (start + 5);
-    cacShot.unshift({
+    cacShot.push({
       id: soId, start, end, tg: end - start,
-      cuMay: s.cam || '', angle: '', lens: '', speed: '',
-      shotSize: '', specialFx: '',
+      cuMay: s.cuMay || s.cam || '', angle: '', lens: s.lens || '', speed: '',
+      shotSize: s.shotSize || '', specialFx: '',
       moTa: s.prompt || s.action || '',
+      shotPrompt: '',
       thoai: 'Không thoại'
     });
   });
