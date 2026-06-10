@@ -5,7 +5,7 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { prompt, size = '1536x1024', quality = 'medium' } = req.body;
+  const { prompt, quality = 'medium' } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Thiếu prompt.' });
 
   const apiKey = process.env.OPENAI_API_KEY;
@@ -20,15 +20,20 @@ export default async function handler(req, res) {
       },
       body: JSON.stringify({
         model: 'gpt-image-1',
-        prompt,
+        prompt: prompt.slice(0, 1000),
         n: 1,
-        size,
-        quality
+        size: '1536x1024',
+        quality: quality,
+        output_format: 'url'
       })
     });
 
     const data = await response.json();
-    if (!response.ok) return res.status(response.status).json({ error: data.error?.message || 'OpenAI error' });
+    
+    if (!response.ok) {
+      console.error('OpenAI error:', JSON.stringify(data));
+      return res.status(response.status).json({ error: data.error?.message || JSON.stringify(data) });
+    }
 
     const imageData = data.data?.[0];
     if (!imageData) return res.status(500).json({ error: 'Không nhận được ảnh.' });
