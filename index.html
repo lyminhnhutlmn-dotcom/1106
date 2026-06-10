@@ -777,13 +777,18 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
                   <button class="btn-i" onclick="apDungBoiCanhVaoDienXuat()" style="font-size:10px">→ Vào Khung Sườn</button>
                 </div>
               </div>
+              <div id="kb-scene-img" style="display:none;margin-top:8px"></div>
               <div id="kb-scene-prompt" style="background:var(--bg);border:1px solid #1a3a1a;border-radius:7px;padding:8px;font-size:11px;line-height:1.7;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:150px;overflow-y:auto;cursor:pointer" onclick="chinhSuaPromptScene(this)">Đang phân tích...</div>
             </div>
             <div style="padding:6px 13px 8px;border-top:1px solid #0f2a0f">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:5px">
                 <span style="font-size:11px;color:#f59e0b;font-weight:500">🪑 Prompt Đạo Cụ</span>
-                <button class="btn-i" id="nut-cp-props" onclick="saoCHepPrompt('props')" style="font-size:10px;border-color:#f59e0b;color:#f59e0b">⊕ Copy</button>
+                <div style="display:flex;gap:5px;flex-wrap:wrap">
+                  <button class="btn-i" onclick="taoAnhDaoCu()" style="font-size:10px;border-color:#818cf8;color:#818cf8">🖼️ Tạo ảnh đạo cụ</button>
+                  <button class="btn-i" id="nut-cp-props" onclick="saoCHepPrompt('props')" style="font-size:10px;border-color:#f59e0b;color:#f59e0b">⊕ Copy</button>
+                </div>
               </div>
+              <div id="kb-props-img" style="display:none;margin-top:8px"></div>
               <div id="kb-props-prompt" style="background:var(--bg);border:1px solid #2a1f0a;border-radius:7px;padding:8px;font-size:11px;line-height:1.7;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:150px;overflow-y:auto;cursor:pointer" onclick="chinhSuaPromptScene(this)">Đang phân tích...</div>
             </div>
             <div style="padding:6px 13px 8px;border-top:1px solid #0f2a0f;display:flex;gap:6px;flex-wrap:wrap">
@@ -6339,6 +6344,89 @@ async function taoAnhStoryboard(id){
   } catch(e) {
     if(wrap) wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px">❌ ${e.message}</div>`;
   }
+}
+
+
+// ===== TẠO ẢNH BỐI CẢNH & ĐẠO CỤ =====
+async function taoAnhBoiCanh(){
+  const prompt = document.getElementById('kb-scene-prompt')?.textContent?.trim();
+  if(!prompt || prompt.length < 20){
+    alert('Phân tích bối cảnh trước để có prompt.');
+    return;
+  }
+  await _taoAnhBoiCanhDaoCu('kb-scene-img', prompt, 'bối cảnh');
+}
+
+async function taoAnhDaoCu(){
+  const prompt = document.getElementById('kb-props-prompt')?.textContent?.trim();
+  if(!prompt || prompt.length < 20){
+    alert('Phân tích đạo cụ trước để có prompt.');
+    return;
+  }
+  await _taoAnhBoiCanhDaoCu('kb-props-img', prompt, 'đạo cụ');
+}
+
+async function _taoAnhBoiCanhDaoCu(wrapId, rawPrompt, label){
+  const wrap = document.getElementById(wrapId);
+  if(!wrap) return;
+
+  wrap.style.display = 'block';
+  wrap.innerHTML = `<div style="padding:16px;text-align:center;color:#818cf8;font-size:11px;border:1px solid #818cf8;border-radius:7px">⏳ Đang tạo ảnh ${label}...</div>`;
+
+  // Build optimized image prompt
+  const system = `You are a film production designer. 
+Convert the following scene/props analysis into a concise image generation prompt (max 200 words).
+Focus on: visual composition, lighting, colors, materials, atmosphere.
+Output ONLY the image prompt, no explanation.
+End with: photorealistic, cinematic, 8K, film still, professional photography --ar 16:9`;
+
+  let imgPrompt = '';
+  try {
+    await goiClaude(system, rawPrompt.slice(0, 800), (chunk) => {
+      imgPrompt += chunk;
+    });
+  } catch(e) {
+    wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px">❌ ${e.message}</div>`;
+    return;
+  }
+
+  // Generate image
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: imgPrompt.slice(0, 1000),
+        quality: 'medium'
+      })
+    });
+
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
+
+    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
+    if(!imgSrc) throw new Error('Không nhận được ảnh');
+
+    wrap.innerHTML = `
+      <div style="border:1px solid #818cf8;border-radius:8px;overflow:hidden">
+        <img src="${imgSrc}" style="width:100%;display:block;cursor:pointer" onclick="this.requestFullscreen?.()" title="Click để xem lớn">
+        <div style="padding:7px 10px;background:#0d0d1a;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+          <span style="font-size:10px;color:#818cf8;flex:1">🎨 Ảnh ${label}</span>
+          <button class="btn-i" onclick="taoLaiAnhBoiCanh('${wrapId}')" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
+          <a href="${imgSrc}" download="anna-${label.replace(' ','-')}.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇ Tải</a>
+          <button class="btn-i" onclick="document.getElementById('${wrapId}').style.display='none'" style="font-size:9px">✕</button>
+        </div>
+        <div style="padding:6px 10px;background:#050510;font-size:9px;color:#333;line-height:1.5">${imgPrompt.slice(0,150)}...</div>
+      </div>`;
+
+  } catch(e) {
+    wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px;border:1px solid #3a1a1a;border-radius:7px">❌ ${e.message}</div>`;
+  }
+}
+
+function taoLaiAnhBoiCanh(wrapId){
+  if(wrapId === 'kb-scene-img') taoAnhBoiCanh();
+  else taoAnhDaoCu();
 }
 
 // ===== INIT =====
