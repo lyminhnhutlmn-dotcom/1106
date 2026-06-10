@@ -753,7 +753,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
           <div style="padding:10px 13px;background:#0a1a0a;border-bottom:1px solid #1a3a1a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
             <div>
               <div style="font-size:12px;font-weight:500;color:#4ade80;margin-bottom:1px">🎨 Phân Tích Bối Cảnh & Đạo Cụ</div>
-              <div style="font-size:10px;color:var(--muted)">Claude phân tích chi tiết — màu sắc, vật liệu, đạo cụ, không gian, ánh sáng môi trường</div>
+              <div style="font-size:10px;color:var(--muted)">AI phân tích chi tiết — màu sắc, vật liệu, đạo cụ, không gian, ánh sáng môi trường</div>
             </div>
             <div style="display:flex;gap:5px">
               <button onclick="phanTichBoiCanh()" style="padding:7px 14px;border-radius:7px;border:none;background:#4ade80;color:#0d0d0d;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">🎨 Phân Tích</button>
@@ -1619,7 +1619,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <button class="btn-i" id="nut-cp-ai" onclick="saoCHepAI()" style="display:none">⊕ Sao chép kết quả AI</button>
       </div>
     </div>
-    <p style="font-size:10px;color:var(--muted);margin-top:5px;font-style:italic">⚡ Powered by Claude AI · ANNAHOUSESTUDIO Backend</p>
+    <p style="font-size:10px;color:var(--muted);margin-top:5px;font-style:italic">⚡ Powered by ANNAHOUSESTUDIO AI</p>
   </div>
 </div>
 
@@ -2475,7 +2475,7 @@ function dungAI(){
   document.getElementById('nut-dung-ai').style.display = 'none';
 }
 
-async function goiClaude(systemPrompt, userMsg, onChunk){
+async function goiAI(systemPrompt, userMsg, onChunk){
   const BACKEND = '';
 
   aiController = new AbortController();
@@ -2523,11 +2523,11 @@ async function goiClaude(systemPrompt, userMsg, onChunk){
 async function dichAI(){
   const nd = dangHien === 'en' ? kqEN : kqVI;
   if(!nd){alert('Tạo prompt tiếng Việt trước rồi mới dịch.');return;}
-  moAIPanel('✨ Claude đang dịch sang tiếng Anh...');
+  moAIPanel('✨ 🌐 Đang dịch prompt... sang tiếng Anh...');
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
-    const ok = await goiClaude(
+    const ok = await goiAI(
       `You are an expert cinematic prompt translator for AI video generation (Seedance 2.0 on Higgsfield).
 Translate Vietnamese cinematic prompts to professional English.
 Rules:
@@ -2561,11 +2561,11 @@ ${nd}`,
 async function caiThienAI(){
   const nd = dangHien === 'en' ? kqEN : kqVI;
   if(!nd){alert('Tạo prompt trước rồi mới cải thiện.');return;}
-  moAIPanel('💡 Claude đang phân tích và cải thiện prompt...');
+  moAIPanel('💡 🎬 Đang phân tích và cải thiện prompt...');
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
-    const ok = await goiClaude(
+    const ok = await goiAI(
       `You are a master cinematographer and prompt engineer for Seedance 2.0 on Higgsfield.
 Your mission: elevate any prompt into a CINEMATIC MASTERPIECE worthy of a feature film.
 
@@ -2613,7 +2613,7 @@ function apDungAI(){
   if(!aiKetQua) return;
   if(dangHien === 'en') kqEN = aiKetQua;
   else kqVI = aiKetQua;
-  hienKQ(aiKetQua, dangHien, '✨ Đã cải thiện bởi Claude AI');
+  hienKQ(aiKetQua, dangHien, '✨ Đã cải thiện bởi AI AI');
   dongAIPanel();
 }
 
@@ -3340,15 +3340,15 @@ PROMPT NHÁP:
   if(nutPT) nutPT.disabled = true;
   // kb-btn-apply removed
   // kb-btn-copy removed
-  document.getElementById('kb-result-title').textContent = '⏳ Claude đang phân tích kịch bản...';
+  document.getElementById('kb-result-title').textContent = '⏳ 🎬 ANNAHOUSESTUDIO đang phân tích...';
   document.getElementById('kb-result').scrollIntoView({behavior:'smooth', block:'start'});
 
   kbCtrl = new AbortController();
   let acc = '';
 
   try{
-    // Use Vercel backend via goiClaude
-    await goiClaude(
+    // Use Vercel backend via goiAI
+    await goiAI(
       systemPrompt,
       `Phân tích kịch bản này:\n\n${noiDung}`,
       (chunk) => {
@@ -4134,7 +4134,7 @@ Analyze the script/shot breakdown and output in this EXACT format (use these exa
         'anthropic-dangerous-direct-browser-access': 'true'
       },
       body: JSON.stringify({
-        model: 'claude-sonnet-4-6',
+        model: 'annahousestudio-engine-4-6',
         max_tokens: 6000,
         stream: true,
         system: systemPrompt,
@@ -4241,10 +4241,10 @@ async function taoAnh(){
   const outputWrap = document.getElementById('img-output-wrap');
   const grid = document.getElementById('img-grid');
 
-  if(statusEl) statusEl.textContent = '⏳ Claude đang tối ưu prompt ảnh...';
+  if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu prompt ảnh...';
   if(outputWrap) outputWrap.style.display = 'none';
 
-  // Step 1: Ask Claude to create optimized image prompt
+  // Step 1: Ask AI to create optimized image prompt
   try{
     const optRes = await fetch('https://api.anthropic.com/v1/messages',{
       method:'POST',
@@ -4255,7 +4255,7 @@ async function taoAnh(){
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'annahousestudio-engine-4-6',
         max_tokens:500,
         messages:[{role:'user',content:`Convert this Vietnamese cinematic prompt into an optimized English image generation prompt for ${style} style, ${ratio} ratio.
 Keep it under 200 words. Focus on: visual composition, lighting, mood, key elements.
@@ -4545,7 +4545,7 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'annahousestudio-engine-4-6',
         max_tokens:8000,
         stream:true,
         system:systemPrompt,
@@ -4621,7 +4621,7 @@ function apDungOptimize(){
   if(!optKetQua){return;}
   if(dangHien==='en') kqEN = optKetQua;
   else kqVI = optKetQua;
-  hienKQ(optKetQua, dangHien, '✂️ Đã tối ưu bởi Claude AI');
+  hienKQ(optKetQua, dangHien, '✂️ Đã tối ưu bởi AI AI');
   dongOptimize();
   // Feedback
   const btn = document.getElementById('opt-apply-btn');
@@ -4833,7 +4833,7 @@ async function taoCharPromptAI(){
   }
 
   const el = document.getElementById('char-preview');
-  if(el) el.innerHTML = '<span style="color:var(--gold)">✨ Claude đang tạo Character Lock Prompt...</span>';
+  if(el) el.innerHTML = '<span style="color:var(--gold)">✨ AI đang tạo Character Lock Prompt...</span>';
 
   const input = [
     face ? 'Khuôn mặt: ' + face : '',
@@ -4859,7 +4859,7 @@ async function taoCharPromptAI(){
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'annahousestudio-engine-4-6',
         max_tokens:4000,
         messages:[{role:'user',content:`Create a professional CHARACTER CONSISTENCY LOCK prompt in English for AI video generation (Seedance 2.0 on Higgsfield).
 
@@ -5016,7 +5016,7 @@ async function taoImgPromptNhanVat(){
   }
 
   const statusEl = document.getElementById('char-img-status');
-  if(statusEl) statusEl.textContent = '⏳ Claude đang tối ưu...';
+  if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu...';
 
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
@@ -5028,7 +5028,7 @@ async function taoImgPromptNhanVat(){
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'annahousestudio-engine-4-6',
         max_tokens:400,
         messages:[{role:'user',content:`Optimize this character image prompt for AI image generation (Ideogram/Midjourney/DALL-E).
 Make it more specific and professional. Add technical photography terms.
@@ -5063,7 +5063,7 @@ async function taoAnhNhanVat(){
   const outputEl = document.getElementById('char-img-output');
   const optEl = document.getElementById('char-img-opt-prompt');
 
-  if(statusEl) statusEl.textContent = '⏳ Claude đang tối ưu prompt...';
+  if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu prompt...';
 
   try{
     const res = await fetch('https://api.anthropic.com/v1/messages',{
@@ -5075,7 +5075,7 @@ async function taoAnhNhanVat(){
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
+        model:'annahousestudio-engine-4-6',
         max_tokens:500,
         messages:[{role:'user',content:`You are an expert at writing AI image generation prompts.
 
