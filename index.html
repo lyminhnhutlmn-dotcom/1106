@@ -2085,19 +2085,19 @@ function veShot(){
       <div style="margin-bottom:8px">
         <div class="slbl" style="margin-bottom:5px">✨ Kỹ thuật đặc biệt cho Shot này</div>
 
-        <div style="font-size:10px;color:#9b7fe8;font-weight:500;margin-bottom:4px;letter-spacing:.5px">🧊 FREEZE FRAME</div>
+        <div style="font-size:10px;color:#9b7fe8;font-weight:500;margin-bottom:4px;letter-spacing:.5px">🧊 ĐÓNG BĂNG</div>
         <div class="schips" style="flex-wrap:wrap;gap:4px;margin-bottom:6px">
           ${['🧊 Đóng băng hoàn toàn','🌀 Bullet Time 180°','🔄 Orbital 360° đóng băng','👁️ Chỉ mắt chuyển động','🌊 Thế giới đóng băng','💥 Đóng băng giữa vụ nổ','🔎 Đóng băng + Dolly cận'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
         </div>
 
-        <div style="font-size:10px;color:#4ade80;font-weight:500;margin-bottom:4px;letter-spacing:.5px">🐌 SLOW MOTION</div>
+        <div style="font-size:10px;color:#4ade80;font-weight:500;margin-bottom:4px;letter-spacing:.5px">🐌 CHUYỂN ĐỘNG CHẬM</div>
         <div class="schips" style="flex-wrap:wrap;gap:4px;margin-bottom:6px">
-          ${['🎞️ Slow-mo 0.7x nhẹ','🌊 Slow-mo 0.5x chuẩn','💧 Slow-mo 0.25x mạnh','👻 Phantom 0.1x','📈 Speed Ramp tăng','📉 Speed Ramp giảm','🔄 Slow-mo + Orbital 360°','🌀 Slow-mo chủ quan'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
+          ${['🎞️ Chậm 0.7x — nhẹ','🌊 Chậm 0.5x — chuẩn','💧 Chậm 0.25x — mạnh','👻 Phantom 0.1x — cực chậm','📈 Speed Ramp tăng tốc','📉 Speed Ramp giảm tốc','🔄 Chậm + Orbital 360°','🌀 Chậm — góc nhìn chủ quan'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
         </div>
 
-        <div style="font-size:10px;color:#f87171;font-weight:500;margin-bottom:4px;letter-spacing:.5px">⏳ THỜI GIAN KHÁC</div>
+        <div style="font-size:10px;color:#f87171;font-weight:500;margin-bottom:4px;letter-spacing:.5px">⏳ HIỆU ỨNG THỜI GIAN</div>
         <div class="schips" style="flex-wrap:wrap;gap:4px">
-          ${['⏩ Timelapse 10x','🔁 Loop liền mạch','⏪ Reverse motion','🌀 Dolly Zoom Vertigo','📸 Strobe 4Hz'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
+          ${['⏩ Timelapse 10x — tua nhanh','🔁 Loop liền mạch','⏪ Chuyển động ngược','🌀 Dolly Zoom Vertigo','📸 Strobe nhấp nháy 4Hz'].map(fx=>`<span class="schip${s.specialFx===fx?' s on':''}" onclick="updShot(${s.id},'specialFx','${fx}');veShot()">${fx}</span>`).join('')}
         </div>
       </div>
       <!-- MÔ TẢ + ÂM THANH -->
@@ -6325,26 +6325,61 @@ function hienShotCards(text){
     </div>`).join('');
 }
 
-function apDungMot(idx){
+async function apDungMot(idx){
   const s = kbShotData[idx];
   if(!s) return;
   soId++;
   const timeMatch = s.time ? s.time.match(/(\d+(?:\.\d+)?)\s*[s–\-]\s*(\d+(?:\.\d+)?)/) : null;
   const start = timeMatch ? parseFloat(timeMatch[1]) : (idx * 5);
   const end = timeMatch ? parseFloat(timeMatch[2]) : (start + 5);
+
+  // Detect if content is English → translate to Vietnamese
+  const rawText = s.prompt || s.action || '';
+  let moTaVI = rawText;
+  const isEnglish = rawText && /[a-zA-Z]{3,}/.test(rawText) && 
+                    rawText.replace(/[^a-zA-Z\s]/g,'').length > rawText.length * 0.3;
+
+  const newShotId = soId;
   cacShot.unshift({
-    id: soId, start, end, tg: end - start,
+    id: newShotId, start, end, tg: end - start,
     cuMay: s.cuMay || s.cam || '', angle: '', lens: s.lens || '', speed: '',
     shotSize: s.shotSize || '', specialFx: '',
-    moTa: s.prompt || s.action || '',
+    moTa: moTaVI,
     thoai: 'Không thoại'
   });
   veShot();
   sw('shots');
   window.scrollTo({top:0, behavior:'smooth'});
-  setTimeout(()=>{ const bd=document.getElementById('sb-'+soId); if(bd)bd.style.display=''; }, 100);
+  setTimeout(()=>{ const bd=document.getElementById('sb-'+newShotId); if(bd)bd.style.display=''; }, 100);
+
   const btn = document.querySelector(`[onclick="apDungMot(${idx})"]`);
   if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã thêm!'; setTimeout(()=>btn.innerHTML=o, 2000); }
+
+  // Auto translate if English
+  if(isEnglish && rawText.length > 10){
+    const ta = document.getElementById('mota-' + newShotId);
+    if(ta) ta.value = '⏳ Đang dịch...';
+    try {
+      let translated = '';
+      await goiClaude(
+        'Dịch đoạn mô tả cảnh quay sau sang tiếng Việt. Giữ nguyên thuật ngữ kỹ thuật điện ảnh (SSS, DOF, Kelvin, mm, ft/s...). Chỉ trả về bản dịch, không giải thích.',
+        rawText,
+        (chunk) => {
+          translated += chunk;
+          const ta2 = document.getElementById('mota-' + newShotId);
+          if(ta2) ta2.value = translated;
+        }
+      );
+      // Save translated
+      const shot = cacShot.find(x => x.id === newShotId);
+      if(shot) shot.moTa = translated;
+      const ta3 = document.getElementById('mota-' + newShotId);
+      if(ta3) ta3.value = translated;
+    } catch(e) {
+      const ta4 = document.getElementById('mota-' + newShotId);
+      if(ta4) ta4.value = rawText; // fallback to original
+    }
+  }
 }
 
 function apDungTatCa(){
