@@ -646,14 +646,16 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
           </div>
         </div>
         <div>
-          <div class="lbl" style="margin-bottom:6px"><span class="tag">Số shot đề xuất</span></div>
-          <div class="chips">
-            <span class="chip s" data-g="kb_shots">1 shot</span>
-            <span class="chip s" data-g="kb_shots">2 shots</span>
-            <span class="chip s" data-g="kb_shots" id="kb-shots-default">3 shots</span>
-            <span class="chip s" data-g="kb_shots">4 shots</span>
-            <span class="chip s" data-g="kb_shots">5 shots</span>
+          <div class="lbl" style="margin-bottom:6px"><span class="tag">Số shot & Cài đặt máy</span></div>
+          <div class="chips" style="margin-bottom:8px">
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(1)">1 shot</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(2)">2 shots</span>
+            <span class="chip s" data-g="kb_shots" id="kb-shots-default" onclick="taoKBShotSetup(3)">3 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(4)">4 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(5)">5 shots</span>
           </div>
+          <!-- SHOT SETUP CARDS -->
+          <div id="kb-shot-setup" style="display:flex;flex-direction:column;gap:6px"></div>
         </div>
       </div>
 
@@ -3243,6 +3245,20 @@ async function phanTichKichBan(){
     ? 'Tự quyết định số lượng shot phù hợp nhất (1-5 shot) dựa trên nội dung.'
     : `Bắt buộc chia thành đúng ${shots}.`;
 
+  // Build per-shot camera instructions from kbShotSetupData
+  let shotCamInstructs = '';
+  if(kbShotSetupData && kbShotSetupData.length > 0){
+    const hasCam = kbShotSetupData.some(s => s.cuMay || s.shotSize || s.lens);
+    if(hasCam){
+      shotCamInstructs = '\n\n⚠️ CÚ MÁY ĐÃ ĐƯỢC XÁC ĐỊNH TRƯỚC — BẮT BUỘC GIỮ NGUYÊN:\n';
+      kbShotSetupData.forEach((s, i) => {
+        const parts = [s.cuMay, s.shotSize, s.lens].filter(Boolean);
+        if(parts.length) shotCamInstructs += `Shot ${i+1}: ${parts.join(', ')}\n`;
+      });
+      shotCamInstructs += 'KHÔNG thay đổi hay đề xuất cú máy khác cho các shot đã xác định.';
+    }
+  }
+
   const langInstruct = lang === 'Tiếng Anh (EN)'
     ? 'Viết toàn bộ bằng tiếng Anh.'
     : lang === 'Cả hai VI + EN'
@@ -3343,7 +3359,7 @@ PROMPT NHÁP:
     // Use Vercel backend via goiAI
     await goiAI(
       systemPrompt,
-      `Phân tích kịch bản này:\n\n${noiDung}`,
+      `Phân tích kịch bản này:\n\n${noiDung}${shotCamInstructs}`,
       (chunk) => {
         acc += chunk;
         const bodyEl = document.getElementById('kb-output');
@@ -6217,36 +6233,8 @@ function hienShotCards(text){
       <div style="padding:10px 13px;font-size:11px;color:var(--ink);line-height:1.7">
         ${s.action || s.fullBlock.slice(0, 200)}
       </div>
-      <div style="padding:8px 13px;background:var(--card2);border-top:1px solid var(--bdr);display:flex;gap:8px;flex-wrap:wrap;align-items:flex-end">
-        <div>
-          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎥 Cú máy</div>
-          <select id="kb-cumay-${s.idx}" style="font-size:10px" onchange="kbShotData[${s.idx-1}].cuMay=this.value">
-            <option value="">-- Chọn --</option>
-            <optgroup label="Cơ bản"><option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option></optgroup>
-            <optgroup label="Dolly"><option>Dolly tiến</option><option>Dolly lùi</option><option>Dolly ngang</option><option>Dolly chéo 45°</option><option>Pull-Back chậm</option><option>Push-In mạnh</option></optgroup>
-            <optgroup label="Arc"><option>Arc 180°</option><option>Orbital 360°</option></optgroup>
-            <optgroup label="Crane"><option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option></optgroup>
-            <optgroup label="Pro"><option>Steadicam</option><option>Tracking</option><option>Fly-through</option><option>Xoắn ốc</option></optgroup>
-            <optgroup label="Đặc biệt"><option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option></optgroup>
-          </select>
-        </div>
-        <div>
-          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎬 Cỡ cảnh</div>
-          <select id="kb-size-${s.idx}" style="font-size:10px" onchange="kbShotData[${s.idx-1}].shotSize=this.value">
-            <option value="">-- Chọn --</option>
-            <option>ECU — Cực cận</option><option>CU — Cận mặt</option><option>MCU — Nửa ngực</option>
-            <option>MS — Ngang lưng</option><option>MWS — 3/4 người</option><option>WS — Toàn thân</option><option>ELS — Toàn cảnh</option>
-          </select>
-        </div>
-        <div>
-          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🔭 Tiêu cự</div>
-          <select id="kb-lens-${s.idx}" style="font-size:10px" onchange="kbShotData[${s.idx-1}].lens=this.value">
-            <option value="">-- Chọn --</option>
-            <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option><option>50mm standard</option>
-            <option>85mm portrait</option><option>100mm macro</option><option>135mm telephoto</option><option>Anamorphic</option>
-          </select>
-        </div>
-        <button class="btn-i" onclick="apDungMot(${s.idx-1})" style="font-size:10px;border-color:var(--green);color:var(--green);margin-left:auto">🎥 → Dựng Cảnh</button>
+      <div style="padding:8px 13px;background:var(--card2);border-top:1px solid var(--bdr);display:flex;justify-content:flex-end">
+        <button class="btn-i" onclick="apDungMot(${s.idx-1})" style="font-size:10px;border-color:var(--green);color:var(--green)">🎥 → Dựng Cảnh</button>
       </div>
     </div>`).join('');
 }
@@ -6568,6 +6556,52 @@ function luuChinhSuaKB(){
     const titleEl = document.getElementById('kb-result-title');
     if(titleEl){ titleEl.textContent = '🎯 Phân tích hoàn tất'; titleEl.style.color = '#ff6b6b'; }
   }, 2000);
+}
+
+
+// ===== KB SHOT SETUP — Cài đặt máy trước khi phân tích =====
+let kbShotSetupData = []; // [{cuMay, shotSize, lens}]
+
+function taoKBShotSetup(n){
+  kbShotSetupData = Array.from({length: n}, () => ({cuMay:'', shotSize:'', lens:''}));
+  const wrap = document.getElementById('kb-shot-setup');
+  if(!wrap) return;
+
+  wrap.innerHTML = kbShotSetupData.map((s,i) => `
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:8px 10px">
+      <div style="font-size:10px;color:var(--gold);font-weight:500;margin-bottom:6px">🎬 SHOT ${i+1}</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:130px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎥 Cú máy</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].cuMay=this.value">
+            <option value="">-- Chọn --</option>
+            <optgroup label="Cơ bản"><option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option></optgroup>
+            <optgroup label="Dolly"><option>Dolly tiến</option><option>Dolly lùi</option><option>Dolly ngang</option><option>Dolly chéo 45°</option><option>Pull-Back chậm</option><option>Push-In mạnh</option></optgroup>
+            <optgroup label="Arc"><option>Arc 180°</option><option>Orbital 360°</option></optgroup>
+            <optgroup label="Crane"><option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option></optgroup>
+            <optgroup label="Pro"><option>Steadicam</option><option>Tracking</option><option>Fly-through</option><option>Xoắn ốc</option></optgroup>
+            <optgroup label="Đặc biệt"><option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option></optgroup>
+          </select>
+        </div>
+        <div style="flex:1;min-width:110px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎬 Cỡ cảnh</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].shotSize=this.value">
+            <option value="">-- Chọn --</option>
+            <option>ECU — Cực cận</option><option>CU — Cận mặt</option><option>MCU — Nửa ngực</option>
+            <option>MS — Ngang lưng</option><option>MWS — 3/4 người</option><option>WS — Toàn thân</option><option>ELS — Toàn cảnh</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:110px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🔭 Tiêu cự</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].lens=this.value">
+            <option value="">-- Chọn --</option>
+            <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option>
+            <option>50mm standard</option><option>85mm portrait</option><option>100mm macro</option>
+            <option>135mm telephoto</option><option>Anamorphic</option>
+          </select>
+        </div>
+      </div>
+    </div>`).join('');
 }
 
 // ===== INIT =====
