@@ -5012,7 +5012,7 @@ async function taoAnhNhanVat(){
 
 
 async function logEvent(event, extraData = {}) {
-  const backendURL = hfBackendURL || localStorage.getItem('hf_backend_url') || '';
+  const backendURL = '' || localStorage.getItem('hf_backend_url') || '';
   if (!backendURL) return; // Không có backend → bỏ qua
 
   const metadata = {
@@ -6311,7 +6311,6 @@ async function taoAnhStoryboard(id){
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
         prompt: prompt.slice(0, 1000),
-        size: '1536x1024',
         quality: 'medium'
       })
     });
