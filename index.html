@@ -4078,24 +4078,18 @@ function saoCHepScene(){
 }
 
 async function phanTichBoiCanh(){
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):\n\nLấy tại: console.anthropic.com');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
-
-  const noiDung = document.getElementById('kb-noi-dung')?.value.trim() || kbKetQua;
-  if(!noiDung){alert('Cần có kịch bản hoặc kết quả phân tích trước.');return;}
+  const nd = document.getElementById('kb-noi-dung')?.value.trim()
+    || document.getElementById('kb-output')?.textContent.trim()
+    || '';
+  if(!nd){ alert('Nhập nội dung kịch bản hoặc phân tích kịch bản trước.'); return; }
 
   const outEl = document.getElementById('kb-scene-output');
+  const stopBtn = document.getElementById('kb-scene-stop');
   const footEl = document.getElementById('kb-scene-foot');
-  if(outEl) outEl.textContent = '';
-  if(footEl) footEl.style.display = 'none';
-  document.getElementById('kb-scene-stop').style.display = '';
 
-  sceneCtrl = new AbortController();
-  let acc = '';
+  if(outEl) outEl.textContent = '⏳ Đang phân tích bối cảnh & đạo cụ...';
+  if(stopBtn) stopBtn.style.display = '';
+  if(footEl) footEl.style.display = 'none';
 
   const systemPrompt = `You are an expert film Production Designer and storyboard artist.
 
@@ -4135,80 +4129,37 @@ Analyze the script/shot breakdown and output in this EXACT format (use these exa
 [SET DRESSING & PROPS]
 [List each prop: Name — material (PBR: roughness X, metallic Y), color (#hex), size, placement, condition. Include @material[name] references where applicable for Higgsfield. End with overall set dressing style.]`;
 
-  try{
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': aiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'annahousestudio-engine-4-6',
-        max_tokens: 6000,
-        stream: true,
-        system: systemPrompt,
-        messages: [{role:'user', content: `Phân tích bối cảnh và đạo cụ cho kịch bản/shot sau:\n\n${noiDung.slice(0,3000)}`}]
-      }),
-      signal: sceneCtrl.signal
+  const userMsg = `Phân tích bối cảnh và đạo cụ cho kịch bản sau:
+
+${nd}`;
+
+  let acc = '';
+  sceneCtrl = new AbortController();
+  try {
+    await goiClaude(systemPrompt, userMsg, (chunk) => {
+      acc += chunk;
+      if(outEl) outEl.textContent = acc;
     });
 
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'API error '+res.status);}
+    if(footEl) footEl.style.display = '';
+    if(stopBtn) stopBtn.style.display = 'none';
 
-    const reader=res.body.getReader();const decoder=new TextDecoder();let buf='';
-    while(true){
-      const{done,value}=await reader.read();if(done)break;
-      buf+=decoder.decode(value,{stream:true});
-      const lines=buf.split('\n');buf=lines.pop();
-      for(const line of lines){
-        if(line.startsWith('data: ')){
-          const d=line.slice(6);if(d==='[DONE]')continue;
-          try{const j=JSON.parse(d);if(j.type==='content_block_delta'&&j.delta?.text){acc+=j.delta.text;sceneKetQua=acc;if(outEl)outEl.textContent=acc;}}catch(e){}
-        }
-      }
+    const sceneMatch = acc.match(/\[PROMPT BỐI CẢNH\]([\s\S]*?)(?:\[PROMPT ĐẠO CỤ\]|$)/);
+    const propsMatch = acc.match(/\[PROMPT ĐẠO CỤ\]([\s\S]*?)$/);
+    const sceneEl = document.getElementById('kb-scene-prompt');
+    const propsEl = document.getElementById('kb-props-prompt');
+    if(sceneEl) sceneEl.textContent = sceneMatch ? sceneMatch[1].trim() : acc;
+    if(propsEl) propsEl.textContent = propsMatch ? propsMatch[1].trim() : '';
+
+  } catch(e) {
+    if(e.name !== 'AbortError'){
+      if(outEl) outEl.textContent = '❌ Lỗi: ' + e.message;
     }
-
-    document.getElementById('kb-scene-stop').style.display='none';
-    if(footEl){footEl.style.display='';}
-
-    // Parse scene and props prompts
-    const sceneMatch = acc.match(/===PROMPT_BOI_CANH===\s*([\s\S]*?)(?:===PROMPT_DAO_CU===|$)/);
-    const propsMatch = acc.match(/===PROMPT_DAO_CU===\s*([\s\S]*?)$/);
-    const phânTichMatch = acc.match(/===PHAN_TICH===\s*([\s\S]*?)(?:===PROMPT_BOI_CANH===|$)/);
-
-    const scenePromptEl = document.getElementById('kb-scene-prompt');
-    const propsPromptEl = document.getElementById('kb-props-prompt');
-    const sceneOutputEl = document.getElementById('kb-scene-output');
-
-    if(scenePromptEl) scenePromptEl.textContent = sceneMatch ? sceneMatch[1].trim() : 'Không trích xuất được — xem phân tích đầy đủ bên trên.';
-    if(propsPromptEl) propsPromptEl.textContent = propsMatch ? propsMatch[1].trim() : 'Không trích xuất được — xem phân tích đầy đủ bên trên.';
-    // Show only analysis part in main output
-    if(sceneOutputEl && phânTichMatch) sceneOutputEl.textContent = phânTichMatch[1].trim();
-
-  }catch(e){
-    if(e.name!=='AbortError' && outEl) outEl.innerHTML='<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
-    document.getElementById('kb-scene-stop').style.display='none';
+    if(stopBtn) stopBtn.style.display = 'none';
   }
 }
 
-function apDungBoiCanhVaoDienXuat(){
-  if(!sceneKetQua) return;
-  // Trích xuất từ khoá bối cảnh đưa vào scene-desc
-  const sceneEl = document.getElementById('scene-desc');
-  if(sceneEl && !sceneEl.value.trim()){
-    // Lấy phần BỐI CẢNH CHÍNH từ kết quả
-    const match = sceneKetQua.match(/BỐI CẢNH CHÍNH([\s\S]*?)(?:🎨|$)/);
-    if(match) sceneEl.value = match[1].trim().replace(/•/g,'').trim();
-    capNhat();
-    sw('fw');
-  } else {
-    alert('Tab Khung Sườn > Bối Cảnh đã có nội dung. Mở tab đó để chỉnh thủ công.');
-    sw('fw');
-  }
-}
 
-// ===== TẠO HÌNH ẢNH REFERENCE =====
 async function taoHinhAnh(){
   document.getElementById('kb-image-wrap').style.display='';
   // Auto-fill prompt from shot data
@@ -6190,20 +6141,29 @@ function hienShotCards(text){
   if(!el) return;
 
   // Parse shot blocks
-  const shotBlocks = text.split(/[═=]{2,}\s*SHOT\s*[\[\(]?\d+[\]\)]?\s*[═=]{2,}/i).slice(1);
+  // Split by SHOT or SỰ KIỆN headers (Vietnamese + English)
+  let shotBlocks = text.split(/[═=]{2,}\s*(?:SHOT|SỰ KIỆN)\s*[\[\(]?\d+[\]\)]?\s*[═=]{2,}/i).slice(1);
 
-  // Fallback
+  // Fallback patterns
   if(!shotBlocks.length){
-    const alt = text.split(/(?:^|\n)(?:SHOT|Shot)\s*\d+[:\s]/m);
+    shotBlocks = text.split(/(?:^|\n)[═=─]{3,}\s*(?:SHOT|SỰ KIỆN)\s*\d+/mi).slice(1);
+  }
+  if(!shotBlocks.length){
+    const alt = text.split(/(?:^|\n)(?:SỰ KIỆN|SHOT|Shot)\s*\d+[:\s]/m);
     if(alt.length > 1) shotBlocks.push(...alt.slice(1));
+  }
+  if(!shotBlocks.length){
+    // Try splitting by ⏱ timestamp markers
+    const alt2 = text.split(/\n(?=⏱|📷|🎯)/);
+    if(alt2.length > 1) shotBlocks.push(...alt2.slice(1));
   }
   if(!shotBlocks.length) return;
 
   kbShotData = shotBlocks.map((block, i) => {
     const timeMatch = block.match(/(?:⏱|Time|Thời gian)[^\d]*(\d+(?:\.\d+)?)\s*[s–\-→]\s*(\d+(?:\.\d+)?)/i);
-    const camMatch = block.match(/(?:📷|Camera|Cú máy)[^\n]*:\s*([^\n]+)/i);
-    const actionMatch = block.match(/(?:🎭|Action|Hành động)[^\n]*:\s*([^\n]+)/i);
-    const promptMatch = block.match(/PROMPT[\s\S]*?:\s*([\s\S]+?)(?:\n\n|\n═|$)/i);
+    const camMatch = block.match(/(?:📷|Camera|Cú máy|Máy quay)[^\n]*:\s*([^\n]+)/i);
+    const actionMatch = block.match(/(?:🎭|Action|Hành động|Diễn xuất)[^\n]*:\s*([^\n]+)/i);
+    const promptMatch = block.match(/(?:PROMPT|Prompt)[\s\S]*?:\s*([\s\S]+?)(?:\n\n|\n[═─]{3}|$)/i);
 
     return {
       idx: i + 1,
@@ -6221,7 +6181,7 @@ function hienShotCards(text){
     <div style="background:var(--card);border:1px solid #2a1a1a;border-radius:9px;overflow:hidden;margin-bottom:4px">
       <div style="padding:9px 13px;background:#1a0808;border-bottom:1px solid #2a1a1a;display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap">
         <div>
-          <span style="font-size:12px;font-weight:500;color:#ff6b6b">🎬 SHOT ${s.idx}</span>
+          <span style="font-size:12px;font-weight:500;color:#ff6b6b">🎬 SỰ KIỆN ${s.idx}</span>
           ${s.time ? `<span style="font-size:10px;color:var(--gold);margin-left:8px">⏱ ${s.time}</span>` : ''}
           ${s.cam ? `<span style="font-size:10px;color:var(--muted);margin-left:8px">📷 ${s.cam}</span>` : ''}
         </div>
