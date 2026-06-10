@@ -778,7 +778,19 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
                 </div>
               </div>
               <div id="kb-scene-img" style="display:none;margin-top:8px"></div>
-              <div id="kb-scene-prompt" style="background:var(--bg);border:1px solid #1a3a1a;border-radius:7px;padding:8px;font-size:11px;line-height:1.7;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:150px;overflow-y:auto;cursor:pointer" onclick="chinhSuaPromptScene(this)">Đang phân tích...</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:4px">
+                <span style="font-size:9px;color:var(--muted)">✏️ Click vào text để chỉnh sửa</span>
+                <button class="btn-i" onclick="robustCopy(document.getElementById('kb-scene-prompt').innerText)" style="font-size:9px;border-color:#4ade80;color:#4ade80">⊕ Copy text</button>
+              </div>
+              <div id="kb-scene-prompt" contenteditable="true" style="background:var(--bg);border:1px solid #1a3a1a;border-radius:7px;padding:8px;font-size:11px;line-height:1.7;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;min-height:60px;max-height:250px;overflow-y:auto;outline:none;cursor:text" onblur="luuScenePrompt(this,'scene')">Đang phân tích...</div>
+              <div style="margin-top:6px">
+                <div style="font-size:9px;color:#818cf8;margin-bottom:3px">🖼️ Prompt tạo ảnh bối cảnh (chỉnh sửa trước khi tạo)</div>
+                <div id="kb-scene-img-prompt" contenteditable="true" style="background:#050510;border:1px solid #818cf8;border-radius:7px;padding:8px;font-size:10px;line-height:1.7;white-space:pre-wrap;color:#a5b4fc;font-family:'IBM Plex Mono',monospace;min-height:40px;max-height:150px;overflow-y:auto;outline:none;cursor:text"></div>
+                <div style="display:flex;gap:5px;margin-top:4px">
+                  <button class="btn-i" onclick="taoAnhBoiCanh()" style="font-size:9px;border-color:#818cf8;color:#818cf8">🖼️ Tạo ảnh</button>
+                  <button class="btn-i" onclick="robustCopy(document.getElementById('kb-scene-img-prompt').innerText)" style="font-size:9px;border-color:#818cf8;color:#818cf8">⊕ Copy prompt</button>
+                </div>
+              </div>
             </div>
             <div style="padding:6px 13px 8px;border-top:1px solid #0f2a0f">
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:5px">
@@ -789,7 +801,19 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
                 </div>
               </div>
               <div id="kb-props-img" style="display:none;margin-top:8px"></div>
-              <div id="kb-props-prompt" style="background:var(--bg);border:1px solid #2a1f0a;border-radius:7px;padding:8px;font-size:11px;line-height:1.7;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:150px;overflow-y:auto;cursor:pointer" onclick="chinhSuaPromptScene(this)">Đang phân tích...</div>
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;flex-wrap:wrap;gap:4px">
+                <span style="font-size:9px;color:var(--muted)">✏️ Click vào text để chỉnh sửa</span>
+                <button class="btn-i" onclick="robustCopy(document.getElementById('kb-props-prompt').innerText)" style="font-size:9px;border-color:#f59e0b;color:#f59e0b">⊕ Copy text</button>
+              </div>
+              <div id="kb-props-prompt" contenteditable="true" style="background:var(--bg);border:1px solid #2a1f0a;border-radius:7px;padding:8px;font-size:11px;line-height:1.7;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;min-height:60px;max-height:250px;overflow-y:auto;outline:none;cursor:text" onblur="luuScenePrompt(this,'props')">Đang phân tích...</div>
+              <div style="margin-top:6px">
+                <div style="font-size:9px;color:#818cf8;margin-bottom:3px">🖼️ Prompt tạo ảnh đạo cụ (chỉnh sửa trước khi tạo)</div>
+                <div id="kb-props-img-prompt" contenteditable="true" style="background:#050510;border:1px solid #818cf8;border-radius:7px;padding:8px;font-size:10px;line-height:1.7;white-space:pre-wrap;color:#a5b4fc;font-family:'IBM Plex Mono',monospace;min-height:40px;max-height:150px;overflow-y:auto;outline:none;cursor:text"></div>
+                <div style="display:flex;gap:5px;margin-top:4px">
+                  <button class="btn-i" onclick="taoAnhDaoCu()" style="font-size:9px;border-color:#818cf8;color:#818cf8">🖼️ Tạo ảnh</button>
+                  <button class="btn-i" onclick="robustCopy(document.getElementById('kb-props-img-prompt').innerText)" style="font-size:9px;border-color:#818cf8;color:#818cf8">⊕ Copy prompt</button>
+                </div>
+              </div>
             </div>
             <div style="padding:6px 13px 8px;border-top:1px solid #0f2a0f;display:flex;gap:6px;flex-wrap:wrap">
               <button class="btn-i" onclick="saoCHepTatCaScene()" style="font-size:10px;border-color:#4ade80;color:#4ade80">⊕ Copy cả 2</button>
@@ -4135,43 +4159,16 @@ async function phanTichBoiCanh(){
   if(stopBtn) stopBtn.style.display = '';
   if(footEl) footEl.style.display = 'none';
 
-  const systemPrompt = `You are an expert film Production Designer and storyboard artist.
-
-Analyze the script/shot breakdown and output in this EXACT format (use these exact headers):
+  const systemPrompt = `Bạn là Production Designer chuyên nghiệp. Phân tích kịch bản và trả về ĐÚNG format sau, KHÔNG thêm gì khác:
 
 ===PHAN_TICH===
-[Full analysis in Vietnamese]
+[Phân tích tổng quan ngắn gọn]
 
-🌍 BỐI CẢNH CHÍNH
-• Địa điểm: [specific name + description]
-• Không gian: [size, height, feeling]
-• Vật liệu: [floor, walls, ceiling — material + color + reflectivity]
-• Điều kiện: [clean/dirty/old/new, weather effects]
+[PROMPT BỐI CẢNH]
+[Mô tả chi tiết bối cảnh cho AI video/image: địa điểm, không gian, vật liệu, màu sắc, ánh sáng, texture, atmosphere. Viết bằng tiếng Anh, súc tích, sẵn sàng paste vào image AI]
 
-🎨 BẢNG MÀU
-• Chủ đạo: [specific color + hex]
-• Tương phản: [accent color]
-• Nhiệt độ: [Kelvin value]
-• Bão hòa: [vivid/muted/desaturated]
-
-🪑 ĐẠO CỤ
-• [Prop name]: [material, color, size, position, significance]
-[list all important props]
-
-💡 ÁNH SÁNG MÔI TRƯỜNG
-• Tự nhiên: [windows, sun direction]
-• Nhân tạo: [lamps, neon, screens, fire]
-• Bóng đổ: [direction, sharpness, shadow color]
-
-===PROMPT_BOI_CANH===
-[Write ONLY an English Seedance/Higgsfield scene prompt here. Format:]
-[SCENE]
-[Location description in cinematic English. Include: environment type, spatial dimensions, surface materials with PBR properties, color temperature, atmospheric conditions, background depth layers. Be specific and technical.]
-
-===PROMPT_DAO_CU===
-[Write ONLY an English props/set dressing prompt here. Format:]
-[SET DRESSING & PROPS]
-[List each prop: Name — material (PBR: roughness X, metallic Y), color (#hex), size, placement, condition. Include @material[name] references where applicable for Higgsfield. End with overall set dressing style.]`;
+[PROMPT ĐẠO CỤ]
+[Mô tả chi tiết đạo cụ quan trọng: tên, vị trí, vật liệu, màu sắc, tình trạng. Viết bằng tiếng Anh, súc tích, sẵn sàng paste vào image AI]`
 
   const userMsg = `Phân tích bối cảnh và đạo cụ cho kịch bản sau:
 
@@ -4188,12 +4185,53 @@ ${nd}`;
     if(footEl) footEl.style.display = '';
     if(stopBtn) stopBtn.style.display = 'none';
 
+    // Parse scene and props sections - multiple format support
+    let sceneText = '', propsText = '';
+
+    // Try [PROMPT BỐI CẢNH] / [PROMPT ĐẠO CỤ] headers
     const sceneMatch = acc.match(/\[PROMPT BỐI CẢNH\]([\s\S]*?)(?:\[PROMPT ĐẠO CỤ\]|$)/);
     const propsMatch = acc.match(/\[PROMPT ĐẠO CỤ\]([\s\S]*?)$/);
+    if(sceneMatch){ sceneText = sceneMatch[1].trim(); }
+    if(propsMatch){ propsText = propsMatch[1].trim(); }
+
+    // Fallback: try BỐI CẢNH / ĐẠO CỤ section headers
+    if(!sceneText){
+      const m = acc.match(/(?:BỐI CẢNH|SCENE|LOCATION)[^
+]*
+([\s\S]*?)(?:ĐẠO CỤ|PROPS|$)/i);
+      if(m) sceneText = m[1].trim();
+    }
+    if(!propsText){
+      const m = acc.match(/(?:ĐẠO CỤ|PROPS)[^
+]*
+([\s\S]*?)$/i);
+      if(m) propsText = m[1].trim();
+    }
+
+    // Last fallback: split at midpoint
+    if(!sceneText && !propsText){
+      const mid = Math.floor(acc.length / 2);
+      sceneText = acc.slice(0, mid).trim();
+      propsText = acc.slice(mid).trim();
+    }
+    if(!sceneText) sceneText = acc;
+
+    // Fill analysis text boxes
     const sceneEl = document.getElementById('kb-scene-prompt');
     const propsEl = document.getElementById('kb-props-prompt');
-    if(sceneEl) sceneEl.textContent = sceneMatch ? sceneMatch[1].trim() : acc;
-    if(propsEl) propsEl.textContent = propsMatch ? propsMatch[1].trim() : '';
+    if(sceneEl){ sceneEl.textContent = sceneText; }
+    if(propsEl){ propsEl.textContent = propsText; }
+
+    // Auto-fill image prompt boxes immediately
+    const sceneImgEl = document.getElementById('kb-scene-img-prompt');
+    const propsImgEl = document.getElementById('kb-props-img-prompt');
+
+    // Build concise image prompts from scene/props text
+    const sceneImgPrompt = extractImgPrompt(sceneText, 'scene');
+    const propsImgPrompt = extractImgPrompt(propsText, 'props');
+
+    if(sceneImgEl) sceneImgEl.textContent = sceneImgPrompt;
+    if(propsImgEl) propsImgEl.textContent = propsImgPrompt;
 
   } catch(e) {
     if(e.name !== 'AbortError'){
@@ -6349,45 +6387,50 @@ async function taoAnhStoryboard(id){
 
 // ===== TẠO ẢNH BỐI CẢNH & ĐẠO CỤ =====
 async function taoAnhBoiCanh(){
-  const prompt = document.getElementById('kb-scene-prompt')?.textContent?.trim();
+  const imgPromptEl = document.getElementById('kb-scene-img-prompt');
+  const prompt = imgPromptEl?.innerText?.trim() || document.getElementById('kb-scene-prompt')?.innerText?.trim();
   if(!prompt || prompt.length < 20){
     alert('Phân tích bối cảnh trước để có prompt.');
     return;
   }
-  await _taoAnhBoiCanhDaoCu('kb-scene-img', prompt, 'bối cảnh');
+  await _taoAnhBoiCanhDaoCu('kb-scene-img', prompt, 'bối cảnh', true);
 }
 
 async function taoAnhDaoCu(){
-  const prompt = document.getElementById('kb-props-prompt')?.textContent?.trim();
+  const imgPromptEl = document.getElementById('kb-props-img-prompt');
+  const prompt = imgPromptEl?.innerText?.trim() || document.getElementById('kb-props-prompt')?.innerText?.trim();
   if(!prompt || prompt.length < 20){
     alert('Phân tích đạo cụ trước để có prompt.');
     return;
   }
-  await _taoAnhBoiCanhDaoCu('kb-props-img', prompt, 'đạo cụ');
+  await _taoAnhBoiCanhDaoCu('kb-props-img', prompt, 'đạo cụ', true);
 }
 
-async function _taoAnhBoiCanhDaoCu(wrapId, rawPrompt, label){
+async function _taoAnhBoiCanhDaoCu(wrapId, rawPrompt, label, directPrompt=false){
   const wrap = document.getElementById(wrapId);
   if(!wrap) return;
 
   wrap.style.display = 'block';
   wrap.innerHTML = `<div style="padding:16px;text-align:center;color:#818cf8;font-size:11px;border:1px solid #818cf8;border-radius:7px">⏳ Đang tạo ảnh ${label}...</div>`;
 
-  // Build optimized image prompt
-  const system = `You are a film production designer. 
+  // Use direct prompt or optimize via AI
+  let imgPrompt = '';
+  if(directPrompt){
+    imgPrompt = rawPrompt;
+  } else {
+    const system = `You are a film production designer. 
 Convert the following scene/props analysis into a concise image generation prompt (max 200 words).
 Focus on: visual composition, lighting, colors, materials, atmosphere.
 Output ONLY the image prompt, no explanation.
 End with: photorealistic, cinematic, 8K, film still, professional photography --ar 16:9`;
-
-  let imgPrompt = '';
-  try {
-    await goiClaude(system, rawPrompt.slice(0, 800), (chunk) => {
-      imgPrompt += chunk;
-    });
-  } catch(e) {
-    wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px">❌ ${e.message}</div>`;
-    return;
+    try {
+      await goiClaude(system, rawPrompt.slice(0, 800), (chunk) => {
+        imgPrompt += chunk;
+      });
+    } catch(e) {
+      wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px">❌ ${e.message}</div>`;
+      return;
+    }
   }
 
   // Generate image
@@ -6427,6 +6470,35 @@ End with: photorealistic, cinematic, 8K, film still, professional photography --
 function taoLaiAnhBoiCanh(wrapId){
   if(wrapId === 'kb-scene-img') taoAnhBoiCanh();
   else taoAnhDaoCu();
+}
+
+
+function luuScenePrompt(el, type){
+  // Auto-update image prompt box when user edits analysis text
+  const text = el.innerText || el.textContent;
+  const suffix = type === 'scene' 
+    ? ', photorealistic, cinematic film still, 8K --ar 16:9'
+    : ', photorealistic, studio photography, detailed --ar 16:9';
+  const imgEl = document.getElementById(type === 'scene' ? 'kb-scene-img-prompt' : 'kb-props-img-prompt');
+  if(imgEl && !imgEl.innerText.trim()) imgEl.textContent = text.slice(0,500) + suffix;
+}
+
+
+function extractImgPrompt(text, type){
+  if(!text) return '';
+  // Extract key visual descriptors
+  const lines = text.split('\n').filter(l => l.trim() && !l.startsWith('//'));
+  // Find lines with visual keywords
+  const visual = lines.filter(l =>
+    /màu|color|ánh sáng|light|vật liệu|material|không gian|space|kết cấu|texture|bối cảnh|scene|location|đạo cụ|prop|đặt trên|on the|đặt cạnh|near|bàn|table|ghế|chair|kệ|shelf|cửa|window|wall|tường/i.test(l)
+  ).slice(0, 8).join(', ');
+
+  const base = visual || lines.slice(0, 5).join(', ');
+  const suffix = type === 'scene'
+    ? ', photorealistic, cinematic wide shot, film still, 8K, professional cinematography --ar 16:9'
+    : ', photorealistic, studio still life photography, detailed, sharp focus, 8K --ar 16:9';
+
+  return base.slice(0, 600) + suffix;
 }
 
 // ===== INIT =====
