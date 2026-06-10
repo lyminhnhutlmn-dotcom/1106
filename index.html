@@ -2476,7 +2476,8 @@ function dungAI(){
 }
 
 async function goiClaude(systemPrompt, userMsg, onChunk){
-  const BACKEND = 'https://anna-backend-production.up.railway.app';
+  const BACKEND = '';
+
   aiController = new AbortController();
   try {
     const res = await fetch(BACKEND + '/api/claude', {
