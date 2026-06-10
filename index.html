@@ -2523,7 +2523,7 @@ async function dichAI(){
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
-    const ok = await goiAI(
+    const ok = await goiClaude(
       `You are an expert cinematic prompt translator for AI video generation (Seedance 2.0 on Higgsfield).
 Translate Vietnamese cinematic prompts to professional English.
 Rules:
@@ -2561,7 +2561,7 @@ async function caiThienAI(){
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
-    const ok = await goiAI(
+    const ok = await goiClaude(
       `You are a master cinematographer and prompt engineer for Seedance 2.0 on Higgsfield.
 Your mission: elevate any prompt into a CINEMATIC MASTERPIECE worthy of a feature film.
 
@@ -3358,7 +3358,7 @@ PROMPT NHÁP:
 
   try{
     // Use Vercel backend via goiAI
-    await goiAI(
+    await goiClaude(
       systemPrompt,
       `Phân tích kịch bản này:\n\n${noiDung}${shotCamInstructs}`,
       (chunk) => {
