@@ -1380,6 +1380,25 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
               <span class="chip s" data-g="face_shape" data-en="Diamond">Kim cương</span>
             </div>
           </div>
+          <!-- QUỐC TỊCH / DÂN TỘC -->
+          <div style="margin-bottom:10px">
+            <div class="slbl" style="margin-bottom:4px" data-en="Nationality / Ethnicity">Quốc tịch / Dân tộc</div>
+            <div class="chips" style="gap:5px">
+              <span class="chip s" data-g="nationality" data-en="Vietnamese">🇻🇳 Người Việt Nam</span>
+              <span class="chip s" data-g="nationality" data-en="Korean">🇰🇷 Người Hàn Quốc</span>
+              <span class="chip s" data-g="nationality" data-en="Japanese">🇯🇵 Người Nhật Bản</span>
+              <span class="chip s" data-g="nationality" data-en="Chinese">🇨🇳 Người Trung Quốc</span>
+              <span class="chip s" data-g="nationality" data-en="Southeast Asian">🌏 Người Đông Nam Á</span>
+              <span class="chip s" data-g="nationality" data-en="East Asian">🌏 Người Châu Á</span>
+              <span class="chip s" data-g="nationality" data-en="South Asian — Indian">🇮🇳 Người Nam Á</span>
+              <span class="chip s" data-g="nationality" data-en="Caucasian European">🌍 Người Châu Âu</span>
+              <span class="chip s" data-g="nationality" data-en="American — Western">🌎 Người Châu Mỹ</span>
+              <span class="chip s" data-g="nationality" data-en="African — Black">🌍 Người Châu Phi</span>
+              <span class="chip s" data-g="nationality" data-en="Middle Eastern">🕌 Người Trung Đông</span>
+              <span class="chip s" data-g="nationality" data-en="Latino Hispanic">🌎 Người Latino</span>
+            </div>
+          </div>
+
           <div><div class="slbl" style="margin-bottom:4px" data-en="Skin tone">Tông da</div>
             <div class="chips">
               <span class="chip s" data-g="skin_tone" data-en="Porcelain white">Trắng sứ — porcelain</span>
@@ -2077,7 +2096,13 @@ function veShot(){
         </div>
       </div>
       <!-- MÔ TẢ + ÂM THANH -->
-      <div><div class="slbl">✍️ Mô tả thêm</div><textarea rows="5" placeholder="Chi tiết cú máy, diễn xuất, cảm xúc nhân vật, ánh sáng đặc biệt, chuyển động chi tiết..." oninput="updShot(${s.id},'moTa',this.value)" style="font-size:11px;min-height:100px;resize:vertical">${s.moTa||''}</textarea></div>
+      <div>
+        <div class="slbl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <span>✍️ Nội dung Shot</span>
+          <button onclick="moRongChinhSuaShot(${s.id})" style="font-size:10px;padding:2px 8px;border-radius:5px;border:1px solid var(--gold);background:transparent;color:var(--gold);cursor:pointer">✏️ Mở rộng</button>
+        </div>
+        <textarea id="mota-${s.id}" rows="5" placeholder="Chi tiết cú máy, diễn xuất, cảm xúc nhân vật, ánh sáng đặc biệt, chuyển động chi tiết..." oninput="updShot(${s.id},'moTa',this.value)" style="font-size:11px;min-height:100px;resize:vertical">${s.moTa||''}</textarea>
+      </div>
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
     </div></div>`).join('');
 }
@@ -2139,7 +2164,7 @@ function taoVI(){
   L.push([SS.inex||'TRONG NHÀ',dd||'KHÔNG GIAN',SS.timeofday||''].filter(Boolean).join(' — '));L.push('');
   if(nv){
     L.push('[NHÂN VẬT]');
-    const p=[];if(SS.gender)p.push(SS.gender);if(SS.age)p.push(SS.age);if(nv)p.push(nv);
+    const p=[];if(SS.gender)p.push(SS.gender);if(SS.age)p.push(SS.age);if(MM.nationality&&MM.nationality.length)p.push(MM.nationality.map(n=>n.replace(/^.{2,3}\s/,'')).join(', '));if(nv)p.push(nv);
     L.push(p.join(', ')+'.');
     const nvpLines=layNVPText();
     if(nvpLines.length){L.push('')
@@ -6347,6 +6372,75 @@ function apSizeChoTatCa(val){
   veShot();
 }
 
+
+// ===== MODAL CHỈNH SỬA SHOT =====
+let dangSuaShot = null;
+
+function moRongChinhSuaShot(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s) return;
+  dangSuaShot = id;
+
+  // Set title
+  const idx = cacShot.indexOf(s);
+  document.getElementById('shot-edit-title').textContent = `✏️ Chỉnh sửa Shot ${idx+1}`;
+
+  // Fill values
+  const setVal = (elId, val) => {
+    const el = document.getElementById(elId);
+    if(el) el.value = val || '';
+  };
+  setVal('modal-cumay', s.cuMay);
+  setVal('modal-size', s.shotSize);
+  setVal('modal-lens', s.lens);
+  setVal('modal-start', s.start);
+  setVal('modal-end', s.end);
+  setVal('modal-mota', s.moTa);
+
+  // Show modal
+  const modal = document.getElementById('shot-edit-modal');
+  modal.style.display = 'flex';
+  setTimeout(() => document.getElementById('modal-mota').focus(), 100);
+}
+
+function luuChinhSuaShot(){
+  if(!dangSuaShot) return;
+  const s = cacShot.find(x => x.id === dangSuaShot);
+  if(!s) return;
+
+  s.cuMay   = document.getElementById('modal-cumay').value;
+  s.shotSize = document.getElementById('modal-size').value;
+  s.lens    = document.getElementById('modal-lens').value;
+  s.moTa    = document.getElementById('modal-mota').value;
+
+  const newStart = parseFloat(document.getElementById('modal-start').value) || s.start;
+  const newEnd   = parseFloat(document.getElementById('modal-end').value) || s.end;
+  if(newEnd > newStart){ s.start = newStart; s.end = newEnd; s.tg = +(newEnd - newStart).toFixed(1); }
+
+  veShot();
+  dongModalShot();
+
+  // Update textarea in shot card directly
+  const ta = document.getElementById('mota-' + dangSuaShot);
+  if(ta) ta.value = s.moTa;
+}
+
+function dongModalShot(){
+  document.getElementById('shot-edit-modal').style.display = 'none';
+  dangSuaShot = null;
+}
+
+// Close modal on backdrop click
+document.addEventListener('click', e => {
+  const modal = document.getElementById('shot-edit-modal');
+  if(e.target === modal) dongModalShot();
+});
+
+// Close on Escape
+document.addEventListener('keydown', e => {
+  if(e.key === 'Escape') dongModalShot();
+});
+
 // ===== INIT =====
 napPromptMau();
 veHooks();
@@ -6360,5 +6454,60 @@ themShot();
 themShot();
 </script>
 </div><!-- end wrap -->
+
+<!-- MODAL CHỈNH SỬA SHOT -->
+<div id="shot-edit-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.85);z-index:9999;align-items:center;justify-content:center">
+  <div style="background:var(--card);border:1px solid var(--gold);border-radius:12px;width:min(800px,95vw);max-height:90vh;overflow:hidden;display:flex;flex-direction:column">
+    <div style="padding:12px 16px;background:var(--card2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between">
+      <span style="font-size:12px;font-weight:500;color:var(--gold)" id="shot-edit-title">✏️ Chỉnh sửa Shot</span>
+      <div style="display:flex;gap:6px">
+        <button onclick="luuChinhSuaShot()" style="padding:5px 14px;border-radius:6px;border:none;background:var(--green);color:#0d0d0d;font-size:11px;cursor:pointer;font-weight:500">💾 Lưu</button>
+        <button onclick="dongModalShot()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:11px;cursor:pointer">✕</button>
+      </div>
+    </div>
+    <div style="padding:14px;overflow-y:auto;flex:1">
+      <div style="display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap">
+        <div style="flex:1;min-width:150px">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:4px">🎥 Cú máy</div>
+          <select id="modal-cumay" style="font-size:11px;width:100%">
+            <option value="">-- Chọn --</option>
+            <optgroup label="Cơ bản"><option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option></optgroup>
+            <optgroup label="Dolly"><option>Dolly tiến</option><option>Dolly lùi</option><option>Dolly ngang</option><option>Dolly chéo 45°</option><option>Pull-Back chậm</option><option>Push-In mạnh</option></optgroup>
+            <optgroup label="Arc"><option>Arc 180°</option><option>Orbital 360°</option></optgroup>
+            <optgroup label="Crane"><option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option></optgroup>
+            <optgroup label="Pro"><option>Steadicam</option><option>Tracking</option><option>Fly-through</option><option>Xoắn ốc</option></optgroup>
+            <optgroup label="Đặc biệt"><option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option></optgroup>
+          </select>
+        </div>
+        <div style="flex:1;min-width:130px">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:4px">🎬 Cỡ cảnh</div>
+          <select id="modal-size" style="font-size:11px;width:100%">
+            <option value="">-- Chọn --</option>
+            <option>ECU — Cực cận</option><option>CU — Cận mặt</option><option>MCU — Nửa ngực</option>
+            <option>MS — Ngang lưng</option><option>MWS — 3/4 người</option><option>WS — Toàn thân</option><option>ELS — Toàn cảnh</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:130px">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:4px">🔭 Tiêu cự</div>
+          <select id="modal-lens" style="font-size:11px;width:100%">
+            <option value="">-- Chọn --</option>
+            <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option><option>50mm standard</option>
+            <option>85mm portrait</option><option>100mm macro</option><option>135mm telephoto</option><option>Anamorphic</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:10px;color:var(--muted);margin-bottom:4px">⏱ Thời gian (giây)</div>
+          <div style="display:flex;gap:5px;align-items:center">
+            <input id="modal-start" type="number" min="0" step="0.5" style="width:55px;font-size:11px;padding:4px" placeholder="0">
+            <span style="color:var(--muted)">→</span>
+            <input id="modal-end" type="number" min="0" step="0.5" style="width:55px;font-size:11px;padding:4px" placeholder="5">
+          </div>
+        </div>
+      </div>
+      <div style="font-size:10px;color:var(--muted);margin-bottom:4px">✍️ Nội dung chi tiết</div>
+      <textarea id="modal-mota" rows="12" placeholder="Mô tả chi tiết: diễn xuất, chuyển động, cảm xúc, ánh sáng, bối cảnh..." style="font-size:12px;line-height:1.8;resize:vertical;min-height:200px"></textarea>
+    </div>
+  </div>
+</div>
 </body>
 </html>
