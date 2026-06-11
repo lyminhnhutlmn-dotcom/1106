@@ -6050,6 +6050,48 @@ function apDungTatCa(){
   });
 }
 
+
+function taoKBShotSetup(n){
+  kbShotSetupData = Array.from({length: n}, () => ({cuMay:'', shotSize:'', lens:''}));
+  const wrap = document.getElementById('kb-shot-setup');
+  if(!wrap) return;
+
+  wrap.innerHTML = kbShotSetupData.map((s,i) => `
+    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:8px 10px;margin-bottom:5px">
+      <div style="font-size:10px;color:var(--gold);font-weight:500;margin-bottom:6px">🎬 SHOT ${i+1}</div>
+      <div style="display:flex;gap:7px;flex-wrap:wrap">
+        <div style="flex:1;min-width:130px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎥 Chuyển động máy</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].cuMay=this.value">
+            <option value="">-- Chọn --</option>
+            <optgroup label="Cơ bản"><option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option></optgroup>
+            <optgroup label="Dolly"><option>Dolly tiến</option><option>Dolly lùi</option><option>Pull-Back chậm</option><option>Push-In mạnh</option></optgroup>
+            <optgroup label="Arc / Crane"><option>Arc 180°</option><option>Orbital 360°</option><option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option></optgroup>
+            <optgroup label="Pro"><option>Steadicam</option><option>Tracking</option><option>Fly-through</option></optgroup>
+            <optgroup label="Đặc biệt"><option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option></optgroup>
+          </select>
+        </div>
+        <div style="flex:1;min-width:110px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎬 Khung hình</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].shotSize=this.value">
+            <option value="">-- Chọn --</option>
+            <option>ECU — Cực cận</option><option>CU — Cận mặt</option><option>MCU — Nửa ngực</option>
+            <option>MS — Ngang lưng</option><option>MWS — 3/4 người</option><option>WS — Toàn thân</option><option>ELS — Toàn cảnh</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:110px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🔭 Tiêu cự</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].lens=this.value">
+            <option value="">-- Chọn --</option>
+            <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option>
+            <option>50mm standard</option><option>85mm portrait</option><option>100mm macro</option>
+            <option>135mm telephoto</option><option>Anamorphic</option>
+          </select>
+        </div>
+      </div>
+    </div>`).join('');
+}
+
 // ===== INIT =====
 napPromptMau();
 veHooks();
