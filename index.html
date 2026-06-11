@@ -6405,6 +6405,80 @@ function taoKBShotSetup(n){
     </div>`).join('');
 }
 
+
+function extractImgPrompt(text, type){
+  if(!text) return '';
+  const lines = text.split('\n').filter(l => l.trim() && !l.startsWith('//'));
+  const base = lines.slice(0, 12).join(', ').replace(/[•→\[\]]/g, '').trim();
+  if(type === 'scene'){
+    return (base.slice(0, 500) +
+      ', photorealistic cinematic film still, anamorphic lens flare, ' +
+      'shallow depth of field, natural motivated lighting, ' +
+      'Kodak 5219 film grain, cinematic color grade, ' +
+      'Roger Deakins lighting quality, 8K resolution, ' +
+      'professional cinematography, no AI smoothing --ar 16:9').slice(0, 900);
+  } else {
+    return (base.slice(0, 500) +
+      ', photorealistic studio product photography, ' +
+      'macro detail, surface texture visible, ' +
+      'soft box lighting, clean background with depth, ' +
+      'ultra sharp focus, 8K, commercial photography quality --ar 16:9').slice(0, 900);
+  }
+}
+
+function luuScenePrompt(el, type){
+  const text = el.innerText || el.textContent;
+  const suffix = type === 'scene'
+    ? ', photorealistic, cinematic film still, 8K --ar 16:9'
+    : ', photorealistic, studio photography, detailed --ar 16:9';
+  const imgEl = document.getElementById(type === 'scene' ? 'kb-scene-img-prompt' : 'kb-props-img-prompt');
+  if(imgEl && !imgEl.innerText.trim()) imgEl.textContent = text.slice(0,500) + suffix;
+}
+
+function batDauChinhSuaKB(){
+  const el = document.getElementById('kb-output');
+  if(!el) return;
+  el.contentEditable = 'true';
+  el.style.border = '1px solid var(--gold)';
+  el.style.borderRadius = '7px';
+  el.style.padding = '13px';
+  el.style.background = 'var(--card)';
+  el.focus();
+  const range = document.createRange();
+  range.selectNodeContents(el);
+  range.collapse(false);
+  const sel = window.getSelection();
+  sel.removeAllRanges();
+  sel.addRange(range);
+  const editBtn = document.getElementById('kb-edit-btn');
+  const saveBtn = document.getElementById('kb-save-btn');
+  if(editBtn) editBtn.style.display = 'none';
+  if(saveBtn) saveBtn.style.display = '';
+  const titleEl = document.getElementById('kb-result-title');
+  if(titleEl){ titleEl.textContent = '✏️ Đang chỉnh sửa...'; titleEl.style.color = 'var(--gold)'; }
+}
+
+function luuChinhSuaKB(){
+  const el = document.getElementById('kb-output');
+  if(!el) return;
+  kbKetQua = el.textContent || el.innerText;
+  el.contentEditable = 'false';
+  el.style.border = 'none';
+  el.style.borderRadius = '0';
+  el.style.background = 'transparent';
+  const editBtn = document.getElementById('kb-edit-btn');
+  const saveBtn = document.getElementById('kb-save-btn');
+  if(editBtn) editBtn.style.display = '';
+  if(saveBtn) saveBtn.style.display = 'none';
+  const titleEl = document.getElementById('kb-result-title');
+  if(titleEl){ titleEl.textContent = '✅ Đã lưu chỉnh sửa'; titleEl.style.color = 'var(--green)'; }
+  hienShotCards(kbKetQua);
+  setTimeout(() => {
+    const t = document.getElementById('kb-result-title');
+    if(t){ t.textContent = '🎯 Phân tích hoàn tất'; t.style.color = '#ff6b6b'; }
+  }, 2000);
+}
+
 // ===== INIT =====
 napPromptMau();
 veHooks();
