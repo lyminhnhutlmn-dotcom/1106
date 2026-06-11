@@ -5,44 +5,40 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { prompt, quality = 'medium', referenceImages } = req.body;
+  const { prompt, quality, referenceImages } = req.body;
   if (!prompt) return res.status(400).json({ error: 'Thiếu prompt.' });
 
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Chưa cấu hình OPENAI_API_KEY.' });
 
+  // Validate quality — only these values accepted
+  const validQualities = ['auto', 'high', 'medium', 'low'];
+  const q = validQualities.includes(quality) ? quality : 'medium';
+
   try {
     let response;
 
     if (referenceImages && referenceImages.length > 0) {
-      // Use edits endpoint — send FIRST image only as single file
+      // Edits endpoint with reference image
       const dataUrl = referenceImages[0];
       const base64 = dataUrl.replace(/^data:image\/\w+;base64,/, '');
-      const buffer = Buffer.from(base64, 'base64');
+      const imgBuffer = Buffer.from(base64, 'base64');
+      const boundary = 'Boundary' + Date.now().toString(36);
+      const NL = '\r\n';
 
-      const boundary = 'FormBoundary' + Date.now();
-      const CRLF = '\r\n';
+      const textParts =
+        `--${boundary}${NL}Content-Disposition: form-data; name="model"${NL}${NL}gpt-image-2${NL}` +
+        `--${boundary}${NL}Content-Disposition: form-data; name="prompt"${NL}${NL}${prompt.slice(0,1000)}${NL}` +
+        `--${boundary}${NL}Content-Disposition: form-data; name="n"${NL}${NL}1${NL}` +
+        `--${boundary}${NL}Content-Disposition: form-data; name="size"${NL}${NL}1024x1024${NL}` +
+        `--${boundary}${NL}Content-Disposition: form-data; name="quality"${NL}${NL}${q}${NL}` +
+        `--${boundary}${NL}Content-Disposition: form-data; name="image"; filename="ref.png"${NL}Content-Type: image/png${NL}${NL}`;
 
-      const part1 = Buffer.from(
-        `--${boundary}${CRLF}` +
-        `Content-Disposition: form-data; name="model"${CRLF}${CRLF}` +
-        `gpt-image-2${CRLF}` +
-        `--${boundary}${CRLF}` +
-        `Content-Disposition: form-data; name="prompt"${CRLF}${CRLF}` +
-        `${prompt.slice(0, 1000)}${CRLF}` +
-        `--${boundary}${CRLF}` +
-        `Content-Disposition: form-data; name="n"${CRLF}${CRLF}` +
-        `1${CRLF}` +
-        `--${boundary}${CRLF}` +
-        `Content-Disposition: form-data; name="size"${CRLF}${CRLF}` +
-        `1536x1024${CRLF}` +
-        `--${boundary}${CRLF}` +
-        `Content-Disposition: form-data; name="image"; filename="reference.png"${CRLF}` +
-        `Content-Type: image/png${CRLF}${CRLF}`,
-        'utf-8'
-      );
-      const part2 = Buffer.from(`${CRLF}--${boundary}--${CRLF}`, 'utf-8');
-      const body = Buffer.concat([part1, buffer, part2]);
+      const body = Buffer.concat([
+        Buffer.from(textParts, 'utf-8'),
+        imgBuffer,
+        Buffer.from(`${NL}--${boundary}--${NL}`, 'utf-8')
+      ]);
 
       response = await fetch('https://api.openai.com/v1/images/edits', {
         method: 'POST',
@@ -54,7 +50,7 @@ export default async function handler(req, res) {
       });
 
     } else {
-      // Text to image
+      // Text to image — generations endpoint
       response = await fetch('https://api.openai.com/v1/images/generations', {
         method: 'POST',
         headers: {
@@ -66,7 +62,7 @@ export default async function handler(req, res) {
           prompt: prompt.slice(0, 1000),
           n: 1,
           size: '1536x1024',
-          quality
+          quality: q
         })
       });
     }
@@ -74,14 +70,14 @@ export default async function handler(req, res) {
     const text = await response.text();
     let data;
     try { data = JSON.parse(text); }
-    catch(e) { return res.status(500).json({ error: 'OpenAI error: ' + text.slice(0, 300) }); }
+    catch(e) { return res.status(500).json({ error: 'Parse error: ' + text.slice(0, 200) }); }
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || JSON.stringify(data) });
+      return res.status(response.status).json({ error: data.error?.message || JSON.stringify(data).slice(0,200) });
     }
 
     const imageData = data.data?.[0];
-    if (!imageData) return res.status(500).json({ error: 'Không nhận được ảnh.' });
+    if (!imageData) return res.status(500).json({ error: 'No image in response.' });
 
     res.status(200).json({
       url: imageData.url || null,
