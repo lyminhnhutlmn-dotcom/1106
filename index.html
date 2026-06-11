@@ -2349,61 +2349,40 @@ function dungAI(){
 }
 
 async function goiClaude(systemPrompt, userMsg, onChunk){
-  // Get API key from input or sessionStorage
-  let key = aiKey || sessionStorage.getItem('annahouseKey');
-  if(!key){
-    key = prompt('Nhập Anthropic API Key:\n\nconsole.anthropic.com → API Keys\nFormat: sk-ant-api03-...');
-    if(!key) return null;
-    key = key.trim();
-    aiKey = key;
-    sessionStorage.setItem('annahouseKey', key);
-    const inp = document.getElementById('api-key-input');
-    if(inp){ inp.value = key; inp.style.borderColor='var(--green)'; }
-    const st = document.getElementById('api-key-status');
-    if(st){ st.textContent='✓ Key đã lưu'; st.style.color='var(--green)'; }
-  }
+  const BACKEND = '';
   aiController = new AbortController();
   try {
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
+    const res = await fetch(BACKEND + '/api/claude', {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': key,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
+      headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        model: 'annahousestudio-engine-4-6',
-        max_tokens: 16000,
-        stream: true,
         system: systemPrompt,
-        messages: [{ role: 'user', content: userMsg }]
+        message: userMsg,
+        max_tokens: 16000
       }),
       signal: aiController.signal
     });
     if(!res.ok){
       const err = await res.json().catch(()=>({}));
-      throw new Error(err.error?.message || 'API error ' + res.status);
+      throw new Error(err.error || 'Backend error ' + res.status);
     }
     const reader = res.body.getReader();
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder('utf-8');
     let buf = '';
     while(true){
       const {done, value} = await reader.read();
       if(done) break;
       buf += decoder.decode(value, {stream:true});
       const lines = buf.split('\n');
-      buf = lines.pop();
+      buf = lines.pop() || '';
       for(const line of lines){
-        if(line.startsWith('data: ')){
-          const data = line.slice(6);
-          if(data === '[DONE]') return;
-          try{
-            const j = JSON.parse(data);
-            if(j.type==='content_block_delta' && j.delta?.text && onChunk)
-              onChunk(j.delta.text);
-          }catch(e){}
-        }
+        if(!line.startsWith('data: ')) continue;
+        const data = line.slice(6).trim();
+        if(data === '[DONE]') return;
+        try{
+          const j = JSON.parse(data);
+          if(j.text && onChunk) onChunk(j.text);
+        }catch(e){}
       }
     }
   } catch(e){
@@ -3959,13 +3938,6 @@ function saoCHepScene(){
 }
 
 async function phanTichBoiCanh(){
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):\n\nLấy tại: console.anthropic.com');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
-
   const noiDung = document.getElementById('kb-noi-dung')?.value.trim() || kbKetQua;
   if(!noiDung){alert('Cần có kịch bản hoặc kết quả phân tích trước.');return;}
 
@@ -4119,13 +4091,6 @@ function layPromptChoAnhToanBo(){
 async function taoAnh(){
   const promptText = document.getElementById('img-prompt-input')?.value.trim();
   if(!promptText){alert('Nhập prompt tạo ảnh trước.');return;}
-
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key:');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
 
   const ratio = SS.img_ratio || '16:9';
   const style = SS.img_style || 'Cinematic still';
@@ -4366,13 +4331,6 @@ function dungOptimize(){
 async function batDauTouuHoa(){
   const nd = dangHien==='en' ? kqEN : kqVI;
   if(!nd){alert('Không có prompt để tối ưu.');return;}
-
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):\n\nLấy tại: console.anthropic.com');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
 
   const target = parseInt(document.getElementById('opt-target')?.value) || 3500;
   const chars = nd.length;
@@ -4717,13 +4675,6 @@ async function taoCharPromptAI(){
     return;
   }
 
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
-
   const el = document.getElementById('char-preview');
   if(el) el.innerHTML = '<span style="color:var(--gold)">✨ AI đang tạo Character Lock Prompt...</span>';
 
@@ -4899,13 +4850,6 @@ function layCharPromptChoAnh(){
 async function taoImgPromptNhanVat(){
   const raw = gVal('char-img-prompt');
   if(!raw){ layCharPromptChoAnh(); return; }
-
-  if(!aiKey){
-    const k = prompt('Nhập Anthropic API Key (sk-ant-...):');
-    if(!k) return;
-    aiKey = k.trim();
-    sessionStorage.setItem('annahouseKey', aiKey);
-  }
 
   const statusEl = document.getElementById('char-img-status');
   if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu...';
