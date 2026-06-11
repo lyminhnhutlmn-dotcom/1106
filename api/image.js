@@ -21,7 +21,7 @@ export default async function handler(req, res) {
       const { FormData, Blob } = await import('formdata-node');
 
       const form = new FormData();
-      form.set('model', 'gpt-image-1.5');
+      form.set('model', 'gpt-image-2');
       form.set('prompt', prompt.slice(0, 1000));
       form.set('n', '1');
       form.set('size', '1536x1024');
@@ -51,7 +51,7 @@ export default async function handler(req, res) {
           'Authorization': `Bearer ${apiKey}`
         },
         body: JSON.stringify({
-          model: 'gpt-image-1.5',
+          model: 'gpt-image-2',
           prompt: prompt.slice(0, 1000),
           n: 1,
           size: '1536x1024',
