@@ -3990,56 +3990,11 @@ Analyze the script/shot breakdown and output in this EXACT format (use these exa
 [List each prop: Name — material (PBR: roughness X, metallic Y), color (#hex), size, placement, condition. Include @material[name] references where applicable for Higgsfield. End with overall set dressing style.]`;
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'x-api-key': aiKey,
-        'anthropic-version': '2023-06-01',
-        'anthropic-dangerous-direct-browser-access': 'true'
-      },
-      body: JSON.stringify({
-        model: 'annahousestudio-engine-4-6',
-        max_tokens: 6000,
-        stream: true,
-        system: systemPrompt,
-        messages: [{role:'user', content: `Phân tích bối cảnh và đạo cụ cho kịch bản/shot sau:\n\n${noiDung.slice(0,3000)}`}]
-      }),
-      signal: sceneCtrl.signal
+    let _acc = '';
+    await goiClaude(systemPrompt || system || '', userMsg || userPrompt || message || '', (chunk) => {
+      _acc += chunk;
     });
-
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'API error '+res.status);}
-
-    const reader=res.body.getReader();const decoder=new TextDecoder();let buf='';
-    while(true){
-      const{done,value}=await reader.read();if(done)break;
-      buf+=decoder.decode(value,{stream:true});
-      const lines=buf.split('\n');buf=lines.pop();
-      for(const line of lines){
-        if(line.startsWith('data: ')){
-          const d=line.slice(6);if(d==='[DONE]')continue;
-          try{const j=JSON.parse(d);if(j.type==='content_block_delta'&&j.delta?.text){acc+=j.delta.text;sceneKetQua=acc;if(outEl)outEl.textContent=acc;}}catch(e){}
-        }
-      }
-    }
-
-    document.getElementById('kb-scene-stop').style.display='none';
-    if(footEl){footEl.style.display='';}
-
-    // Parse scene and props prompts
-    const sceneMatch = acc.match(/===PROMPT_BOI_CANH===\s*([\s\S]*?)(?:===PROMPT_DAO_CU===|$)/);
-    const propsMatch = acc.match(/===PROMPT_DAO_CU===\s*([\s\S]*?)$/);
-    const phânTichMatch = acc.match(/===PHAN_TICH===\s*([\s\S]*?)(?:===PROMPT_BOI_CANH===|$)/);
-
-    const scenePromptEl = document.getElementById('kb-scene-prompt');
-    const propsPromptEl = document.getElementById('kb-props-prompt');
-    const sceneOutputEl = document.getElementById('kb-scene-output');
-
-    if(scenePromptEl) scenePromptEl.textContent = sceneMatch ? sceneMatch[1].trim() : 'Không trích xuất được — xem phân tích đầy đủ bên trên.';
-    if(propsPromptEl) propsPromptEl.textContent = propsMatch ? propsMatch[1].trim() : 'Không trích xuất được — xem phân tích đầy đủ bên trên.';
-    // Show only analysis part in main output
-    if(sceneOutputEl && phânTichMatch) sceneOutputEl.textContent = phânTichMatch[1].trim();
-
+    result = _acc;
   }catch(e){
     if(e.name!=='AbortError' && outEl) outEl.innerHTML='<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
     document.getElementById('kb-scene-stop').style.display='none';
@@ -4104,46 +4059,11 @@ async function taoAnh(){
 
   // Step 1: Ask AI to create optimized image prompt
   try{
-    const optRes = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':aiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
-        max_tokens:500,
-        messages:[{role:'user',content:`Convert this Vietnamese cinematic prompt into an optimized English image generation prompt for ${style} style, ${ratio} ratio.
-Keep it under 200 words. Focus on: visual composition, lighting, mood, key elements.
-Output ONLY the prompt, no explanations.
-
-Input: ${promptText}`}]
-      })
+    let _acc = '';
+    await goiClaude(systemPrompt || system || '', userMsg || userPrompt || message || '', (chunk) => {
+      _acc += chunk;
     });
-
-    const optData = await optRes.json();
-    const optimizedPrompt = optData.content?.[0]?.text || promptText;
-
-    if(statusEl) statusEl.innerHTML = '✅ Prompt tối ưu xong — copy sang Midjourney/DALL-E để tạo ảnh:<br><div style="margin-top:6px;padding:8px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;font-size:11px;color:var(--ink);white-space:pre-wrap;font-family:\'IBM Plex Mono\',monospace">' + optimizedPrompt + '</div>';
-
-    // Show copy button and MJ/DALL-E links
-    if(grid) grid.innerHTML = `
-      <div style="grid-column:1/-1;display:flex;flex-direction:column;gap:8px">
-        <button class="btn-i" onclick="navigator.clipboard.writeText(document.getElementById('opt-prompt-text').textContent).then(()=>{this.innerHTML='✓ Đã copy!';setTimeout(()=>this.innerHTML='⊕ Copy prompt',2000)})" style="border-color:#818cf8;color:#818cf8">⊕ Copy prompt đã tối ưu</button>
-        <div style="font-size:11px;color:var(--muted)">Dán vào:</div>
-        <div style="display:flex;gap:6px;flex-wrap:wrap">
-          <a href="https://www.midjourney.com" target="_blank" class="btn-i" style="text-decoration:none;border-color:#f59e0b;color:#f59e0b">🎨 Midjourney</a>
-          <a href="https://labs.openai.com" target="_blank" class="btn-i" style="text-decoration:none;border-color:#10b981;color:#10b981">🟢 DALL-E</a>
-          <a href="https://stability.ai" target="_blank" class="btn-i" style="text-decoration:none;border-color:#8b5cf6;color:#8b5cf6">💜 Stable Diffusion</a>
-          <a href="https://ideogram.ai" target="_blank" class="btn-i" style="text-decoration:none;border-color:#ec4899;color:#ec4899">🌸 Ideogram</a>
-        </div>
-        <div id="opt-prompt-text" style="display:none">${optimizedPrompt}</div>
-      </div>`;
-
-    if(outputWrap) outputWrap.style.display='';
-
+    result = _acc;
   }catch(e){
     if(statusEl) statusEl.innerHTML='<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
   }
@@ -4387,87 +4307,27 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
   let acc = '';
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':aiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
-        max_tokens:8000,
-        stream:true,
-        system:systemPrompt,
-        messages:[{role:'user',content:`COMPRESS TO UNDER ${target} CHARACTERS:\n\n${nd}`}]
-      }),
-      signal:optCtrl.signal
+    moAIPanel('✂️ ANNAHOUSESTUDIO ĐANG TỐI ƯU...');
+    document.getElementById('ai-output').textContent = '';
+    let acc = '';
+    const sys = 'You are a cinematic prompt optimizer. Shorten this prompt to under ' + target + ' characters. Keep all technical cinematic details: camera specs, lighting, skin texture, timing, constraints. Remove only redundant words and unnecessary explanations. Output ONLY the optimized prompt.';
+    await goiClaude(sys, nd, (chunk) => {
+      acc += chunk;
+      document.getElementById('ai-output').textContent = acc;
     });
-
-    if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'Lỗi API '+res.status);}
-
-    const reader=res.body.getReader();const decoder=new TextDecoder();let buf='';
-    while(true){
-      const{done,value}=await reader.read();if(done)break;
-      buf+=decoder.decode(value,{stream:true});
-      const lines=buf.split('\n');buf=lines.pop();
-      for(const line of lines){
-        if(line.startsWith('data: ')){
-          const d=line.slice(6);if(d==='[DONE]')continue;
-          try{
-            const j=JSON.parse(d);
-            if(j.type==='content_block_delta'&&j.delta?.text){
-              acc+=j.delta.text;
-              optKetQua=acc;
-              bodyEl.textContent=acc;
-              // Show live char count
-              document.getElementById('opt-result-count').textContent = acc.length + ' ký tự';
-            }
-          }catch(e){}
-        }
-      }
-    }
-
-    // Done — show results
-    const newChars = acc.length;
-    const newWords = acc.trim().split(/\s+/).filter(Boolean).length;
-    const savedChars = chars - newChars;
-    const pct = Math.round(savedChars/chars*100);
-    const success = newChars <= target;
-
-    document.getElementById('opt-stop-btn').style.display='none';
-    document.getElementById('opt-apply-btn').style.display='';
-    document.getElementById('opt-copy-btn').style.display='';
-    document.getElementById('opt-title').textContent = success
-      ? `✅ Hoàn tất — ${newChars} ký tự (giảm ${savedChars} · ${pct}%)`
-      : `⚠️ ${newChars} ký tự — chưa đủ, thử lại với mức thấp hơn`;
-    document.getElementById('opt-title').style.color = success ? 'var(--green)' : '#f59e0b';
-    document.getElementById('opt-result-count').textContent = `${newChars} ký tự · ${newWords} từ`;
-
-    // If still over target, show retry suggestion
-    if(!success){
-      bodyEl.textContent = acc + '\n\n─── Chưa đạt mục tiêu ───\nThử chọn mức thấp hơn hoặc nhấn Tối ưu lại.';
-    }
-
+    window._optimizedPrompt = acc.trim();
+    const optPreview = document.getElementById('opt-preview');
+    if(optPreview) optPreview.textContent = acc.trim();
+    const optAccept = document.getElementById('opt-accept');
+    if(optAccept) optAccept.style.display = '';
+    const optCopy = document.getElementById('opt-copy');
+    if(optCopy) optCopy.style.display = '';
+    const optLen = document.getElementById('opt-length');
+    if(optLen) optLen.textContent = acc.trim().length + ' ký tự';
   }catch(e){
-    if(e.name!=='AbortError'){
-      bodyEl.innerHTML='<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
-    }
-    document.getElementById('opt-stop-btn').style.display='none';
-    // Show copy + apply buttons
-    if(acc.length > 0){
-      document.getElementById('opt-copy-btn').style.display='';
-      document.getElementById('opt-apply-btn').style.display='';
-    }
+    if(e.name !== 'AbortError') alert('Lỗi tối ưu: ' + e.message);
   }
 }
-
-
-
-
-
-
 function apDungOptimize(){
   if(!optKetQua){return;}
   if(dangHien==='en') kqEN = optKetQua;
@@ -4694,41 +4554,11 @@ async function taoCharPromptAI(){
   ].filter(Boolean).join('\n');
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':aiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
-        max_tokens:4000,
-        messages:[{role:'user',content:`Create a professional CHARACTER CONSISTENCY LOCK prompt in English for AI video generation (Seedance 2.0 on Higgsfield).
-
-Character description (Vietnamese):
-${input}
-
-Requirements:
-1. Convert all Vietnamese descriptions to precise English cinematic terminology
-2. Include specific PBR material properties for skin, eyes, hair
-3. Include exact color values where possible
-4. Format with clear sections: FACE, EYES, HAIR, COSTUME, IDENTIFYING MARKS
-5. End with CHARACTER CONSISTENCY RULES (5-7 rules)
-6. Include @material[character_reference] placeholder
-7. Make it copy-paste ready to prepend to any shot prompt
-
-Output ONLY the prompt, no explanations.`}]
-      })
+    let _acc = '';
+    await goiClaude(systemPrompt || system || '', userMsg || userPrompt || message || '', (chunk) => {
+      _acc += chunk;
     });
-
-    const data = await res.json();
-    charPromptText = data.content?.[0]?.text || '';
-    if(el) el.textContent = charPromptText;
-    document.getElementById('nut-cp-char').style.display = '';
-    document.getElementById('nut-add-char').style.display = '';
-
+    result = _acc;
   }catch(e){
     if(el) el.innerHTML = '<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
   }
@@ -4856,30 +4686,11 @@ async function taoImgPromptNhanVat(){
   if(statusEl) statusEl.textContent = '⏳ AI đang tối ưu...';
 
   try{
-    const res = await fetch('https://api.anthropic.com/v1/messages',{
-      method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'x-api-key':aiKey,
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
-      body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
-        max_tokens:400,
-        messages:[{role:'user',content:`Optimize this character image prompt for AI image generation (Ideogram/Midjourney/DALL-E).
-Make it more specific and professional. Add technical photography terms.
-Keep it under 150 words. Output ONLY the optimized prompt.
-
-Input: ${raw}`}]
-      })
+    let _acc = '';
+    await goiClaude(systemPrompt || system || '', userMsg || userPrompt || message || '', (chunk) => {
+      _acc += chunk;
     });
-    const data = await res.json();
-    const opt = data.content?.[0]?.text || raw;
-    const ta = document.getElementById('char-img-prompt');
-    if(ta) ta.value = opt;
-    if(statusEl) statusEl.textContent = '✅ Đã tối ưu!';
-    setTimeout(()=>{ if(statusEl) statusEl.textContent=''; }, 3000);
+    result = _acc;
   }catch(e){
     if(statusEl) statusEl.textContent = '❌ ' + e.message;
   }
