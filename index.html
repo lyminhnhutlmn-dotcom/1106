@@ -209,7 +209,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <div id="license-banner" style="display:none;background:linear-gradient(135deg,#1a0a00,#2a1500);border:1px solid #f59e0b;border-radius:8px;padding:9px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
   <div>
     <span style="font-size:11px;font-weight:500;color:#f59e0b">⚠️ Chế độ dùng thử</span>
-    <span style="font-size:10px;color:var(--muted);margin-left:8px">Prompt xuất ra có watermark · Nhập license key để tắt · Cần Anthropic API Key để dùng tính năng AI</span>
+    <span style="font-size:10px;color:var(--muted);margin-left:8px">Prompt xuất ra có watermark · Nhập license key để tắt · ANNAHOUSESTUDIO AI</span>
   </div>
   <div style="display:flex;gap:6px;align-items:center">
     <button onclick="moKhungLicense()" style="padding:5px 14px;border-radius:6px;border:none;background:#f59e0b;color:#0d0d0d;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">🔑 Nhập License Key</button>
@@ -1483,15 +1483,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <div style="background:#0a1020;border:1px solid var(--blue);border-radius:9px;overflow:hidden">
       <div style="padding:9px 13px;background:#0d1428;border-bottom:1px solid #1a2a4a;display:flex;align-items:center;justify-content:space-between;gap:6px">
         <span style="font-size:11px;color:var(--blue);letter-spacing:1.2px;text-transform:uppercase;font-weight:500" id="ai-panel-title">✨ ANNAHOUSESTUDIO AI</span>
-        <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
-          <input type="password" id="api-key-input" placeholder="Nhập Anthropic API Key (sk-ant-api03-...)" 
-            style="width:280px;padding:6px 10px;font-size:11px;border:1px solid #f59e0b;border-radius:6px;background:#0a0a00;color:var(--ink)" 
-            oninput="luuAPIKey(this.value)">
-          <span id="api-key-status" style="font-size:10px;color:var(--muted)">Nhập key để dùng AI</span>
-          <button class="btn-i" onclick="luuKey()" style="border-color:var(--blue);color:var(--blue);font-size:10px">Lưu</button>
-          <span id="key-status" style="font-size:10px;color:var(--muted)"></span>
-          <button class="btn-i" onclick="dongAIPanel()" style="font-size:10px">✕</button>
-        </div>
+        
       </div>
       <div style="padding:13px;font-size:12px;line-height:1.9;white-space:pre-wrap;color:var(--ink);min-height:160px;overflow-y:visible;font-family:'IBM Plex Mono',monospace;word-break:break-word" id="ai-output"><span style="color:var(--muted);font-style:italic">Kết quả AI sẽ hiển thị ở đây...</span></div>
       <div style="padding:9px 13px;border-top:1px solid #1a2a4a;display:flex;gap:6px;flex-wrap:wrap">
@@ -2394,7 +2386,7 @@ async function goiClaude(systemPrompt, userMsg, onChunk){
 async function dichAI(){
   const nd = dangHien === 'en' ? kqEN : kqVI;
   if(!nd){alert('Tạo prompt tiếng Việt trước rồi mới dịch.');return;}
-  moAIPanel('✨ 🌐 Đang dịch prompt... sang tiếng Anh...');
+  moAIPanel('🌐 ANNAHOUSESTUDIO ĐANG DỊCH...');
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
@@ -2432,7 +2424,7 @@ ${nd}`,
 async function caiThienAI(){
   const nd = dangHien === 'en' ? kqEN : kqVI;
   if(!nd){alert('Tạo prompt trước rồi mới cải thiện.');return;}
-  moAIPanel('💡 🎬 Đang phân tích và cải thiện prompt...');
+  moAIPanel('🎬 ANNAHOUSESTUDIO ĐANG CẢI THIỆN...');
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
@@ -3211,7 +3203,7 @@ PROMPT NHÁP:
   if(nutPT) nutPT.disabled = true;
   // kb-btn-apply removed
   // kb-btn-copy removed
-  document.getElementById('kb-result-title').textContent = '⏳ 🎬 ANNAHOUSESTUDIO đang phân tích...';
+  document.getElementById('kb-result-title').textContent = '⏳ 🎬 ANNAHOUSESTUDIO ĐANG PHÂN TÍCH...';
   document.getElementById('kb-result').scrollIntoView({behavior:'smooth', block:'start'});
 
   kbCtrl = new AbortController();
@@ -5933,7 +5925,7 @@ function luuAPIKey(val){
     }
     // Show success
     const btn = document.getElementById('api-key-status');
-    if(btn){ btn.textContent='✓ Key đã lưu'; btn.style.color='var(--green)'; }
+    if(btn){ btn.textContent='✅ ANNAHOUSESTUDIO AI'; btn.style.color='var(--green)'; }
   }
 }
 
@@ -5945,7 +5937,7 @@ setTimeout(()=>{
     const inp = document.getElementById('api-key-input');
     if(inp) inp.value = saved;
     const status = document.getElementById('api-key-status');
-    if(status){ status.textContent='✓ Key đã lưu'; status.style.color='var(--green)'; }
+    if(status){ status.textContent='✅ ANNAHOUSESTUDIO AI'; status.style.color='var(--green)'; }
   }
 }, 300);
 
