@@ -11,46 +11,39 @@ export default async function handler(req, res) {
   const apiKey = process.env.OPENAI_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Chưa cấu hình OPENAI_API_KEY.' });
 
-  // Validate quality — only these values accepted
-  const validQualities = ['auto', 'high', 'medium', 'low'];
-  const q = validQualities.includes(quality) ? quality : 'medium';
+  const q = ['auto','high','medium','low'].includes(quality) ? quality : 'medium';
 
   try {
     let response;
 
     if (referenceImages && referenceImages.length > 0) {
-      // Edits endpoint with reference image
+      // Use OpenAI Node SDK style — build proper multipart
+      const { Readable } = await import('stream');
+      
       const dataUrl = referenceImages[0];
-      const base64 = dataUrl.replace(/^data:image\/\w+;base64,/, '');
+      const base64 = dataUrl.replace(/^data:image\/[^;]+;base64,/, '');
       const imgBuffer = Buffer.from(base64, 'base64');
-      const boundary = 'Boundary' + Date.now().toString(36);
-      const NL = '\r\n';
-
-      const textParts =
-        `--${boundary}${NL}Content-Disposition: form-data; name="model"${NL}${NL}gpt-image-2${NL}` +
-        `--${boundary}${NL}Content-Disposition: form-data; name="prompt"${NL}${NL}${prompt.slice(0,1000)}${NL}` +
-        `--${boundary}${NL}Content-Disposition: form-data; name="n"${NL}${NL}1${NL}` +
-        `--${boundary}${NL}Content-Disposition: form-data; name="size"${NL}${NL}1024x1024${NL}` +
-        `--${boundary}${NL}Content-Disposition: form-data; name="quality"${NL}${NL}${q}${NL}` +
-        `--${boundary}${NL}Content-Disposition: form-data; name="image"; filename="ref.png"${NL}Content-Type: image/png${NL}${NL}`;
-
-      const body = Buffer.concat([
-        Buffer.from(textParts, 'utf-8'),
-        imgBuffer,
-        Buffer.from(`${NL}--${boundary}--${NL}`, 'utf-8')
-      ]);
+      
+      // Use FormData with Blob (Node 18+ native)
+      const formData = new FormData();
+      formData.append('model', 'gpt-image-2');
+      formData.append('prompt', prompt.slice(0, 1000));
+      formData.append('n', '1');
+      formData.append('size', '1024x1024');
+      formData.append('quality', q);
+      
+      // Create Blob from buffer
+      const blob = new Blob([imgBuffer], { type: 'image/png' });
+      formData.append('image', blob, 'reference.png');
 
       response = await fetch('https://api.openai.com/v1/images/edits', {
         method: 'POST',
-        headers: {
-          'Authorization': `Bearer ${apiKey}`,
-          'Content-Type': `multipart/form-data; boundary=${boundary}`
-        },
-        body
+        headers: { 'Authorization': `Bearer ${apiKey}` },
+        // Let fetch set Content-Type with boundary automatically
+        body: formData
       });
 
     } else {
-      // Text to image — generations endpoint
       response = await fetch('https://api.openai.com/v1/images/generations', {
         method: 'POST',
         headers: {
@@ -70,14 +63,16 @@ export default async function handler(req, res) {
     const text = await response.text();
     let data;
     try { data = JSON.parse(text); }
-    catch(e) { return res.status(500).json({ error: 'Parse error: ' + text.slice(0, 200) }); }
+    catch(e) { return res.status(500).json({ error: 'Parse error: ' + text.slice(0, 300) }); }
 
     if (!response.ok) {
-      return res.status(response.status).json({ error: data.error?.message || JSON.stringify(data).slice(0,200) });
+      return res.status(response.status).json({ 
+        error: data.error?.message || JSON.stringify(data).slice(0, 300) 
+      });
     }
 
     const imageData = data.data?.[0];
-    if (!imageData) return res.status(500).json({ error: 'No image in response.' });
+    if (!imageData) return res.status(500).json({ error: 'No image returned.' });
 
     res.status(200).json({
       url: imageData.url || null,
