@@ -4209,14 +4209,10 @@ ${nd}`;
     // Fallback: try BỐI CẢNH / ĐẠO CỤ section headers
     if(!sceneText){
       const mScene = acc.split(/SCENE|LOCATION/i)[1] || '';
-]*
-([\s\S]*?)(?:ĐẠO CỤ|PROPS|$)/i);
       if(mScene) sceneText = mScene.split(/PROPS|DAO/i)[0].trim();
     }
     if(!propsText){
       const mProps = acc.split(/PROPS/i)[1] || '';
-]*
-([\s\S]*?)$/i);
       if(mProps) propsText = mProps.trim();
     }
 
