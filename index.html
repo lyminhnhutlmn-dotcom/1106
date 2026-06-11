@@ -1648,6 +1648,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <button class="btn-i" id="nut-ai-imp" id="nut-imp" onclick="caiThienAI()" style="display:none;border-color:#f0a500;color:#f0a500">💡 Cải thiện</button>
         <button class="btn-i" onclick="docPrompt()">🔊 Đọc</button>
         <button class="btn-i" id="nut-cp" onclick="saoCHep()" style="display:none">⊕ Sao chép</button>
+        <button class="btn-i" id="nut-storyboard" onclick="taoAnhTuPromptCuoi()" style="display:none;border-color:#818cf8;color:#818cf8">🎨 Tạo ảnh</button>
         <button class="btn-i" id="nut-json" onclick="xuatJSON()" style="display:none;border-color:#818cf8;color:#818cf8">💾 Lưu Project</button>
         <button class="btn-i" id="nut-veo3-json" onclick="xuatVeo3JSON()" style="display:none;border-color:#ec4899;color:#ec4899">🎬 Veo3 JSON</button>
         <button class="btn-i" id="nut-api-json" onclick="xuatAPIJSON()" style="display:none;border-color:#10b981;color:#10b981">⚡ API JSON</button>
@@ -1660,6 +1661,38 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
     <div class="out-body" id="ket-qua" spellcheck="false"><span class="ph">Nhấn "Tạo Prompt" để xem kết quả...</span></div>
   </div>
+  <!-- STORYBOARD TỪ PROMPT CUỐI -->
+  <div id="final-storyboard-wrap" style="display:none;margin-top:10px">
+    <div style="background:#0d0d1a;border:1px solid #818cf8;border-radius:10px;overflow:hidden">
+      <div style="padding:9px 14px;background:#080814;border-bottom:1px solid #818cf8;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+        <span style="font-size:11px;color:#818cf8;font-weight:500">🎨 Ảnh Storyboard từ Prompt</span>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <button class="btn-i" onclick="taoAnhTuPromptCuoi()" style="font-size:10px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
+          <button class="btn-i" onclick="document.getElementById('final-storyboard-wrap').style.display='none'" style="font-size:10px">✕</button>
+        </div>
+      </div>
+      <!-- Upload nhân vật reference -->
+      <div style="padding:10px 14px;border-bottom:1px solid #2a2a3a">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span style="font-size:10px;color:#a78bfa">🔒 Ảnh nhân vật reference (1 ảnh chính)</span>
+          <label style="font-size:9px;padding:3px 9px;border-radius:5px;border:1px dashed #7c3aed;color:#a78bfa;cursor:pointer">
+            📎 Upload ảnh nhân vật
+            <input type="file" accept="image/*" style="display:none" onchange="uploadAnhNhanVatFinal(this)">
+          </label>
+        </div>
+        <div id="final-nv-preview" style="display:flex;gap:6px;align-items:center">
+          <span style="font-size:9px;color:#3a2050">Chưa có ảnh — upload để lock khuôn mặt nhân vật</span>
+        </div>
+        <!-- Hoặc dùng từ tab Nhân Vật -->
+        <button onclick="dungAnhCharRefFinal()" style="margin-top:6px;font-size:9px;padding:3px 9px;border-radius:5px;border:1px solid #7c3aed;background:transparent;color:#7c5fa0;cursor:pointer">
+          🔄 Dùng ảnh từ tab Nhân Vật
+        </button>
+      </div>
+      <!-- Kết quả ảnh -->
+      <div id="final-storyboard-img" style="padding:10px 14px"></div>
+    </div>
+  </div>
+
   <!-- KHUNG DÁN PROMPT -->
   <div id="khung-dan" style="display:none;margin-top:10px;background:var(--card);border:1px solid var(--green);border-radius:9px;overflow:hidden">
     <div style="padding:9px 13px;background:var(--card2);border-bottom:1px solid var(--bdr);display:flex;align-items:center;justify-content:space-between;gap:6px">
@@ -2483,6 +2516,8 @@ function hienKQ(nd,loai,label){
   document.getElementById('ket-qua').textContent=nd;
   document.getElementById('tieu-de-out').innerHTML=`📋 ${label} <span style="font-size:10px;color:var(--muted);font-weight:400;letter-spacing:0;text-transform:none">(~${nd.split(/\s+/).filter(Boolean).length} từ)</span>`;
   document.getElementById('nut-cp').style.display='';
+  const _sbBtn = document.getElementById('nut-storyboard');
+  if(_sbBtn) _sbBtn.style.display='';
     const nutJson = document.getElementById('nut-json');
     if(nutJson) nutJson.style.display='';
     ['nut-veo3-json','nut-api-json'].forEach(id=>{
@@ -6686,6 +6721,111 @@ function dungAnhNhanVatChung(id){
 
   const btn = document.querySelector(`[onclick="dungAnhNhanVatChung(${id})"]`);
   if(btn){ const o=btn.innerHTML; btn.innerHTML='✅ Đã dùng!'; setTimeout(()=>btn.innerHTML=o,2000); }
+}
+
+
+// ===== STORYBOARD TỪ PROMPT CUỐI =====
+let finalNhanVatImg = null; // base64 ảnh nhân vật cho final storyboard
+
+function uploadAnhNhanVatFinal(input){
+  const file = input.files[0];
+  if(!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    finalNhanVatImg = e.target.result;
+    const preview = document.getElementById('final-nv-preview');
+    if(preview) preview.innerHTML = `
+      <div style="position:relative;display:inline-block">
+        <img src="${e.target.result}" style="width:64px;height:64px;object-fit:cover;border-radius:7px;border:2px solid #7c3aed">
+        <button onclick="xoaAnhNhanVatFinal()" style="position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:9px;cursor:pointer;padding:0">✕</button>
+      </div>
+      <span style="font-size:9px;color:#a78bfa;margin-left:8px">✅ Ảnh nhân vật đã sẵn sàng</span>`;
+  };
+  reader.readAsDataURL(file);
+  input.value = '';
+}
+
+function xoaAnhNhanVatFinal(){
+  finalNhanVatImg = null;
+  const preview = document.getElementById('final-nv-preview');
+  if(preview) preview.innerHTML = '<span style="font-size:9px;color:#3a2050">Chưa có ảnh — upload để lock khuôn mặt nhân vật</span>';
+}
+
+function dungAnhCharRefFinal(){
+  if(!charRefImages || charRefImages.length === 0){
+    alert('Tab Nhân Vật chưa có ảnh. Vào tab 🔒 Nhân Vật → upload ảnh trước.');
+    return;
+  }
+  finalNhanVatImg = charRefImages[0].src;
+  const preview = document.getElementById('final-nv-preview');
+  if(preview) preview.innerHTML = `
+    <div style="position:relative;display:inline-block">
+      <img src="${finalNhanVatImg}" style="width:64px;height:64px;object-fit:cover;border-radius:7px;border:2px solid #7c3aed">
+      <button onclick="xoaAnhNhanVatFinal()" style="position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:9px;cursor:pointer;padding:0">✕</button>
+    </div>
+    <span style="font-size:9px;color:#a78bfa;margin-left:8px">✅ Từ tab Nhân Vật</span>`;
+}
+
+async function taoAnhTuPromptCuoi(){
+  // Get current prompt
+  const promptEl = document.getElementById('ket-qua');
+  const promptText = promptEl ? (promptEl.innerText || promptEl.textContent) : '';
+  if(!promptText || promptText.includes('Nhấn "Tạo Prompt"')){
+    alert('Tạo prompt trước rồi mới tạo ảnh.');
+    return;
+  }
+
+  // Show wrap
+  const wrap = document.getElementById('final-storyboard-wrap');
+  const imgWrap = document.getElementById('final-storyboard-img');
+  if(wrap) wrap.style.display = 'block';
+  if(imgWrap) imgWrap.innerHTML = '<div style="padding:20px;text-align:center;color:#818cf8;font-size:11px">⏳ Đang tạo ảnh storyboard...</div>';
+
+  // Build cinematic image prompt from final prompt
+  const system = `You are a cinematographer. Extract the key visual elements from this video prompt and create a concise image generation prompt.
+Include: shot size, camera angle, subject description, lighting (Kelvin), color palette, atmosphere.
+Add: photorealistic, cinematic film still, anamorphic, shallow DOF, 8K --ar 16:9
+Output ONLY the image prompt, max 300 words.`;
+
+  let imgPrompt = '';
+  try {
+    await goiClaude(system, promptText.slice(0, 1500), (chunk) => {
+      imgPrompt += chunk;
+    });
+  } catch(e) {
+    if(imgWrap) imgWrap.innerHTML = `<div style="padding:10px;color:var(--red)">❌ ${e.message}</div>`;
+    return;
+  }
+
+  // Generate image with optional character reference
+  try {
+    const res = await fetch('/api/image', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        prompt: imgPrompt.slice(0, 1000),
+        quality: 'high',
+        referenceImages: finalNhanVatImg ? [finalNhanVatImg]
+          : (charRefImages.length > 0 ? [charRefImages[0].src] : undefined)
+      })
+    });
+
+    const data = await res.json();
+    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
+    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
+    if(!imgSrc) throw new Error('Không nhận được ảnh');
+
+    if(imgWrap) imgWrap.innerHTML = `
+      <img src="${imgSrc}" style="width:100%;display:block;border-radius:0 0 9px 9px;cursor:pointer" onclick="(this.requestFullscreen||this.webkitRequestFullscreen||function(){}).call(this)">
+      <div style="display:flex;gap:6px;padding:8px 10px;background:#050510;flex-wrap:wrap">
+        <button class="btn-i" onclick="taoAnhTuPromptCuoi()" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
+        <a href="${imgSrc}" download="storyboard-final.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇ Tải ảnh</a>
+        <button class="btn-i" onclick="robustCopy(${JSON.stringify(imgPrompt)})" style="font-size:9px">⊕ Copy prompt</button>
+      </div>`;
+
+  } catch(e) {
+    if(imgWrap) imgWrap.innerHTML = `<div style="padding:10px;color:var(--red)">❌ ${e.message}</div>`;
+  }
 }
 
 // ===== INIT =====
