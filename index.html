@@ -6828,6 +6828,55 @@ Output ONLY the image prompt, max 300 words.`;
   }
 }
 
+
+// ===== DÁN SKIN PRESET =====
+function danSkinPreset(){
+  const SKIN_PRESET = `Ultra-photorealistic dermis rendering. Subsurface scattering (SSS) active — light penetrates 2–4mm beneath skin surface, warm pink-red glow visible at ear cartilage edges, nostril wings, inner eye corners, fingertip pads. Micro-pore topology visible across nose bridge, cheekbones, forehead — pores 0.1–0.3mm diameter, depth-mapped. Vellus hair (peach fuzz) present on cheeks and upper lip — fine translucent filaments 1–3mm, catching rim light as luminous edge. Capillary flush — natural pink-red undertone in cheeks responding to emotion/temperature. Individual skin cells implied in extreme close-up. Sebaceous texture — natural oil sheen on T-zone. Under-eye micro-wrinkle topology. Laugh lines as lived-in human record. No AI smoothing. No porcelain skin. No plastic sheen. Absolutely no beauty retouching. Biological imperfection = cinematic truth.`;
+
+  const el = document.getElementById('skin-full-desc');
+  if(el){
+    el.value = SKIN_PRESET;
+    el.style.borderColor = 'var(--green)';
+    setTimeout(() => el.style.borderColor = '', 2000);
+  }
+  const preview = document.getElementById('skin-preset-preview');
+  const done = document.getElementById('skin-preset-done');
+  if(preview){ preview.style.display = 'block'; preview.textContent = SKIN_PRESET.slice(0,150) + '...'; }
+  if(done) done.style.display = 'block';
+  capNhat();
+}
+
+// ===== DÁN BLACKMAGIC LUT PRESET =====
+function danBMLUTPreset(){
+  // Collect selected LUT options
+  const profile = (MM.bm_profile||[]).join(', ') || 'Blackmagic RAW 12K — BRAW';
+  const lut = (MM.bm_lut||[]).join(', ') || 'FilmBox Cinematic LUT';
+  const grade = (MM.bm_grade||[]).join(', ') || 'Warm tungsten 3200K base';
+  const output = (MM.bm_output||[]).join(', ') || 'Rec.709 delivery';
+
+  const BM_PRESET = `[BLACKMAGIC COLOR PIPELINE]
+Camera: ${profile}
+LUT: ${lut}
+Grade: ${grade}
+Output: ${output}
+DaVinci Resolve workflow: BRAW → DaVinci Wide Gamut → ${lut} → Rec.709
+Film grain: Kodak 5219 emulation, 15–20% opacity, heavier in shadows`;
+
+  // Add to skin-full-desc or a custom field
+  const el = document.getElementById('skin-full-desc');
+  if(el){
+    el.value = (el.value ? el.value + '\n\n' : '') + BM_PRESET;
+    el.style.borderColor = '#60a5fa';
+    setTimeout(() => el.style.borderColor = '', 2000);
+  }
+
+  const preview = document.getElementById('skin-preset-preview');
+  const done = document.getElementById('skin-preset-done');
+  if(preview){ preview.style.display = 'block'; preview.textContent = BM_PRESET.slice(0,150) + '...'; }
+  if(done){ done.style.display = 'block'; done.textContent = '✅ Đã thêm Blackmagic LUT preset vào prompt'; }
+  capNhat();
+}
+
 // ===== INIT =====
 napPromptMau();
 veHooks();
