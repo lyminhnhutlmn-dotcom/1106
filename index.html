@@ -5939,50 +5939,55 @@ async function taoPromptShot(id){
   const s = cacShot.find(x => x.id === id);
   if(!s) return;
 
-  // Build context from Khung Sườn
-  const {nv, nvp, dd} = layChung();
-  const genre = SS.genre || '';
-  const style = (MM.director||[]).slice(0,2).join(', ');
-  const lighting = (MM.light_type||[]).slice(0,2).join(', ');
-  const emotion = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
-  const skin = SS.skin_level || '';
-  const color = SS.pal || '';
-
-  // Build shot info
-  const cam = [s.cuMay, s.shotSize, s.lens].filter(Boolean).join(', ') || 'Máy tĩnh';
-  const fx = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
-  const content = s.moTa || '';
-  const timing = `${s.start}s → ${s.end}s (${s.tg}s)`;
-
-  // Show loading
   const wrap = document.getElementById('shot-prompt-wrap-' + id);
   const el = document.getElementById('shot-prompt-' + id);
   if(wrap) wrap.style.display = '';
   if(el) el.textContent = '⏳ Đang tạo prompt...';
 
-  const system = `You are a master cinematographer and AI video prompt engineer.
-Create a complete, ready-to-use cinematic prompt for ONE specific shot.
-Format: write in English, professional cinematic language.
-Include: shot size, camera movement, lens, timing, action, emotion, lighting, skin detail, constraints.
-Output ONLY the prompt — no explanation, no preamble.`;
+  const cam = s.cuMay || 'static shot';
+  const lens = s.lens || '50mm';
+  const size = s.shotSize || '';
+  const fx = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
+  const content = s.moTa || '';
+  const timing = `${s.start}s → ${s.end}s (${s.tg}s)`;
 
-  const userMsg = `Create a cinematic prompt for this shot:
+  const nv = gVal('subject-desc') || '';
+  const genre = SS.genre || 'cinematic drama';
+  const emo = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
+  const lightType = (MM.light_type||[]).slice(0,2).join(', ') || '';
+  const colorPal = SS.pal || '';
+  const director = (MM.director||[]).slice(0,2).join(', ');
+  const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
+  const skin = SS.skin_level || '';
 
-SHOT INFO:
-- Timing: ${timing}
-- Camera: ${cam}${fx ? '\n- Special FX: ' + fx : ''}
-- Content: ${content || 'Shot from scene'}
+  const system = `You are a master DOP (Director of Photography) writing Seedance/Veo3 video prompts.
+Create a COMPLETE, PRODUCTION-READY cinematic video prompt for ONE shot.
 
-SCENE CONTEXT:
-- Genre: ${genre || 'Cinematic Drama'}
-- Subject: ${nv || 'Young person'}
-${emotion ? '- Emotion: ' + emotion : ''}
-${lighting ? '- Lighting: ' + lighting : ''}
-${style ? '- Style ref: ' + style : ''}
-${skin ? '- Skin level: ' + skin : ''}
-${color ? '- Color: ' + color : ''}
+MANDATORY structure:
+[CAMERA] Shot size, movement, lens, speed ft/s, angle
+[SUBJECT] Nationality, age range, exact action, micro-expression, body language, clothing texture
+[SKIN] SSS, pore detail, vellus hair, capillary flush, NO AI smoothing — biological realism
+[LIGHTING] Kelvin temperature, direction, key:shadow ratio, practical sources, rim, motivated source
+[DEPTH] Foreground / Midground / Background — 3 layers
+[ATMOSPHERE] Particles, dust, smoke, steam, weather, air density
+[COLOR] Film stock reference, grade, saturation, shadow tone
+[EMOTION] Show don't tell — encoded in physics and light
+[CONSTRAINTS] No warped faces, no extra fingers, no flickering, no texture swimming
 
-Write a complete Seedance/Veo3 ready prompt for this single shot.`;
+Write in professional cinematography language. Output ONLY the prompt. No preamble.`;
+
+  const userMsg = `Write complete video prompt:
+
+SHOT: ${size} | ${cam} | ${lens} | ${timing}
+${fx ? 'FX: ' + fx : ''}
+ACTION: ${content || 'Scene from ' + genre}
+SUBJECT: ${nationality ? nationality + ', ' : ''}${nv || 'character'}
+EMOTION: ${emo || 'tension'}
+LIGHTING: ${lightType}
+COLOR: ${colorPal}
+GENRE: ${genre}
+${director ? 'DIRECTOR REF: ' + director : ''}
+${skin ? 'SKIN: ' + skin : ''}`;
 
   let acc = '';
   try {
@@ -5990,191 +5995,14 @@ Write a complete Seedance/Veo3 ready prompt for this single shot.`;
       acc += chunk;
       if(el) el.textContent = acc;
     });
-
-    // Save to shot
     s.shotPrompt = acc;
     if(el){ el.textContent = acc; el.contentEditable = 'true'; }
     if(wrap) wrap.style.display = '';
-
   } catch(e) {
-    if(el) el.textContent = '❌ Lỗi: ' + e.message;
+    if(el) el.textContent = '❌ ' + e.message;
   }
 }
 
-function copyShot(id){
-  const s = cacShot.find(x => x.id === id);
-  if(!s || !s.shotPrompt) return;
-  robustCopy(s.shotPrompt, null);
-  const btn = document.querySelector(`[onclick="copyShot(${id})"]`);
-  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã copy!'; setTimeout(()=>btn.innerHTML=o, 2000); }
-}
-
-function xoaPromptShot(id){
-  const s = cacShot.find(x => x.id === id);
-  if(s) s.shotPrompt = '';
-  const wrap = document.getElementById('shot-prompt-wrap-' + id);
-  if(wrap) wrap.style.display = 'none';
-}
-
-function luuShotPrompt(id, text){
-  const s = cacShot.find(x => x.id === id);
-  if(s) s.shotPrompt = text;
-}
-
-
-// ===== CHỈNH SỬA KẾT QUẢ PHÂN TÍCH KỊCH BẢN =====
-function batDauChinhSuaKB(){
-  const el = document.getElementById('kb-output');
-  if(!el) return;
-
-  // Make editable
-  el.contentEditable = 'true';
-  el.style.border = '1px solid var(--gold)';
-  el.style.borderRadius = '7px';
-  el.style.padding = '13px';
-  el.style.background = 'var(--card)';
-  el.focus();
-
-  // Move cursor to end
-  const range = document.createRange();
-  range.selectNodeContents(el);
-  range.collapse(false);
-  const sel = window.getSelection();
-  sel.removeAllRanges();
-  sel.addRange(range);
-
-  // Toggle buttons
-  document.getElementById('kb-edit-btn').style.display = 'none';
-  document.getElementById('kb-save-btn').style.display = '';
-
-  document.getElementById('kb-result-title').textContent = '✏️ Đang chỉnh sửa...';
-  document.getElementById('kb-result-title').style.color = 'var(--gold)';
-}
-
-function luuChinhSuaKB(){
-  const el = document.getElementById('kb-output');
-  if(!el) return;
-
-  // Save to kbKetQua
-  kbKetQua = el.textContent || el.innerText;
-
-  // Lock editing
-  el.contentEditable = 'false';
-  el.style.border = 'none';
-  el.style.borderRadius = '0';
-  el.style.background = 'transparent';
-
-  // Toggle buttons
-  document.getElementById('kb-edit-btn').style.display = '';
-  document.getElementById('kb-save-btn').style.display = 'none';
-
-  document.getElementById('kb-result-title').textContent = '✅ Đã lưu chỉnh sửa';
-  document.getElementById('kb-result-title').style.color = 'var(--green)';
-
-  // Re-parse shot cards with updated content
-  hienShotCards(kbKetQua);
-
-  setTimeout(() => {
-    const titleEl = document.getElementById('kb-result-title');
-    if(titleEl){ titleEl.textContent = '🎯 Phân tích hoàn tất'; titleEl.style.color = '#ff6b6b'; }
-  }, 2000);
-}
-
-
-// ===== KB SHOT SETUP — Cài đặt máy trước khi phân tích =====
-let kbShotSetupData = []; // [{cuMay, shotSize, lens}]
-
-function taoKBShotSetup(n){
-  kbShotSetupData = Array.from({length: n}, () => ({cuMay:'', shotSize:'', lens:''}));
-  const wrap = document.getElementById('kb-shot-setup');
-  if(!wrap) return;
-
-  wrap.innerHTML = kbShotSetupData.map((s,i) => `
-    <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:8px 10px">
-      <div style="font-size:10px;color:var(--gold);font-weight:500;margin-bottom:6px">🎬 SHOT ${i+1}</div>
-      <div style="display:flex;gap:8px;flex-wrap:wrap">
-        <div style="flex:1;min-width:130px">
-          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎥 Cú máy</div>
-          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].cuMay=this.value">
-            <option value="">-- Chọn --</option>
-            <optgroup label="Cơ bản"><option>Máy tĩnh</option><option>Pan ngang</option><option>Tilt lên</option><option>Tilt xuống</option></optgroup>
-            <optgroup label="Dolly"><option>Dolly tiến</option><option>Dolly lùi</option><option>Dolly ngang</option><option>Dolly chéo 45°</option><option>Pull-Back chậm</option><option>Push-In mạnh</option></optgroup>
-            <optgroup label="Arc"><option>Arc 180°</option><option>Orbital 360°</option></optgroup>
-            <optgroup label="Crane"><option>Crane up</option><option>Crane down</option><option>High → Low</option><option>Low → High</option></optgroup>
-            <optgroup label="Pro"><option>Steadicam</option><option>Tracking</option><option>Fly-through</option><option>Xoắn ốc</option></optgroup>
-            <optgroup label="Đặc biệt"><option>Rack focus</option><option>Dolly zoom (Vertigo)</option><option>Dutch angle</option><option>Whip pan</option></optgroup>
-          </select>
-        </div>
-        <div style="flex:1;min-width:110px">
-          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🎬 Cỡ cảnh</div>
-          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].shotSize=this.value">
-            <option value="">-- Chọn --</option>
-            <option>ECU — Cực cận</option><option>CU — Cận mặt</option><option>MCU — Nửa ngực</option>
-            <option>MS — Ngang lưng</option><option>MWS — 3/4 người</option><option>WS — Toàn thân</option><option>ELS — Toàn cảnh</option>
-          </select>
-        </div>
-        <div style="flex:1;min-width:110px">
-          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">🔭 Tiêu cự</div>
-          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].lens=this.value">
-            <option value="">-- Chọn --</option>
-            <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option>
-            <option>50mm standard</option><option>85mm portrait</option><option>100mm macro</option>
-            <option>135mm telephoto</option><option>Anamorphic</option>
-          </select>
-        </div>
-      </div>
-    </div>`).join('');
-}
-
-
-// ===== ẢNH MINH HOẠ TRONG SHOT =====
-function uploadAnhShot(id, input){
-  const file = input.files[0];
-  if(!file) return;
-  if(file.size > 5 * 1024 * 1024){ alert('Ảnh tối đa 5MB.'); return; }
-
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    const s = cacShot.find(x => x.id === id);
-    if(!s) return;
-    s.image = e.target.result; // base64
-    s.imageName = file.name;
-
-    // Update display
-    const wrap = document.getElementById('img-shot-' + id);
-    if(wrap){
-      wrap.style.display = 'block';
-      wrap.innerHTML = `
-        <img src="${e.target.result}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid var(--bdr);cursor:pointer" onclick="xemAnhLon(${id})" title="Click để xem lớn">
-        <div style="display:flex;gap:5px;margin-top:4px">
-          <button class="btn-i" onclick="guiAnhChoAI(${id})" style="font-size:10px;border-color:var(--gold);color:var(--gold)">✨ Gửi AI phân tích</button>
-          <button class="btn-i" onclick="xoaAnhShot(${id})" style="font-size:10px">✕ Xoá</button>
-        </div>`;
-    }
-  };
-  reader.readAsDataURL(file);
-}
-
-function xoaAnhShot(id){
-  const s = cacShot.find(x => x.id === id);
-  if(s){ s.image = ''; s.imageName = ''; }
-  const wrap = document.getElementById('img-shot-' + id);
-  if(wrap){ wrap.style.display = 'none'; wrap.innerHTML = ''; }
-}
-
-function xemAnhLon(id){
-  const s = cacShot.find(x => x.id === id);
-  if(!s || !s.image) return;
-  // Open in lightbox
-  const overlay = document.createElement('div');
-  overlay.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,.92);z-index:9999;display:flex;align-items:center;justify-content:center;cursor:pointer';
-  overlay.onclick = () => document.body.removeChild(overlay);
-  const img = document.createElement('img');
-  img.src = s.image;
-  img.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px';
-  overlay.appendChild(img);
-  document.body.appendChild(overlay);
-}
 
 async function guiAnhChoAI(id){
   const s = cacShot.find(x => x.id === id);
@@ -6248,53 +6076,57 @@ async function taoStoryboardPrompt(id){
   const s = cacShot.find(x => x.id === id);
   if(!s) return;
 
-  // Show wrap
   const wrap = document.getElementById('shot-sb-wrap-' + id);
   const el = document.getElementById('shot-sb-' + id);
   if(wrap) wrap.style.display = 'block';
   if(el) el.textContent = '⏳ Đang tạo prompt storyboard...';
 
-  // Build camera info
-  const cam = s.cuMay || 'Máy tĩnh';
+  const cam = s.cuMay || 'static shot';
   const lens = s.lens || '50mm';
   const size = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS';
-  const angle = s.angle || 'eye level';
-  const timing = `${s.start}s → ${s.end}s`;
-  const content = s.moTa || s.shotPrompt || '';
   const fx = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
+  const content = s.moTa || s.shotPrompt || '';
+  const timing = `${s.start}s → ${s.end}s (${s.tg}s)`;
 
-  // Get context from Khung Suon
-  const {nv, hd} = layChung();
+  const nv = gVal('subject-desc') || '';
   const genre = SS.genre || 'cinematic drama';
-  const emo = (MM.emo||[]).slice(0,2).map(e=>e.replace(/^\S+\s/,'')).join(', ');
-  const lighting = SS.ls || (MM.light_type||[]).slice(0,1).join('');
-  const colorPal = SS.pal || '';
+  const emo = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
+  const lightType = (MM.light_type||[]).slice(0,2).join(', ') || 'natural cinematic light';
+  const colorPal = SS.pal || 'muted cinematic palette';
+  const director = (MM.director||[]).slice(0,2).join(', ');
+  const skin = SS.skin_level || '';
+  const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
 
-  const system = `You are a professional storyboard artist and cinematographer.
-Create a detailed image generation prompt for ONE storyboard frame.
-The prompt must be optimized for Midjourney / DALL-E 3 / Flux / Ideogram.
+  const system = `You are a world-class cinematographer and storyboard artist.
+Create a HIGHLY DETAILED, PHOTOREALISTIC image generation prompt for ONE storyboard frame.
+Optimized for GPT Image / DALL-E 3 / Midjourney / Flux.
 
-RULES:
-- Describe the exact camera angle and framing
-- Include lighting details
-- Describe character pose/action
-- Add cinematic style references
-- End with technical modifiers
-- Output ONLY the prompt, no explanation`;
+MANDATORY elements to include:
+1. SHOT: exact framing (ECU/CU/MCU/MS/WS/ELS) + subject position in frame
+2. CAMERA: lens mm, aperture f/stop, camera height, tilt angle
+3. SUBJECT: nationality, age, physical details, exact pose, micro-expression, muscle tension
+4. SKIN: SSS subsurface scattering, pore detail, vellus hair, natural imperfection — NO AI smoothing
+5. LIGHTING: color temperature Kelvin, direction, ratio key:shadow, practical sources, rim/fill
+6. DEPTH: 3 layers — foreground detail, midground action, background atmosphere
+7. COLOR: specific palette, grade reference (Kodak 5219 / Fuji 400H / etc)
+8. ATMOSPHERE: dust, smoke, steam, particles, weather
+9. TECHNICAL: film grain %, lens flare character, anamorphic oval bokeh if applicable
+10. STYLE: director reference, film reference
 
-  const userMsg = `Create a storyboard image prompt for this shot:
+Output ONLY the prompt. No explanation. No headers. Pure descriptive text.`;
 
-CAMERA: ${cam} | ${lens} | ${size} | ${angle}
-TIMING: ${timing}
-CONTENT: ${content || 'Scene from ' + genre}
-${fx ? 'EFFECT: ' + fx : ''}
-SUBJECT: ${nv || 'character'}
-${emo ? 'EMOTION: ' + emo : ''}
-${lighting ? 'LIGHTING: ' + lighting : ''}
-${colorPal ? 'COLOR: ' + colorPal : ''}
+  const userMsg = `Create storyboard image prompt:
+
+SHOT: ${size} | ${cam} | ${lens} | timing: ${timing}
+CONTENT: ${content || 'Cinematic scene'}
+${fx ? 'FX: ' + fx : ''}
+SUBJECT: ${nationality ? nationality + ', ' : ''}${nv || 'character'}
+EMOTION: ${emo || 'tension, quiet drama'}
+LIGHTING: ${lightType}
+COLOR: ${colorPal}
 GENRE: ${genre}
-
-Format: [shot size] [subject description and action], [camera angle], [lens mm], [lighting description], [color palette], cinematic storyboard, film still, [director reference if any], professional illustration --ar 16:9`;
+${director ? 'STYLE REF: ' + director : ''}
+${skin ? 'SKIN LEVEL: ' + skin : ''}`;
 
   let acc = '';
   try {
@@ -6302,29 +6134,14 @@ Format: [shot size] [subject description and action], [camera angle], [lens mm],
       acc += chunk;
       if(el) el.textContent = acc;
     });
-    // Save
     s.sbPrompt = acc;
-    if(el){ el.textContent = acc; }
+    if(el){ el.textContent = acc; el.contentEditable = 'true'; }
   } catch(e) {
     if(el) el.textContent = '❌ ' + e.message;
   }
 }
 
-function copySBPrompt(id){
-  const s = cacShot.find(x => x.id === id);
-  if(!s || !s.sbPrompt) return;
-  robustCopy(s.sbPrompt, null);
-  const btn = document.querySelector(`[onclick="copySBPrompt(${id})"]`);
-  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã copy!'; setTimeout(()=>btn.innerHTML=o, 2000); }
-}
 
-function luuSBPrompt(id, text){
-  const s = cacShot.find(x => x.id === id);
-  if(s) s.sbPrompt = text;
-}
-
-
-// ===== TẠO ẢNH STORYBOARD QUA OPENAI =====
 async function taoAnhStoryboard(id){
   const s = cacShot.find(x => x.id === id);
   if(!s) return;
@@ -6418,11 +6235,18 @@ async function _taoAnhBoiCanhDaoCu(wrapId, rawPrompt, label, directPrompt=false)
   if(directPrompt){
     imgPrompt = rawPrompt;
   } else {
-    const system = `You are a film production designer. 
-Convert the following scene/props analysis into a concise image generation prompt (max 200 words).
-Focus on: visual composition, lighting, colors, materials, atmosphere.
-Output ONLY the image prompt, no explanation.
-End with: photorealistic, cinematic, 8K, film still, professional photography --ar 16:9`;
+    const isScene = label === 'bối cảnh';
+    const system = isScene
+      ? `You are a world-class cinematographer. Convert this scene analysis into a photorealistic image generation prompt.
+INCLUDE: exact location, architecture/interior details, lighting color temperature (Kelvin), light direction and shadows, color palette with specific tones, atmospheric particles (dust/smoke/steam), depth layers (foreground/mid/background), time of day, weather, film stock reference.
+Style: cinematic, anamorphic, film still quality.
+End with: photorealistic, cinematic film still, anamorphic lens, shallow DOF, Kodak 5219 grain, 8K, Roger Deakins lighting --ar 16:9
+Output ONLY the prompt.`
+      : `You are a professional prop stylist and product photographer. Convert this props analysis into a photorealistic image generation prompt.
+INCLUDE: exact prop names, materials (wood/metal/fabric/glass), surface texture detail, color and patina, placement and arrangement, scale references, lighting (soft box or window light), shadows and reflections.
+Style: editorial product photography, macro detail.
+End with: photorealistic, studio photography, macro detail, surface texture, soft box lighting, 8K, sharp focus --ar 16:9
+Output ONLY the prompt.`;
     try {
       await goiClaude(system, rawPrompt.slice(0, 800), (chunk) => {
         imgPrompt += chunk;
@@ -6486,19 +6310,23 @@ function luuScenePrompt(el, type){
 
 function extractImgPrompt(text, type){
   if(!text) return '';
-  // Extract key visual descriptors
   const lines = text.split('\n').filter(l => l.trim() && !l.startsWith('//'));
-  // Find lines with visual keywords
-  const visual = lines.filter(l =>
-    /màu|color|ánh sáng|light|vật liệu|material|không gian|space|kết cấu|texture|bối cảnh|scene|location|đạo cụ|prop|đặt trên|on the|đặt cạnh|near|bàn|table|ghế|chair|kệ|shelf|cửa|window|wall|tường/i.test(l)
-  ).slice(0, 8).join(', ');
+  const base = lines.slice(0, 12).join(', ').replace(/[•→\[\]]/g, '').trim();
 
-  const base = visual || lines.slice(0, 5).join(', ');
-  const suffix = type === 'scene'
-    ? ', photorealistic, cinematic wide shot, film still, 8K, professional cinematography --ar 16:9'
-    : ', photorealistic, studio still life photography, detailed, sharp focus, 8K --ar 16:9';
-
-  return base.slice(0, 600) + suffix;
+  if(type === 'scene'){
+    return (base.slice(0, 500) + 
+      ', photorealistic cinematic film still, anamorphic lens flare, ' +
+      'shallow depth of field, natural motivated lighting, ' +
+      'Kodak 5219 film grain, cinematic color grade, ' +
+      'Roger Deakins lighting quality, 8K resolution, ' +
+      'professional cinematography, no AI smoothing --ar 16:9').slice(0, 900);
+  } else {
+    return (base.slice(0, 500) +
+      ', photorealistic studio product photography, ' +
+      'macro detail, surface texture visible, ' +
+      'soft box lighting, clean background with depth, ' +
+      'ultra sharp focus, 8K, commercial photography quality --ar 16:9').slice(0, 900);
+  }
 }
 
 // ===== INIT =====
