@@ -2054,7 +2054,7 @@ function themShot(){
     id: soId, start: newStart, end: newEnd, tg: 5,
     cuMay: '', angle: '', lens: '', speed: '',
     shotSize: '', specialFx: '', moTa: '', shotPrompt: '',
-    image: '', imageName: '', sbPrompt: '', thoai: 'Không thoại'
+    image: '', imageName: '', sbPrompt: '', nhanVatRefs: [], thoai: 'Không thoại'
   });
   veShot();
   // Auto open first shot
@@ -2134,25 +2134,49 @@ function veShot(){
         <div id="shot-prompt-${s.id}" style="background:var(--bg);border:1px solid var(--gold);border-radius:7px;padding:10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;cursor:text" contenteditable="true" onblur="luuShotPrompt(${s.id},this.textContent)">${s.shotPrompt||''}</div>
       </div>
 
-      <!-- ẢNH MINH HOẠ -->
+      
+      <!-- ẢNH SHOT + NHÂN VẬT REFERENCE -->
       <div style="margin-top:6px;margin-bottom:6px">
-        <div class="slbl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <span>🖼️ Ảnh minh hoạ</span>
-          <div style="display:flex;gap:5px">
-            <button onclick="taoAnhStoryboard(${s.id})" style="background:transparent;border:1px solid #818cf8;color:#818cf8;border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer">🖼️ Tạo ảnh AI</button>
-            <label style="font-size:9px;padding:2px 7px;border-radius:5px;border:1px solid var(--bdr);color:var(--muted);cursor:pointer">
-              📎 Upload
-              <input type="file" accept="image/*" style="display:none" onchange="uploadAnhShot(${s.id}, this)">
+        <div class="slbl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+          <span>🖼️ Hình ảnh Shot</span>
+          <button onclick="taoAnhStoryboard(${s.id})" style="background:transparent;border:1px solid #818cf8;color:#818cf8;border-radius:5px;font-size:9px;padding:2px 8px;cursor:pointer">✨ Tạo ảnh AI</button>
+        </div>
+
+        <!-- Nhân vật reference riêng cho shot -->
+        <div style="margin-bottom:7px;padding:7px 9px;background:#0a0010;border:1px solid #4a2060;border-radius:7px">
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+            <span style="font-size:9px;color:#a78bfa">🔒 Nhân vật reference</span>
+            <label style="font-size:9px;padding:2px 7px;border-radius:4px;border:1px dashed #7c3aed;color:#a78bfa;cursor:pointer">
+              ➕ Upload
+              <input type="file" accept="image/*" multiple style="display:none" onchange="uploadNhanVatShot(${s.id}, this)">
             </label>
           </div>
+          <div id="nv-ref-${s.id}" style="display:flex;gap:5px;flex-wrap:wrap;min-height:10px">
+            ${(s.nhanVatRefs||[]).length > 0
+              ? (s.nhanVatRefs||[]).map((img,i)=>`<div style="position:relative"><img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed"><button onclick="xoaNhanVatRef(${s.id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button></div>`).join('')
+              : '<span style="font-size:9px;color:#3a2050">Chưa có — upload ảnh nhân vật để lock khuôn mặt</span>'}
+          </div>
+          <button onclick="dungAnhNhanVatChung(${s.id})" style="font-size:9px;margin-top:5px;padding:2px 8px;border-radius:4px;border:1px solid #7c3aed;background:transparent;color:#7c5fa0;cursor:pointer">
+            🔄 Dùng ảnh từ tab Nhân Vật
+          </button>
         </div>
+
+        <!-- Ảnh kết quả storyboard -->
         <div id="img-shot-${s.id}" style="display:${s.image?'block':'none'}">
-          ${s.image ? `<img src="${s.image}" style="width:100%;max-height:200px;object-fit:cover;border-radius:6px;border:1px solid var(--bdr);cursor:pointer" onclick="xemAnhLon('${s.id}')" title="Click để xem lớn">
-          <div style="display:flex;gap:5px;margin-top:4px">
-            <button class="btn-i" onclick="guiAnhChoAI(${s.id})" style="font-size:10px;border-color:var(--gold);color:var(--gold)">✨ Gửi AI phân tích</button>
-            <button class="btn-i" onclick="xoaAnhShot(${s.id})" style="font-size:10px">✕ Xoá</button>
+          ${s.image ? `<img src="${s.image}" style="width:100%;max-height:220px;object-fit:cover;border-radius:7px;border:1px solid #818cf8;cursor:pointer;margin-bottom:5px" onclick="xemAnhLon(${s.id})">
+          <div style="display:flex;gap:5px;flex-wrap:wrap">
+            <button class="btn-i" onclick="taoAnhStoryboard(${s.id})" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
+            <button class="btn-i" onclick="guiAnhChoAI(${s.id})" style="font-size:9px;border-color:var(--gold);color:var(--gold)">✨ AI phân tích</button>
+            <a href="${s.image}" download="shot-${s.id}.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇</a>
+            <button class="btn-i" onclick="xoaAnhShot(${s.id})" style="font-size:9px">✕</button>
           </div>` : ''}
         </div>
+
+        <!-- Upload ảnh thủ công -->
+        <label style="display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:3px 8px;border-radius:5px;border:1px solid var(--bdr);color:var(--muted);cursor:pointer;margin-top:5px">
+          📎 Upload ảnh thủ công
+          <input type="file" accept="image/*" style="display:none" onchange="uploadAnhShot(${s.id}, this)">
+        </label>
       </div>
 
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
@@ -5086,7 +5110,9 @@ async function taoAnhNhanVat(){
       body: JSON.stringify({
         prompt: finalPrompt,
         quality: 'high',
-        referenceImages: charRefImages.length > 0 ? charRefImages.map(r => r.src) : undefined
+        referenceImages: (s.nhanVatRefs && s.nhanVatRefs.length > 0)
+          ? s.nhanVatRefs
+          : (charRefImages.length > 0 ? charRefImages.map(r => r.src) : undefined)
       })
     });
 
@@ -6594,6 +6620,72 @@ function veAnhThamChieu(){
 function xoaAnhThamChieu(idx){
   charRefImages.splice(idx, 1);
   veAnhThamChieu();
+}
+
+
+// ===== NHÂN VẬT REFERENCE TRONG SHOT =====
+function uploadNhanVatShot(id, input){
+  const s = cacShot.find(x => x.id === id);
+  if(!s) return;
+  if(!s.nhanVatRefs) s.nhanVatRefs = [];
+  const files = Array.from(input.files).slice(0, 3 - s.nhanVatRefs.length);
+  let loaded = 0;
+  files.forEach(file => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      s.nhanVatRefs.push(e.target.result);
+      loaded++;
+      if(loaded === files.length){
+        // Update display
+        const wrap = document.getElementById('nv-ref-' + id);
+        if(wrap) wrap.innerHTML = s.nhanVatRefs.map((img,i)=>`
+          <div style="position:relative">
+            <img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed">
+            <button onclick="xoaNhanVatRef(${id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button>
+          </div>`).join('');
+      }
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function xoaNhanVatRef(id, idx){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s.nhanVatRefs) return;
+  s.nhanVatRefs.splice(idx, 1);
+  const wrap = document.getElementById('nv-ref-' + id);
+  if(wrap){
+    if(s.nhanVatRefs.length === 0){
+      wrap.innerHTML = '<span style="font-size:9px;color:#3a2050">Chưa có — upload ảnh nhân vật để lock khuôn mặt</span>';
+    } else {
+      wrap.innerHTML = s.nhanVatRefs.map((img,i)=>`
+        <div style="position:relative">
+          <img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed">
+          <button onclick="xoaNhanVatRef(${id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button>
+        </div>`).join('');
+    }
+  }
+}
+
+function dungAnhNhanVatChung(id){
+  if(!charRefImages || charRefImages.length === 0){
+    alert('Tab Nhân Vật chưa có ảnh reference. Vào tab 🔒 Nhân Vật → upload ảnh trước.');
+    return;
+  }
+  const s = cacShot.find(x => x.id === id);
+  if(!s) return;
+  s.nhanVatRefs = charRefImages.map(r => r.src);
+  // Update display
+  const wrap = document.getElementById('nv-ref-' + id);
+  if(wrap) wrap.innerHTML = s.nhanVatRefs.map((img,i)=>`
+    <div style="position:relative">
+      <img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed">
+      <button onclick="xoaNhanVatRef(${id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button>
+    </div>`).join('');
+
+  const btn = document.querySelector(`[onclick="dungAnhNhanVatChung(${id})"]`);
+  if(btn){ const o=btn.innerHTML; btn.innerHTML='✅ Đã dùng!'; setTimeout(()=>btn.innerHTML=o,2000); }
 }
 
 // ===== INIT =====
