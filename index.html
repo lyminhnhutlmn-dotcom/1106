@@ -2065,6 +2065,9 @@ function taoVI(){
   }
   if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';L.push(d.trim()||'(Chưa mô tả)');L.push('');});}
   kqVI=L.join('\n');kqSD='';kqCG='';
+  const _header = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER\nBY LÝ MINH NHỰT\n' + '═'.repeat(50) + '\n\n';
+  const _footer = '\n\n' + '═'.repeat(50) + '\nANNAHOUSESTUDIO AI — annahousestudio.vercel.app\nlypro.vn';
+  kqVI = _header + kqVI + _footer;
     if(!licenseValid){
     kqVI += '\n\n// ANNAHOUSESTUDIO Cinematic Prompt Builder · annahousestudio.com';
   }
@@ -2170,6 +2173,9 @@ function taoSD(){
   if(matRefs.length){L.push('[MATERIAL INTEGRATION]');matRefs.forEach(r=>L.push(`@material[${r.n}]: Apply ${r.t} reference characteristics.`));L.push('');}
   L.push('[OUTPUT]');L.push(`Duration: ${selDuration}s. Resolution: 720p. ${selPlatform?'Platform: '+selPlatform.split(' ')[0]+'.':''}`);
   kqSD=L.join('\n');kqCG='';
+  const _hSD = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER\nBY LÝ MINH NHỰT\n' + '═'.repeat(50) + '\n\n';
+  const _fSD = '\n\n' + '═'.repeat(50) + '\nANNAHOUSESTUDIO AI — annahousestudio.vercel.app\nlypro.vn';
+  kqSD = _hSD + kqSD + _fSD;
   hienKQ(kqSD,'sd','🎬 Seedance Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Dán trực tiếp vào ô prompt Seedance 2.0 trên Higgsfield.';
   document.getElementById('ghi-chu').style.display='block';
@@ -2225,6 +2231,9 @@ function taoCG(){
   L.push('[OUTPUT SPECIFICATIONS]');
   L.push(`Render: ${selRenderStyle?selRenderStyle.split(':')[0]:'Photorealistic CGI'}. Duration: ${dur}. Frame rate: ${fps}. Aspect ratio: 16:9 widescreen. This sequence should showcase exceptional CGI craft — every material, lighting interaction, and camera motion should be production-quality.`);
   kqCG=L.join('\n');kqSD='';
+  const _hCG = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER\nBY LÝ MINH NHỰT\n' + '═'.repeat(50) + '\n\n';
+  const _fCG = '\n\n' + '═'.repeat(50) + '\nANNAHOUSESTUDIO AI — annahousestudio.vercel.app\nlypro.vn';
+  kqCG = _hCG + kqCG + _fCG;
   hienKQ(kqCG,'cg','🎨 3D CGI Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Prompt tối ưu cho Seedance 3D CGI render mode trên Higgsfield.';
   document.getElementById('ghi-chu').style.display='block';
