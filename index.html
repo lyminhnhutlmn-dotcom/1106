@@ -264,21 +264,21 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </div>
 <h1 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:2px">ANNAHOUSESTUDIO</h1>
 <p style="font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Cinematic Prompt Builder — by LÝ MINH NHỰT</p>
-<p class="sub" id="app-sub">// 8 Yếu Tố · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · Nhân Vật · AI Dịch & Cải Thiện</p>
+<p class="sub" id="app-sub">// Nhân Vật · Khung Sườn · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · AI Dịch & Cải Thiện</p>
 <div class="tabs">
-  <button class="tab on" onclick="sw('fw')">① Khung Sườn</button>
+  <button class="tab on" onclick="sw('char')" id="tab-char">🔒 Nhân Vật</button>
+  <button class="tab" onclick="sw('fw')">① Khung Sườn</button>
   <button class="tab" onclick="sw('shots')">🎥 Dựng Cảnh</button>
   <button class="tab" onclick="sw('thoai')">💬 Lời Thoại</button>
   <button class="tab" onclick="sw('emo')">💔 Cảm Xúc</button>
   <button class="tab" onclick="sw('voice')">🎙️ Giọng Nói</button>
-  <button class="tab" onclick="sw('char')" style="border-bottom-color:transparent" id="tab-char">🔒 Nhân Vật</button>
   <button class="tab" onclick="sw('out')">📋 Xuất Prompt</button>
   <button class="tab" onclick="sw('lib')">📚 Thư Viện</button>
 </div>
 
 <!-- ===== KHUNG SƯỜN ===== -->
 <!-- KỊCH BẢN AI -->
-<div class="pane on" id="p-fw">
+<div class="pane" id="p-fw">
 <div class="prog-wrap">
   <div class="prog-title">Mức độ hoàn thiện — nhấp tiêu đề để mở / đóng từng mục</div>
   <div class="prog-items">
@@ -1337,7 +1337,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </div>
 
 <!-- ===== NHÂN VẬT NHẤT QUÁN ===== -->
-<div class="pane" id="p-char">
+<div class="pane on" id="p-char">
 
   <div style="background:linear-gradient(135deg,#0a0a1a,#120a1a);border:1px solid #7c3aed;border-radius:10px;padding:13px 15px;margin-bottom:16px">
     <div style="font-size:13px;font-weight:500;color:#a78bfa;margin-bottom:3px">🔒 Nhân Vật Nhất Quán — Character Consistency</div>
@@ -1574,6 +1574,22 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
         <button onclick="taoAnhNhanVat()" style="padding:8px 16px;border-radius:7px;border:none;background:#7c3aed;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">⚡ Tối ưu & Mở công cụ tạo ảnh</button>
         <span id="char-img-status" style="font-size:11px;color:var(--muted)"></span>
+      </div>
+
+      <!-- REFERENCE IMAGES FOR CHARACTER LOCK -->
+      <div style="margin-top:10px;padding:10px;background:#0a0010;border:1px solid #4a2080;border-radius:8px">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:4px">
+          <span style="font-size:11px;color:#a78bfa;font-weight:500">📸 Ảnh tham chiếu nhân vật</span>
+          <span style="font-size:9px;color:var(--muted)">Tối đa 3 ảnh · lock khuôn mặt xuyên suốt</span>
+        </div>
+        <div id="char-ref-images" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;min-height:20px"></div>
+        <label style="display:inline-flex;align-items:center;gap:5px;font-size:10px;padding:5px 10px;border-radius:6px;border:1px dashed #7c3aed;color:#a78bfa;cursor:pointer">
+          ➕ Thêm ảnh tham chiếu
+          <input type="file" accept="image/*" multiple style="display:none" onchange="themAnhThamChieu(this)">
+        </label>
+        <div style="font-size:9px;color:#5a3090;margin-top:6px;line-height:1.5">
+          Khi nhấn 🖼️ Tạo ảnh AI trong Dựng Cảnh → ảnh nhân vật được gửi kèm → khuôn mặt nhất quán
+        </div>
       </div>
 
       <!-- OUTPUT -->
@@ -2050,6 +2066,7 @@ function veShot(){
   document.getElementById('ds-shot').innerHTML=cacShot.map((s,i)=>`
     <div class="shot-card"><div class="shot-hd" onclick="moShot(${s.id})">
       <span class="shot-num">SỰ KIỆN ${i+1}</span>
+      ${charPromptText?'<span title="Nhân vật đã lock" style="color:#a78bfa;font-size:10px;margin-right:4px">🔒</span>':''}
       <span class="shot-title">${s.cuMay||'Chưa chọn'}${s.moTa?' — '+s.moTa.slice(0,30)+'...':''}</span>
       <span class="shot-dur">${s.tg}s</span>
       <button onclick="event.stopPropagation();taoPromptShot(${s.id})" style="background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer;font-family:'IBM Plex Mono',monospace">✨ Prompt</button>
@@ -4888,6 +4905,8 @@ async function taoCharPromptAI(){
     document.getElementById('nut-add-char').style.display = '';
     const indicator = document.getElementById('char-lock-active');
     if(indicator) indicator.style.display = '';
+    // Update sync banner in Dựng Cảnh
+    capNhatCharBanner();
     }catch(e){
     if(el) el.innerHTML = '<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
   }
@@ -5064,7 +5083,11 @@ async function taoAnhNhanVat(){
     const res = await fetch('/api/image', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: finalPrompt, quality: 'high' })
+      body: JSON.stringify({
+        prompt: finalPrompt,
+        quality: 'high',
+        referenceImages: charRefImages.length > 0 ? charRefImages.map(r => r.src) : undefined
+      })
     });
 
     const data = await res.json();
@@ -5998,6 +6021,9 @@ async function taoPromptShot(id){
   const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
   const skin = SS.skin_level || '';
 
+  // Include character lock if set
+  const charLock = charPromptText ? `\n\n[CHARACTER CONSISTENCY]\n${charPromptText.slice(0,300)}` : '';
+
   const system = `You are a master DOP (Director of Photography) writing Seedance/Veo3 video prompts.
 Create a COMPLETE, PRODUCTION-READY cinematic video prompt for ONE shot.
 
@@ -6025,7 +6051,7 @@ LIGHTING: ${lightType}
 COLOR: ${colorPal}
 GENRE: ${genre}
 ${director ? 'DIRECTOR REF: ' + director : ''}
-${skin ? 'SKIN: ' + skin : ''}`;
+${skin ? 'SKIN: ' + skin : ''}${charLock}`;
 
   let acc = '';
   try {
@@ -6477,6 +6503,97 @@ function luuChinhSuaKB(){
     const t = document.getElementById('kb-result-title');
     if(t){ t.textContent = '🎯 Phân tích hoàn tất'; t.style.color = '#ff6b6b'; }
   }, 2000);
+}
+
+
+// ===== ĐỒNG BỘ NHÂN VẬT TRONG DỰNG CẢNH =====
+function capNhatCharBanner(){
+  const banner = document.getElementById('char-sync-banner');
+  const nameEl = document.getElementById('char-sync-name');
+  const previewEl = document.getElementById('char-sync-preview');
+  if(!banner) return;
+
+  if(charPromptText && charPromptText.trim()){
+    banner.style.display = 'block';
+    // Extract name/description from first 80 chars
+    const preview = charPromptText.slice(0, 120).replace(/\n/g, ' ');
+    if(nameEl) nameEl.textContent = gVal('subject-desc') ? gVal('subject-desc').slice(0,40) : '—';
+    if(previewEl) previewEl.textContent = preview + (charPromptText.length > 120 ? '...' : '');
+    // Refresh shot list to show lock badges
+    veShot();
+  } else {
+    banner.style.display = 'none';
+  }
+}
+
+function dongBoNhanVatTatCa(){
+  if(!charPromptText){
+    alert('Chưa có Character Lock. Vào tab 🔒 Nhân Vật → tạo Character Lock Prompt trước.');
+    return;
+  }
+
+  // Add character lock to ALL shots' moTa if not already there
+  const marker = '[CHARACTER LOCK]';
+  let updated = 0;
+
+  cacShot.forEach(s => {
+    if(!s.moTa.includes(marker)){
+      s.moTa = (s.moTa ? s.moTa + '\n\n' : '') + marker + '\n' + charPromptText;
+      updated++;
+    }
+  });
+
+  veShot();
+
+  const btn = document.querySelector('[onclick="dongBoNhanVatTatCa()"]');
+  if(btn){
+    const o = btn.innerHTML;
+    btn.innerHTML = `✅ Đã đồng bộ ${updated} shots!`;
+    setTimeout(() => btn.innerHTML = o, 2500);
+  }
+}
+
+function xoaDongBoNhanVat(){
+  const marker = '[CHARACTER LOCK]';
+  cacShot.forEach(s => {
+    const idx = s.moTa.indexOf('\n\n' + marker);
+    if(idx > 0) s.moTa = s.moTa.slice(0, idx);
+    else s.moTa = s.moTa.replace(marker + '\n' + charPromptText, '').trim();
+  });
+  veShot();
+}
+
+
+// ===== ẢNH THAM CHIẾU NHÂN VẬT =====
+let charRefImages = []; // [{src: base64, name: string}]
+
+function themAnhThamChieu(input){
+  const files = Array.from(input.files).slice(0, 3 - charRefImages.length);
+  files.forEach(file => {
+    if(charRefImages.length >= 3) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      charRefImages.push({ src: e.target.result, name: file.name });
+      veAnhThamChieu();
+    };
+    reader.readAsDataURL(file);
+  });
+  input.value = '';
+}
+
+function veAnhThamChieu(){
+  const wrap = document.getElementById('char-ref-images');
+  if(!wrap) return;
+  wrap.innerHTML = charRefImages.map((img, i) => `
+    <div style="position:relative;width:70px;height:70px">
+      <img src="${img.src}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;border:2px solid #7c3aed">
+      <button onclick="xoaAnhThamChieu(${i})" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">✕</button>
+    </div>`).join('');
+}
+
+function xoaAnhThamChieu(idx){
+  charRefImages.splice(idx, 1);
+  veAnhThamChieu();
 }
 
 // ===== INIT =====
