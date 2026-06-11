@@ -4198,24 +4198,26 @@ ${nd}`;
     // Parse scene and props sections - multiple format support
     let sceneText = '', propsText = '';
 
-    // Try [PROMPT BỐI CẢNH] / [PROMPT ĐẠO CỤ] headers
-    const sceneMatch = acc.match(/\[PROMPT BỐI CẢNH\]([\s\S]*?)(?:\[PROMPT ĐẠO CỤ\]|$)/);
-    const propsMatch = acc.match(/\[PROMPT ĐẠO CỤ\]([\s\S]*?)$/);
+    // Try [PROMPT BOI CANH] / [PROMPT DAO CU] headers
+    const sceneMatch = acc.match(/\[PROMPT B[^\]]*NH\]([\s\S]*?)(?:\[PROMPT [^\]]*\]|$)/)
+                    || acc.match(/PROMPT B[^\n]*NH[^\n]*\n([\s\S]*?)(?:PROMPT D|$)/i);
+    const propsMatch = acc.match(/\[PROMPT D[^\]]*\]([\s\S]*?)$/)
+                    || acc.match(/PROMPT D[^\n]*\n([\s\S]*?)$/i);
     if(sceneMatch){ sceneText = sceneMatch[1].trim(); }
     if(propsMatch){ propsText = propsMatch[1].trim(); }
 
     // Fallback: try BỐI CẢNH / ĐẠO CỤ section headers
     if(!sceneText){
-      const m = acc.match(/(?:BỐI CẢNH|SCENE|LOCATION)[^
+      const mScene = acc.split(/SCENE|LOCATION/i)[1] || '';
 ]*
 ([\s\S]*?)(?:ĐẠO CỤ|PROPS|$)/i);
-      if(m) sceneText = m[1].trim();
+      if(mScene) sceneText = mScene.split(/PROPS|DAO/i)[0].trim();
     }
     if(!propsText){
-      const m = acc.match(/(?:ĐẠO CỤ|PROPS)[^
+      const mProps = acc.split(/PROPS/i)[1] || '';
 ]*
 ([\s\S]*?)$/i);
-      if(m) propsText = m[1].trim();
+      if(mProps) propsText = mProps.trim();
     }
 
     // Last fallback: split at midpoint
