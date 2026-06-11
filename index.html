@@ -1,9 +1,8 @@
-// API via goiClaude
   <!DOCTYPE html>
 <html lang="vi">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>ANNAHOUSESTUDIO by Lý Minh Nhựt — Cinematic Prompt Builder</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -201,6 +200,17 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 .bm-lut-name{font-size:11px;font-weight:500;color:#93c5fd;margin-bottom:2px}
 .bm-lut-sub{font-size:10px;color:var(--muted)}
 
+
+  /* Safari fixes */
+  * { -webkit-tap-highlight-color: transparent; -webkit-overflow-scrolling: touch; }
+  textarea, input, select { -webkit-appearance: none; }
+  [contenteditable] { -webkit-user-modify: read-write; }
+  .schip, .chip, .btn-i, .btn-p, .btn-s { -webkit-tap-highlight-color: transparent; cursor: pointer; }
+  /* Safari flex gap fallback */
+  @supports not (gap: 1px) {
+    .chips { margin: -2px; }
+    .chips > * { margin: 2px; }
+  }
 </style>
 </head>
 <body>
@@ -2558,14 +2568,14 @@ async function goiClaude(systemPrompt, userMsg, onChunk){
       throw new Error(err.error || 'Backend error ' + res.status);
     }
     const reader = res.body.getReader();
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder('utf-8');
     let buf = '';
     while(true){
       const {done, value} = await reader.read();
       if(done) break;
       buf += decoder.decode(value, {stream:true});
       const lines = buf.split('\n');
-      buf = lines.pop();
+      buf = lines.pop() || '';
       for(const line of lines){
         if(line.startsWith('data: ')){
           const data = line.slice(6);
@@ -3431,7 +3441,7 @@ PROMPT NHÁP:
       (chunk) => {
         acc += chunk;
         const bodyEl = document.getElementById('kb-output');
-        if(bodyEl) bodyEl.textContent = acc;
+        if(bodyEl){ if(bodyEl.isContentEditable) bodyEl.innerText = acc; else bodyEl.textContent = acc; }
         const countEl = document.getElementById('kb-result-title');
         if(countEl) countEl.textContent = acc.length + ' ký tự';
         const optCount = document.getElementById('opt-result-count');
@@ -4179,7 +4189,7 @@ ${nd}`;
   try {
     await goiClaude(systemPrompt, userMsg, (chunk) => {
       acc += chunk;
-      if(outEl) outEl.textContent = acc;
+      if(outEl){ if(outEl.isContentEditable) outEl.innerText = acc; else outEl.textContent = acc; }
     });
 
     if(footEl) footEl.style.display = '';
@@ -4272,7 +4282,6 @@ async function taoAnh(){
   const promptText = document.getElementById('img-prompt-input')?.value.trim();
   if(!promptText){alert('Nhập prompt tạo ảnh trước.');return;}
 
-  // API via goiClaude
 
   const ratio = SS.img_ratio || '16:9';
   const style = SS.img_style || 'Cinematic still';
@@ -4586,7 +4595,7 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
 
     if(!res.ok){const e=await res.json().catch(()=>({}));throw new Error(e.error?.message||'Lỗi API '+res.status);}
 
-    const reader=res.body.getReader();const decoder=new TextDecoder();let buf='';
+    const reader=res.body.getReader();const decoder=new TextDecoder('utf-8');let buf='';
     while(true){
       const{done,value}=await reader.read();if(done)break;
       buf+=decoder.decode(value,{stream:true});
@@ -4855,8 +4864,7 @@ async function taoCharPromptAI(){
     return;
   }
 
-  // API via goiClaude
-  
+
 
   const el = document.getElementById('char-preview');
   if(el) el.innerHTML = '<span style="color:var(--gold)">✨ AI đang tạo Character Lock Prompt...</span>';
@@ -6039,7 +6047,7 @@ Trả lời ngắn gọn, súc tích bằng tiếng Việt.`;
     if(!res.ok) throw new Error('Backend error ' + res.status);
 
     const reader = res.body.getReader();
-    const decoder = new TextDecoder();
+    const decoder = new TextDecoder('utf-8');
     let acc = '';
     let buf = '';
 
@@ -6048,7 +6056,7 @@ Trả lời ngắn gọn, súc tích bằng tiếng Việt.`;
       if(done) break;
       buf += decoder.decode(value, {stream:true});
       const lines = buf.split('\n');
-      buf = lines.pop();
+      buf = lines.pop() || '';
       for(const line of lines){
         if(line.startsWith('data: ')){
           const data = line.slice(6);
@@ -6276,7 +6284,7 @@ Output ONLY the prompt.`;
 
     wrap.innerHTML = `
       <div style="border:1px solid #818cf8;border-radius:8px;overflow:hidden">
-        <img src="${imgSrc}" style="width:100%;display:block;cursor:pointer" onclick="this.requestFullscreen?.()" title="Click để xem lớn">
+        <img src="${imgSrc}" style="width:100%;display:block;cursor:pointer" onclick="(this.requestFullscreen||this.webkitRequestFullscreen||this.mozRequestFullScreen||this.msRequestFullscreen).call(this)" title="Click để xem lớn">
         <div style="padding:7px 10px;background:#0d0d1a;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
           <span style="font-size:10px;color:#818cf8;flex:1">🎨 Ảnh ${label}</span>
           <button class="btn-i" onclick="taoLaiAnhBoiCanh('${wrapId}')" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
