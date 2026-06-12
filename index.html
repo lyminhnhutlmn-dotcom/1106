@@ -295,11 +295,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <p class="sub" id="app-sub">// 8 Yếu Tố · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · Nhân Vật · AI Dịch & Cải Thiện &nbsp;<span style="color:#5b9cf6;border:1px solid #1a3a6a;border-radius:8px;padding:1px 8px;font-size:10px;letter-spacing:.5px">V.10 P2 — AI Shot Builder</span></p>
 <div class="tabs">
   <button class="tab on" onclick="sw('fw')">① Khung Sườn</button>
-  <button class="tab" onclick="sw('shots')">🎥 Dựng Cảnh <span style="font-size:9px;color:#5b9cf6;background:#0a1020;border:1px solid #1a3a5a;border-radius:8px;padding:1px 5px;margin-left:2px">AI</span></button>
-  <button class="tab" onclick="sw('thoai')">💬 Lời Thoại</button>
-  <button class="tab" onclick="sw('emo')">💔 Cảm Xúc</button>
-  <button class="tab" onclick="sw('voice')">🎙️ Giọng Nói</button>
-  <button class="tab" onclick="sw('char')" style="border-bottom-color:transparent" id="tab-char">🔒 Nhân Vật</button>
   <button class="tab" onclick="sw('out')">📋 Xuất Prompt</button>
   <button class="tab" onclick="sw('lib')">📚 Thư Viện</button>
 </div>
@@ -818,786 +813,6 @@ VD: Dark kitchen interior at night, single overhead pendant lamp 2700K casting w
 
 </div>
 
-<!-- ===== SEEDANCE TAB ===== -->
-<div class="pane" id="p-shots">
-  <div class="hint" style="margin-bottom:11px;padding:9px 11px;background:var(--card);border-radius:7px;border:1px solid var(--bdr)">
-    💡 Dựng Cảnh được tạo từ kết quả <strong>Phân Tích Kịch Bản</strong>. Vào <strong>① Khung Sườn → 09 Kịch Bản AI</strong> → phân tích → nhấn <strong>⚡ Thêm Tất Cả</strong> để tạo shots.
-  </div>
-
-  <!-- ===== SHOT TOOLBAR ===== -->
-  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
-    <button onclick="themShot()" class="btn-s" style="font-size:11px;padding:7px 13px">+ Thêm Shot</button>
-    <button onclick="aiTaoTatCaShots()" style="padding:7px 16px;border-radius:7px;border:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500;transition:opacity .15s" id="btn-ai-all-shots">⚡ AI Tạo Tất Cả Shot Prompts</button>
-    <button onclick="ghepTatCaShots()" style="padding:7px 14px;border-radius:7px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .15s" id="btn-ghep-shots">🔗 Ghép Sequence Prompt</button>
-    <span id="shot-ai-global-status" style="font-size:10px;color:var(--muted);font-style:italic"></span>
-  </div>
-
-  <!-- ===== SHOT CARDS ===== -->
-  <div id="ds-shot"></div>
-
-  <!-- ===== COMBINE SEQUENCE PANEL ===== -->
-  <div class="shots-combine-panel" id="shots-combine-panel" style="display:none">
-    <div class="shots-combine-head">
-      <div>
-        <div style="font-size:12px;font-weight:500;color:#f59e0b;margin-bottom:1px">🔗 Sequence Prompt — Tất Cả Shots</div>
-        <div style="font-size:10px;color:var(--muted)" id="combine-meta">Ghép từ shot prompts đã tạo</div>
-      </div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
-        <button class="btn-i" id="btn-cp-combine" onclick="copyCombine()" style="border-color:#f59e0b;color:#f59e0b;font-size:10px">⊕ Copy</button>
-        <button class="btn-i" onclick="apDungCombineVaoOutput()" style="border-color:var(--green);color:var(--green);font-size:10px">→ Xuất Prompt</button>
-        <button class="btn-i" onclick="document.getElementById('shots-combine-panel').style.display='none'" style="font-size:10px">✕</button>
-      </div>
-    </div>
-    <div class="shots-combine-body" id="shots-combine-body"><span style="color:var(--muted);font-style:italic">Nhấn "🔗 Ghép Sequence Prompt" để tạo...</span></div>
-    <div class="shots-combine-foot">
-      <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
-        <span style="font-size:10px;color:var(--muted)">Format xuất:</span>
-        <span class="schip" id="fmt-seedance" onclick="chonCombineFmt('seedance',this)" style="border-color:#5b9cf6;color:#5b9cf6;background:#0a1020">Seedance 2.0</span>
-        <span class="schip" onclick="chonCombineFmt('higgsfield',this)">Higgsfield</span>
-        <span class="schip" onclick="chonCombineFmt('veo3',this)">Veo 3</span>
-        <span class="schip" onclick="chonCombineFmt('clean',this)">Clean Text</span>
-      </div>
-    </div>
-  </div>
-
-</div>
-
-<!-- ===== LỜI THOẠI ===== -->
-<div class="pane" id="p-thoai">
-  <div class="hint" style="margin-bottom:12px;padding:9px 11px;background:var(--card);border-radius:7px;border:1px solid var(--bdr)">💬 Mỗi dòng = 1 lượt thoại. Chọn Loại để định dạng đúng.</div>
-  <div class="sec"><div class="lbl"><span class="lbl-tag" data-en="Quick name">Tên nhanh</span></div><div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px" id="ten-nhanh"></div></div>
-  <div class="lbl" style="margin-bottom:7px"><span class="lbl-tag" data-en="Dialogue list">Danh sách lời thoại</span></div>
-  <div class="thoai-wrap" id="ds-thoai"><div style="font-size:11px;color:var(--muted);font-style:italic;padding:3px 0">Chưa có lời thoại.</div></div>
-  <div style="margin-top:9px;display:flex;gap:7px;flex-wrap:wrap">
-    <button class="btn-s" onclick="themThoai()">+ Thêm lượt thoại</button>
-    <button class="btn-s" onclick="themThoai('Nội tâm (V.O.)')">+ Nội tâm V.O.</button>
-    <button class="btn-s" onclick="xoaHetThoai()">✕ Xóa tất cả</button>
-  </div>
-  <div class="divd" style="margin-top:14px"></div>
-  <div class="sec"><div class="lbl"><span class="lbl-tag" data-en="Export format">Định dạng xuất</span></div>
-    <div class="chips"><span class="chip s" data-g="thoai_format">Kịch bản phim chuẩn</span><span class="chip s" data-g="thoai_format">Truyện — có dẫn thoại</span><span class="chip s" data-g="thoai_format">Nhập vai — xen hành động</span></div>
-  </div>
-
-  <div class="divd" style="margin-top:16px"></div>
-
-  <!-- FPT AI TTS -->
-  <div style="background:#0a1a14;border:1px solid #1a4a2a;border-radius:10px;overflow:hidden;margin-top:4px">
-    <div style="padding:10px 13px;background:#0d1f17;border-bottom:1px solid #1a4a2a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
-      <div>
-        <div style="font-size:12px;font-weight:500;color:var(--green);margin-bottom:1px">🎙️ FPT AI — Lồng Tiếng Việt</div>
-        <div style="font-size:10px;color:var(--muted)">Chuyển lời thoại thành giọng nói tiếng Việt · Tải audio upload lên Higgsfield</div>
-      </div>
-      <div style="display:flex;gap:5px;align-items:center">
-        <input type="password" id="fpt-api-key" placeholder="FPT AI API Key..." style="width:170px;padding:4px 8px;font-size:11px;border-color:#1a4a2a;background:#0a1a14;color:var(--ink)">
-        <button class="btn-i" onclick="luuFPTKey()" style="border-color:var(--green);color:var(--green);font-size:10px">Lưu</button>
-        <span id="fpt-key-ok" style="font-size:10px;color:var(--muted)"></span>
-      </div>
-    </div>
-    <div style="padding:13px;display:flex;flex-direction:column;gap:10px">
-
-      <div class="r2">
-        <div>
-          <div class="slbl" style="margin-bottom:5px">🗣️ Giọng đọc</div>
-          <select id="fpt-voice" style="border-color:#1a4a2a;background:#0a1a14">
-            <optgroup label="🇻🇳 Miền Nam">
-              <option value="linhsan">Linh San (Nữ · Nam)</option>
-              <option value="minhquan">Minh Quân (Nam · Nam)</option>
-              <option value="lannhi">Lan Nhi (Nữ · Nam)</option>
-            </optgroup>
-            <optgroup label="🇻🇳 Miền Bắc">
-              <option value="linhtu">Linh Tú (Nữ · Bắc)</option>
-              <option value="minhhoang">Minh Hoàng (Nam · Bắc)</option>
-              <option value="thuminh">Thu Minh (Nữ · Bắc)</option>
-            </optgroup>
-            <optgroup label="🇻🇳 Miền Trung">
-              <option value="linhchi">Linh Chi (Nữ · Trung)</option>
-            </optgroup>
-          </select>
-        </div>
-        <div>
-          <div class="slbl" style="margin-bottom:5px">⚙️ Cài đặt</div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap">
-            <div class="hang-toc"><label style="color:var(--muted);font-size:11px">Tốc độ</label><input type="range" id="fpt-speed" min="-3" max="3" step="1" value="0" oninput="document.getElementById('fpt-speed-val').textContent=this.value" style="width:70px"><span id="fpt-speed-val" style="font-size:11px;color:var(--muted);min-width:16px">0</span></div>
-            <div style="font-size:10px;color:var(--muted);align-self:center;font-style:italic">Cao độ không hỗ trợ qua trình duyệt</div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-          <div class="slbl">📝 Nội dung lồng tiếng</div>
-          <div style="display:flex;gap:5px">
-            <button class="btn-i" onclick="layThoaiVaoFPT()" style="font-size:10px;border-color:var(--green);color:var(--green)">← Lấy từ Lời Thoại</button>
-            <button class="btn-i" onclick="document.getElementById('fpt-text').value=''" style="font-size:10px">✕ Xóa</button>
-          </div>
-        </div>
-        <textarea id="fpt-text" rows="4" placeholder="Nhập hoặc lấy lời thoại từ tab trên...&#10;&#10;Ví dụ: Tôi đã chờ đợi quá lâu. Đã đến lúc kết thúc tất cả." style="font-size:12px;line-height:1.8;border-color:#1a4a2a;background:#0a1a14"></textarea>
-      </div>
-
-      <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
-        <button onclick="taoDuongFPT()" style="padding:8px 16px;border-radius:7px;border:1px solid var(--green);background:var(--green);color:#0d0d0d;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">▶ Tạo & Nghe Thử</button>
-        <button class="btn-i" id="fpt-btn-dl" onclick="taiFileFPT()" style="display:none;border-color:var(--green);color:var(--green)">⬇️ Tải Audio (.mp3)</button>
-        <button class="btn-i" onclick="stopFPT()" id="fpt-btn-stop" style="display:none;border-color:var(--red);color:var(--red)">⏹ Dừng</button>
-        <span id="fpt-status" style="font-size:11px;color:var(--muted)"></span>
-      </div>
-
-      <!-- AUDIO PLAYER -->
-      <div id="fpt-player-wrap" style="display:none">
-        <audio id="fpt-audio" controls style="width:100%;margin-top:4px;border-radius:6px"></audio>
-        <p class="hint" style="margin-top:6px;color:var(--green)">✅ Audio sẵn sàng — Tải xuống và upload lên Higgsfield làm <strong>@material[voice]</strong></p>
-      </div>
-
-      <!-- LỊCH SỬ -->
-      <div id="fpt-history-wrap" style="display:none">
-        <div class="slbl" style="margin-bottom:5px">Lịch sử audio</div>
-        <div id="fpt-history" style="display:flex;flex-direction:column;gap:5px;max-height:150px;overflow-y:auto"></div>
-      </div>
-
-      <div style="padding:8px 10px;background:#0d1f17;border-radius:6px;font-size:10px;color:var(--muted);line-height:1.7">
-        💡 Lấy API Key miễn phí tại <strong style="color:var(--green)">fpt.ai/tts</strong> → Đăng ký → Dashboard → API Key<br>
-        Gói miễn phí: 30,000 ký tự/tháng · <strong style="color:#ff9900">Lưu ý:</strong> Do giới hạn bảo mật trình duyệt, cần deploy web để dùng đầy đủ. Hoặc dùng app desktop.
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== CẢM XÚC ===== -->
-<div class="pane" id="p-emo">
-  <!-- CẢM XÚC CƠ BẢN -->
-  <div class="sec">
-    <div class="lbl" data-en="💔 Basic Emotions">💔 Cảm xúc cơ bản</div>
-    <div class="egrid">
-      <span class="ec" data-g="emo" data-en="😔 Lonely">😔 Cô đơn</span>
-      <span class="ec" data-g="emo" data-en="😤 Angry">😤 Tức giận</span>
-      <span class="ec" data-g="emo" data-en="😨 Fear">😨 Sợ hãi</span>
-      <span class="ec" data-g="emo" data-en="🥹 Moved">🥹 Xúc động</span>
-      <span class="ec" data-g="emo" data-en="😍 Deeply in love">😍 Yêu say</span>
-      <span class="ec" data-g="emo" data-en="😞 Despair">😞 Tuyệt vọng</span>
-      <span class="ec" data-g="emo" data-en="😏 Confident">😏 Tự tin</span>
-      <span class="ec" data-g="emo" data-en="🤔 Conflicted">🤔 Phân vân</span>
-      <span class="ec" data-g="emo" data-en="😌 Peaceful">😌 Bình yên</span>
-      <span class="ec" data-g="emo" data-en="😈 Scheming">😈 Mưu toan</span>
-      <span class="ec" data-g="emo" data-en="💔 Suffering">💔 Đau khổ</span>
-      <span class="ec" data-g="emo" data-en="🥶 Cold">🥶 Lạnh lùng</span>
-      <span class="ec" data-g="emo" data-en="💪 Determined">💪 Quyết tâm</span>
-      <span class="ec" data-g="emo" data-en="🤯 Overwhelmed">🤯 Quá tải</span>
-      <span class="ec" data-g="emo" data-en="🫠 Lost">🫠 Mất hướng</span>
-      <span class="ec" data-g="emo" data-en="😐 Numb">😐 Vô cảm</span>
-    </div>
-  </div>
-  <div class="divd"></div>
-
-  <!-- CẢM XÚC PHỨC TẠP -->
-  <div class="sec">
-    <div class="lbl" data-en="🎭 Complex emotions — multilayered">🎭 Cảm xúc phức tạp — đa tầng</div>
-    <div class="egrid">
-      <span class="ec" data-g="emo" data-en="🌪 Inner chaos">🌪 Hỗn loạn nội tâm</span>
-      <span class="ec" data-g="emo" data-en="🫥 Emotional paralysis">🫥 Tê liệt cảm xúc</span>
-      <span class="ec" data-g="emo">🌊 Bị cuốn trôi</span>
-      <span class="ec" data-g="emo">🔥 Đam mê cháy bỏng</span>
-      <span class="ec" data-g="emo">🧊 Điềm tĩnh lạnh toát</span>
-      <span class="ec" data-g="emo">🕳 Trống rỗng hoàn toàn</span>
-      <span class="ec" data-g="emo">⚡ Căng thẳng tột đỉnh</span>
-      <span class="ec" data-g="emo">🌫 Mơ hồ xa cách</span>
-      <span class="ec" data-g="emo">💀 Chấp nhận số phận</span>
-      <span class="ec" data-g="emo">🦋 Hy vọng mong manh</span>
-      <span class="ec" data-g="emo">🗡 Tổn thương sâu thẳm</span>
-      <span class="ec" data-g="emo">🎭 Hai mặt — mặt nạ</span>
-      <span class="ec" data-g="emo">🌑 Ám ảnh không buông</span>
-      <span class="ec" data-g="emo">💎 Kiêu hãnh không cúi</span>
-      <span class="ec" data-g="emo">🌹 Yêu thương che giấu</span>
-      <span class="ec" data-g="emo">🕊 Tha thứ sau đau</span>
-    </div>
-  </div>
-  <div class="divd"></div>
-
-  <!-- CẢM XÚC ĐIỆN ẢNH -->
-  <div class="sec">
-    <div class="lbl">🎬 Cảm xúc điện ảnh đặc trưng</div>
-    <div class="egrid">
-      <span class="ec" data-g="emo">🔫 Nguy hiểm cận kề</span>
-      <span class="ec" data-g="emo">🩸 Hy sinh — bi tráng</span>
-      <span class="ec" data-g="emo">👁 Nhận ra sự thật</span>
-      <span class="ec" data-g="emo">🌅 Khoảnh khắc quyết định</span>
-      <span class="ec" data-g="emo">🎯 Tập trung cao độ</span>
-      <span class="ec" data-g="emo">😤 Phẫn uất bùng nổ</span>
-      <span class="ec" data-g="emo">🤍 Trong sáng vô tội</span>
-      <span class="ec" data-g="emo">🖤 Căm hận sâu thẳm</span>
-      <span class="ec" data-g="emo">😶 Câm lặng chịu đựng</span>
-      <span class="ec" data-g="emo">🌠 Hoài niệm xa xôi</span>
-      <span class="ec" data-g="emo">⚰ Đau mất mát</span>
-      <span class="ec" data-g="emo">🏳 Đầu hàng thực tại</span>
-      <span class="ec" data-g="emo">🗺 Lạc lõng không thuộc về</span>
-      <span class="ec" data-g="emo">💫 Ngây ngất hạnh phúc</span>
-      <span class="ec" data-g="emo">🧨 Bùng nổ bên trong</span>
-      <span class="ec" data-g="emo">🫀 Trái tim tan vỡ</span>
-    </div>
-  </div>
-  <div class="divd"></div>
-
-  <!-- NỘI TÂM ẨN -->
-  <div class="sec">
-    <div class="lbl">🧠 Nội tâm ẩn — Subtext</div>
-    <div class="chips">
-      <span class="chip" data-g="sub">Giả vờ bình thường</span>
-      <span class="chip" data-g="sub">Che giấu tình cảm</span>
-      <span class="chip" data-g="sub">Kìm nén tức giận</span>
-      <span class="chip" data-g="sub">Sợ bị bỏ rơi</span>
-      <span class="chip" data-g="sub">Không dám hy vọng</span>
-      <span class="chip" data-g="sub">Biết sự thật nhưng im lặng</span>
-      <span class="chip" data-g="sub">Yêu nhưng không thể nói</span>
-      <span class="chip" data-g="sub">Hối hận không thể chuộc</span>
-      <span class="chip" data-g="sub">Muốn bỏ cuộc nhưng không dám</span>
-      <span class="chip" data-g="sub">Cảm giác không xứng đáng</span>
-      <span class="chip" data-g="sub">Sợ thành công hơn thất bại</span>
-      <span class="chip" data-g="sub">Ghen tuông không dám nhận</span>
-      <span class="chip" data-g="sub">Biết mình sắp mất tất cả</span>
-      <span class="chip" data-g="sub">Đang diễn — không thật</span>
-      <span class="chip" data-g="sub">Chờ được phép khóc</span>
-      <span class="chip" data-g="sub">Tha thứ nhưng chưa quên</span>
-    </div>
-  </div>
-  <div class="divd"></div>
-
-  <!-- BIỂU HIỆN THỂ CHẤT -->
-  <div class="sec">
-    <div class="lbl">🎭 Biểu hiện thể chất — Physical cues</div>
-    <div class="chips">
-      <span class="chip" data-g="body">Ánh mắt né tránh</span>
-      <span class="chip" data-g="body">Tay run nhẹ</span>
-      <span class="chip" data-g="body">Hàm nghiến chặt</span>
-      <span class="chip" data-g="body">Thở nông</span>
-      <span class="chip" data-g="body">Bất động hoàn toàn</span>
-      <span class="chip" data-g="body">Cười nhưng mắt buồn</span>
-      <span class="chip" data-g="body">Giọng gần thì thầm</span>
-      <span class="chip" data-g="body">Môi mím chặt</span>
-      <span class="chip" data-g="body">Mắt đỏ hoe — vừa khóc</span>
-      <span class="chip" data-g="body">Lưng thẳng — kiêu hãnh</span>
-      <span class="chip" data-g="body">Vai sụp xuống — gánh nặng</span>
-      <span class="chip" data-g="body">Ngón tay siết chặt</span>
-      <span class="chip" data-g="body">Mắt nhìn xa — phân tâm</span>
-      <span class="chip" data-g="body">Nuốt nước bọt — căng thẳng</span>
-      <span class="chip" data-g="body">Lắc đầu chậm — không tin</span>
-      <span class="chip" data-g="body">Chớp mắt nhanh — che giấu</span>
-      <span class="chip" data-g="body">Cơ mặt co rúm nhẹ</span>
-      <span class="chip" data-g="body">Đứng khom — thu mình lại</span>
-    </div>
-  </div>
-
-  <!-- CƯỜNG ĐỘ CẢM XÚC -->
-  <div class="divd"></div>
-  <div class="sec">
-    <div class="lbl" data-en="⚡ Emotional intensity">⚡ Cường độ cảm xúc</div>
-    <div class="chips">
-      <span class="chip s" data-g="emo_intensity" data-en="Smoldering — barely visible">Âm ỉ — barely visible</span>
-      <span class="chip s" data-g="emo_intensity" data-en="Suppressed">Kiềm chế — suppressed</span>
-      <span class="chip s" data-g="emo_intensity" data-en="Clearly shown">Rõ ràng — clearly shown</span>
-      <span class="chip s" data-g="emo_intensity" data-en="Intense">Mãnh liệt — intense</span>
-      <span class="chip s" data-g="emo_intensity" data-en="Explosive">Bùng nổ — explosive</span>
-    </div>
-  </div>
-
-  <!-- CẢM XÚC QUAN HỆ -->
-  <div class="divd"></div>
-  <div class="sec">
-    <div class="lbl" data-en="❤️ Relational emotions">❤️ Cảm xúc trong quan hệ — Relational</div>
-    <div class="egrid">
-      <span class="ec" data-g="emo">💑 Gắn bó sâu sắc</span>
-      <span class="ec" data-g="emo">💔 Vỡ mộng</span>
-      <span class="ec" data-g="emo">🤝 Tin tưởng tuyệt đối</span>
-      <span class="ec" data-g="emo">🗡 Phản bội</span>
-      <span class="ec" data-g="emo">🥺 Cầu xin tha thứ</span>
-      <span class="ec" data-g="emo">😒 Thất vọng âm ỉ</span>
-      <span class="ec" data-g="emo">🫂 Bảo vệ che chở</span>
-      <span class="ec" data-g="emo">👁️ Ghen tuông cháy bỏng</span>
-      <span class="ec" data-g="emo">🌙 Nhớ nhung da diết</span>
-      <span class="ec" data-g="emo">🕯️ Chờ đợi mòn mỏi</span>
-      <span class="ec" data-g="emo">💌 Tình cảm vụng về</span>
-      <span class="ec" data-g="emo">😤 Tự ái bị tổn thương</span>
-      <span class="ec" data-g="emo">🌊 Yêu say mù quáng</span>
-      <span class="ec" data-g="emo">🫙 Giữ khoảng cách</span>
-      <span class="ec" data-g="emo">💞 Lần đầu rung động</span>
-      <span class="ec" data-g="emo">🔚 Kết thúc không nói</span>
-    </div>
-  </div>
-
-  <!-- CẢM XÚC NỘI TÂM ĐẶC BIỆT -->
-  <div class="divd"></div>
-  <div class="sec">
-    <div class="lbl" data-en="🧬 Special psychological states">🧬 Trạng thái tâm lý đặc biệt</div>
-    <div class="egrid">
-      <span class="ec" data-g="emo">🪞 Tự nhìn nhận bản thân</span>
-      <span class="ec" data-g="emo">🌀 Phân ly — dissociation</span>
-      <span class="ec" data-g="emo">⏳ Sống trong quá khứ</span>
-      <span class="ec" data-g="emo">🧩 Mất bản sắc</span>
-      <span class="ec" data-g="emo">🎪 Cô đơn giữa đám đông</span>
-      <span class="ec" data-g="emo">🔮 Linh cảm không giải thích</span>
-      <span class="ec" data-g="emo">🪤 Bẫy tâm lý</span>
-      <span class="ec" data-g="emo">💊 Tê dại — numbness</span>
-      <span class="ec" data-g="emo">🌊 Chết chìm trong suy nghĩ</span>
-      <span class="ec" data-g="emo">🏔️ Trơ lỳ không cảm nhận</span>
-      <span class="ec" data-g="emo">🌪️ PTSD — ký ức bùng lên</span>
-      <span class="ec" data-g="emo">🦅 Giải thoát — liberation</span>
-      <span class="ec" data-g="emo">🫧 Mơ mộng xa thực tại</span>
-      <span class="ec" data-g="emo">🕰️ Mắc kẹt trong thời gian</span>
-      <span class="ec" data-g="emo">🔇 Tắt tiếng nội tâm</span>
-      <span class="ec" data-g="emo">💡 Bừng tỉnh nhận ra</span>
-    </div>
-  </div>
-
-  <!-- CẢM XÚC HÀNH ĐỘNG -->
-  <div class="divd"></div>
-  <div class="sec">
-    <div class="lbl" data-en="⚔️ Action emotions">⚔️ Cảm xúc trong hành động — Action emotion</div>
-    <div class="egrid">
-      <span class="ec" data-g="emo">🎯 Săn mồi — predatory calm</span>
-      <span class="ec" data-g="emo">🩸 Bản năng sinh tồn</span>
-      <span class="ec" data-g="emo">⚡ Phản xạ thuần túy</span>
-      <span class="ec" data-g="emo">🧊 Máu lạnh hoàn toàn</span>
-      <span class="ec" data-g="emo">🔥 Cuồng nộ không kiểm soát</span>
-      <span class="ec" data-g="emo">😤 Kiêu ngạo chiến thắng</span>
-      <span class="ec" data-g="emo">😰 Sợ chết — survival panic</span>
-      <span class="ec" data-g="emo">🏃 Chạy trốn khỏi chính mình</span>
-      <span class="ec" data-g="emo">💀 Thản nhiên trước cái chết</span>
-      <span class="ec" data-g="emo">🛡️ Bảo vệ đến cùng</span>
-      <span class="ec" data-g="emo">🗡️ Hy sinh có tính toán</span>
-      <span class="ec" data-g="emo">🌊 Bị nghiền nát — crushed</span>
-      <span class="ec" data-g="emo">👊 Trỗi dậy lần cuối</span>
-      <span class="ec" data-g="emo">🪖 Kỷ luật thép</span>
-      <span class="ec" data-g="emo">😵 Sốc — không thể tin</span>
-      <span class="ec" data-g="emo">🏳️ Buông xuôi</span>
-
-      <!-- NHÓM MỚI: TÌNH CẢM GIA ĐÌNH & MÁU MỦ -->
-      <div style="font-size:10px;color:#f59e0b;font-weight:500;margin:10px 0 5px;letter-spacing:.5px">👨‍👩‍👧 TÌNH CẢM GIA ĐÌNH & MÁU MỦ</div>
-      <div class="chips" style="gap:4px;margin-bottom:8px">
-        <span class="chip" data-g="emo">👨‍👩‍👧 Tình yêu cha mẹ — vô điều kiện</span>
-        <span class="chip" data-g="emo">👶 Bản năng bảo vệ con</span>
-        <span class="chip" data-g="emo">🏠 Nhớ nhà — homesickness</span>
-        <span class="chip" data-g="emo">👴 Kính trọng bề trên</span>
-        <span class="chip" data-g="emo">👫 Anh em ruột thịt</span>
-        <span class="chip" data-g="emo">💔 Mất đi người thân yêu</span>
-        <span class="chip" data-g="emo">🧬 Di sản — gánh nặng dòng họ</span>
-        <span class="chip" data-g="emo">🪦 Tang thương — grief</span>
-      </div>
-
-      <!-- NHÓM MỚI: XUNG ĐỘT NỘI TÂM -->
-      <div style="font-size:10px;color:#ec4899;font-weight:500;margin:10px 0 5px;letter-spacing:.5px">⚔️ XUNG ĐỘT NỘI TÂM — INTERNAL CONFLICT</div>
-      <div class="chips" style="gap:4px;margin-bottom:8px">
-        <span class="chip" data-g="emo">⚖️ Lưỡng lự — không thể chọn</span>
-        <span class="chip" data-g="emo">😇😈 Thiện ác đấu tranh</span>
-        <span class="chip" data-g="emo">🪞 Ghét chính mình</span>
-        <span class="chip" data-g="emo">🔄 Muốn thay đổi nhưng không thể</span>
-        <span class="chip" data-g="emo">🎭 Diễn vai mà quên mình là ai</span>
-        <span class="chip" data-g="emo">🧠 Lý trí vs trái tim</span>
-        <span class="chip" data-g="emo">💣 Tức giận với bản thân</span>
-        <span class="chip" data-g="emo">🌊 Bị cuốn bởi cảm xúc không muốn</span>
-        <span class="chip" data-g="emo">🔒 Tự nhốt mình — self-imprisonment</span>
-        <span class="chip" data-g="emo">🪤 Biết là sai nhưng vẫn làm</span>
-      </div>
-
-      <!-- NHÓM MỚI: CẢM XÚC XÃ HỘI -->
-      <div style="font-size:10px;color:#06b6d4;font-weight:500;margin:10px 0 5px;letter-spacing:.5px">🌐 CẢM XÚC XÃ HỘI — SOCIAL EMOTION</div>
-      <div class="chips" style="gap:4px;margin-bottom:8px">
-        <span class="chip" data-g="emo">😳 Xấu hổ — shame</span>
-        <span class="chip" data-g="emo">🙏 Biết ơn sâu sắc</span>
-        <span class="chip" data-g="emo">😤 Bị xúc phạm phẩm giá</span>
-        <span class="chip" data-g="emo">🫣 Sợ bị phán xét</span>
-        <span class="chip" data-g="emo">😌 Được chấp nhận — belonging</span>
-        <span class="chip" data-g="emo">👑 Quyền lực — dominance</span>
-        <span class="chip" data-g="emo">🐑 Phục tùng — submission</span>
-        <span class="chip" data-g="emo">🤫 Giữ bí mật nặng nề</span>
-        <span class="chip" data-g="emo">😰 Áp lực phải hoàn hảo</span>
-        <span class="chip" data-g="emo">🎪 Cô đơn dù có người yêu</span>
-      </div>
-
-      <!-- NHÓM MỚI: DIỄN XUẤT VI MÔ — MICRO EXPRESSION -->
-      <div style="font-size:10px;color:#a78bfa;font-weight:500;margin:10px 0 5px;letter-spacing:.5px">🔬 DIỄN XUẤT VI MÔ — MICRO EXPRESSION</div>
-      <div class="chips" style="gap:4px;margin-bottom:8px">
-        <span class="chip" data-g="emo">👁️ Mắt cụp xuống 0.1 giây — flash of shame</span>
-        <span class="chip" data-g="emo">👄 Môi mím — suppressed response</span>
-        <span class="chip" data-g="emo">🫀 Hàm căng 2mm — anger held</span>
-        <span class="chip" data-g="emo">👃 Lỗ mũi nở — contempt</span>
-        <span class="chip" data-g="emo">🤨 Lông mày nhíu 1 bên — skepticism</span>
-        <span class="chip" data-g="emo">😤 Cơ má giật — disgust flash</span>
-        <span class="chip" data-g="emo">👁️ Chớp mắt nhanh — stress blink</span>
-        <span class="chip" data-g="emo">🫦 Cắn môi dưới — anxiety tell</span>
-        <span class="chip" data-g="emo">👁️‍🗨️ Ánh mắt liếc — contempt flicker</span>
-        <span class="chip" data-g="emo">😶 Mặt đơ 0.5s — processing shock</span>
-        <span class="chip" data-g="emo">🤐 Nuốt nước bọt — fear tell</span>
-        <span class="chip" data-g="emo">🙂 Nụ cười không đến mắt — fake smile</span>
-      </div>
-
-      <!-- NHÓM MỚI: CẢM XÚC ĐẶC THÙ ĐIỆN ẢNH VIỆT NAM -->
-      <div style="font-size:10px;color:#fbbf24;font-weight:500;margin:10px 0 5px;letter-spacing:.5px">🇻🇳 CẢM XÚC ĐẶC THÙ — VIETNAMESE CINEMA</div>
-      <div class="chips" style="gap:4px;margin-bottom:8px">
-        <span class="chip" data-g="emo">🌾 Chịu đựng — nhẫn nhục sâu sắc</span>
-        <span class="chip" data-g="emo">💪 Ý chí kiên cường — will to endure</span>
-        <span class="chip" data-g="emo">🕯️ Hy vọng âm ỉ không tắt</span>
-        <span class="chip" data-g="emo">👘 Mặc cảm — không xứng đáng</span>
-        <span class="chip" data-g="emo">🤐 Giữ lại — không nói được</span>
-        <span class="chip" data-g="emo">🌊 Trôi dạt — drift without anchor</span>
-        <span class="chip" data-g="emo">🏡 Trách nhiệm gia đình đè nặng</span>
-        <span class="chip" data-g="emo">😶 Nuốt nước mắt vào trong</span>
-        <span class="chip" data-g="emo">🌹 Yêu mà không dám nói</span>
-        <span class="chip" data-g="emo">⏰ Muộn rồi — too late realization</span>
-      </div>
-
-      <!-- NHÓM MỚI: TRẠNG THÁI GIỮA — LIMINAL EMOTION -->
-      <div style="font-size:10px;color:#34d399;font-weight:500;margin:10px 0 5px;letter-spacing:.5px">🌫️ TRẠNG THÁI GIỮA — LIMINAL</div>
-      <div class="chips" style="gap:4px;margin-bottom:8px">
-        <span class="chip" data-g="emo">🌅 Khoảnh khắc trước khi mọi thứ thay đổi</span>
-        <span class="chip" data-g="emo">⏸️ Thời gian như ngừng lại</span>
-        <span class="chip" data-g="emo">🚪 Đứng trước ngưỡng cửa không thể quay lui</span>
-        <span class="chip" data-g="emo">🌊 Calm trước bão — eerie stillness</span>
-        <span class="chip" data-g="emo">🎭 Không vui không buồn — emotional void</span>
-        <span class="chip" data-g="emo">💭 Nhận ra điều đã biết từ lâu</span>
-        <span class="chip" data-g="emo">🔄 Không thể tiến không thể lùi</span>
-        <span class="chip" data-g="emo">🌙 Khoảnh khắc cuối — last moment</span>
-      </div>
-    </div>
-  </div>
-
-  <!-- BIỂU HIỆN MẮT -->
-  <div class="divd"></div>
-  <div class="sec">
-    <div class="lbl" data-en="👁️ Eye expressions">👁️ Biểu hiện qua mắt — Eye expression</div>
-    <p class="hint" style="margin-bottom:6px">Mắt là cửa sổ tâm hồn — quan trọng nhất trong cú máy CU/ECU</p>
-    <div class="chips">
-      <span class="chip" data-g="body" data-en="Eyes red — about to cry">Mắt đỏ hoe — sắp khóc</span>
-      <span class="chip" data-g="body" data-en="Wet eyes — not crying">Mắt ướt nhưng không khóc</span>
-      <span class="chip" data-g="body" data-en="Silent tears rolling">Nước mắt lăn im lặng</span>
-      <span class="chip" data-g="body" data-en="Wide eyes — horror">Mắt trợn — kinh hoàng</span>
-      <span class="chip" data-g="body" data-en="Eyes closed — enduring">Mắt nhắm — chịu đựng</span>
-      <span class="chip" data-g="body" data-en="Unblinking direct gaze">Nhìn thẳng không chớp</span>
-      <span class="chip" data-g="body" data-en="Eyes cast down">Mắt dán xuống đất</span>
-      <span class="chip" data-g="body" data-en="Looking away — avoidance">Nhìn sang bên — né tránh</span>
-      <span class="chip" data-g="body" data-en="Wide eyes — shock">Mắt mở to — bàng hoàng</span>
-      <span class="chip" data-g="body" data-en="Dilated pupils — fear">Đồng tử giãn — sợ hãi</span>
-      <span class="chip" data-g="body" data-en="Heavy eyes — exhausted">Mắt lim dim — mệt mỏi</span>
-      <span class="chip" data-g="body" data-en="Sharp gaze — calculating">Ánh mắt sắc bén — tính toán</span>
-      <span class="chip" data-g="body" data-en="Distant gaze — lost">Mắt xa xăm — mất hồn</span>
-      <span class="chip" data-g="body" data-en="Looking up — defiant">Nhìn từ dưới lên — thách thức</span>
-      <span class="chip" data-g="body" data-en="Slow blink — contempt">Chớp mắt chậm — khinh thường</span>
-      <span class="chip" data-g="body" data-en="Eyes light up — hope">Mắt ánh lên — hy vọng</span>
-    </div>
-  </div>
-
-  <!-- CƯỜNG ĐỘ CHUYỂN TIẾP -->
-  <div class="divd"></div>
-  <div class="sec">
-    <div class="lbl" data-en="🔄 Emotional arc">🔄 Chuyển tiếp cảm xúc — Emotional arc</div>
-    <p class="hint" style="margin-bottom:6px">Cảm xúc thay đổi trong 1 cú máy — tạo chiều sâu nhân vật</p>
-    <div class="chips">
-      <span class="chip" data-g="emo_arc" data-en="Normal → Collapse">Bình thường → Sụp đổ</span>
-      <span class="chip" data-g="emo_arc" data-en="Angry → Breaking down">Tức giận → Vỡ khóc</span>
-      <span class="chip" data-g="emo_arc" data-en="Cold → Softening">Lạnh lùng → Mềm lòng</span>
-      <span class="chip" data-g="emo_arc" data-en="Fear → Resolve">Sợ hãi → Quyết tâm</span>
-      <span class="chip" data-g="emo_arc" data-en="Happy → Realizing truth">Hạnh phúc → Nhận ra sự thật</span>
-      <span class="chip" data-g="emo_arc" data-en="Despair → Glimpse of hope">Tuyệt vọng → Tia hy vọng</span>
-      <span class="chip" data-g="emo_arc" data-en="Confident → Self-doubt">Tự tin → Nghi ngờ bản thân</span>
-      <span class="chip" data-g="emo_arc" data-en="Hatred → Pity">Căm ghét → Thương hại</span>
-      <span class="chip" data-g="emo_arc" data-en="Numb → Explosion">Vô cảm → Bùng nổ</span>
-      <span class="chip" data-g="emo_arc" data-en="Hiding → Fully exposed">Che giấu → Bị lộ hoàn toàn</span>
-    </div>
-  </div>
-
-</div>
-
-<!-- ===== GIỌNG NÓI ===== -->
-<div class="pane" id="p-voice">
-  <div class="canh-bao" id="canh-bao">⚠️ Dùng <strong>Chrome</strong> hoặc <strong>Edge</strong>.</div>
-  <div class="vpanel" id="panel-stt">
-    <div class="vhead"><span class="vtitle">🎤 Nói → Văn bản</span><span class="vstatus"><span class="vdot" id="stt-dot"></span><span id="tt-stt">Sẵn sàng</span></span></div>
-    <div class="vbody">
-      <div class="vcontrols">
-        <select class="vsel" id="ng-ngu"><option value="vi-VN" selected>🇻🇳 Tiếng Việt</option><option value="en-US">🇺🇸 English</option></select>
-        <select class="vsel" id="che-do" style="max-width:130px"><option value="continuous">Liên tục</option><option value="single">Một lần</option></select>
-        <button class="btn-mic" id="nut-noi" onclick="batDau()">🎙️ Bắt đầu nói</button>
-        <button class="btn-stop" id="nut-dung" onclick="dungNoi()">⏹ Dừng</button>
-      </div>
-      <div><div class="slbl">Văn bản nhận được</div><div class="vtranscript" id="hop-vb"><span class="vph">Nhấn "Bắt đầu nói"...</span></div></div>
-      <div><div class="slbl" style="margin-bottom:4px">Điền nhanh</div>
-        <div class="vactions">
-          <button class="vfbtn" onclick="dien('scene-desc')">→ Bối cảnh</button>
-          <button class="vfbtn" onclick="dien('subject-desc')">→ Nhân vật</button>
-          <button class="vfbtn" onclick="dien('action-desc')">→ Hành động</button>
-          <button class="vfbtn" onclick="dien('lighting-desc')">→ Ánh sáng</button>
-          <button class="vfbtn" onclick="dien('hook-custom')">→ Hook SD</button>
-          <button class="vfbtn" onclick="dien('cg-hook-custom')">→ Hook CGI</button>
-          <button class="vfbtn" onclick="dienShot()">→ Cảnh hiện tại</button>
-          <button class="vfbtn" onclick="dienThoai()">→ Lời thoại</button>
-          <button class="vfbtn" onclick="dien('hop-doc')">→ Ô đọc</button>
-          <button class="vfbtn" onclick="xoaVB()">✕ Xóa</button>
-        </div>
-      </div>
-      <div><div class="slbl" style="margin-bottom:4px">Lịch sử</div><div class="vhist" id="lich-su"><div style="font-size:11px;color:var(--muted);font-style:italic">Chưa có...</div></div></div>
-    </div>
-  </div>
-  <div class="vpanel">
-    <div class="vhead"><span class="vtitle">🔊 Văn bản → Giọng nói</span><span class="vstatus"><span class="vdot" id="tts-dot"></span><span id="tt-tts">Sẵn sàng</span></span></div>
-    <div class="vbody">
-      <div><div class="slbl">Nhập văn bản</div><div class="hop-doc" id="hop-doc" contenteditable="true" data-ph="Nhập văn bản để nghe đọc..."></div></div>
-      <div class="vcontrols">
-        <select class="vsel" id="chon-giong" style="flex:2"><option>Đang tải...</option></select>
-        <div class="hang-toc"><label>Tốc độ</label><input type="range" id="toc-do" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('rv').textContent=this.value+'x'"><span id="rv" style="font-size:11px;color:var(--muted);min-width:28px">1x</span></div>
-        <div class="hang-toc"><label>Cao độ</label><input type="range" id="cao-do" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('pv').textContent=this.value"><span id="pv" style="font-size:11px;color:var(--muted);min-width:18px">1</span></div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn-s" onclick="docTo()">▶ Đọc to</button>
-        <button class="btn-i" onclick="window.speechSynthesis.pause()">⏸</button>
-        <button class="btn-i" onclick="dungDoc()">⏹</button>
-        <button class="btn-s" onclick="docPrompt()">📋 Đọc prompt</button>
-      </div>
-    </div>
-  </div>
-</div>
-
-<!-- ===== NHÂN VẬT NHẤT QUÁN ===== -->
-<div class="pane" id="p-char">
-
-  <div style="background:linear-gradient(135deg,#0a0a1a,#120a1a);border:1px solid #7c3aed;border-radius:10px;padding:13px 15px;margin-bottom:16px">
-    <div style="font-size:13px;font-weight:500;color:#a78bfa;margin-bottom:3px">🔒 Nhân Vật Nhất Quán — Character Consistency</div>
-    <div style="font-size:10px;color:var(--muted);line-height:1.7">Vấn đề lớn nhất của AI video: nhân vật thay đổi mặt/ngoại hình giữa các shot. Tab này giúp tạo <strong style="color:#a78bfa">Character Lock Prompt</strong> — đoạn mô tả cực chi tiết để "khóa" nhân vật nhất quán.</div>
-  </div>
-
-  <!-- NHÂN VẬT CHÍNH -->
-  <div style="margin-bottom:14px">
-    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px;flex-wrap:wrap;gap:6px">
-      <div class="lbl" style="margin-bottom:0"><span class="tag" style="background:#1a0a2a;border-color:#7c3aed;color:#a78bfa">👤 Nhân Vật Chính</span></div>
-      <button class="btn-i" onclick="layTuKhungSuon()" style="font-size:10px;border-color:#a78bfa;color:#a78bfa">← Lấy từ Khung Sườn</button>
-    </div>
-
-    <div style="display:flex;flex-direction:column;gap:8px">
-      <!-- KHUÔN MẶT -->
-      <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;color:#a78bfa;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px">😶 Khuôn Mặt — Face Lock</div>
-        <div class="r2" style="gap:8px;margin-bottom:8px">
-          <div><div class="slbl" style="margin-bottom:4px" data-en="Face shape">Hình dạng mặt</div>
-            <div class="chips">
-              <span class="chip s" data-g="face_shape" data-en="Oval balanced">Oval cân đối</span>
-              <span class="chip s" data-g="face_shape" data-en="Square angular">Vuông góc cạnh</span>
-              <span class="chip s" data-g="face_shape" data-en="Oval slim">Trái xoan thon</span>
-              <span class="chip s" data-g="face_shape" data-en="Round full">Tròn đầy đặn</span>
-              <span class="chip s" data-g="face_shape" data-en="Heart">Trái tim</span>
-              <span class="chip s" data-g="face_shape" data-en="Diamond">Kim cương</span>
-            </div>
-          </div>
-          <div><div class="slbl" style="margin-bottom:4px" data-en="Skin tone">Tông da</div>
-            <div class="chips">
-              <span class="chip s" data-g="skin_tone" data-en="Porcelain white">Trắng sứ — porcelain</span>
-              <span class="chip s" data-g="skin_tone" data-en="Fair pink">Trắng hồng — fair</span>
-              <span class="chip s" data-g="skin_tone" data-en="Warm beige">Vàng ấm — warm beige</span>
-              <span class="chip s" data-g="skin_tone" data-en="Olive tan">Nâu olive — tan</span>
-              <span class="chip s" data-g="skin_tone" data-en="Deep brown">Nâu đậm — deep brown</span>
-              <span class="chip s" data-g="skin_tone" data-en="Pale cold">Tái xanh — pale cold</span>
-            </div>
-          </div>
-        </div>
-        <div><div class="slbl" style="margin-bottom:4px">Mô tả khuôn mặt chi tiết <span style="color:var(--red)">*quan trọng nhất*</span></div>
-          <textarea id="char-face" rows="3" placeholder="Ví dụ: Khuôn mặt oval cân đối, xương gò má cao, cằm nhọn, mũi thẳng dài, môi mỏng tự nhiên, hàm cứng. KHÔNG có vết thương hay dị tật..." oninput="capNhatCharPreview()"></textarea>
-        </div>
-      </div>
-
-      <!-- MẮT -->
-      <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;color:#a78bfa;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px">👁️ Mắt — Eye Lock</div>
-        <div class="r2" style="gap:8px;margin-bottom:8px">
-          <div><div class="slbl" style="margin-bottom:4px" data-en="Eye color">Màu mắt</div>
-            <div class="chips">
-              <span class="chip s" data-g="eye_color" data-en="Deep black">Đen sâu thẳm</span>
-              <span class="chip s" data-g="eye_color" data-en="Chestnut brown">Nâu hạt dẻ</span>
-              <span class="chip s" data-g="eye_color" data-en="Ocean blue">Xanh lơ ocean</span>
-              <span class="chip s" data-g="eye_color" data-en="Forest green">Xanh lá forest</span>
-              <span class="chip s" data-g="eye_color" data-en="Silver gray">Xám bạc</span>
-              <span class="chip s" data-g="eye_color" data-en="Amber">Hổ phách amber</span>
-            </div>
-          </div>
-          <div><div class="slbl" style="margin-bottom:4px" data-en="Eye shape">Hình dạng mắt</div>
-            <span class="chip s" data-g="eye_shape" data-en="Almond">Hạnh nhân</span>
-            <span class="chip s" data-g="eye_shape" data-en="Round large">Tròn to</span>
-            <span class="chip s" data-g="eye_shape" data-en="Long tail">Đuôi mắt dài</span>
-            <span class="chip s" data-g="eye_shape" data-en="Deep set">Mí lót sâu</span>
-            <span class="chip s" data-g="eye_shape" data-en="Monolid">Mắt một mí</span>
-          </div>
-        </div>
-        <div><div class="slbl" style="margin-bottom:4px" data-en="Eye description">Mô tả mắt</div>
-          <input type="text" id="char-eyes" placeholder="Mắt hạnh nhân, đen sâu, lông mi dày tự nhiên, không mascara, ánh mắt sắc bén..." data-en-placeholder="Almond eyes, deep black, thick natural lashes, no mascara, sharp gaze..." data-vi-placeholder="Mắt hạnh nhân, đen sâu, lông mi dày tự nhiên, không mascara, ánh mắt sắc bén..." oninput="capNhatCharPreview()">
-        </div>
-      </div>
-
-      <!-- TÓC -->
-      <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;color:#a78bfa;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px">💇 Tóc — Hair Lock</div>
-        <div class="r2" style="gap:8px;margin-bottom:8px">
-          <div><div class="slbl" style="margin-bottom:4px" data-en="Hair color">Màu tóc</div>
-            <div class="chips">
-              <span class="chip s" data-g="hair_color" data-en="Jet black">Đen tuyền</span>
-              <span class="chip s" data-g="hair_color" data-en="Dark brown">Đen nâu</span>
-              <span class="chip s" data-g="hair_color" data-en="Caramel brown">Nâu caramel</span>
-              <span class="chip s" data-g="hair_color" data-en="Platinum blonde">Vàng platinum</span>
-              <span class="chip s" data-g="hair_color" data-en="Auburn red">Đỏ auburn</span>
-              <span class="chip s" data-g="hair_color" data-en="Platinum silver">Bạch kim bạc</span>
-              <span class="chip s" data-g="hair_color" data-en="Raven black">Xanh đen raven</span>
-            </div>
-          </div>
-          <div><div class="slbl" style="margin-bottom:4px" data-en="Hairstyle">Kiểu tóc</div>
-            <div class="chips">
-              <span class="chip s" data-g="hair_style" data-en="Straight smooth">Thẳng mượt</span>
-              <span class="chip s" data-g="hair_style" data-en="Slightly wavy">Xoăn nhẹ</span>
-              <span class="chip s" data-g="hair_style" data-en="Natural curly">Xoăn tự nhiên</span>
-              <span class="chip s" data-g="hair_style" data-en="Short pixie">Ngắn pixie</span>
-              <span class="chip s" data-g="hair_style" data-en="Bob shoulder">Bob ngang vai</span>
-              <span class="chip s" data-g="hair_style" data-en="Long loose">Dài buông</span>
-              <span class="chip s" data-g="hair_style" data-en="High bun">Búi cao</span>
-              <span class="chip s" data-g="hair_style" data-en="Undercut">Cạo sát hai bên</span>
-            </div>
-          </div>
-        </div>
-        <div><div class="slbl" style="margin-bottom:4px" data-en="Hair description">Mô tả tóc</div>
-          <input type="text" id="char-hair" placeholder="Tóc đen tuyền thẳng mượt, dài đến vai, không phân tóc, tự nhiên không styling..." data-en-placeholder="Jet black straight hair, shoulder length, no part, natural unstyled..." data-vi-placeholder="Tóc đen tuyền thẳng mượt, dài đến vai, không phân tóc, tự nhiên không styling..." oninput="capNhatCharPreview()">
-        </div>
-      </div>
-
-      <!-- TRANG PHỤC -->
-      <div style="background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:10px 12px">
-        <div style="font-size:10px;color:#a78bfa;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px">👗 Trang Phục — Costume Lock</div>
-        <div><div class="slbl" style="margin-bottom:4px" data-en="Detailed costume description">Mô tả trang phục chi tiết</div>
-          <textarea id="char-costume" rows="3" placeholder="Áo trench coat đen dài đến gối, chất liệu wool pha cashmere, cúc đồng, cổ áo lật. Quần đen thẳng. Không phụ kiện. Không logo hay chữ..." oninput="capNhatCharPreview()"></textarea>
-        </div>
-        <div style="margin-top:7px"><div class="slbl" style="margin-bottom:4px" data-en="Distinguishing marks">Dấu hiệu nhận dạng đặc biệt</div>
-          <input type="text" id="char-mark" placeholder="Sẹo nhỏ dưới mắt trái, nốt ruồi má phải, kính gọng vàng..." oninput="capNhatCharPreview()">
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <!-- NHÂN VẬT PHỤ LOCK -->
-  <div style="margin-bottom:14px">
-    <div class="lbl" style="margin-bottom:8px">
-      <span class="tag" style="background:#1a0a2a;border-color:#7c3aed;color:#a78bfa">👥 Nhân Vật Phụ</span>
-      <button class="btn-i" onclick="themCharLock()" style="margin-left:8px;font-size:10px;border-color:#a78bfa;color:#a78bfa">+ Thêm</button>
-    </div>
-    <div id="ds-char-lock"><p class="hint">Chưa có nhân vật phụ được lock.</p></div>
-  </div>
-
-  <!-- CHARACTER LOCK PROMPT OUTPUT -->
-  <div style="background:#0a0816;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;margin-bottom:12px">
-    <div style="padding:10px 13px;background:#0d0a1a;border-bottom:1px solid #2a1a4a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
-      <span style="font-size:11px;color:#a78bfa;letter-spacing:1px;text-transform:uppercase;font-weight:500">🔒 Character Lock Prompt (EN)</span>
-      <div style="display:flex;gap:5px">
-        <button class="btn-i" onclick="taoCharPrompt()" style="border-color:#a78bfa;color:#a78bfa;font-size:10px">⚡ Tạo Prompt</button>
-        <button class="btn-i" onclick="taoCharPromptAI()" style="border-color:var(--gold);color:var(--gold);font-size:10px">✨ Tạo bằng AI</button>
-        <button class="btn-i" id="nut-cp-char" onclick="saoCHepChar()" style="display:none;font-size:10px">⊕ Copy</button>
-        <button class="btn-i" onclick="themVaoPrompt()" style="display:none;border-color:var(--green);color:var(--green);font-size:10px" id="nut-add-char">→ Thêm vào Prompt</button>
-      </div>
-    </div>
-    <div id="char-preview" style="padding:13px;font-size:11.5px;line-height:1.9;white-space:pre-wrap;color:var(--ink);min-height:120px;overflow-y:visible;font-family:'IBM Plex Mono',monospace"><span style="color:var(--muted);font-style:italic">Nhấn "⚡ Tạo Prompt" hoặc "✨ Tạo bằng AI" để tạo Character Lock Prompt...</span></div>
-  </div>
-
-  <!-- HƯỚNG DẪN -->
-  <div style="background:var(--card2);border:1px solid var(--bdr);border-radius:9px;padding:12px 14px">
-    <div style="font-size:11px;color:var(--gold);font-weight:500;margin-bottom:8px">💡 Cách dùng Character Lock Prompt</div>
-    <div style="font-size:11px;color:var(--muted);line-height:1.9">
-      <strong style="color:var(--ink)">1. Tạo prompt</strong> → Copy → Dán vào đầu <strong>MỌI prompt</strong> của tất cả các shot<br>
-      <strong style="color:var(--ink)">2. @material[character_ref]</strong> → Upload ảnh nhân vật lên Higgsfield, dùng làm reference<br>
-      <strong style="color:var(--ink)">3. Consistency keywords</strong> → Thêm vào cuối mỗi prompt:<br>
-      <div style="margin:5px 0 5px 16px;padding:6px 10px;background:var(--bg);border-radius:5px;font-size:11px;font-family:'IBM Plex Mono',monospace;color:#a78bfa">
-        CHARACTER CONSISTENCY LOCK: same face every frame, same costume, same hair — zero variation allowed.
-      </div>
-      <strong style="color:var(--ink)">4. Seed number</strong> → Nếu Higgsfield cho phép, dùng cùng seed number cho tất cả shot
-    </div>
-  </div>
-
-  <!-- TẠO ẢNH NHÂN VẬT -->
-  <div style="background:#0a0816;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;margin-bottom:14px">
-    <div style="padding:10px 13px;background:#0d0a1a;border-bottom:1px solid #2a1a4a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
-      <div>
-        <div style="font-size:12px;font-weight:500;color:#a78bfa;margin-bottom:1px">🖼️ Tạo Ảnh Nhân Vật Reference</div>
-        <div style="font-size:10px;color:var(--muted)">Tạo ảnh nhân vật để upload lên Higgsfield làm @material[character_ref]</div>
-      </div>
-      <button onclick="moTaoAnhNhanVat()" style="padding:7px 14px;border-radius:7px;border:none;background:#7c3aed;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">🖼️ Tạo Ảnh</button>
-    </div>
-
-    <div id="char-img-panel" style="padding:13px;display:flex;flex-direction:column;gap:10px">
-
-      <!-- UPLOAD REFERENCE -->
-      <div style="background:var(--bg);border:2px dashed #3a1a6a;border-radius:8px;padding:12px;text-align:center">
-        <div style="font-size:11px;color:#a78bfa;margin-bottom:6px">📸 Đã có ảnh nhân vật? Upload làm reference</div>
-        <input type="file" id="char-ref-upload" accept="image/*" style="display:none" onchange="xemAnh(this)">
-        <button class="btn-i" onclick="document.getElementById('char-ref-upload').click()" style="border-color:#7c3aed;color:#a78bfa">📁 Chọn ảnh từ máy</button>
-        <div id="char-ref-preview" style="margin-top:8px;display:none">
-          <img id="char-ref-img" style="max-width:200px;max-height:200px;border-radius:8px;border:2px solid #7c3aed" alt="Character reference">
-          <div style="margin-top:5px;font-size:10px;color:var(--green)">✅ Upload ảnh này lên Higgsfield → dùng @material[character_ref] trong prompt</div>
-          <div style="margin-top:4px;padding:5px 8px;background:var(--card);border-radius:5px;font-size:11px;color:#a78bfa;font-family:'IBM Plex Mono',monospace">@material[character_ref]</div>
-        </div>
-      </div>
-
-      <!-- PROMPT TẠO ẢNH -->
-      <div>
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:5px">
-          <div class="slbl" data-en="Character image prompt">Prompt tạo ảnh nhân vật</div>
-          <div style="display:flex;gap:5px">
-            <button class="btn-i" onclick="taoImgPromptNhanVat()" style="font-size:10px;border-color:#a78bfa;color:#a78bfa">✨ AI tối ưu prompt</button>
-            <button class="btn-i" onclick="layCharPromptChoAnh()" style="font-size:10px">← Lấy từ Character Lock</button>
-          </div>
-        </div>
-        <textarea id="char-img-prompt" rows="4" placeholder="Ví dụ: portrait photo, young asian woman, oval face, deep black almond eyes, straight black hair shoulder length, wearing black trench coat, neutral expression, studio lighting, white background, ultra realistic, 8K..." style="font-size:12px;border-color:#2a1a4a;background:#0a0816"></textarea>
-      </div>
-
-      <!-- CÀI ĐẶT -->
-      <div class="r2">
-        <div>
-          <div class="slbl" style="margin-bottom:5px" data-en="Shooting angle">Góc chụp</div>
-          <div class="chips">
-            <span class="chip s" data-g="char_img_angle" data-en="Straight portrait">Chân dung thẳng mặt</span>
-            <span class="chip s" data-g="char_img_angle" data-en="3/4 angle">Nghiêng 3/4</span>
-            <span class="chip s" data-g="char_img_angle" data-en="Full body">Toàn thân</span>
-            <span class="chip s" data-g="char_img_angle" data-en="Half body">Nửa người</span>
-            <span class="chip s" data-g="char_img_angle" data-en="From behind">Từ sau lưng</span>
-          </div>
-        </div>
-        <div>
-          <div class="slbl" style="margin-bottom:5px" data-en="Image background">Nền ảnh</div>
-          <div class="chips">
-            <span class="chip s" data-g="char_img_bg" data-en="White studio background">Nền trắng studio</span>
-            <span class="chip s" data-g="char_img_bg" data-en="Neutral gray background">Nền xám trung tính</span>
-            <span class="chip s" data-g="char_img_bg" data-en="Black background">Nền đen</span>
-            <span class="chip s" data-g="char_img_bg" data-en="Blurred background">Nền blur bối cảnh</span>
-          </div>
-        </div>
-      </div>
-
-      <!-- NÚT TẠO -->
-      <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
-        <button onclick="taoAnhNhanVat()" style="padding:8px 16px;border-radius:7px;border:none;background:#7c3aed;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">⚡ Tối ưu & Mở công cụ tạo ảnh</button>
-        <span id="char-img-status" style="font-size:11px;color:var(--muted)"></span>
-      </div>
-
-      <!-- OUTPUT -->
-      <div id="char-img-output" style="display:none">
-        <div class="slbl" style="margin-bottom:6px">Prompt đã tối ưu — Copy và dán vào:</div>
-        <div id="char-img-opt-prompt" style="background:var(--bg);border:1px solid #3a1a6a;border-radius:7px;padding:10px;font-size:11px;line-height:1.8;color:#a78bfa;font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;max-height:150px;overflow-y:auto"></div>
-        <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-          <button class="btn-i" onclick="saoCHepImgPrompt()" style="border-color:#a78bfa;color:#a78bfa">⊕ Copy prompt</button>
-          <a href="https://ideogram.ai" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #ec4899;color:#ec4899;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🌸 Ideogram</a>
-          <a href="https://www.midjourney.com" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #f59e0b;color:#f59e0b;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🎨 Midjourney</a>
-          <a href="https://labs.openai.com" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #10b981;color:#10b981;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🟢 DALL-E</a>
-          <a href="https://leonardo.ai" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #818cf8;color:#818cf8;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🔵 Leonardo</a>
-        </div>
-        <div style="margin-top:8px;padding:8px 10px;background:#0d0a1a;border-radius:6px;font-size:10px;color:var(--muted);line-height:1.7">
-          💡 Sau khi tạo ảnh:<br>
-          1. Tải ảnh về → Upload lên <strong style="color:#a78bfa">Higgsfield → Materials</strong><br>
-          2. Dùng <strong style="color:#a78bfa">@material[character_ref]</strong> trong mọi shot prompt<br>
-          3. Quay lại <strong>⚡ Tạo Prompt / ✨ Tạo bằng AI</strong> để tạo Character Lock Prompt
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-</div>
-
-
 <!-- ===== XUẤT PROMPT ===== -->
 <div class="pane" id="p-out">
   <div class="arow" style="margin-bottom:11px">
@@ -1785,6 +1000,20 @@ const SS={};const MM={};
 let cacShot=[],soId=0,dsThoai=[],thoaiId=0;
 let selHook='',selPlatform='',selRenderStyle='',selLightingCG='',selDuration=8,selCGHook='',selNoHookSD=false,selNoHookCG=false;
 let kqVI='',kqSD='',kqCG='',dangHien='';
+let fptKey=sessionStorage.getItem('fpt_key')||'';
+let fptAudioHistory=[];
+let kqEN='';
+let libWhich='Tiếng Việt';
+
+function luuFPTKey(){
+  const inp=document.getElementById('fpt-api-key');
+  if(!inp||!inp.value.trim()){alert('Nhập FPT API Key trước.');return;}
+  fptKey=inp.value.trim();
+  sessionStorage.setItem('fpt_key',fptKey);
+  const status=document.getElementById('fpt-key-ok');
+  if(status){status.textContent='✓ Đã lưu';status.style.color='var(--green)';}
+  setTimeout(()=>{const s=document.getElementById('fpt-key-ok');if(s)s.textContent='';},2500);
+}
 
 // ===== TABS =====
 function sw(n){
@@ -2408,7 +1637,7 @@ async function aiTaoTatCaShots(){
   if(btn) btn.disabled = true;
   if(status) status.textContent = '⏳ Đang xử lý...';
 
-  sw('shots');
+  sw('fw');
 
   for(let i = 0; i < cacShot.length; i++){
     const s = cacShot[i];
@@ -2917,14 +2146,14 @@ function xoaVB(){vanBan='';document.getElementById('hop-vb').innerHTML='<span cl
 function themLS(t){if(!t)return;lichSu.unshift({id:Date.now(),t});if(lichSu.length>15)lichSu.pop();veLS();}
 function veLS(){document.getElementById('lich-su').innerHTML=lichSu.length?lichSu.map(h=>`<div class="vitem"><span>${h.t}</span><span class="vitag">VN</span><button class="videl" onclick="lichSu=lichSu.filter(x=>x.id!=${h.id});veLS()">✕</button></div>`).join(''):'<div style="font-size:11px;color:var(--muted);font-style:italic">Chưa có...</div>';}
 function dien(id){const t=vanBan.trim();if(!t)return;if(id==='hop-doc'){document.getElementById('hop-doc').textContent=t;}else{const e=document.getElementById(id);if(e)e.value=(e.value?e.value+'\n':'')+t;capNhat();}}
-function dienShot(){const t=vanBan.trim();if(!t||!cacShot.length)return;const s=cacShot[cacShot.length-1];s.moTa=(s.moTa?s.moTa+' ':'')+t;veShot();sw('shots');}
-function dienThoai(){const t=vanBan.trim();if(!t)return;if(!dsThoai.length)themThoai();const d=dsThoai[dsThoai.length-1];d.loi=(d.loi?d.loi+' ':'')+t;veThoai();sw('thoai');}
+function dienShot(){const t=vanBan.trim();if(!t||!cacShot.length)return;const s=cacShot[cacShot.length-1];s.moTa=(s.moTa?s.moTa+' ':'')+t;veShot();sw('fw');}
+function dienThoai(){const t=vanBan.trim();if(!t)return;if(!dsThoai.length)themThoai();const d=dsThoai[dsThoai.length-1];d.loi=(d.loi?d.loi+' ':'')+t;veThoai();sw('fw');}
 let dsGiong=[];
 function taiGiong(){dsGiong=window.speechSynthesis.getVoices();const s=document.getElementById('chon-giong');const vi=dsGiong.filter(v=>v.lang.startsWith('vi'));const kh=dsGiong.filter(v=>!v.lang.startsWith('vi'));s.innerHTML='';if(vi.length){const g=document.createElement('optgroup');g.label='🇻🇳 Tiếng Việt';vi.forEach(v=>{const o=document.createElement('option');o.value=v.name;o.textContent=v.name;g.appendChild(o);});s.appendChild(g);}if(kh.length){const g=document.createElement('optgroup');g.label='Khác';kh.slice(0,8).forEach(v=>{const o=document.createElement('option');o.value=v.name;o.textContent=v.name+' ('+v.lang+')';g.appendChild(o);});s.appendChild(g);}if(!dsGiong.length)s.innerHTML='<option>Chưa có giọng</option>';}
 if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=taiGiong;taiGiong();}
 function docTo(){if(!window.speechSynthesis)return;const nd=(document.getElementById('hop-doc').textContent||'').trim();if(!nd)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(nd);const gn=document.getElementById('chon-giong').value;const g=dsGiong.find(v=>v.name===gn);if(g)u.voice=g;u.lang='vi-VN';u.rate=parseFloat(document.getElementById('toc-do').value)||1;u.pitch=parseFloat(document.getElementById('cao-do').value)||1;u.onstart=()=>{document.getElementById('tts-dot').className='vdot listening';document.getElementById('tt-tts').textContent='Đang đọc...';};u.onend=u.onerror=()=>{document.getElementById('tts-dot').className='vdot ready';document.getElementById('tt-tts').textContent='Sẵn sàng';};window.speechSynthesis.speak(u);}
 function dungDoc(){window.speechSynthesis.cancel();document.getElementById('tts-dot').className='vdot ready';document.getElementById('tt-tts').textContent='Sẵn sàng';}
-function docPrompt(){const nd=dangHien==='vi'?kqVI:dangHien==='cg'?kqCG:kqSD;if(!nd)return;document.getElementById('hop-doc').textContent=nd;sw('voice');setTimeout(docTo,300);}
+function docPrompt(){const nd=dangHien==='vi'?kqVI:dangHien==='cg'?kqCG:kqSD;if(!nd)return;document.getElementById('hop-doc').textContent=nd;sw('fw');setTimeout(docTo,300);}
 
 
 // ===== CLAUDE AI — DỊCH & CẢI THIỆN =====
@@ -5181,7 +4410,6 @@ function taoCharPrompt(){
 
   const el = document.getElementById('char-preview');
   if(el) el.textContent = charPromptText;
-  document.getElementById('nut-cp-char').style.display = '';
   // Show active indicator
   const indicator = document.getElementById('char-lock-active');
   if(indicator) indicator.style.display = '';
@@ -5234,7 +4462,6 @@ async function taoCharPromptAI(){
 function saoCHepChar(){
   if(!charPromptText) return;
   navigator.clipboard.writeText(charPromptText).then(()=>{
-    const b=document.getElementById('nut-cp-char');
     if(b){const o=b.innerHTML;b.innerHTML='✓ Đã copy!';setTimeout(()=>b.innerHTML=o,2000);}
   });
 }
@@ -6497,7 +5724,7 @@ function apDungMot(idx){
     thoai: 'Không thoại'
   });
   veShot();
-  sw('shots');
+  sw('fw');
   window.scrollTo({top:0, behavior:'smooth'});
   setTimeout(()=>{ const bd=document.getElementById('sb-'+soId); if(bd)bd.style.display=''; }, 100);
   const btn = document.querySelector(`[onclick="apDungMot(${idx})"]`);
@@ -6520,7 +5747,7 @@ function apDungTatCa(){
     });
   });
   veShot();
-  sw('shots');
+  sw('fw');
   document.querySelectorAll('[onclick="apDungTatCa()"]').forEach(btn => {
     const o = btn.innerHTML;
     btn.innerHTML = '✓ Đã thêm ' + kbShotData.length + ' shots!';
@@ -6612,6 +5839,18 @@ veThoai();
 veNVP();
 veKBShotTimes();
 taiGiong();
+
+// ===== FIX: libWhich chip listener =====
+document.querySelectorAll('[data-g="lib_which"].chip.s').forEach(c=>{
+  c.addEventListener('click',()=>{
+    document.querySelectorAll('[data-g="lib_which"].chip.s').forEach(x=>x.classList.remove('on'));
+    libWhich=c.textContent.trim();
+    c.classList.add('on');
+  });
+});
+// Default select first lib_which chip
+const firstLibChip=document.querySelector('[data-g="lib_which"].chip.s');
+if(firstLibChip) firstLibChip.classList.add('on');
 </script>
 </div><!-- end wrap -->
 </body>
