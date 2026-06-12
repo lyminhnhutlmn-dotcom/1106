@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>ANNAHOUSESTUDIO by Lý Minh Nhựt — Cinematic Prompt Builder</title>
+<title>ANNAHOUSESTUDIO by Lý Minh Nhựt — Cinematic Prompt Builder V.10</title>
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
@@ -200,6 +200,45 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 .bm-lut-name{font-size:11px;font-weight:500;color:#93c5fd;margin-bottom:2px}
 .bm-lut-sub{font-size:10px;color:var(--muted)}
 
+/* ===== PART 2 — SHOT AI PROMPT BUILDER ===== */
+.shot-ai-wrap{margin-top:8px;border-top:1px solid var(--bdr);padding-top:10px}
+.shot-ai-btn{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:7px}
+.btn-ai-shot{padding:6px 12px;border-radius:6px;border:1px solid #5b9cf6;background:#0a0f1e;color:#5b9cf6;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .15s;font-weight:500}
+.btn-ai-shot:hover{background:#1a2a4a;border-color:#93c5fd}
+.btn-ai-shot.gold{border-color:var(--gold);background:#1e1a0f;color:var(--gold)}
+.btn-ai-shot.gold:hover{background:#2a240a}
+.btn-ai-shot.green{border-color:var(--green);background:#0a1a0f;color:var(--green)}
+.btn-ai-shot.green:hover{background:#0f2a1a}
+.btn-ai-shot.purple{border-color:var(--purple);background:#1a0f2e;color:var(--purple)}
+.btn-ai-shot.purple:hover{background:#220f40}
+.shot-ai-panel{display:none;background:#080d18;border:1px solid #1a2a5a;border-radius:8px;overflow:hidden;margin-top:6px}
+.shot-ai-head{display:flex;align-items:center;justify-content:space-between;padding:7px 12px;background:#0a1020;border-bottom:1px solid #1a2a5a;flex-wrap:wrap;gap:5px}
+.shot-ai-title{font-size:10px;color:#5b9cf6;letter-spacing:1px;text-transform:uppercase;font-weight:500}
+.shot-ai-body{padding:10px 12px;font-size:11px;line-height:1.9;white-space:pre-wrap;color:var(--ink);min-height:60px;font-family:'IBM Plex Mono',monospace;word-break:break-word;max-height:300px;overflow-y:auto}
+.shot-ai-foot{display:none;padding:7px 12px;border-top:1px solid #1a2a5a;display:flex;gap:5px;flex-wrap:wrap;background:#0a1020}
+.shot-prompt-result{background:#0a0d14;border:1px solid #1a2a5a;border-radius:6px;padding:8px 10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;word-break:break-word;cursor:pointer;margin-top:7px;display:none}
+.shot-prompt-result:hover{border-color:#3b5af5}
+
+/* Combine all shots panel */
+.shots-combine-panel{background:#0a0a00;border:1px solid #f59e0b;border-radius:10px;overflow:hidden;margin:12px 0}
+.shots-combine-head{padding:10px 13px;background:#0d0c00;border-bottom:1px solid #2a2200;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px}
+.shots-combine-body{padding:12px;font-size:11px;line-height:1.9;white-space:pre-wrap;color:var(--ink);min-height:80px;font-family:'IBM Plex Mono',monospace;word-break:break-word;max-height:500px;overflow-y:auto}
+.shots-combine-foot{padding:8px 12px;border-top:1px solid #2a2200;display:flex;gap:5px;flex-wrap:wrap;background:#0a0900}
+
+/* Shot status badge */
+.shot-ai-status{font-size:9px;padding:2px 7px;border-radius:10px;background:#0a1020;border:1px solid #1a2a5a;color:var(--muted);font-family:'IBM Plex Mono',monospace;white-space:nowrap}
+.shot-ai-status.done{border-color:var(--green);color:var(--green);background:#0a1a0f}
+.shot-ai-status.running{border-color:#5b9cf6;color:#5b9cf6;background:#0a1020;animation:nhip 1s infinite}
+.shot-ai-status.error{border-color:var(--red);color:var(--red);background:#1a0a0a}
+
+/* Shot prompt refine mode */
+.shot-refine-wrap{display:none;margin-top:7px;background:#0a0d1a;border:1px solid #2a3a6a;border-radius:7px;padding:9px}
+.shot-refine-label{font-size:10px;color:#818cf8;font-weight:500;letter-spacing:.5px;margin-bottom:5px}
+.shot-refine-chips{display:flex;flex-wrap:wrap;gap:4px;margin-bottom:7px}
+.shot-rchip{padding:3px 9px;border-radius:12px;font-size:11px;border:1px solid #2a3a6a;cursor:pointer;background:#0d1020;color:var(--muted);transition:all .12s;font-family:'IBM Plex Mono',monospace}
+.shot-rchip:hover{border-color:#818cf8;color:#818cf8}
+.shot-rchip.on{background:#1a1040;border-color:#818cf8;color:#818cf8}
+
 </style>
 </head>
 <body>
@@ -253,10 +292,10 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </div>
 <h1 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:2px">ANNAHOUSESTUDIO</h1>
 <p style="font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Cinematic Prompt Builder — by LÝ MINH NHỰT</p>
-<p class="sub" id="app-sub">// 8 Yếu Tố · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · Nhân Vật · AI Dịch & Cải Thiện</p>
+<p class="sub" id="app-sub">// 8 Yếu Tố · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · Nhân Vật · AI Dịch & Cải Thiện &nbsp;<span style="color:#5b9cf6;border:1px solid #1a3a6a;border-radius:8px;padding:1px 8px;font-size:10px;letter-spacing:.5px">V.10 P2 — AI Shot Builder</span></p>
 <div class="tabs">
   <button class="tab on" onclick="sw('fw')">① Khung Sườn</button>
-  <button class="tab" onclick="sw('shots')">🎥 Dựng Cảnh</button>
+  <button class="tab" onclick="sw('shots')">🎥 Dựng Cảnh <span style="font-size:9px;color:#5b9cf6;background:#0a1020;border:1px solid #1a3a5a;border-radius:8px;padding:1px 5px;margin-left:2px">AI</span></button>
   <button class="tab" onclick="sw('thoai')">💬 Lời Thoại</button>
   <button class="tab" onclick="sw('emo')">💔 Cảm Xúc</button>
   <button class="tab" onclick="sw('voice')">🎙️ Giọng Nói</button>
@@ -784,8 +823,43 @@ VD: Dark kitchen interior at night, single overhead pendant lamp 2700K casting w
   <div class="hint" style="margin-bottom:11px;padding:9px 11px;background:var(--card);border-radius:7px;border:1px solid var(--bdr)">
     💡 Dựng Cảnh được tạo từ kết quả <strong>Phân Tích Kịch Bản</strong>. Vào <strong>① Khung Sườn → 09 Kịch Bản AI</strong> → phân tích → nhấn <strong>⚡ Thêm Tất Cả</strong> để tạo shots.
   </div>
+
+  <!-- ===== SHOT TOOLBAR ===== -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px;align-items:center">
+    <button onclick="themShot()" class="btn-s" style="font-size:11px;padding:7px 13px">+ Thêm Shot</button>
+    <button onclick="aiTaoTatCaShots()" style="padding:7px 16px;border-radius:7px;border:none;background:linear-gradient(135deg,#1d4ed8,#7c3aed);color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500;transition:opacity .15s" id="btn-ai-all-shots">⚡ AI Tạo Tất Cả Shot Prompts</button>
+    <button onclick="ghepTatCaShots()" style="padding:7px 14px;border-radius:7px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .15s" id="btn-ghep-shots">🔗 Ghép Sequence Prompt</button>
+    <span id="shot-ai-global-status" style="font-size:10px;color:var(--muted);font-style:italic"></span>
+  </div>
+
+  <!-- ===== SHOT CARDS ===== -->
   <div id="ds-shot"></div>
-  
+
+  <!-- ===== COMBINE SEQUENCE PANEL ===== -->
+  <div class="shots-combine-panel" id="shots-combine-panel" style="display:none">
+    <div class="shots-combine-head">
+      <div>
+        <div style="font-size:12px;font-weight:500;color:#f59e0b;margin-bottom:1px">🔗 Sequence Prompt — Tất Cả Shots</div>
+        <div style="font-size:10px;color:var(--muted)" id="combine-meta">Ghép từ shot prompts đã tạo</div>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="btn-i" id="btn-cp-combine" onclick="copyCombine()" style="border-color:#f59e0b;color:#f59e0b;font-size:10px">⊕ Copy</button>
+        <button class="btn-i" onclick="apDungCombineVaoOutput()" style="border-color:var(--green);color:var(--green);font-size:10px">→ Xuất Prompt</button>
+        <button class="btn-i" onclick="document.getElementById('shots-combine-panel').style.display='none'" style="font-size:10px">✕</button>
+      </div>
+    </div>
+    <div class="shots-combine-body" id="shots-combine-body"><span style="color:var(--muted);font-style:italic">Nhấn "🔗 Ghép Sequence Prompt" để tạo...</span></div>
+    <div class="shots-combine-foot">
+      <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+        <span style="font-size:10px;color:var(--muted)">Format xuất:</span>
+        <span class="schip" id="fmt-seedance" onclick="chonCombineFmt('seedance',this)" style="border-color:#5b9cf6;color:#5b9cf6;background:#0a1020">Seedance 2.0</span>
+        <span class="schip" onclick="chonCombineFmt('higgsfield',this)">Higgsfield</span>
+        <span class="schip" onclick="chonCombineFmt('veo3',this)">Veo 3</span>
+        <span class="schip" onclick="chonCombineFmt('clean',this)">Clean Text</span>
+      </div>
+    </div>
+  </div>
+
 </div>
 
 <!-- ===== LỜI THOẠI ===== -->
@@ -1969,6 +2043,7 @@ function veShot(){
       <span class="shot-num">SỰ KIỆN ${i+1}</span>
       <span class="shot-title">${s.cuMay||'Chưa chọn'}${s.moTa?' — '+s.moTa.slice(0,30)+'...':''}</span>
       <span class="shot-dur">${s.tg}s</span>
+      <span class="shot-ai-status" id="shot-status-${s.id}">${s._aiDone?'✓ AI done':'○ Chưa AI'}</span>
       <button class="sdel" onclick="event.stopPropagation();xoaShot(${s.id})">✕</button>
     </div>
     <div class="shot-bd" id="sb-${s.id}">
@@ -2037,11 +2112,418 @@ function veShot(){
       <!-- MÔ TẢ + ÂM THANH -->
       <div><div class="slbl">✍️ Mô tả thêm</div><textarea rows="5" placeholder="Chi tiết cú máy, diễn xuất, cảm xúc nhân vật, ánh sáng đặc biệt, chuyển động chi tiết..." oninput="updShot(${s.id},'moTa',this.value)" style="font-size:11px;min-height:100px;resize:vertical">${s.moTa||''}</textarea></div>
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
+
+      <!-- ===== PART 2: AI PROMPT BUILDER PER SHOT ===== -->
+      <div class="shot-ai-wrap">
+        <div style="font-size:10px;color:#5b9cf6;font-weight:500;letter-spacing:.8px;text-transform:uppercase;margin-bottom:7px">✨ AI Prompt Builder — Shot ${i+1}</div>
+        
+        <!-- REFINE OPTIONS -->
+        <div class="shot-refine-wrap" id="refine-${s.id}">
+          <div class="shot-refine-label">🎯 Hướng dẫn thêm cho AI (tùy chọn)</div>
+          <div class="shot-refine-chips">
+            ${['Tăng kịch tính','Thêm chi tiết da/SSS','Nhấn mạnh cảm xúc','Thêm ánh sáng volumetric','Ngắn gọn hơn','Chi tiết hơn','Focus vào nhân vật','Focus vào bối cảnh','Seedance optimized','Higgsfield optimized'].map(r=>`<span class="shot-rchip" onclick="toggleRchip(this,'${s.id}')">${r}</span>`).join('')}
+          </div>
+          <textarea id="refine-custom-${s.id}" rows="2" placeholder="Hướng dẫn tùy chỉnh thêm..." style="font-size:10px;padding:5px 8px;border-color:#2a3a6a;background:#0a0d1a"></textarea>
+        </div>
+
+        <!-- ACTION BUTTONS -->
+        <div class="shot-ai-btn">
+          <button class="btn-ai-shot gold" onclick="aiTaoPromptShot(${s.id},${i})">✨ AI Tạo Prompt</button>
+          <button class="btn-ai-shot purple" onclick="toggleRefine(${s.id})" id="btn-refine-${s.id}">⚙️ Tùy chỉnh</button>
+          <button class="btn-ai-shot" onclick="aiCaiThienShotPrompt(${s.id})" id="btn-improve-${s.id}" style="display:${s._aiDone?'':'none'}">🔧 Cải Thiện</button>
+          <button class="btn-ai-shot green" onclick="copyAIShotPrompt(${s.id})" id="btn-cp-shot-${s.id}" style="display:${s._aiDone?'':'none'}">⊕ Copy Prompt</button>
+          <button onclick="dungAIShot(${s.id})" id="btn-stop-shot-${s.id}" style="display:none;padding:5px 10px;border-radius:6px;border:1px solid var(--red);background:#1a0808;color:var(--red);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⏹ Dừng</button>
+        </div>
+
+        <!-- AI OUTPUT PANEL -->
+        <div class="shot-ai-panel" id="shot-ai-panel-${s.id}">
+          <div class="shot-ai-head">
+            <span class="shot-ai-title" id="shot-ai-title-${s.id}">✨ ANNAHOUSESTUDIO AI — Shot ${i+1}</span>
+            <div style="display:flex;gap:4px;align-items:center">
+              <span id="shot-ai-wc-${s.id}" style="font-size:9px;color:var(--muted)"></span>
+              <button onclick="document.getElementById('shot-ai-panel-${s.id}').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:12px;padding:0 2px">✕</button>
+            </div>
+          </div>
+          <div class="shot-ai-body" id="shot-ai-body-${s.id}"><span style="color:var(--muted);font-style:italic">Nhấn "✨ AI Tạo Prompt" để bắt đầu...</span></div>
+          <div style="padding:7px 12px;border-top:1px solid #1a2a5a;display:flex;gap:5px;flex-wrap:wrap;background:#0a1020">
+            <button class="btn-i" id="btn-use-shot-${s.id}" onclick="dungshotAIAsMain(${s.id})" style="display:none;border-color:var(--green);color:var(--green);font-size:10px">✓ Dùng làm Prompt chính</button>
+            <button class="btn-i" id="btn-to-moTa-${s.id}" onclick="shotAIToMoTa(${s.id})" style="display:none;border-color:var(--muted);color:var(--muted);font-size:10px">→ Vào Mô tả</button>
+          </div>
+        </div>
+
+        <!-- SAVED PROMPT DISPLAY -->
+        <div class="shot-prompt-result" id="shot-prompt-saved-${s.id}" onclick="editSavedPrompt(${s.id})">${s._prompt||''}</div>
+      </div>
+
     </div></div>`).join('');
 }
 function moShot(id){const e=document.getElementById('sb-'+id);if(e)e.style.display=e.style.display==='none'?'':'none';}
 function chonCM(id,v){updShot(id,'cuMay',v);veShot();}
 function chonTD(id,v){updShot(id,'thoai',v);veShot();}
+
+// ===== PART 2: PER-SHOT AI PROMPT BUILDER =====
+const shotAIControllers = {};  // id → AbortController
+let combineFormat = 'seedance';
+
+function toggleRefine(id){
+  const el = document.getElementById('refine-'+id);
+  const btn = document.getElementById('btn-refine-'+id);
+  if(!el) return;
+  const open = el.style.display !== 'none' && el.style.display !== '';
+  el.style.display = open ? 'none' : '';
+  if(btn) btn.style.borderColor = open ? '' : '#818cf8', btn.style.color = open ? '' : '#818cf8';
+}
+
+function toggleRchip(el, id){
+  el.classList.toggle('on');
+}
+
+function getRefineTags(id){
+  const tags = [];
+  const wrap = document.getElementById('refine-'+id);
+  if(!wrap) return '';
+  wrap.querySelectorAll('.shot-rchip.on').forEach(c => tags.push(c.textContent));
+  const custom = document.getElementById('refine-custom-'+id)?.value.trim();
+  if(custom) tags.push(custom);
+  return tags.join(', ');
+}
+
+function buildShotContext(s, shotIndex){
+  const {dd,nv,hd,mt,as,pc} = layChung();
+  const parts = [];
+  parts.push(`Shot ${shotIndex+1} of ${cacShot.length} — [${s.start}s → ${s.end}s] (${s.tg.toFixed(1)}s)`);
+  if(s.cuMay) parts.push(`Camera movement: ${s.cuMay}`);
+  if(s.angle) parts.push(`Camera angle: ${s.angle}`);
+  if(s.lens) parts.push(`Lens: ${s.lens}`);
+  if(s.speed) parts.push(`Speed: ${s.speed}`);
+  if(s.shotSize) parts.push(`Shot size: ${s.shotSize}`);
+  if(s.specialFx) parts.push(`Special FX: ${s.specialFx}`);
+  if(s.moTa) parts.push(`Shot description: ${s.moTa}`);
+  if(s.thoai && s.thoai !== 'Không thoại') parts.push(`Audio: ${s.thoai}`);
+  parts.push('--- GLOBAL CONTEXT ---');
+  if(nv) parts.push(`Subject: ${nv}`);
+  if(hd) parts.push(`Action: ${hd}`);
+  if(mt) parts.push(`Scene: ${mt}`);
+  if(dd) parts.push(`Location: ${dd}`);
+  if(as) parts.push(`Lighting: ${as}`);
+  if(SS.light_setup) parts.push(`Lighting setup: ${SS.light_setup}`);
+  if(SS.genre) parts.push(`Genre: ${SS.genre}`);
+  if(MM.director && MM.director.length) parts.push(`Director ref: ${MM.director.join(', ')}`);
+  if(MM.colorgrade && MM.colorgrade.length) parts.push(`Color grade: ${MM.colorgrade.join(', ')}`);
+  if(SS.pal) parts.push(`Palette: ${SS.pal}`);
+  if(MM.emo && MM.emo.length) parts.push(`Emotions: ${MM.emo.slice(0,4).join(', ')}`);
+  if(SS.emo_intensity) parts.push(`Intensity: ${SS.emo_intensity}`);
+  if(charPromptText) parts.push(`Character lock: ${charPromptText.slice(0,200)}`);
+  if(MM.prohibit && MM.prohibit.length) parts.push(`Prohibited: ${MM.prohibit.slice(0,5).join(', ')}`);
+  return parts.join('\n');
+}
+
+async function aiTaoPromptShot(id, shotIndex){
+  const s = cacShot.find(x => x.id === id);
+  if(!s){ alert('Không tìm thấy shot.'); return; }
+  const panel = document.getElementById('shot-ai-panel-'+id);
+  const body = document.getElementById('shot-ai-body-'+id);
+  const title = document.getElementById('shot-ai-title-'+id);
+  const status = document.getElementById('shot-status-'+id);
+  const btnStop = document.getElementById('btn-stop-shot-'+id);
+  const btnUse = document.getElementById('btn-use-shot-'+id);
+  const btnToMoTa = document.getElementById('btn-to-moTa-'+id);
+  const btnCp = document.getElementById('btn-cp-shot-'+id);
+  const btnImprove = document.getElementById('btn-improve-shot-'+id);
+  const wc = document.getElementById('shot-ai-wc-'+id);
+
+  if(!panel) return;
+  panel.style.display = '';
+  body.textContent = '';
+  if(title) title.textContent = `⏳ AI đang tạo prompt shot ${shotIndex+1}...`;
+  if(status){ status.textContent = '⏳ Running'; status.className = 'shot-ai-status running'; }
+  if(btnStop) btnStop.style.display = '';
+  if(btnUse) btnUse.style.display = 'none';
+  if(btnToMoTa) btnToMoTa.style.display = 'none';
+  if(btnCp) btnCp.style.display = 'none';
+
+  const refineTags = getRefineTags(id);
+  const shotCtx = buildShotContext(s, shotIndex);
+
+  const systemPrompt = `You are ANNAHOUSESTUDIO AI — a master cinematographer and AI video prompt engineer specializing in Seedance 2.0 on Higgsfield.
+
+Your task: Write a professional cinematic prompt in English for a SINGLE SHOT segment of a video.
+
+OUTPUT FORMAT (follow exactly):
+[CAM] Camera movement, speed (ft/s or deg/sec), focal length (mm), aperture (f-stop), motion easing curve
+[SUBJECT] Subject description, position in frame, micro-actions (muscle tension, eye movement, breath)
+[SCENE] Environment, depth layers (fg/mid/bg), atmosphere, particles, materials
+[LIGHT] Kelvin temperature, direction degrees, fill ratio, practical sources, color temperature
+[SKIN] SSS subsurface scattering detail, pore visibility, natural texture — if applicable
+[EMOTION] Emotional subtext encoded in camera position + speed + color
+[FX] Special techniques, timing, transitions — if applicable
+[CONSTRAINTS] No AI smoothing. No warped faces. No flickering. No texture swimming.
+
+Rules:
+- Write in English only
+- Each section: 1-2 lines, dense with technical specs
+- Use exact numbers: "1.5ft/s", "85mm f/1.4", "3200K", "45deg left"
+- Total output: 150-250 words
+- No preamble, no explanation, just the prompt sections`;
+
+  const userMsg = `Create a shot prompt for:\n\n${shotCtx}${refineTags ? '\n\nAdditional direction: ' + refineTags : ''}`;
+
+  // Abort previous if running
+  if(shotAIControllers[id]) shotAIControllers[id].abort();
+  shotAIControllers[id] = new AbortController();
+
+  let acc = '';
+  try{
+    const origController = aiController;
+    aiController = shotAIControllers[id];
+    await goiClaude(systemPrompt, userMsg, chunk => {
+      acc += chunk;
+      body.textContent = acc;
+      if(wc) wc.textContent = acc.split(/\s+/).filter(Boolean).length + ' từ';
+    });
+    aiController = origController;
+
+    // Done
+    s._prompt = acc.trim();
+    s._aiDone = true;
+    if(title) title.textContent = `✓ Shot ${shotIndex+1} — Prompt hoàn tất`;
+    if(status){ status.textContent = '✓ AI done'; status.className = 'shot-ai-status done'; }
+    if(btnStop) btnStop.style.display = 'none';
+    if(btnUse) btnUse.style.display = '';
+    if(btnToMoTa) btnToMoTa.style.display = '';
+    if(btnCp) btnCp.style.display = '';
+    const btnImp = document.getElementById('btn-improve-'+id);
+    if(btnImp) btnImp.style.display = '';
+
+    // Show saved prompt
+    const saved = document.getElementById('shot-prompt-saved-'+id);
+    if(saved){ saved.textContent = acc.trim(); saved.style.display = ''; }
+
+    if(wc) wc.textContent = acc.split(/\s+/).filter(Boolean).length + ' từ';
+  }catch(e){
+    if(e.name !== 'AbortError'){
+      body.innerHTML = '<span style="color:var(--red)">Lỗi: ' + e.message + '</span>';
+      if(status){ status.textContent = '✕ Lỗi'; status.className = 'shot-ai-status error'; }
+    } else {
+      if(status){ status.textContent = '— Đã dừng'; status.className = 'shot-ai-status'; }
+    }
+    if(btnStop) btnStop.style.display = 'none';
+  }
+}
+
+async function aiCaiThienShotPrompt(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s._prompt){ alert('Tạo prompt trước rồi mới cải thiện.'); return; }
+  const body = document.getElementById('shot-ai-body-'+id);
+  const title = document.getElementById('shot-ai-title-'+id);
+  const status = document.getElementById('shot-status-'+id);
+  if(title) title.textContent = '🔧 AI đang cải thiện...';
+  if(status){ status.textContent = '⏳ Running'; status.className = 'shot-ai-status running'; }
+  body.textContent = '';
+
+  const sys = `You are a cinematographer upgrading an AI video prompt. Make it more cinematic and precise.
+Add: exact camera speed ft/s, Kelvin temperature, aperture f-stop, micro-action details.
+Add subsurface scattering skin detail if human subject.
+Add volumetric atmosphere depth layers.
+Keep same structure but more specific. Output ONLY the improved prompt.`;
+
+  let acc = '';
+  try{
+    await goiClaude(sys, 'Improve this shot prompt:\n\n' + s._prompt, chunk => {
+      acc += chunk;
+      body.textContent = acc;
+    });
+    s._prompt = acc.trim();
+    if(title) title.textContent = '✓ Đã cải thiện';
+    if(status){ status.textContent = '✓ AI done'; status.className = 'shot-ai-status done'; }
+    const saved = document.getElementById('shot-prompt-saved-'+id);
+    if(saved){ saved.textContent = acc.trim(); saved.style.display = ''; }
+    const wc = document.getElementById('shot-ai-wc-'+id);
+    if(wc) wc.textContent = acc.split(/\s+/).filter(Boolean).length + ' từ';
+  }catch(e){
+    if(e.name !== 'AbortError'){
+      body.innerHTML = '<span style="color:var(--red)">Lỗi: ' + e.message + '</span>';
+    }
+  }
+}
+
+function dungAIShot(id){
+  if(shotAIControllers[id]) shotAIControllers[id].abort();
+  const btn = document.getElementById('btn-stop-shot-'+id);
+  if(btn) btn.style.display = 'none';
+}
+
+function copyAIShotPrompt(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s._prompt){ return; }
+  robustCopy(s._prompt, document.getElementById('btn-cp-shot-'+id));
+}
+
+function dungshotAIAsMain(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s._prompt) return;
+  // Store as main Seedance EN prompt for this session
+  kqSD = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER\nBY LÝ MINH NHỰT\n' + '═'.repeat(50) + '\n\n' + s._prompt + '\n\n' + '═'.repeat(50) + '\nANNAHOUSESTUDIO AI — annahousestudio.vercel.app';
+  sw('out');
+  hienKQ(kqSD, 'sd', '🎥 Shot ' + (cacShot.indexOf(s)+1) + ' — Seedance Prompt');
+  const btn = document.getElementById('btn-use-shot-'+id);
+  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã set làm prompt!'; btn.style.color='var(--gold)'; setTimeout(()=>{btn.innerHTML=o;btn.style.color='var(--green)';},2000); }
+}
+
+function shotAIToMoTa(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s._prompt) return;
+  s.moTa = s._prompt;
+  veShot();
+  // Re-open the shot
+  setTimeout(()=>{
+    const bd = document.getElementById('sb-'+id);
+    if(bd) bd.style.display = '';
+  }, 50);
+  const btn = document.getElementById('btn-to-moTa-'+id);
+  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã điền!'; setTimeout(()=>btn.innerHTML=o,2000); }
+}
+
+function editSavedPrompt(id){
+  const el = document.getElementById('shot-prompt-saved-'+id);
+  if(!el) return;
+  if(el.contentEditable === 'true'){
+    el.contentEditable = 'false';
+    el.style.outline = '';
+    // Save back
+    const s = cacShot.find(x => x.id === id);
+    if(s) s._prompt = el.textContent.trim();
+  } else {
+    el.contentEditable = 'true';
+    el.style.outline = '1px solid #5b9cf6';
+    el.focus();
+  }
+}
+
+// ===== AI TẠO TẤT CẢ SHOTS =====
+async function aiTaoTatCaShots(){
+  if(!cacShot.length){ alert('Chưa có shot nào. Thêm shot trước.'); return; }
+  const btn = document.getElementById('btn-ai-all-shots');
+  const status = document.getElementById('shot-ai-global-status');
+  if(btn) btn.disabled = true;
+  if(status) status.textContent = '⏳ Đang xử lý...';
+
+  sw('shots');
+
+  for(let i = 0; i < cacShot.length; i++){
+    const s = cacShot[i];
+    if(status) status.textContent = `⏳ Shot ${i+1}/${cacShot.length} đang xử lý...`;
+    // Open shot so user can see streaming
+    const bd = document.getElementById('sb-'+s.id);
+    if(bd && bd.style.display === 'none') bd.style.display = '';
+    // Call AI for this shot
+    await aiTaoPromptShot(s.id, i);
+    // Small delay between shots
+    await new Promise(r => setTimeout(r, 500));
+  }
+
+  if(status) status.textContent = `✓ Hoàn tất ${cacShot.length} shots!`;
+  if(btn){ btn.disabled = false; btn.style.background = 'linear-gradient(135deg,#15803d,#166534)'; setTimeout(()=>btn.style.background='',3000); }
+
+  // Auto show combine panel
+  setTimeout(ghepTatCaShots, 300);
+}
+
+// ===== GHÉP SEQUENCE PROMPT =====
+let combineKetQua = '';
+
+function chonCombineFmt(fmt, el){
+  combineFormat = fmt;
+  document.querySelectorAll('#shots-combine-panel .schip').forEach(c => c.classList.remove('on'));
+  if(el) el.classList.add('on');
+  // Re-generate with new format
+  const doneShots = cacShot.filter(s => s._prompt);
+  if(doneShots.length) _buildCombinePrompt(doneShots);
+}
+
+function ghepTatCaShots(){
+  const doneShots = cacShot.filter(s => s._prompt);
+  if(!doneShots.length){
+    alert('Chưa có shot nào được tạo prompt AI. Nhấn "⚡ AI Tạo Tất Cả" trước.');
+    return;
+  }
+  const panel = document.getElementById('shots-combine-panel');
+  if(panel) panel.style.display = '';
+  _buildCombinePrompt(doneShots);
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+
+function _buildCombinePrompt(shots){
+  const body = document.getElementById('shots-combine-body');
+  const meta = document.getElementById('combine-meta');
+  if(!body) return;
+
+  const totalDur = shots.reduce((a,s) => a + (s.tg||5), 0).toFixed(1);
+  const nShots = shots.length;
+
+  if(meta) meta.textContent = `${nShots} shot · ${totalDur}s tổng · ${combineFormat.toUpperCase()} format`;
+
+  let out = '';
+
+  if(combineFormat === 'seedance'){
+    out += 'SEEDANCE 2.0 ON HIGGSFIELD — MULTI-SHOT SEQUENCE\n';
+    out += 'ANNAHOUSESTUDIO — by Lý Minh Nhựt\n';
+    out += '═'.repeat(50) + '\n\n';
+    const {dd,nv,hd,mt} = layChung();
+    if(nv || hd) out += '[SEQUENCE OVERVIEW]\n';
+    if(nv) out += `Subject: ${nv}\n`;
+    if(hd) out += `Action: ${hd}\n`;
+    if(dd) out += `Location: ${dd}\n`;
+    if(SS.genre) out += `Genre: ${SS.genre}\n`;
+    out += `Total duration: ${totalDur}s · ${nShots} shots\n\n`;
+    shots.forEach((s, i) => {
+      out += `${'═'.repeat(30)}\nSHOT ${i+1} [${s.start}s → ${s.end}s · ${s.tg.toFixed(1)}s]\n${'═'.repeat(30)}\n`;
+      out += s._prompt + '\n\n';
+    });
+    out += '═'.repeat(50) + '\n';
+    out += 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app\n';
+    out += 'by Lý Minh Nhựt — lypro.vn';
+
+  } else if(combineFormat === 'higgsfield'){
+    out += '// HIGGSFIELD MULTI-SHOT PROMPT\n// ANNAHOUSESTUDIO by Lý Minh Nhựt\n\n';
+    shots.forEach((s, i) => {
+      out += `// ─── SEGMENT ${i+1} ───\n// Timecode: ${s.start}s–${s.end}s (${s.tg.toFixed(1)}s)\n`;
+      out += s._prompt.replace(/\n/g, '\n') + '\n\n';
+    });
+
+  } else if(combineFormat === 'veo3'){
+    out += `Cinematic video sequence — ${totalDur}s total.\n\n`;
+    shots.forEach((s, i) => {
+      const camPart = s._prompt.match(/\[CAM\](.*?)(?=\[|$)/s)?.[1]?.trim() || s.cuMay || '';
+      const subPart = s._prompt.match(/\[SUBJECT\](.*?)(?=\[|$)/s)?.[1]?.trim() || s.moTa || '';
+      out += `Shot ${i+1} (${s.tg.toFixed(1)}s): ${camPart} ${subPart}\n`;
+    });
+    out += `\nTotal: ${nShots} shots, ${totalDur}s. No AI smoothing. Cinematic color grade.`;
+
+  } else { // clean
+    shots.forEach((s, i) => {
+      out += `SHOT ${i+1} [${s.start}s–${s.end}s]\n${s._prompt}\n\n`;
+    });
+  }
+
+  combineKetQua = out;
+  body.textContent = out;
+  const metaEl = document.getElementById('combine-meta');
+  if(metaEl) metaEl.textContent = `${nShots} shot · ${totalDur}s · ${out.split(/\s+/).filter(Boolean).length} từ · ${out.length} ký tự`;
+}
+
+function copyCombine(){
+  if(!combineKetQua){ alert('Chưa có sequence prompt.'); return; }
+  robustCopy(combineKetQua, document.getElementById('btn-cp-combine'));
+}
+
+function apDungCombineVaoOutput(){
+  if(!combineKetQua){ alert('Chưa có sequence prompt.'); return; }
+  kqSD = combineKetQua;
+  sw('out');
+  hienKQ(kqSD, 'sd', '🔗 Multi-Shot Sequence (EN)');
+}
+
 
 // ===== LỜI THOẠI =====
 const LOAI_T=['Thoại thường','Nội tâm (V.O.)','Giọng ngoài (O.S.)','Thì thầm','Độc thoại'];
