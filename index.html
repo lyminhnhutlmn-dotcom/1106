@@ -385,6 +385,63 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <!-- BỐ CỤC NHÂN VẬT -->
     <div style="margin-bottom:10px">
       <div class="lbl" style="margin-bottom:6px"><span class="tag">Bố cục nhân vật</span></div>
+    <!-- GỢI Ý HÀNH ĐỘNG THEO CẢM XÚC -->
+    <div style="margin-bottom:10px">
+      <div class="lbl" style="margin-bottom:6px"><span class="tag" style="border-color:#f59e0b;color:#fbbf24">💡 Gợi ý hành động theo cảm xúc</span></div>
+      <div class="chips" style="flex-wrap:wrap;gap:4px">
+        <span class="chip s" onclick="goiYHanhDong('buon')" style="cursor:pointer;border-color:#3b82f6">😢 Buồn</span>
+        <span class="chip s" onclick="goiYHanhDong('gian')" style="cursor:pointer;border-color:#ef4444">😡 Tức giận</span>
+        <span class="chip s" onclick="goiYHanhDong('lo')" style="cursor:pointer;border-color:#f59e0b">😰 Lo lắng</span>
+        <span class="chip s" onclick="goiYHanhDong('yeu')" style="cursor:pointer;border-color:#ec4899">🥰 Yêu thương</span>
+        <span class="chip s" onclick="goiYHanhDong('so')" style="cursor:pointer;border-color:#8b5cf6">😱 Sợ hãi</span>
+        <span class="chip s" onclick="goiYHanhDong('quyet')" style="cursor:pointer;border-color:#10b981">💪 Kiên quyết</span>
+        <span class="chip s" onclick="goiYHanhDong('met')" style="cursor:pointer;border-color:#6b7280">😮‍💨 Mệt mỏi</span>
+        <span class="chip s" onclick="goiYHanhDong('vui')" style="cursor:pointer;border-color:#fbbf24">😊 Vui vẻ</span>
+      </div>
+      <div id="goiy-hd-result" style="display:none;margin-top:6px;padding:8px 10px;background:#0a0d18;border:1px solid #1a2a4a;border-radius:7px;font-size:10px;line-height:1.8;color:#93c5fd;white-space:pre-wrap"></div>
+    </div>
+
+    <!-- BẢNG MICRO-EXPRESSION -->
+    <div style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+        <div class="lbl"><span class="tag" style="border-color:#a78bfa;color:#c4b5fd">🎭 Micro-Expression — click để dán</span></div>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;font-size:9px">
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#60a5fa">Mắt: nheo lại</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#60a5fa">Mắt: mở to</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#60a5fa">Mắt: nhìn xuống 3s</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#60a5fa">Mắt: không chớp 5s</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#60a5fa">Mắt: nhìn sang trái</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#818cf8">Mày: nhíu lại</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#818cf8">Mày: 1 bên nhướn</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#818cf8">Mày: nhướn cả 2</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#a78bfa">Miệng: mím chặt</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#a78bfa">Miệng: hé mở</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#a78bfa">Miệng: cắn môi dưới</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#a78bfa">Miệng: góc miệng hạ</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#c084fc">Hàm: siết chặt</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#c084fc">Mũi: hít sâu</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#c084fc">Mũi: cánh mũi phập</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#f472b6">Nuốt nước bọt 1 lần</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#f472b6">Thở ra bằng miệng</span>
+        <span class="chip s" onclick="danHD(this)" style="cursor:pointer;border-color:#f472b6">Nhịp thở ngắt quãng</span>
+      </div>
+    </div>
+
+    <!-- AI GỢI Ý HÀNH ĐỘNG TỪ TÌNH HUỐNG -->
+    <div style="margin-bottom:10px">
+      <div class="lbl" style="margin-bottom:4px"><span class="tag" style="border-color:#10b981;color:#34d399">✨ AI Gợi Ý Hành Động Từ Tình Huống</span></div>
+      <div style="display:flex;gap:5px">
+        <input id="ai-hd-input" type="text" placeholder="VD: người phụ nữ nhận tin xấu qua điện thoại..." style="flex:1;font-size:11px;padding:5px 8px">
+        <button onclick="aiGoiYHanhDong()" style="font-size:10px;padding:5px 12px;border-radius:6px;border:none;background:#10b981;color:#000;cursor:pointer;font-weight:500;white-space:nowrap">✨ AI gợi ý</button>
+      </div>
+      <div id="ai-hd-result" style="display:none;margin-top:6px;padding:8px 10px;background:#050f0a;border:1px solid #16a34a;border-radius:7px">
+        <div id="ai-hd-text" style="font-size:10px;line-height:1.8;color:#86efac;white-space:pre-wrap"></div>
+        <button onclick="danAIHD()" class="btn-i" style="margin-top:5px;font-size:9px;border-color:#10b981;color:#10b981">→ Dán vào NV1</button>
+      </div>
+    </div>
+
+
       <div class="chips" style="flex-wrap:wrap;gap:5px">
         <span class="chip s" data-g="char_layout">1 người — trung tâm frame</span>
         <span class="chip s" data-g="char_layout">1 người — 1/3 trái</span>
@@ -6900,6 +6957,75 @@ function xoaMasterLock(){
 function layMasterLockBlock(){
   if(!masterLockText) return '';
   return masterLockText + String.fromCharCode(10,10);
+}
+
+
+// ===== GỢI Ý HÀNH ĐỘNG =====
+const HANH_DONG_MAP = {
+  buon: '😢 BUỒN:\n• Ngón tay vuốt chậm mép ly — không nhấc, chỉ vuốt qua lại\n• Mắt nhìn xuống không focus, mí mắt nặng, chớp chậm 1 lần / 3 giây\n• Vai hạ 3cm so với bình thường, lưng hơi cong\n• Nhịp thở dài 4 giây hít vào — thở ra bằng miệng chậm\n• Góc miệng hạ xuống 2mm, môi hơi mím\n• Tay kia đặt trên đùi, ngón cái xoa nhẹ vải quần',
+  gian: '😡 TỨC GIẬN:\n• Tay nắm chặt — gân cổ tay nổi rõ, đốt ngón trắng bệch\n• Hàm siết lại — xương hàm nổi góc cạnh, cơ thái dương co\n• Mắt nhìn thẳng không chớp 5 giây, đồng tử thu nhỏ\n• Thở nhanh qua mũi — cánh mũi phập phồng\n• Vai căng lên 2cm, cổ cứng\n• Bước chân nặng hơn bình thường, gót chạm sàn mạnh',
+  lo: '😰 LO LẮNG:\n• Ngón trỏ gõ nhịp 3 lần trên bàn — nhịp không đều\n• Mắt nhìn sang trái rồi xuống, chớp nhanh 2-3 lần liên tiếp\n• Nuốt nước bọt 1 lần — cổ họng chuyển động thấy rõ\n• Vai co lên 1cm, tay kia ôm khuỷu tay\n• Môi hé mở rồi mím lại — như muốn nói nhưng không\n• Chân rung nhẹ, đầu gối lay 2mm',
+  yeu: '🥰 YÊU THƯƠNG:\n• Tay chạm nhẹ má đối phương — ngón giữa và áp út, áp lực 0\n• Mắt nhìn vào mắt — đồng tử giãn, mí dưới nâng nhẹ (nụ cười mắt)\n• Đầu nghiêng 5° sang trái, cổ lộ ra\n• Nhịp thở chậm đều — ngực nâng lên hạ xuống nhịp nhàng\n• Miệng hé cười — chỉ góc phải lên 3mm trước, rồi cả 2 góc\n• Ngón cái xoa nhẹ da — chuyển động tròn 1cm',
+  so: '😱 SỢ HÃI:\n• Mắt mở to — lòng trắng nhìn thấy rõ phía trên đồng tử\n• Vai co lên gần tai — cổ rụt lại\n• Tay giơ lên ngang ngực — lòng bàn tay hướng ra ngoài (phản xạ tự vệ)\n• Lùi lại 1 bước — trọng tâm dồn về gót\n• Hơi thở ngắt quãng — hít ngắn, thở ngắn, liên tục\n• Ngón tay run nhẹ — biên độ 1-2mm',
+  quyet: '💪 KIÊN QUYẾT:\n• Đứng thẳng — vai mở rộng, ngực hướng thẳng về phía trước\n• Mắt nhìn thẳng — không nhìn tránh, không chớp khi nói\n• Hàm hơi nâng — cằm lên 3°, cổ thẳng\n• Tay đặt phẳng trên bàn — ngón xòe, áp lực đều\n• Bước chân chắc chắn — đặt cả bàn chân cùng lúc, không do dự\n• Thở đều sâu — 3 giây hít, 3 giây thở, qua mũi',
+  met: '😮‍💨 MỆT MỎI:\n• Vai xệ xuống 4cm — trọng lực kéo toàn thân\n• Mắt nửa nhắm — mí trên che 1/3 đồng tử\n• Tay chống cằm — khuỷu tay trên bàn, đầu nặng 80% lên tay\n• Thở dài 1 lần — hít 2 giây, thở ra 5 giây bằng miệng\n• Ngón tay buông lỏng — không nắm, không mở, rũ tự nhiên\n• Lưng cong — đốt sống cổ nghiêng về trước 10°',
+  vui: '😊 VUI VẺ:\n• Miệng cười — cả 2 góc nâng, răng trên lộ 4-6 cái\n• Mắt nheo — nếp nhăn đuôi mắt (cười thật), mí dưới nâng\n• Vai nhẹ nhõm — hạ tự nhiên, không căng\n• Tay vung nhẹ khi nói — cổ tay linh hoạt, ngón mở\n• Đầu nghiêng nhẹ 3° khi cười, gật nhẹ\n• Bước chân nhẹ — mũi chân chạm trước, nhún nhẹ'
+};
+
+function goiYHanhDong(emotion){
+  const el = document.getElementById('goiy-hd-result');
+  if(!el) return;
+  const text = HANH_DONG_MAP[emotion] || '';
+  if(text){
+    el.style.display = 'block';
+    el.textContent = text;
+  }
+}
+
+function danHD(chip){
+  const text = chip.textContent.replace(/^(Mắt|Mày|Miệng|Hàm|Mũi): /, '');
+  const ta = document.getElementById('action-desc');
+  if(ta){
+    ta.value = (ta.value ? ta.value + ', ' : '') + text;
+    ta.focus();
+    capNhat();
+  }
+  // Visual feedback
+  chip.style.background = '#1a2a4a';
+  setTimeout(() => { chip.style.background = ''; }, 800);
+}
+
+async function aiGoiYHanhDong(){
+  const input = gVal('ai-hd-input');
+  if(!input){ alert('Nhập tình huống trước.'); return; }
+  const wrap = document.getElementById('ai-hd-result');
+  const text = document.getElementById('ai-hd-text');
+  if(wrap) wrap.style.display = 'block';
+  if(text) text.textContent = 'ANNAHOUSESTUDIO dang phan tich...';
+
+  const system = 'You are ANNAHOUSESTUDIO AI — a cinematic action choreographer. Given a situation, write DETAILED physical actions for the character in Vietnamese. For EACH action include: exact body part, speed, direction, distance/angle. Include micro-expressions (specific facial muscles), breathing pattern, and posture changes. Format as bullet points. Write 6-8 actions that tell the emotion through physics only — NEVER name the emotion directly. Output ONLY the action list.';
+
+  let acc = '';
+  try{
+    await goiClaude(system, 'Tình huống: ' + input + '\n\nViết hành động chi tiết cho nhân vật:', (chunk) => {
+      acc += chunk;
+      if(text) text.textContent = acc;
+    });
+  }catch(e){
+    if(text) text.textContent = 'Lỗi: ' + e.message;
+  }
+}
+
+function danAIHD(){
+  const text = document.getElementById('ai-hd-text');
+  if(!text) return;
+  const ta = document.getElementById('action-desc');
+  if(ta){
+    ta.value = (ta.value ? ta.value + '\n\n' : '') + text.textContent;
+    capNhat();
+    const btn = document.querySelector('[onclick="danAIHD()"]');
+    if(btn){ const o=btn.textContent; btn.textContent='✅ Đã dán!'; setTimeout(()=>btn.textContent=o,2000); }
+  }
 }
 
 // ===== INIT =====
