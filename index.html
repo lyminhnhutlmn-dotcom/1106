@@ -365,6 +365,37 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <div><div class="lbl"><span class="lbl-tag" data-en="Specific location">Địa điểm cụ thể</span></div><input id="location" type="text" placeholder="HÀNH LANG TRẮNG VÔ TẬN / STUDIO TRẮNG / SA MẠC NƯỚC / RỪNG CỔ ĐẠI..." oninput="capNhat()"></div>
     <div><div class="lbl"><span class="lbl-tag" data-en="Genre">Thể loại</span></div><div class="chips"><span class="chip s" data-g="genre">Khoa học viễn tưởng</span><span class="chip s" data-g="genre">Noir bóng tối</span><span class="chip s" data-g="genre">Tình cảm</span><span class="chip s" data-g="genre">Kinh dị</span><span class="chip s" data-g="genre">Hành động</span><span class="chip s" data-g="genre">Cổ trang</span><span class="chip s" data-g="genre">Tâm lý</span><span class="chip s" data-g="genre" data-en="Product commercial">Quảng cáo sản phẩm</span><span class="chip s" data-g="genre">Kiến trúc / Nội thất</span></div></div>
     <div><div class="lbl"><span class="lbl-tag" data-en="Space description">Mô tả không gian</span></div><textarea id="scene-desc" rows="3" placeholder="Hành lang trắng vô tận... / Studio tối với nền trắng sạch... / Đô thị cyberpunk đêm mưa..." oninput="capNhat()"></textarea></div>
+    <!-- PROMPT BỐI CẢNH TRỰC TIẾP -->
+    <div style="margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="lbl"><span class="lbl-tag" data-en="Scene Prompt (direct)">Prompt Bối Cảnh</span></div>
+        <button onclick="taoPromptBoiCanh()" style="font-size:10px;padding:3px 10px;border-radius:5px;border:none;background:var(--gold);color:#000;cursor:pointer;font-weight:500">✨ Tạo từ AI</button>
+      </div>
+      <textarea id="scene-prompt-direct" rows="5" placeholder="Mô tả bối cảnh chi tiết bằng tiếng Anh — hoặc nhấn ✨ Tạo từ AI...
+VD: Dark kitchen interior at night, single overhead pendant lamp 2700K casting warm circle of light on granite countertop..." oninput="capNhat()" style="font-size:11px;resize:vertical"></textarea>
+    </div>
+
+    <!-- HÀNH ĐỘNG CHI TIẾT NHÂN VẬT -->
+    <div style="margin-bottom:10px;background:#0a0d18;border:1px solid #1a2a4a;border-radius:9px;padding:10px 12px">
+      <div class="lbl" style="margin-bottom:8px"><span class="lbl-tag" style="border-color:#60a5fa;color:#60a5fa" data-en="Character Actions">🎭 Hành Động Nhân Vật</span></div>
+
+      <div style="margin-bottom:8px">
+        <div style="font-size:10px;color:#60a5fa;margin-bottom:3px">Nhân vật 1</div>
+        <textarea id="action-nv1" rows="4" placeholder="Mô tả hành động chi tiết — bộ phận cơ thể + tốc độ + cảm xúc qua vật lý
+VD: Tay trái đặt chậm lên mặt bàn, ngón trỏ gõ nhịp 1 lần rồi dừng. Vai phải hạ 2cm. Mắt nhìn xuống ly cà phê 3 giây, không chớp..." oninput="capNhat()" style="font-size:11px;resize:vertical"></textarea>
+      </div>
+
+      <div style="margin-bottom:8px">
+        <div style="font-size:10px;color:#60a5fa;margin-bottom:3px">Nhân vật 2</div>
+        <textarea id="action-nv2" rows="4" placeholder="Hành động nhân vật 2..." oninput="capNhat()" style="font-size:11px;resize:vertical"></textarea>
+      </div>
+
+      <div>
+        <div style="font-size:10px;color:#60a5fa;margin-bottom:3px">Nhân vật 3 (nếu có)</div>
+        <textarea id="action-nv3" rows="3" placeholder="Hành động nhân vật 3..." oninput="capNhat()" style="font-size:11px;resize:vertical"></textarea>
+      </div>
+    </div>
+
     <div><div class="lbl"><span class="lbl-tag" data-en="Weather / Environment">Thời tiết / Môi trường</span></div><div class="chips"><span class="chip" data-g="weather">Trời trong xanh</span><span class="chip" data-g="weather">Mưa lớn</span><span class="chip" data-g="weather">Sương mù dày</span><span class="chip" data-g="weather">Bão tuyết</span><span class="chip" data-g="weather">Ngập khói</span><span class="chip" data-g="weather">Không gian vô trùng</span><span class="chip" data-g="weather">Bụi vàng bay</span><span class="chip" data-g="weather">Chân không / Vũ trụ</span></div></div>
   </div>
 </div>
@@ -2042,6 +2073,22 @@ function taoVI(){
     L.push('');
   }
   if(hd){L.push('[HÀNH ĐỘNG]');L.push(hd+'.');L.push('');}
+  // Scene prompt direct
+  const scenePromptDirect = gVal('scene-prompt-direct');
+  if(scenePromptDirect){ L.push('[PROMPT BỐI CẢNH]'); L.push(scenePromptDirect); L.push(''); }
+
+  // Character actions
+  const aNV1 = gVal('action-nv1');
+  const aNV2 = gVal('action-nv2');
+  const aNV3 = gVal('action-nv3');
+  if(aNV1||aNV2||aNV3){
+    L.push('[HÀNH ĐỘNG NHÂN VẬT]');
+    if(aNV1){ L.push('Nhân vật 1:'); L.push(aNV1); }
+    if(aNV2){ L.push('Nhân vật 2:'); L.push(aNV2); }
+    if(aNV3){ L.push('Nhân vật 3:'); L.push(aNV3); }
+    L.push('');
+  }
+
   if(mt||MM.weather.length||SS.genre){L.push('[BỐI CẢNH]');if(SS.genre)L.push('Thể loại: '+SS.genre+'.');if(mt)L.push(mt);if(MM.weather.length)L.push('Thời tiết: '+MM.weather.join(', ')+'.');L.push('');}
   if(as||SS.light_setup||MM.light_color.length){L.push('[ÁNH SÁNG]');if(SS.light_setup)L.push('Bố cục: '+SS.light_setup+'.');if(MM.light_color.length)L.push('Màu: '+MM.light_color.join(', ')+'.');if(SS.pal)L.push('Bảng màu: '+SS.pal+'.');if(as)L.push(as);L.push('');}
   const cam=[];if(SS.shot_size)cam.push(SS.shot_size);if(SS.movement)cam.push(SS.movement);if(SS.angle)cam.push(SS.angle);if(SS.lens)cam.push(SS.lens);if(SS.dof)cam.push(SS.dof);
@@ -5996,6 +6043,39 @@ function taoKBShotSetup(n){
         </div>
       </div>
     </div>`).join('');
+}
+
+
+// ===== TẠO PROMPT BỐI CẢNH TỪ AI =====
+async function taoPromptBoiCanh(){
+  const location = gVal('location') || '';
+  const sceneDesc = gVal('scene-desc') || '';
+  const lighting = gVal('lighting-desc') || '';
+  const timeofday = SS.timeofday || '';
+  const genre = SS.genre || '';
+  if(!location && !sceneDesc){ alert('Điền địa điểm hoặc mô tả không gian trước.'); return; }
+
+  const el = document.getElementById('scene-prompt-direct');
+  if(el) el.value = '⏳ ANNAHOUSESTUDIO đang tạo prompt bối cảnh...';
+
+  const system = 'You are a cinematic production designer. Write a detailed scene/environment prompt in English for Seedance/Higgsfield AI video. Include: location type, spatial dimensions, surface materials, color temperature, lighting sources, atmospheric elements, depth layers. Output ONLY the prompt, no explanation.';
+  const userMsg = `Create a scene prompt for:
+Location: ${location}
+Description: ${sceneDesc}
+Time of day: ${timeofday}
+Genre: ${genre}
+Lighting: ${lighting}`;
+
+  let acc = '';
+  try{
+    await goiClaude(system, userMsg, (chunk)=>{
+      acc += chunk;
+      if(el) el.value = acc;
+    });
+    capNhat();
+  }catch(e){
+    if(el) el.value = '❌ ' + e.message;
+  }
 }
 
 // ===== INIT =====
