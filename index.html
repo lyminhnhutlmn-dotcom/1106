@@ -1416,7 +1416,19 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
     <div id="char-img-thumb" style="display:none;margin-bottom:6px"></div>
     <div id="char-img-lock-status" style="font-size:10px;color:var(--muted)"></div>
+  </div
+  <!-- NHÂN VẬT PHỤ -->
+  <div style="background:#0d0016;border:1px solid #6d28d9;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:500;color:#c084fc;margin-bottom:3px">👥 Nhân Vật Phụ — Upload Ảnh → AI Viết Lock</div>
+    <div style="font-size:9.5px;color:var(--muted);margin-bottom:10px">Thêm nhân vật phụ — AI viết prompt nhất quán cho từng người, cùng format với nhân vật chính</div>
+
+    <div id="nv-phu-list"></div>
+
+    <button onclick="themNVPhu()" style="font-size:10px;padding:5px 12px;border-radius:6px;border:1px dashed #6d28d9;background:transparent;color:#c084fc;cursor:pointer;font-family:'IBM Plex Mono',monospace">
+      ➕ Thêm nhân vật phụ
+    </button>
   </div>
+>
 
 
   <!-- NHÂN VẬT CHÍNH -->
@@ -1690,6 +1702,70 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
 <!-- ===== XUẤT PROMPT ===== -->
 <div class="pane" id="p-out">
+
+  <!-- MASTER LOCK -->
+  <div style="background:linear-gradient(135deg,#0d0a1a,#1a0a10);border:1px solid #f59e0b;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#f59e0b">🔗 MASTER LOCK — Đồng Nhất Toàn Bộ</div>
+        <div style="font-size:9.5px;color:var(--muted);margin-top:2px">Gộp tất cả Lock thành 1 block cố định — tự động dán vào đầu mọi prompt</div>
+      </div>
+      <div style="display:flex;gap:5px">
+        <button onclick="taoMasterLock()" style="font-size:10px;padding:5px 14px;border-radius:6px;border:none;background:#f59e0b;color:#000;cursor:pointer;font-weight:600;font-family:'IBM Plex Mono',monospace">⚡ Tạo Master Lock</button>
+        <button onclick="xoaMasterLock()" style="font-size:10px;padding:5px 10px;border-radius:6px;border:1px solid #78350f;background:transparent;color:#f59e0b;cursor:pointer">✕ Xóa</button>
+      </div>
+    </div>
+
+    <!-- Wardrobe -->
+    <div style="margin-bottom:8px">
+      <div style="font-size:10px;color:#fb923c;margin-bottom:3px;font-weight:500">👔 Wardrobe Lock — Trang phục</div>
+      <textarea id="wardrobe-lock" rows="3" placeholder="Mô tả trang phục cố định...&#10;VD: NV1: Cream knit sweater, dark jeans, bare feet&#10;NV2: Black leather jacket, white tee, boots" oninput="capNhat()" style="font-size:10px;resize:vertical"></textarea>
+    </div>
+
+    <!-- Lighting Direction -->
+    <div style="margin-bottom:8px">
+      <div style="font-size:10px;color:#fbbf24;margin-bottom:3px;font-weight:500">💡 Lighting Lock — Hướng sáng cố định</div>
+      <div class="chips" style="flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <span class="chip s" data-g="light_lock">Key light upper-left 45°</span>
+        <span class="chip s" data-g="light_lock">Key light upper-right 45°</span>
+        <span class="chip s" data-g="light_lock">Backlit — rim from behind</span>
+        <span class="chip s" data-g="light_lock">Top down — overhead</span>
+        <span class="chip s" data-g="light_lock">Side light — 90° left</span>
+        <span class="chip s" data-g="light_lock">Natural window — left</span>
+      </div>
+      <textarea id="lighting-lock" rows="2" placeholder="Bổ sung: nhiệt độ Kelvin, tỷ lệ sáng/tối, nguồn sáng thực..." oninput="capNhat()" style="font-size:10px;resize:vertical"></textarea>
+    </div>
+
+    <!-- Props -->
+    <div style="margin-bottom:8px">
+      <div style="font-size:10px;color:#a3e635;margin-bottom:3px;font-weight:500">🪑 Props Lock — Đạo cụ quan trọng</div>
+      <textarea id="props-lock" rows="2" placeholder="VD: Ceramic coffee mug (white, chipped rim), wooden spoon (dark walnut, worn)..." oninput="capNhat()" style="font-size:10px;resize:vertical"></textarea>
+    </div>
+
+    <!-- Constraints -->
+    <div style="margin-bottom:8px">
+      <div style="font-size:10px;color:#f87171;margin-bottom:3px;font-weight:500">⛔ Constraints Lock — Ràng buộc kỹ thuật</div>
+      <div class="chips" style="flex-wrap:wrap;gap:4px;margin-bottom:4px">
+        <span class="chip s" data-g="constraint_lock">No AI smoothing</span>
+        <span class="chip s" data-g="constraint_lock">No extra fingers</span>
+        <span class="chip s" data-g="constraint_lock">No warped faces</span>
+        <span class="chip s" data-g="constraint_lock">No texture swimming</span>
+        <span class="chip s" data-g="constraint_lock">No color cast shifts</span>
+        <span class="chip s" data-g="constraint_lock">Consistent light direction</span>
+        <span class="chip s" data-g="constraint_lock">Same wardrobe throughout</span>
+        <span class="chip s" data-g="constraint_lock">Continuous character identity</span>
+      </div>
+    </div>
+
+    <!-- Master Lock Preview -->
+    <div id="master-lock-preview" style="display:none;background:#050508;border:1px solid #f59e0b;border-radius:7px;padding:10px;margin-top:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
+        <span style="font-size:10px;color:#f59e0b;font-weight:500">🔗 MASTER LOCK BLOCK</span>
+        <button onclick="robustCopy(document.getElementById('master-lock-text').textContent)" class="btn-i" style="font-size:9px;border-color:#f59e0b;color:#f59e0b">⊕ Copy</button>
+      </div>
+      <div id="master-lock-text" style="font-size:10px;line-height:1.7;white-space:pre-wrap;color:#fcd34d;max-height:200px;overflow-y:auto"></div>
+    </div>
+  </div>
   <div class="arow" style="margin-bottom:11px">
     <button class="btn-p" onclick="taoVI()" id="nut-tao-vi">🇻🇳 Tạo Prompt Tiếng Việt</button>
     <button class="btn-s" onclick="luuProject()" title="Lưu toàn bộ project ra file JSON + lưu vào trình duyệt">💾 Lưu Project</button>
@@ -2276,6 +2352,17 @@ function taoVI(){
     L.push(charPromptText);
     L.push('');
   }
+  // Nhân vật phụ locks
+  if(nvPhuList && nvPhuList.length){
+    nvPhuList.forEach(nv => {
+      if(nv.lockText){
+        L.push('[CHARACTER LOCK — ' + nv.name.toUpperCase() + ']');
+        L.push(nv.lockText);
+        L.push('');
+      }
+    });
+  }
+
 
   L.push('[Tiêu đề cảnh]');
   L.push([SS.inex||'TRONG NHÀ',dd||'KHÔNG GIAN',SS.timeofday||''].filter(Boolean).join(' — '));L.push('');
@@ -2362,8 +2449,9 @@ function taoVI(){
   if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';L.push(d.trim()||'(Chưa mô tả)');L.push('');});}
   kqVI=L.join('\n');kqSD='';kqCG='';
   const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
+  const _ml = layMasterLockBlock();
   const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
-  kqVI = _hdr + kqVI + _ftr;
+  kqVI = _hdr + _ml + kqVI + _ftr;
     if(!licenseValid){
     kqVI += '\n\n// ANNAHOUSESTUDIO Cinematic Prompt Builder · annahousestudio.com';
   }
@@ -2470,8 +2558,9 @@ function taoSD(){
   L.push('[OUTPUT]');L.push(`Duration: ${selDuration}s. Resolution: 720p. ${selPlatform?'Platform: '+selPlatform.split(' ')[0]+'.':''}`);
   kqSD=L.join('\n');kqCG='';
   const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
+  const _ml = layMasterLockBlock();
   const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
-  kqSD = _hdr + kqSD + _ftr;
+  kqSD = _hdr + _ml + kqSD + _ftr;
   hienKQ(kqSD,'sd','🎬 Seedance Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Dán trực tiếp vào ô prompt Seedance 2.0 trên Higgsfield.';
   document.getElementById('ghi-chu').style.display='block';
@@ -2528,8 +2617,9 @@ function taoCG(){
   L.push(`Render: ${selRenderStyle?selRenderStyle.split(':')[0]:'Photorealistic CGI'}. Duration: ${dur}. Frame rate: ${fps}. Aspect ratio: 16:9 widescreen. This sequence should showcase exceptional CGI craft — every material, lighting interaction, and camera motion should be production-quality.`);
   kqCG=L.join('\n');kqSD='';
   const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
+  const _ml = layMasterLockBlock();
   const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
-  kqCG = _hdr + kqCG + _ftr;
+  kqCG = _hdr + _ml + kqCG + _ftr;
   hienKQ(kqCG,'cg','🎨 3D CGI Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Prompt tối ưu cho Seedance 3D CGI render mode trên Higgsfield.';
   document.getElementById('ghi-chu').style.display='block';
@@ -6617,6 +6707,199 @@ async function phanTichAnhBoiCanh(input){
     if(status) status.innerHTML = '<span style="color:var(--red)">❌ ' + e.message + '</span>';
   }
   input.value = '';
+}
+
+
+// ===== NHÂN VẬT PHỤ =====
+let nvPhuList = []; // [{id, name, lockText, imgSrc}]
+let nvPhuId = 0;
+
+function themNVPhu(){
+  nvPhuId++;
+  const id = nvPhuId;
+  nvPhuList.push({id, name: 'Nhân vật phụ ' + id, lockText: '', imgSrc: ''});
+  veNVPhuList();
+}
+
+function veNVPhuList(){
+  const wrap = document.getElementById('nv-phu-list');
+  if(!wrap) return;
+  wrap.innerHTML = nvPhuList.map((nv, i) => `
+    <div style="background:#1a0a2e;border:1px solid #4c1d95;border-radius:8px;padding:10px;margin-bottom:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
+        <input type="text" value="${nv.name}" onchange="nvPhuList[${i}].name=this.value" style="font-size:11px;background:transparent;border:1px solid #4c1d95;color:#c084fc;padding:3px 8px;border-radius:5px;font-weight:500;width:160px">
+        <div style="display:flex;gap:5px">
+          <label style="font-size:9px;padding:3px 8px;border-radius:5px;border:none;background:#6d28d9;color:#fff;cursor:pointer">
+            📎 Upload ảnh
+            <input type="file" accept="image/*" style="display:none" onchange="phanTichAnhNVPhu(${nv.id}, this)">
+          </label>
+          <button onclick="xoaNVPhu(${nv.id})" style="font-size:9px;padding:3px 8px;border-radius:5px;border:1px solid #ef4444;background:transparent;color:#ef4444;cursor:pointer">✕</button>
+        </div>
+      </div>
+      <div id="nv-phu-thumb-${nv.id}" style="display:${nv.imgSrc?'block':'none'};margin-bottom:5px">
+        ${nv.imgSrc ? '<img src="'+nv.imgSrc+'" style="max-width:80px;max-height:80px;border-radius:6px;border:2px solid #6d28d9">' : ''}
+      </div>
+      <div id="nv-phu-status-${nv.id}" style="font-size:9px;color:var(--muted);margin-bottom:4px">${nv.lockText ? '✅ Đã có Lock Prompt' : 'Chưa upload ảnh'}</div>
+      <textarea id="nv-phu-lock-${nv.id}" rows="4" placeholder="Lock Prompt nhân vật phụ — upload ảnh hoặc viết thủ công..." style="font-size:10px;resize:vertical" onchange="nvPhuList[${i}].lockText=this.value">${nv.lockText}</textarea>
+      <div style="display:flex;gap:5px;margin-top:4px">
+        <button onclick="robustCopy(document.getElementById('nv-phu-lock-${nv.id}').value)" class="btn-i" style="font-size:9px">⊕ Copy</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function xoaNVPhu(id){
+  nvPhuList = nvPhuList.filter(nv => nv.id !== id);
+  veNVPhuList();
+}
+
+async function phanTichAnhNVPhu(id, input){
+  const nv = nvPhuList.find(n => n.id === id);
+  if(!nv) return;
+  const idx = nvPhuList.indexOf(nv);
+  const status = document.getElementById('nv-phu-status-' + id);
+  const thumb = document.getElementById('nv-phu-thumb-' + id);
+
+  try{
+    const dataUrl = await _docAnhBase64(input, 1024);
+    nv.imgSrc = dataUrl;
+    if(thumb){
+      thumb.style.display = 'block';
+      thumb.innerHTML = '<img src="' + dataUrl + '" style="max-width:80px;max-height:80px;border-radius:6px;border:2px solid #6d28d9">';
+    }
+    if(status) status.textContent = '🎬 ANNAHOUSESTUDIO đang phân tích nhân vật phụ...';
+
+    // Lấy character lock chính làm reference style
+    const mainLock = charPromptText || '';
+    const styleRef = mainLock ? '\n\nIMPORTANT: Match the EXACT same format, structure, and level of detail as this main character lock:\n' + mainLock.slice(0, 500) : '';
+
+    const system = 'You are ANNAHOUSESTUDIO AI. Analyze this person photo and write a [CHARACTER LOCK] prompt in English — same format as the main character. Include: apparent ethnicity and age, face shape, eye shape/color, brows, nose, lips, skin tone/texture, hair style/color/length, clothing exact colors/materials, accessories, posture. Write in the EXACT SAME FORMAT AND DETAIL LEVEL as the reference character lock below (if provided). Output ONLY the lock block.' + styleRef;
+
+    let acc = '';
+    await goiClaude(system, 'Analyze this secondary character photo. Write CHARACTER LOCK in the same format as the main character.', (chunk) => {
+      acc += chunk;
+      if(status) status.textContent = '✍️ ' + acc.length + ' ký tự...';
+    }, [dataUrl]);
+
+    nv.lockText = acc.trim();
+    const ta = document.getElementById('nv-phu-lock-' + id);
+    if(ta) ta.value = nv.lockText;
+    if(status) status.innerHTML = '<span style="color:var(--green)">✅ Lock Prompt nhân vật phụ đã tạo</span>';
+  }catch(e){
+    if(status) status.innerHTML = '<span style="color:var(--red)">❌ ' + e.message + '</span>';
+  }
+  input.value = '';
+}
+
+
+// ===== MASTER LOCK =====
+let masterLockText = '';
+
+function taoMasterLock(){
+  const NL = String.fromCharCode(10);
+  const SEP = '─'.repeat(40);
+  const parts = [];
+
+  // Character Lock chính
+  if(charPromptText){
+    parts.push('[CHARACTER LOCK — MAIN]');
+    parts.push(charPromptText);
+  }
+
+  // Nhân vật phụ
+  if(nvPhuList && nvPhuList.length){
+    nvPhuList.forEach(nv => {
+      if(nv.lockText){
+        parts.push(NL + '[CHARACTER LOCK — ' + nv.name.toUpperCase() + ']');
+        parts.push(nv.lockText);
+      }
+    });
+  }
+
+  // Wardrobe
+  const wardrobe = gVal('wardrobe-lock');
+  if(wardrobe){
+    parts.push(NL + '[WARDROBE LOCK]');
+    parts.push(wardrobe);
+  }
+
+  // Scene Lock
+  const sceneLock = gVal('scene-prompt-direct');
+  if(sceneLock){
+    parts.push(NL + '[SCENE LOCK]');
+    parts.push(sceneLock);
+  }
+
+  // Lighting Lock
+  const lightChips = (MM.light_lock||[]).join('. ');
+  const lightCustom = gVal('lighting-lock');
+  if(lightChips || lightCustom){
+    parts.push(NL + '[LIGHTING LOCK]');
+    if(lightChips) parts.push(lightChips + '.');
+    if(lightCustom) parts.push(lightCustom);
+  }
+
+  // Props Lock
+  const props = gVal('props-lock');
+  if(props){
+    parts.push(NL + '[PROPS LOCK]');
+    parts.push(props);
+  }
+
+  // Skin Lock
+  const skinLock = laySkinPromptVI();
+  if(skinLock){
+    parts.push(NL + '[SKIN LOCK]');
+    parts.push(skinLock);
+  }
+
+  // Color Grade Lock
+  if(SS.bm_profile || bmLutSelected || gVal('bm-lut-custom')){
+    parts.push(NL + '[COLOR GRADE LOCK]');
+    if(SS.bm_profile) parts.push('Camera: ' + SS.bm_profile);
+    if(bmLutSelected) parts.push('LUT: ' + bmLutSelected);
+    const bmC = gVal('bm-lut-custom');
+    if(bmC) parts.push(bmC);
+  }
+
+  // Constraints Lock
+  const constraints = (MM.constraint_lock||[]).join('. ');
+  if(constraints){
+    parts.push(NL + '[CONSTRAINTS — MANDATORY]');
+    parts.push(constraints + '.');
+    parts.push('Consistent throughout all shots. No exceptions.');
+  }
+
+  if(parts.length === 0){
+    alert('Chưa có dữ liệu nào để tạo Master Lock.\n\nĐiền ít nhất 1 trong: Nhân Vật, Bối Cảnh, Trang Phục, Ánh Sáng.');
+    return;
+  }
+
+  masterLockText = '╔══ MASTER LOCK — ANNAHOUSESTUDIO ══╗' + NL + parts.join(NL) + NL + '╚══ END MASTER LOCK ══╝';
+
+  const preview = document.getElementById('master-lock-preview');
+  const text = document.getElementById('master-lock-text');
+  if(preview) preview.style.display = 'block';
+  if(text) text.textContent = masterLockText;
+
+  // Visual feedback
+  const btn = document.querySelector('[onclick="taoMasterLock()"]');
+  if(btn){
+    const o = btn.textContent;
+    btn.textContent = '✅ Master Lock đã tạo!';
+    setTimeout(()=> btn.textContent = o, 2500);
+  }
+}
+
+function xoaMasterLock(){
+  masterLockText = '';
+  const preview = document.getElementById('master-lock-preview');
+  if(preview) preview.style.display = 'none';
+}
+
+function layMasterLockBlock(){
+  if(!masterLockText) return '';
+  return masterLockText + String.fromCharCode(10,10);
 }
 
 // ===== INIT =====
