@@ -3172,32 +3172,45 @@ async function phanTichKichBan(){
     ? 'Viết phân tích bằng tiếng Việt, prompt nháp bằng tiếng Anh.'
     : 'Viết toàn bộ bằng tiếng Việt, riêng các thuật ngữ điện ảnh giữ tiếng Anh.';
 
-  const systemPrompt = `Bạn là chuyên gia quay phim điện ảnh và AI video generation, chuyên tư vấn breakdown kịch bản thành các shot quay cho Seedance 2.0 on Higgsfield.
-
-Nhiệm vụ: Phân tích kịch bản và đề xuất shot breakdown + prompt nháp.
+  const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản điện ảnh và tạo shot breakdown cho Seedance 2.0 / Higgsfield.
 
 ${langInstruct}
 
-Quy tắc xuất kết quả:
-1. PHÂN TÍCH KỊCH BẢN (2-3 dòng): Tóm tắt ý đồ, cảm xúc chính, thách thức kỹ thuật.
-2. ĐỀ XUẤT SHOT BREAKDOWN: ${shotInstruct}
-3. Với mỗi shot, viết đầy đủ theo format:
+NHIỆM VỤ: Phân tích kịch bản thành shot breakdown chi tiết với HÀNH ĐỘNG CỤ THỂ từng shot.
 
-QUAN TRỌNG: Nếu thông tin "CÚ MÁY ĐÃ XÁC ĐỊNH" có trong Khung Sườn → BẮT BUỘC giữ nguyên cú máy, góc máy, tiêu cự đó. KHÔNG tự thay đổi hay đề xuất cú máy khác.
+QUY TẮC BẮT BUỘC:
+1. Mỗi shot PHẢI có hành động nhân vật rõ ràng — không được viết chung chung
+2. Hành động = động từ cụ thể + bộ phận cơ thể + tốc độ + cảm xúc đằng sau
+   VD ĐÚNG: "Tay trái đặt nhẹ lên mặt bàn, ngón trỏ gõ nhịp chậm 1 lần rồi dừng"
+   VD SAI: "nhân vật ngồi ở bàn"
+3. Micro-expression: nét mặt thay đổi như thế nào — cụ thể từng cơ
+4. Thể hiện cảm xúc qua vật lý — KHÔNG nói thẳng cảm xúc
 
-═══ SHOT [N] ═══
-⏱ Thời gian: [Xs – Ys]
-🎯 Mục đích: [Vai trò của shot trong câu chuyện]
-📷 Cú máy: [Giữ nguyên nếu đã xác định — hoặc đề xuất nếu chưa có]
-🔭 Tiêu cự: [Giữ nguyên nếu đã xác định]
-💡 Ánh sáng: [Nhiệt độ Kelvin + hướng + tỷ lệ]
-🎭 Hành động: [Mô tả chi tiết theo cú máy đã chọn]
-🎨 Cảm xúc: [Show don't tell]
+${shotInstruct}
 
-PROMPT NHÁP:
-[Viết prompt đầy đủ sẵn sàng dùng cho Seedance]
+⚠️ NẾU "CÚ MÁY ĐÃ XÁC ĐỊNH" → BẮT BUỘC giữ nguyên, KHÔNG thay đổi.
 
-4. KẾT LUẬN: Lý do chọn số shot này, gợi ý điều chỉnh.`;
+FORMAT TỪNG SHOT:
+
+═══ SỰ KIỆN [N] ═══
+⏱ Thời gian: [Xs – Ys (Zs)]
+🎯 Vai trò: [shot này phục vụ gì trong câu chuyện — 1 câu]
+📷 Cú máy: [tên cú máy — nếu đã xác định thì ghi rõ "GIỮ NGUYÊN: ..."]
+🔭 Tiêu cự: [mm — lý do chọn tiêu cự này]
+🎬 Khung hình: [ECU/CU/MCU/MS/WS/ELS — lý do]
+💡 Ánh sáng: [nhiệt độ Kelvin + hướng + tỷ lệ sáng/tối]
+
+🎭 HÀNH ĐỘNG CHI TIẾT:
+[Mô tả từng giây: ai làm gì, bộ phận nào chuyển động, tốc độ, hướng]
+[Micro-expression: cơ nào trên mặt thay đổi, mắt nhìn đâu]
+[Breathing & body: nhịp thở, độ căng vai, tư thế thay đổi thế nào]
+
+🎙 ÂM THANH/THOẠI: [nếu có]
+
+PROMPT NHÁP (EN):
+[Viết prompt tiếng Anh đầy đủ sẵn sàng dùng cho Seedance — bao gồm hành động chi tiết]
+
+4. SAU TẤT CẢ SHOTS: Ghi 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP.`;
 
   // Build Khung Sườn context
   const ksCon = [];
