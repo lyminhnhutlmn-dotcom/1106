@@ -4055,10 +4055,28 @@ Analyze the script/shot breakdown and output in this EXACT format (use these exa
 
   try{
     let _acc = '';
-    await goiClaude(systemPrompt || system || '', userMsg || userPrompt || message || '', (chunk) => {
+    const userMsg = `Phân tích bối cảnh và đạo cụ cho kịch bản sau:\n\n${noiDung}`;
+    await goiClaude(systemPrompt, userMsg, (chunk) => {
       _acc += chunk;
     });
-    result = _acc;
+    // Parse results
+    acc = _acc;
+    if(outEl){ outEl.textContent = acc; }
+    if(footEl){ footEl.style.display = ''; }
+    document.getElementById('kb-scene-stop').style.display = 'none';
+    // Parse scene and props
+    const sceneM = acc.match(/===PROMPT_BOI_CANH===([\s\S]*?)(?:===PROMPT_DAO_CU===|$)/);
+    const propsM = acc.match(/===PROMPT_DAO_CU===([\s\S]*?)$/);
+    const sceneEl2 = document.getElementById('kb-scene-prompt');
+    const propsEl2 = document.getElementById('kb-props-prompt');
+    if(sceneEl2) sceneEl2.textContent = sceneM ? sceneM[1].trim() : '';
+    if(propsEl2) propsEl2.textContent = propsM ? propsM[1].trim() : '';
+    // Fill image prompt boxes
+    const sceneImgEl = document.getElementById('kb-scene-img-prompt');
+    const propsImgEl = document.getElementById('kb-props-img-prompt');
+    if(sceneImgEl && sceneM) sceneImgEl.textContent = sceneM[1].trim().slice(0,500) + ', photorealistic, cinematic film still, 8K --ar 16:9';
+    if(propsImgEl && propsM) propsImgEl.textContent = propsM[1].trim().slice(0,500) + ', photorealistic, studio photography --ar 16:9';
+    sceneKetQua = acc;
   }catch(e){
     if(e.name!=='AbortError' && outEl) outEl.innerHTML='<span style="color:var(--red)">Lỗi: '+e.message+'</span>';
     document.getElementById('kb-scene-stop').style.display='none';
