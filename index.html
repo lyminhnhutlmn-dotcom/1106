@@ -381,7 +381,33 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <div class="fw-head" onclick="moRong('action')"><span class="fw-num">02</span><span class="fw-key" data-en="ACTION">HÀNH ĐỘNG</span><span class="fw-desc">Cụ thể, rõ ràng — không dùng từ mơ hồ</span><span class="fw-check" id="ck-action">○</span></div>
   <div class="fw-body" id="fb-action">
     <div><div class="lbl"><span class="lbl-tag" data-en="Quick add">Thêm nhanh</span></div><div class="chips"><span class="chip" data-g="action-quick">đứng bất động</span><span class="chip" data-g="action-quick">bước chậm về phía trước</span><span class="chip" data-g="action-quick">quay mặt về phía máy</span><span class="chip" data-g="action-quick">giơ tay ra</span><span class="chip" data-g="action-quick">ngồi xuống</span><span class="chip" data-g="action-quick">chạy hết tốc lực</span><span class="chip" data-g="action-quick">xoay 360°</span><span class="chip" data-g="action-quick">nổ vỡ thành mảnh</span><span class="chip" data-g="action-quick">hình thành từ hạt</span><span class="chip" data-g="action-quick">biến hình / morph</span><span class="chip" data-g="action-quick">hiện ra từ bóng tối</span><span class="chip" data-g="action-quick">ôm chặt</span></div></div>
-    <div><div class="lbl"><span class="lbl-tag" data-en="Detailed action description">Mô tả hành động chi tiết</span><span class="lbl-req"> * bắt buộc</span></div><textarea id="action-desc" rows="3" placeholder="Ví dụ: đứng hoàn toàn bất động, hai tay xuôi, nhìn thẳng không chớp mắt... / xoay 360° chậm rãi trong không khí, các mảnh bề mặt dần hiển thị từng lớp vật liệu..." oninput="capNhat()"></textarea></div>
+    
+    <!-- BỐ CỤC NHÂN VẬT -->
+    <div style="margin-bottom:10px">
+      <div class="lbl" style="margin-bottom:6px"><span class="tag">Bố cục nhân vật</span></div>
+      <div class="chips" style="flex-wrap:wrap;gap:5px">
+        <span class="chip s" data-g="char_layout">1 người — trung tâm frame</span>
+        <span class="chip s" data-g="char_layout">1 người — 1/3 trái</span>
+        <span class="chip s" data-g="char_layout">1 người — 1/3 phải</span>
+        <span class="chip s" data-g="char_layout">1 người đi trước — 1 người đi sau cách 2m</span>
+        <span class="chip s" data-g="char_layout">1 người đi trước — 1 người đi sau cách 3m</span>
+        <span class="chip s" data-g="char_layout">2 người đứng ngang — cách nhau 1m</span>
+        <span class="chip s" data-g="char_layout">2 người — đối diện nhau</span>
+        <span class="chip s" data-g="char_layout">3 người — tam giác bố cục</span>
+        <span class="chip s" data-g="char_layout">Nhóm — tụ lại gần nhau</span>
+        <span class="chip s" data-g="char_layout">Nhóm — phân tán không gian</span>
+      </div>
+    </div>
+<div><div class="lbl"><span class="lbl-tag" data-en="Detailed action description">Mô tả hành động chi tiết</span><span class="lbl-req"> * bắt buộc</span></div><textarea id="action-desc" rows="3" placeholder="Ví dụ: đứng hoàn toàn bất động, hai tay xuôi, nhìn thẳng không chớp mắt... / xoay 360° chậm rãi trong không khí, các mảnh bề mặt dần hiển thị từng lớp vật liệu..." oninput="capNhat()"></textarea></div>
+      <div style="margin-top:8px">
+        <div style="font-size:10px;color:#818cf8;margin-bottom:3px;font-weight:500">Nhân vật 2</div>
+        <textarea id="action-nv2" rows="4" placeholder="Hành động nhân vật 2 — bộ phận cơ thể + phản ứng..." oninput="capNhat()"></textarea>
+      </div>
+      <div style="margin-top:8px">
+        <div style="font-size:10px;color:#a78bfa;margin-bottom:3px;font-weight:500">Nhân vật 3 (nếu có)</div>
+        <textarea id="action-nv3" rows="3" placeholder="Hành động nhân vật 3..." oninput="capNhat()"></textarea>
+      </div>
+
   </div>
 </div>
 
@@ -440,6 +466,14 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <div><div class="lbl"><span class="lbl-tag" data-en="Specific location">Địa điểm cụ thể</span></div><input id="location" type="text" placeholder="HÀNH LANG TRẮNG VÔ TẬN / STUDIO TRẮNG / SA MẠC NƯỚC / RỪNG CỔ ĐẠI..." oninput="capNhat()"></div>
     <div><div class="lbl"><span class="lbl-tag" data-en="Genre">Thể loại</span></div><div class="chips"><span class="chip s" data-g="genre">Khoa học viễn tưởng</span><span class="chip s" data-g="genre">Noir bóng tối</span><span class="chip s" data-g="genre">Tình cảm</span><span class="chip s" data-g="genre">Kinh dị</span><span class="chip s" data-g="genre">Hành động</span><span class="chip s" data-g="genre">Cổ trang</span><span class="chip s" data-g="genre">Tâm lý</span><span class="chip s" data-g="genre" data-en="Product commercial">Quảng cáo sản phẩm</span><span class="chip s" data-g="genre">Kiến trúc / Nội thất</span></div></div>
     <div><div class="lbl"><span class="lbl-tag" data-en="Space description">Mô tả không gian</span></div><textarea id="scene-desc" rows="3" placeholder="Hành lang trắng vô tận... / Studio tối với nền trắng sạch... / Đô thị cyberpunk đêm mưa..." oninput="capNhat()"></textarea></div>
+    <div style="margin-top:10px;margin-bottom:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <div class="lbl"><span class="lbl-tag">Prompt Bối Cảnh</span></div>
+        <button onclick="taoPromptBoiCanh()" style="font-size:10px;padding:3px 10px;border-radius:5px;border:none;background:var(--gold);color:#000;cursor:pointer;font-weight:500">✨ Tạo từ AI</button>
+      </div>
+      <textarea id="scene-prompt-direct" rows="5" placeholder="Mô tả bối cảnh chi tiết bằng tiếng Anh — hoặc nhấn ✨ Tạo từ AI" oninput="capNhat()" style="font-size:11px;resize:vertical"></textarea>
+    </div>
+
     <div><div class="lbl"><span class="lbl-tag" data-en="Weather / Environment">Thời tiết / Môi trường</span></div><div class="chips"><span class="chip" data-g="weather">Trời trong xanh</span><span class="chip" data-g="weather">Mưa lớn</span><span class="chip" data-g="weather">Sương mù dày</span><span class="chip" data-g="weather">Bão tuyết</span><span class="chip" data-g="weather">Ngập khói</span><span class="chip" data-g="weather">Không gian vô trùng</span><span class="chip" data-g="weather">Bụi vàng bay</span><span class="chip" data-g="weather">Chân không / Vũ trụ</span></div></div>
   </div>
 </div>
@@ -538,6 +572,15 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         </div>
 
         <!-- DAVINCI NODE WORKFLOW -->
+        <div>
+          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+            <div class="slbl">📝 Mô tả LUT / Color tùy chỉnh</div>
+            <div id="bm-lut-selected" style="display:none;font-size:9px;color:#60a5fa;padding:2px 6px;border-radius:4px;background:#0a1520;border:1px solid #1d4ed8"></div>
+          </div>
+          <textarea id="bm-lut-custom" rows="4" placeholder="Paste LUT description hoặc mô tả màu sắc tùy chỉnh..." oninput="capNhat()" style="font-size:11px;resize:vertical"></textarea>
+          <button onclick="danBMLUTPreset()" style="margin-top:5px;font-size:10px;padding:3px 10px;border-radius:5px;border:none;background:#1d4ed8;color:#fff;cursor:pointer;font-weight:500">⚡ Dán LUT Preset</button>
+        </div>
+
         <div>
           <div class="slbl" style="margin-bottom:5px">🔧 DaVinci Node Workflow</div>
           <div class="chips">
@@ -797,7 +840,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
                 <div style="font-size:9px;color:#818cf8;margin-bottom:3px">🖼️ Prompt tạo ảnh bối cảnh (chỉnh sửa trước khi tạo)</div>
                 <div id="kb-scene-img-prompt" contenteditable="true" style="background:#050510;border:1px solid #818cf8;border-radius:7px;padding:8px;font-size:10px;line-height:1.7;white-space:pre-wrap;color:#a5b4fc;font-family:'IBM Plex Mono',monospace;min-height:40px;max-height:150px;overflow-y:auto;outline:none;cursor:text"></div>
                 <div style="display:flex;gap:5px;margin-top:4px">
-                  <button class="btn-i" onclick="taoAnhBoiCanh()" style="font-size:9px;border-color:#818cf8;color:#818cf8">🖼️ Tạo ảnh</button>
+                  
                   <button class="btn-i" onclick="robustCopy(document.getElementById('kb-scene-img-prompt').innerText)" style="font-size:9px;border-color:#818cf8;color:#818cf8">⊕ Copy prompt</button>
                 </div>
               </div>
@@ -806,7 +849,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
               <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px;flex-wrap:wrap;gap:5px">
                 <span style="font-size:11px;color:#f59e0b;font-weight:500">🪑 Prompt Đạo Cụ</span>
                 <div style="display:flex;gap:5px;flex-wrap:wrap">
-                  <button class="btn-i" onclick="taoAnhDaoCu()" style="font-size:10px;border-color:#818cf8;color:#818cf8">🖼️ Tạo ảnh đạo cụ</button>
+                  
                   <button class="btn-i" id="nut-cp-props" onclick="saoCHepPrompt('props')" style="font-size:10px;border-color:#f59e0b;color:#f59e0b">⊕ Copy</button>
                 </div>
               </div>
@@ -820,7 +863,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
                 <div style="font-size:9px;color:#818cf8;margin-bottom:3px">🖼️ Prompt tạo ảnh đạo cụ (chỉnh sửa trước khi tạo)</div>
                 <div id="kb-props-img-prompt" contenteditable="true" style="background:#050510;border:1px solid #818cf8;border-radius:7px;padding:8px;font-size:10px;line-height:1.7;white-space:pre-wrap;color:#a5b4fc;font-family:'IBM Plex Mono',monospace;min-height:40px;max-height:150px;overflow-y:auto;outline:none;cursor:text"></div>
                 <div style="display:flex;gap:5px;margin-top:4px">
-                  <button class="btn-i" onclick="taoAnhDaoCu()" style="font-size:9px;border-color:#818cf8;color:#818cf8">🖼️ Tạo ảnh</button>
+                  
                   <button class="btn-i" onclick="robustCopy(document.getElementById('kb-props-img-prompt').innerText)" style="font-size:9px;border-color:#818cf8;color:#818cf8">⊕ Copy prompt</button>
                 </div>
               </div>
@@ -1572,7 +1615,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
       <!-- NÚT TẠO -->
       <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
-        <button onclick="taoAnhNhanVat()" style="padding:8px 16px;border-radius:7px;border:none;background:#7c3aed;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">⚡ Tối ưu & Mở công cụ tạo ảnh</button>
+        
         <span id="char-img-status" style="font-size:11px;color:var(--muted)"></span>
       </div>
 
@@ -1583,10 +1626,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
           <span style="font-size:9px;color:var(--muted)">Tối đa 3 ảnh · lock khuôn mặt xuyên suốt</span>
         </div>
         <div id="char-ref-images" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:8px;min-height:20px"></div>
-        <label style="display:inline-flex;align-items:center;gap:5px;font-size:10px;padding:5px 10px;border-radius:6px;border:1px dashed #7c3aed;color:#a78bfa;cursor:pointer">
-          ➕ Thêm ảnh tham chiếu
-          <input type="file" accept="image/*" multiple style="display:none" onchange="themAnhThamChieu(this)">
-        </label>
+        
         <div style="font-size:9px;color:#5a3090;margin-top:6px;line-height:1.5">
           Khi nhấn 🖼️ Tạo ảnh AI trong Dựng Cảnh → ảnh nhân vật được gửi kèm → khuôn mặt nhất quán
         </div>
@@ -1597,7 +1637,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <div class="slbl" style="margin-bottom:6px">Prompt đã tối ưu — Copy và dán vào:</div>
         <div id="char-img-opt-prompt" style="background:var(--bg);border:1px solid #3a1a6a;border-radius:7px;padding:10px;font-size:11px;line-height:1.8;color:#a78bfa;font-family:'IBM Plex Mono',monospace;white-space:pre-wrap;max-height:150px;overflow-y:auto"></div>
         <div style="display:flex;gap:6px;margin-top:8px;flex-wrap:wrap">
-          <button class="btn-i" onclick="saoCHepImgPrompt()" style="border-color:#a78bfa;color:#a78bfa">⊕ Copy prompt</button>
           <a href="https://ideogram.ai" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #ec4899;color:#ec4899;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🌸 Ideogram</a>
           <a href="https://www.midjourney.com" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #f59e0b;color:#f59e0b;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🎨 Midjourney</a>
           <a href="https://labs.openai.com" target="_blank" style="padding:5px 10px;border-radius:6px;border:1px solid #10b981;color:#10b981;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none">🟢 DALL-E</a>
@@ -1648,7 +1687,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <button class="btn-i" id="nut-ai-imp" id="nut-imp" onclick="caiThienAI()" style="display:none;border-color:#f0a500;color:#f0a500">💡 Cải thiện</button>
         <button class="btn-i" onclick="docPrompt()">🔊 Đọc</button>
         <button class="btn-i" id="nut-cp" onclick="saoCHep()" style="display:none">⊕ Sao chép</button>
-        <button class="btn-i" id="nut-storyboard" onclick="taoAnhTuPromptCuoi()" style="display:none;border-color:#818cf8;color:#818cf8">🎨 Tạo ảnh</button>
+        
         <button class="btn-i" id="nut-json" onclick="xuatJSON()" style="display:none;border-color:#818cf8;color:#818cf8">💾 Lưu Project</button>
         <button class="btn-i" id="nut-veo3-json" onclick="xuatVeo3JSON()" style="display:none;border-color:#ec4899;color:#ec4899">🎬 Veo3 JSON</button>
         <button class="btn-i" id="nut-api-json" onclick="xuatAPIJSON()" style="display:none;border-color:#10b981;color:#10b981">⚡ API JSON</button>
@@ -1667,7 +1706,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       <div style="padding:9px 14px;background:#080814;border-bottom:1px solid #818cf8;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
         <span style="font-size:11px;color:#818cf8;font-weight:500">🎨 Ảnh Storyboard từ Prompt</span>
         <div style="display:flex;gap:5px;flex-wrap:wrap">
-          <button class="btn-i" onclick="taoAnhTuPromptCuoi()" style="font-size:10px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
+          
           <button class="btn-i" onclick="document.getElementById('final-storyboard-wrap').style.display='none'" style="font-size:10px">✕</button>
         </div>
       </div>
@@ -1675,19 +1714,12 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       <div style="padding:10px 14px;border-bottom:1px solid #2a2a3a">
         <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
           <span style="font-size:10px;color:#a78bfa">🔒 Ảnh nhân vật reference (1 ảnh chính)</span>
-          <label style="font-size:9px;padding:3px 9px;border-radius:5px;border:1px dashed #7c3aed;color:#a78bfa;cursor:pointer">
-            📎 Upload ảnh nhân vật
-            <input type="file" accept="image/*" style="display:none" onchange="uploadAnhNhanVatFinal(this)">
-          </label>
-        </div>
+          </div>
         <div id="final-nv-preview" style="display:flex;gap:6px;align-items:center">
           <span style="font-size:9px;color:#3a2050">Chưa có ảnh — upload để lock khuôn mặt nhân vật</span>
         </div>
         <!-- Hoặc dùng từ tab Nhân Vật -->
-        <button onclick="dungAnhCharRefFinal()" style="margin-top:6px;font-size:9px;padding:3px 9px;border-radius:5px;border:1px solid #7c3aed;background:transparent;color:#7c5fa0;cursor:pointer">
-          🔄 Dùng ảnh từ tab Nhân Vật
-        </button>
-      </div>
+        </div>
       <!-- Kết quả ảnh -->
       <div id="final-storyboard-img" style="padding:10px 14px"></div>
     </div>
@@ -2156,62 +2188,6 @@ function veShot(){
       </div>
 
       <!-- PROMPT TỪNG SHOT -->
-      <div id="shot-prompt-wrap-${s.id}" style="display:${s.shotPrompt?'':'none'};margin-top:8px">
-        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
-          <div class="slbl" style="color:var(--gold)">✨ Prompt Shot này</div>
-          <div style="display:flex;gap:5px">
-            <button class="btn-i" onclick="copyShot(${s.id})" style="font-size:10px;border-color:var(--green);color:var(--green)">⊕ Copy</button>
-            <button class="btn-i" onclick="xoaPromptShot(${s.id})" style="font-size:10px">✕</button>
-          </div>
-        </div>
-        <div id="shot-prompt-${s.id}" style="background:var(--bg);border:1px solid var(--gold);border-radius:7px;padding:10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;cursor:text" contenteditable="true" onblur="luuShotPrompt(${s.id},this.textContent)">${s.shotPrompt||''}</div>
-      </div>
-
-      
-      <!-- ẢNH SHOT + NHÂN VẬT REFERENCE -->
-      <div style="margin-top:6px;margin-bottom:6px">
-        <div class="slbl" style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px">
-          <span>🖼️ Hình ảnh Shot</span>
-          <button onclick="taoAnhStoryboard(${s.id})" style="background:transparent;border:1px solid #818cf8;color:#818cf8;border-radius:5px;font-size:9px;padding:2px 8px;cursor:pointer">✨ Tạo ảnh AI</button>
-        </div>
-
-        <!-- Nhân vật reference riêng cho shot -->
-        <div style="margin-bottom:7px;padding:7px 9px;background:#0a0010;border:1px solid #4a2060;border-radius:7px">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:5px">
-            <span style="font-size:9px;color:#a78bfa">🔒 Nhân vật reference</span>
-            <label style="font-size:9px;padding:2px 7px;border-radius:4px;border:1px dashed #7c3aed;color:#a78bfa;cursor:pointer">
-              ➕ Upload
-              <input type="file" accept="image/*" multiple style="display:none" onchange="uploadNhanVatShot(${s.id}, this)">
-            </label>
-          </div>
-          <div id="nv-ref-${s.id}" style="display:flex;gap:5px;flex-wrap:wrap;min-height:10px">
-            ${(s.nhanVatRefs||[]).length > 0
-              ? (s.nhanVatRefs||[]).map((img,i)=>`<div style="position:relative"><img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed"><button onclick="xoaNhanVatRef(${s.id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button></div>`).join('')
-              : '<span style="font-size:9px;color:#3a2050">Chưa có — upload ảnh nhân vật để lock khuôn mặt</span>'}
-          </div>
-          <button onclick="dungAnhNhanVatChung(${s.id})" style="font-size:9px;margin-top:5px;padding:2px 8px;border-radius:4px;border:1px solid #7c3aed;background:transparent;color:#7c5fa0;cursor:pointer">
-            🔄 Dùng ảnh từ tab Nhân Vật
-          </button>
-        </div>
-
-        <!-- Ảnh kết quả storyboard -->
-        <div id="img-shot-${s.id}" style="display:${s.image?'block':'none'}">
-          ${s.image ? `<img src="${s.image}" style="width:100%;max-height:220px;object-fit:cover;border-radius:7px;border:1px solid #818cf8;cursor:pointer;margin-bottom:5px" onclick="xemAnhLon(${s.id})">
-          <div style="display:flex;gap:5px;flex-wrap:wrap">
-            <button class="btn-i" onclick="taoAnhStoryboard(${s.id})" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
-            <button class="btn-i" onclick="guiAnhChoAI(${s.id})" style="font-size:9px;border-color:var(--gold);color:var(--gold)">✨ AI phân tích</button>
-            <a href="${s.image}" download="shot-${s.id}.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇</a>
-            <button class="btn-i" onclick="xoaAnhShot(${s.id})" style="font-size:9px">✕</button>
-          </div>` : ''}
-        </div>
-
-        <!-- Upload ảnh thủ công -->
-        <label style="display:inline-flex;align-items:center;gap:4px;font-size:9px;padding:3px 8px;border-radius:5px;border:1px solid var(--bdr);color:var(--muted);cursor:pointer;margin-top:5px">
-          📎 Upload ảnh thủ công
-          <input type="file" accept="image/*" style="display:none" onchange="uploadAnhShot(${s.id}, this)">
-        </label>
-      </div>
-
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
     </div></div>`).join('');
 }
@@ -2284,7 +2260,15 @@ function taoVI(){
     if(skinVI){L.push('[KẾT CẤU DA]');L.push(skinVI);}
     L.push('');
   }
-  if(hd){L.push('[HÀNH ĐỘNG]');L.push(hd+'.');L.push('');}
+  if(hd||gVal('action-nv2')||gVal('action-nv3')||SS.char_layout){
+    L.push('[HÀNH ĐỘNG NHÂN VẬT]');
+    if(SS.char_layout) L.push('Bố cục: ' + SS.char_layout + '.');
+    if(MM.body && MM.body.length) L.push('Ngôn ngữ cơ thể: ' + MM.body.join(', ') + '.');
+    if(hd) L.push('Nhân vật 1: ' + hd);
+    const _nv2 = gVal('action-nv2'); if(_nv2) L.push('Nhân vật 2: ' + _nv2);
+    const _nv3 = gVal('action-nv3'); if(_nv3) L.push('Nhân vật 3: ' + _nv3);
+    L.push('');
+  }
   if(mt||MM.weather.length||SS.genre){L.push('[BỐI CẢNH]');if(SS.genre)L.push('Thể loại: '+SS.genre+'.');if(mt)L.push(mt);if(MM.weather.length)L.push('Thời tiết: '+MM.weather.join(', ')+'.');L.push('');}
   if(as||SS.light_setup||MM.light_color.length){L.push('[ÁNH SÁNG]');if(SS.light_setup)L.push('Bố cục: '+SS.light_setup+'.');if(MM.light_color.length)L.push('Màu: '+MM.light_color.join(', ')+'.');if(SS.pal)L.push('Bảng màu: '+SS.pal+'.');if(as)L.push(as);L.push('');}
   const cam=[];if(SS.shot_size)cam.push(SS.shot_size);if(SS.movement)cam.push(SS.movement);if(SS.angle)cam.push(SS.angle);if(SS.lens)cam.push(SS.lens);if(SS.dof)cam.push(SS.dof);
@@ -2296,7 +2280,7 @@ function taoVI(){
     L.push('');
   }
   if(MM.director.length||MM.visual.length||MM.colorgrade.length||pc){L.push('[PHONG CÁCH]');
-    if(SS.bm_profile||bmLutSelected){L.push('[COLOR GRADE — BLACKMAGIC 12K URSA CINE / DAVINCI RESOLVE]');if(SS.bm_profile)L.push('Camera Profile: '+SS.bm_profile+'.');if(bmLutSelected){L.push('LUT Style: '+bmLutSelected.split('—')[0].trim()+'.');L.push(bmLutSelected+'.');}if(MM.dv_node&&MM.dv_node.length)L.push('DaVinci Nodes: '+MM.dv_node.join(' · ')+'.');L.push('');}
+    if(SS.bm_profile||bmLutSelected){L.push('[COLOR GRADE — BLACKMAGIC 12K URSA CINE / DAVINCI RESOLVE]');if(SS.bm_profile)L.push('Camera Profile: '+SS.bm_profile+'.');if(bmLutSelected){L.push('LUT Style: '+bmLutSelected.split('—')[0].trim()+'.');L.push(bmLutSelected+'.');}const _bmC=gVal('bm-lut-custom');if(_bmC)L.push(_bmC);if(MM.dv_node&&MM.dv_node.length)L.push('DaVinci Nodes: '+MM.dv_node.join(' · ')+'.');L.push('');}
     if(MM.director.length)L.push('Tham chiếu: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grade: '+MM.colorgrade.join(', ')+'.');if(MM.visual.length)L.push('Hình ảnh: '+MM.visual.join(', ')+'.');if(pc)L.push(pc);L.push('');}
   const cl=[];if(SS.res)cl.push(SS.res);if(SS.fps)cl.push(SS.fps);MM.grain.forEach(g=>cl.push(g));MM.qtag.forEach(q=>cl.push(q));
   if(cl.length){L.push('[CHẤT LƯỢNG]');L.push(cl.join(', ')+'.');L.push('');}
@@ -2345,6 +2329,9 @@ function taoVI(){
   }
   if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';L.push(d.trim()||'(Chưa mô tả)');L.push('');});}
   kqVI=L.join('\n');kqSD='';kqCG='';
+  const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
+  const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
+  kqVI = _hdr + kqVI + _ftr;
     if(!licenseValid){
     kqVI += '\n\n// ANNAHOUSESTUDIO Cinematic Prompt Builder · annahousestudio.com';
   }
@@ -2450,6 +2437,9 @@ function taoSD(){
   if(matRefs.length){L.push('[MATERIAL INTEGRATION]');matRefs.forEach(r=>L.push(`@material[${r.n}]: Apply ${r.t} reference characteristics.`));L.push('');}
   L.push('[OUTPUT]');L.push(`Duration: ${selDuration}s. Resolution: 720p. ${selPlatform?'Platform: '+selPlatform.split(' ')[0]+'.':''}`);
   kqSD=L.join('\n');kqCG='';
+  const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
+  const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
+  kqSD = _hdr + kqSD + _ftr;
   hienKQ(kqSD,'sd','🎬 Seedance Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Dán trực tiếp vào ô prompt Seedance 2.0 trên Higgsfield.';
   document.getElementById('ghi-chu').style.display='block';
@@ -2505,6 +2495,9 @@ function taoCG(){
   L.push('[OUTPUT SPECIFICATIONS]');
   L.push(`Render: ${selRenderStyle?selRenderStyle.split(':')[0]:'Photorealistic CGI'}. Duration: ${dur}. Frame rate: ${fps}. Aspect ratio: 16:9 widescreen. This sequence should showcase exceptional CGI craft — every material, lighting interaction, and camera motion should be production-quality.`);
   kqCG=L.join('\n');kqSD='';
+  const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
+  const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
+  kqCG = _hdr + kqCG + _ftr;
   hienKQ(kqCG,'cg','🎨 3D CGI Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Prompt tối ưu cho Seedance 3D CGI render mode trên Higgsfield.';
   document.getElementById('ghi-chu').style.display='block';
@@ -3419,32 +3412,45 @@ async function phanTichKichBan(){
     ? 'Viết phân tích bằng tiếng Việt, prompt nháp bằng tiếng Anh.'
     : 'Viết toàn bộ bằng tiếng Việt, riêng các thuật ngữ điện ảnh giữ tiếng Anh.';
 
-  const systemPrompt = `Bạn là chuyên gia quay phim điện ảnh và AI video generation, chuyên tư vấn breakdown kịch bản thành các shot quay cho Seedance 2.0 on Higgsfield.
-
-Nhiệm vụ: Phân tích kịch bản và đề xuất shot breakdown + prompt nháp.
+  const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản điện ảnh và shot breakdown cho Seedance 2.0 / Higgsfield.
 
 ${langInstruct}
 
-Quy tắc xuất kết quả:
-1. PHÂN TÍCH KỊCH BẢN (2-3 dòng): Tóm tắt ý đồ, cảm xúc chính, thách thức kỹ thuật.
-2. ĐỀ XUẤT SHOT BREAKDOWN: ${shotInstruct}
-3. Với mỗi shot, viết đầy đủ theo format:
+NHIỆM VỤ: Phân tích kịch bản thành shot breakdown với HÀNH ĐỘNG CỤ THỂ từng shot.
 
-QUAN TRỌNG: Nếu thông tin "CÚ MÁY ĐÃ XÁC ĐỊNH" có trong Khung Sườn → BẮT BUỘC giữ nguyên cú máy, góc máy, tiêu cự đó. KHÔNG tự thay đổi hay đề xuất cú máy khác.
+QUY TẮC BẮT BUỘC:
+1. Mỗi shot PHẢI có hành động nhân vật rõ ràng — KHÔNG viết chung chung
+2. Hành động = động từ cụ thể + bộ phận cơ thể + tốc độ + cảm xúc qua vật lý
+   ĐÚNG: "Tay trái đặt nhẹ lên mặt bàn, ngón trỏ gõ nhịp chậm 1 lần rồi dừng"
+   SAI: "nhân vật ngồi ở bàn"
+3. Micro-expression: nét mặt thay đổi cụ thể từng cơ
+4. Cảm xúc thể hiện qua vật lý — KHÔNG nói thẳng cảm xúc
 
-═══ SHOT [N] ═══
-⏱ Thời gian: [Xs – Ys]
-🎯 Mục đích: [Vai trò của shot trong câu chuyện]
-📷 Cú máy: [Giữ nguyên nếu đã xác định — hoặc đề xuất nếu chưa có]
-🔭 Tiêu cự: [Giữ nguyên nếu đã xác định]
-💡 Ánh sáng: [Nhiệt độ Kelvin + hướng + tỷ lệ]
-🎭 Hành động: [Mô tả chi tiết theo cú máy đã chọn]
-🎨 Cảm xúc: [Show don't tell]
+${shotInstruct}
 
-PROMPT NHÁP:
-[Viết prompt đầy đủ sẵn sàng dùng cho Seedance]
+⚠️ NẾU CÓ "CÚ MÁY ĐÃ XÁC ĐỊNH" → BẮT BUỘC giữ nguyên, KHÔNG thay đổi.
 
-4. KẾT LUẬN: Lý do chọn số shot này, gợi ý điều chỉnh.`;
+FORMAT TỪNG SHOT:
+
+═══ SỰ KIỆN [N] ═══
+⏱ Thời gian: [Xs – Ys (Zs)]
+🎯 Vai trò: [1 câu — shot này phục vụ gì]
+📷 Cú máy: [nếu đã xác định ghi "GIỮ NGUYÊN: ..."]
+🔭 Tiêu cự: [mm + lý do]
+🎬 Khung hình: [ECU/CU/MCU/MS/WS/ELS + lý do]
+💡 Ánh sáng: [Kelvin + hướng + tỷ lệ]
+
+🎭 HÀNH ĐỘNG CHI TIẾT:
+[Từng giây: ai làm gì, bộ phận nào, tốc độ, hướng]
+[Micro-expression: cơ mặt nào thay đổi, mắt nhìn đâu]
+[Nhịp thở, độ căng vai, tư thế]
+
+🎙 ÂM THANH/THOẠI: [nếu có]
+
+PROMPT NHÁP (EN):
+[Prompt tiếng Anh đầy đủ sẵn dùng cho Seedance — gồm hành động chi tiết]
+
+CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP.`;
 
   // Build Khung Sườn context
   const ksCon = [];
@@ -4060,19 +4066,24 @@ function capNhatKBSummary(){
 
 // ===== SKIN TEXTURE HELPER =====
 function laySkinPromptVI(){
-  if(!SS.skin_level || SS.skin_level === 'Không có') return '';
   const lines = [];
+  const fullDesc = gVal('skin-full-desc');
+  if(fullDesc){ lines.push(fullDesc); }
+  else {
+    if(!SS.skin_level || SS.skin_level === 'Không có') return '';
+    const levelMap = {
+      'Tiêu chuẩn': 'Kết cấu da tự nhiên, lỗ chân lông nhìn thấy.',
+      'Chi tiết cao': 'Da chi tiết cao — lỗ chân lông li ti rõ nét, nếp nhăn vi mô tự nhiên, ánh sáng xuyên qua lớp da (SSS).',
+      'Cực kỳ chân thật': 'Da siêu chân thật — từng lỗ chân lông cực nhỏ, lông tơ mặt (peach fuzz), subsurface scattering, nếp nhăn vi mô, khuyết điểm tự nhiên.'
+    };
+    lines.push(levelMap[SS.skin_level] || '');
+    if(MM.skin_detail && MM.skin_detail.length) lines.push(MM.skin_detail.join(', ') + '.');
+  }
   const custom = gVal('skin-custom');
-  const levelMap = {
-    'Tiêu chuẩn': 'Kết cấu da tự nhiên, lỗ chân lông nhìn thấy.',
-    'Chi tiết cao': 'Da chi tiết cao — lỗ chân lông li ti rõ nét, nếp nhăn vi mô tự nhiên, ánh sáng xuyên qua lớp da (SSS).',
-    'Cực kỳ chân thật': 'Da siêu chân thật — từng lỗ chân lông cực nhỏ nhìn thấy rõ, lông tơ mặt (peach fuzz), ánh sáng xuyên hạ bì (subsurface scattering), nếp nhăn vi mô, khuyết điểm da tự nhiên.'
-  };
-  lines.push(levelMap[SS.skin_level] || '');
-  if(MM.skin_detail && MM.skin_detail.length) lines.push(MM.skin_detail.join(', ') + '.');
   if(custom) lines.push(custom);
   return lines.filter(Boolean).join(' ');
 }
+
 
 function laySkinPromptEN(){
   if(!SS.skin_level || SS.skin_level === 'Không có') return '';
@@ -5108,72 +5119,7 @@ async function taoImgPromptNhanVat(){
   }
 }
 
-async function taoAnhNhanVat(){
-  const promptText = gVal('char-img-prompt');
-  if(!promptText){ alert('Nhập prompt nhân vật trước.'); return; }
 
-  const statusEl = document.getElementById('char-img-status');
-  const outputEl = document.getElementById('char-img-output');
-  if(statusEl) statusEl.textContent = '⏳ Đang tạo ảnh nhân vật...';
-  if(outputEl) outputEl.style.display = 'none';
-
-  // Build character reference prompt
-  const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
-  const skinTone = (MM.skin_tone||[]).slice(0,1).join('');
-  const hairStyle = (MM.hair_style||[]).slice(0,1).join('');
-  const hairColor = (MM.hair_color||[]).slice(0,1).join('');
-  const eyeShape = (MM.eye_shape||[]).slice(0,1).join('');
-  const faceShape = (MM.face_shape||[]).slice(0,1).join('');
-  const gender = SS.gender || '';
-  const age = SS.age || '';
-
-  const charDetails = [nationality, gender, age, skinTone, hairStyle, hairColor, eyeShape, faceShape]
-    .filter(Boolean).join(', ');
-
-  const finalPrompt = [
-    promptText,
-    charDetails ? '(' + charDetails + ')' : '',
-    'photorealistic portrait, subsurface scattering skin, natural pores, vellus hair visible,',
-    'no AI smoothing, cinematic portrait lighting, shallow depth of field,',
-    'professional photography, 8K, character reference sheet --ar 2:3'
-  ].filter(Boolean).join(' ').slice(0, 1000);
-
-  try {
-    const res = await fetch('/api/image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt: finalPrompt,
-        quality: 'high',
-        referenceImages: (s.nhanVatRefs && s.nhanVatRefs.length > 0)
-          ? s.nhanVatRefs
-          : (charRefImages.length > 0 ? charRefImages.map(r => r.src) : undefined)
-      })
-    });
-
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
-    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
-    if(!imgSrc) throw new Error('Không nhận được ảnh');
-
-    if(outputEl){
-      outputEl.style.display = 'block';
-      outputEl.innerHTML = `
-        <div style="border:1px solid #a78bfa;border-radius:8px;overflow:hidden;margin-top:8px">
-          <img src="${imgSrc}" style="width:100%;display:block;cursor:pointer;max-height:400px;object-fit:cover" onclick="(this.requestFullscreen||this.webkitRequestFullscreen||function(){}).call(this)">
-          <div style="padding:7px 10px;background:#0d001a;display:flex;gap:5px;flex-wrap:wrap">
-            <span style="font-size:9px;color:#a78bfa;flex:1">🔒 Character Reference</span>
-            <button class="btn-i" onclick="taoAnhNhanVat()" style="font-size:9px;border-color:#a78bfa;color:#a78bfa">↻ Tạo lại</button>
-            <a href="${imgSrc}" download="character-ref.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇ Lưu</a>
-          </div>
-        </div>`;
-    }
-    if(statusEl) statusEl.textContent = '✅ Character Reference đã tạo — lưu lại để giữ nhân vật nhất quán';
-
-  } catch(e) {
-    if(statusEl) statusEl.textContent = '❌ ' + e.message;
-  }
-}
 
 
 async function logEvent(event, extraData = {}) {
@@ -6267,184 +6213,14 @@ ${skin ? 'SKIN LEVEL: ' + skin : ''}`;
 }
 
 
-async function taoAnhStoryboard(id){
-  const s = cacShot.find(x => x.id === id);
-  if(!s) return;
-
-  const wrap = document.getElementById('img-shot-' + id);
-  if(wrap){
-    wrap.style.display = 'block';
-    wrap.innerHTML = '<div style="padding:20px;text-align:center;color:#818cf8;font-size:11px;border:1px solid #818cf8;border-radius:7px">⏳ Đang tạo ảnh storyboard...</div>';
-  }
-
-  // Gather all context
-  const cam = s.cuMay || 'static shot';
-  const lens = s.lens || '50mm';
-  const size = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS';
-  const content = s.moTa || s.shotPrompt || '';
-  const sbPrompt = s.sbPrompt || '';
-
-  const nv = gVal('subject-desc') || '';
-  const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
-  const emo = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
-  const lightType = (MM.light_type||[]).slice(0,2).join(', ') || '';
-  const colorPal = SS.pal || '';
-  const director = (MM.director||[]).slice(0,2).join(', ');
-  const genre = SS.genre || 'cinematic drama';
-  const skinLevel = SS.skin_level || '';
-
-  // Build final image prompt - use sbPrompt if available, else build fresh
-  let finalPrompt = '';
-  if(sbPrompt && sbPrompt.length > 50){
-    finalPrompt = sbPrompt;
-  } else {
-    // Build cinematic storyboard prompt
-    finalPrompt = [
-      size ? size.replace('ECU','extreme close-up').replace('CU','close-up').replace('MCU','medium close-up').replace('MS','medium shot').replace('MWS','medium wide shot').replace('WS','wide shot').replace('ELS','extreme long shot') : 'medium shot',
-      nationality ? nationality + ' person' : '',
-      nv || '',
-      content.slice(0,200),
-      cam !== 'static shot' ? cam + ' camera movement' : 'static locked camera',
-      lens + ' lens',
-      lightType || 'natural motivated lighting',
-      colorPal || 'cinematic color grade',
-      emo ? 'mood: ' + emo : '',
-      director ? 'visual style of ' + director : '',
-      genre + ' film still',
-      skinLevel || '',
-      'photorealistic, anamorphic lens flare, shallow DOF, film grain, 8K, cinematic --ar 16:9'
-    ].filter(Boolean).join(', ').slice(0, 1000);
-  }
-
-  try {
-    const res = await fetch('/api/image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: finalPrompt, quality: 'high' })
-    });
-
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
-    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
-    if(!imgSrc) throw new Error('Không nhận được ảnh');
-
-    s.image = imgSrc;
-    s.imageName = 'storyboard-shot-' + id + '.png';
-
-    if(wrap){
-      wrap.innerHTML = `
-        <div style="border:1px solid #818cf8;border-radius:8px;overflow:hidden">
-          <img src="${imgSrc}" style="width:100%;display:block;cursor:pointer" onclick="xemAnhLon(${id})" title="Click để xem lớn">
-          <div style="padding:7px 10px;background:#0d0d1a;display:flex;gap:5px;flex-wrap:wrap;align-items:center">
-            <span style="font-size:9px;color:#818cf8;flex:1">🎨 Shot ${id}</span>
-            <button class="btn-i" onclick="taoAnhStoryboard(${id})" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
-            <a href="${imgSrc}" download="storyboard-${id}.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇</a>
-            <button class="btn-i" onclick="xoaAnhShot(${id})" style="font-size:9px">✕</button>
-          </div>
-        </div>`;
-    }
-  } catch(e) {
-    if(wrap) wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px;border:1px solid #3a1a1a;border-radius:7px">❌ ${e.message}</div>`;
-  }
-}
 
 
-async function taoAnhBoiCanh(){
-  const imgPromptEl = document.getElementById('kb-scene-img-prompt');
-  const prompt = imgPromptEl?.innerText?.trim() || document.getElementById('kb-scene-prompt')?.innerText?.trim();
-  if(!prompt || prompt.length < 20){
-    alert('Phân tích bối cảnh trước để có prompt.');
-    return;
-  }
-  await _taoAnhBoiCanhDaoCu('kb-scene-img', prompt, 'bối cảnh', true);
-}
 
-async function taoAnhDaoCu(){
-  const imgPromptEl = document.getElementById('kb-props-img-prompt');
-  const prompt = imgPromptEl?.innerText?.trim() || document.getElementById('kb-props-prompt')?.innerText?.trim();
-  if(!prompt || prompt.length < 20){
-    alert('Phân tích đạo cụ trước để có prompt.');
-    return;
-  }
-  await _taoAnhBoiCanhDaoCu('kb-props-img', prompt, 'đạo cụ', true);
-}
 
-async function _taoAnhBoiCanhDaoCu(wrapId, rawPrompt, label, directPrompt=false){
-  const wrap = document.getElementById(wrapId);
-  if(!wrap) return;
 
-  wrap.style.display = 'block';
-  wrap.innerHTML = `<div style="padding:16px;text-align:center;color:#818cf8;font-size:11px;border:1px solid #818cf8;border-radius:7px">⏳ Đang tạo ảnh ${label}...</div>`;
 
-  const isScene = label === 'bối cảnh';
-  let imgPrompt = '';
 
-  if(directPrompt){
-    imgPrompt = rawPrompt;
-  } else {
-    const system = isScene
-      ? `You are a world-class cinematographer and production designer.
-Convert this scene analysis into a photorealistic image generation prompt for GPT Image.
-MUST include: exact location name, architectural details, surface materials and textures, 
-color temperature in Kelvin, light direction and shadow angle, color palette with specific tones,
-atmospheric elements (dust/fog/steam/particles), depth layers (foreground/mid/background),
-time of day and weather condition, film stock reference.
-End with: photorealistic, cinematic film still, anamorphic 35mm, shallow DOF, 
-Kodak 5219 film grain, 8K, Roger Deakins lighting quality --ar 16:9
-Output ONLY the image prompt.`
-      : `You are a professional prop stylist and editorial photographer.
-Convert this props analysis into a photorealistic image generation prompt for GPT Image.
-MUST include: exact prop names and descriptions, material types (wood grain/oxidized metal/worn fabric),
-surface texture and patina details, color with specific tones, physical condition (new/worn/aged),
-spatial arrangement and placement, scale context, lighting setup (soft box/window/practicals),
-shadow and reflection details.
-End with: photorealistic, editorial product photography, macro surface detail,
-soft box lighting, 8K, ultra sharp focus, commercial photography quality --ar 16:9
-Output ONLY the image prompt.`;
 
-    try {
-      await goiClaude(system, rawPrompt.slice(0, 800), (chunk) => {
-        imgPrompt += chunk;
-      });
-    } catch(e) {
-      wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px">❌ ${e.message}</div>`;
-      return;
-    }
-  }
-
-  // Update the editable prompt box
-  const imgPromptEl = document.getElementById(wrapId === 'kb-scene-img' ? 'kb-scene-img-prompt' : 'kb-props-img-prompt');
-  if(imgPromptEl && !directPrompt) imgPromptEl.textContent = imgPrompt;
-
-  try {
-    const res = await fetch('/api/image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ prompt: imgPrompt.slice(0, 1000), quality: 'high' })
-    });
-
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
-    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
-    if(!imgSrc) throw new Error('Không nhận được ảnh');
-
-    const borderColor = isScene ? '#4ade80' : '#f59e0b';
-    wrap.innerHTML = `
-      <div style="border:1px solid ${borderColor};border-radius:8px;overflow:hidden">
-        <img src="${imgSrc}" style="width:100%;display:block;cursor:pointer" 
-          onclick="(this.requestFullscreen||this.webkitRequestFullscreen||function(){}).call(this)">
-        <div style="padding:7px 10px;background:#050a05;display:flex;gap:5px;align-items:center;flex-wrap:wrap">
-          <span style="font-size:9px;color:${borderColor};flex:1">🎨 ${label}</span>
-          <button class="btn-i" onclick="taoLaiAnhBoiCanh('${wrapId}')" style="font-size:9px;border-color:${borderColor};color:${borderColor}">↻ Tạo lại</button>
-          <a href="${imgSrc}" download="anna-${label.replace(' ','-')}.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇</a>
-          <button class="btn-i" onclick="document.getElementById('${wrapId}').style.display='none'" style="font-size:9px">✕</button>
-        </div>
-      </div>`;
-
-  } catch(e) {
-    wrap.innerHTML = `<div style="padding:10px;color:var(--red);font-size:11px;border:1px solid #3a1a1a;border-radius:7px">❌ ${e.message}</div>`;
-  }
-}
 
 
 // ===== KB SHOT SETUP =====
@@ -6568,264 +6344,159 @@ function luuChinhSuaKB(){
 
 
 // ===== ĐỒNG BỘ NHÂN VẬT TRONG DỰNG CẢNH =====
-function capNhatCharBanner(){
-  const banner = document.getElementById('char-sync-banner');
-  const nameEl = document.getElementById('char-sync-name');
-  const previewEl = document.getElementById('char-sync-preview');
-  if(!banner) return;
 
-  if(charPromptText && charPromptText.trim()){
-    banner.style.display = 'block';
-    // Extract name/description from first 80 chars
-    const preview = charPromptText.slice(0, 120).replace(/\n/g, ' ');
-    if(nameEl) nameEl.textContent = gVal('subject-desc') ? gVal('subject-desc').slice(0,40) : '—';
-    if(previewEl) previewEl.textContent = preview + (charPromptText.length > 120 ? '...' : '');
-    // Refresh shot list to show lock badges
-    veShot();
-  } else {
-    banner.style.display = 'none';
-  }
-}
 
-function dongBoNhanVatTatCa(){
-  if(!charPromptText){
-    alert('Chưa có Character Lock. Vào tab 🔒 Nhân Vật → tạo Character Lock Prompt trước.');
-    return;
-  }
 
-  // Add character lock to ALL shots' moTa if not already there
-  const marker = '[CHARACTER LOCK]';
-  let updated = 0;
 
-  cacShot.forEach(s => {
-    if(!s.moTa.includes(marker)){
-      s.moTa = (s.moTa ? s.moTa + '\n\n' : '') + marker + '\n' + charPromptText;
-      updated++;
-    }
-  });
 
-  veShot();
-
-  const btn = document.querySelector('[onclick="dongBoNhanVatTatCa()"]');
-  if(btn){
-    const o = btn.innerHTML;
-    btn.innerHTML = `✅ Đã đồng bộ ${updated} shots!`;
-    setTimeout(() => btn.innerHTML = o, 2500);
-  }
-}
-
-function xoaDongBoNhanVat(){
-  const marker = '[CHARACTER LOCK]';
-  cacShot.forEach(s => {
-    const idx = s.moTa.indexOf('\n\n' + marker);
-    if(idx > 0) s.moTa = s.moTa.slice(0, idx);
-    else s.moTa = s.moTa.replace(marker + '\n' + charPromptText, '').trim();
-  });
-  veShot();
-}
 
 
 // ===== ẢNH THAM CHIẾU NHÂN VẬT =====
 let charRefImages = []; // [{src: base64, name: string}]
 
-function themAnhThamChieu(input){
-  const files = Array.from(input.files).slice(0, 3 - charRefImages.length);
-  files.forEach(file => {
-    if(charRefImages.length >= 3) return;
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      charRefImages.push({ src: e.target.result, name: file.name });
-      veAnhThamChieu();
-    };
-    reader.readAsDataURL(file);
-  });
-  input.value = '';
-}
 
-function veAnhThamChieu(){
-  const wrap = document.getElementById('char-ref-images');
-  if(!wrap) return;
-  wrap.innerHTML = charRefImages.map((img, i) => `
-    <div style="position:relative;width:70px;height:70px">
-      <img src="${img.src}" style="width:70px;height:70px;object-fit:cover;border-radius:6px;border:2px solid #7c3aed">
-      <button onclick="xoaAnhThamChieu(${i})" style="position:absolute;top:-5px;right:-5px;width:18px;height:18px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;padding:0">✕</button>
-    </div>`).join('');
-}
 
-function xoaAnhThamChieu(idx){
-  charRefImages.splice(idx, 1);
-  veAnhThamChieu();
-}
+
+
+
 
 
 // ===== NHÂN VẬT REFERENCE TRONG SHOT =====
-function uploadNhanVatShot(id, input){
-  const s = cacShot.find(x => x.id === id);
-  if(!s) return;
-  if(!s.nhanVatRefs) s.nhanVatRefs = [];
-  const files = Array.from(input.files).slice(0, 3 - s.nhanVatRefs.length);
-  let loaded = 0;
-  files.forEach(file => {
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      s.nhanVatRefs.push(e.target.result);
-      loaded++;
-      if(loaded === files.length){
-        // Update display
-        const wrap = document.getElementById('nv-ref-' + id);
-        if(wrap) wrap.innerHTML = s.nhanVatRefs.map((img,i)=>`
-          <div style="position:relative">
-            <img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed">
-            <button onclick="xoaNhanVatRef(${id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button>
-          </div>`).join('');
-      }
-    };
-    reader.readAsDataURL(file);
-  });
-  input.value = '';
-}
 
-function xoaNhanVatRef(id, idx){
-  const s = cacShot.find(x => x.id === id);
-  if(!s || !s.nhanVatRefs) return;
-  s.nhanVatRefs.splice(idx, 1);
-  const wrap = document.getElementById('nv-ref-' + id);
-  if(wrap){
-    if(s.nhanVatRefs.length === 0){
-      wrap.innerHTML = '<span style="font-size:9px;color:#3a2050">Chưa có — upload ảnh nhân vật để lock khuôn mặt</span>';
-    } else {
-      wrap.innerHTML = s.nhanVatRefs.map((img,i)=>`
-        <div style="position:relative">
-          <img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed">
-          <button onclick="xoaNhanVatRef(${id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button>
-        </div>`).join('');
-    }
-  }
-}
 
-function dungAnhNhanVatChung(id){
-  if(!charRefImages || charRefImages.length === 0){
-    alert('Tab Nhân Vật chưa có ảnh reference. Vào tab 🔒 Nhân Vật → upload ảnh trước.');
-    return;
-  }
-  const s = cacShot.find(x => x.id === id);
-  if(!s) return;
-  s.nhanVatRefs = charRefImages.map(r => r.src);
-  // Update display
-  const wrap = document.getElementById('nv-ref-' + id);
-  if(wrap) wrap.innerHTML = s.nhanVatRefs.map((img,i)=>`
-    <div style="position:relative">
-      <img src="${img}" style="width:52px;height:52px;object-fit:cover;border-radius:5px;border:2px solid #7c3aed">
-      <button onclick="xoaNhanVatRef(${id},${i})" style="position:absolute;top:-4px;right:-4px;width:14px;height:14px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:8px;cursor:pointer;padding:0">✕</button>
-    </div>`).join('');
 
-  const btn = document.querySelector(`[onclick="dungAnhNhanVatChung(${id})"]`);
-  if(btn){ const o=btn.innerHTML; btn.innerHTML='✅ Đã dùng!'; setTimeout(()=>btn.innerHTML=o,2000); }
-}
+
+
 
 
 // ===== STORYBOARD TỪ PROMPT CUỐI =====
 let finalNhanVatImg = null; // base64 ảnh nhân vật cho final storyboard
 
-function uploadAnhNhanVatFinal(input){
-  const file = input.files[0];
-  if(!file) return;
-  const reader = new FileReader();
-  reader.onload = (e) => {
-    finalNhanVatImg = e.target.result;
-    const preview = document.getElementById('final-nv-preview');
-    if(preview) preview.innerHTML = `
-      <div style="position:relative;display:inline-block">
-        <img src="${e.target.result}" style="width:64px;height:64px;object-fit:cover;border-radius:7px;border:2px solid #7c3aed">
-        <button onclick="xoaAnhNhanVatFinal()" style="position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:9px;cursor:pointer;padding:0">✕</button>
-      </div>
-      <span style="font-size:9px;color:#a78bfa;margin-left:8px">✅ Ảnh nhân vật đã sẵn sàng</span>`;
-  };
-  reader.readAsDataURL(file);
-  input.value = '';
+
+
+
+
+
+
+
+
+
+// ===== SKIN & LUT PRESETS =====
+let bmLutSelected = '';
+
+
+function danSkinPreset(){
+  const SKIN = 'Ultra-photorealistic dermis. SSS subsurface scattering - warm pink-red glow at ear edges, nostrils, inner eye corners. Micro-pore topology on nose bridge and cheekbones. Vellus hair (peach fuzz) on cheeks catching rim light. Capillary flush - natural pink-red undertone. Natural oil sheen on T-zone. Under-eye micro-wrinkle topology. No AI smoothing. No porcelain skin. No plastic sheen. Biological imperfection = cinematic truth.';
+  const el = document.getElementById('skin-full-desc');
+  if(el){
+    el.value = SKIN;
+    el.style.borderColor = 'var(--green)';
+    setTimeout(() => { el.style.borderColor = ''; }, 2000);
+  }
+  capNhat();
 }
 
-function xoaAnhNhanVatFinal(){
-  finalNhanVatImg = null;
-  const preview = document.getElementById('final-nv-preview');
-  if(preview) preview.innerHTML = '<span style="font-size:9px;color:#3a2050">Chưa có ảnh — upload để lock khuôn mặt nhân vật</span>';
+function danBMLUTPreset(){
+  const profile = SS.bm_profile || 'Blackmagic RAW 12K';
+  const lut = bmLutSelected || 'FilmBox Cinematic LUT';
+  const BM = '[BLACKMAGIC COLOR]' + String.fromCharCode(10) + 'Camera: ' + profile + String.fromCharCode(10) + 'LUT: ' + lut + String.fromCharCode(10) + 'Workflow: BRAW to DaVinci Wide Gamut to ' + lut + ' to Rec.709' + String.fromCharCode(10) + 'Film grain: Kodak 5219 emulation 15-20%';
+  const el = document.getElementById('bm-lut-custom');
+  if(el){
+    el.value = (el.value ? el.value + String.fromCharCode(10,10) : '') + BM;
+    el.style.borderColor = '#60a5fa';
+    setTimeout(() => { el.style.borderColor = ''; }, 2000);
+  }
+  capNhat();
 }
 
-function dungAnhCharRefFinal(){
-  if(!charRefImages || charRefImages.length === 0){
-    alert('Tab Nhân Vật chưa có ảnh. Vào tab 🔒 Nhân Vật → upload ảnh trước.');
-    return;
-  }
-  finalNhanVatImg = charRefImages[0].src;
-  const preview = document.getElementById('final-nv-preview');
-  if(preview) preview.innerHTML = `
-    <div style="position:relative;display:inline-block">
-      <img src="${finalNhanVatImg}" style="width:64px;height:64px;object-fit:cover;border-radius:7px;border:2px solid #7c3aed">
-      <button onclick="xoaAnhNhanVatFinal()" style="position:absolute;top:-5px;right:-5px;width:16px;height:16px;border-radius:50%;border:none;background:#ff4444;color:white;font-size:9px;cursor:pointer;padding:0">✕</button>
-    </div>
-    <span style="font-size:9px;color:#a78bfa;margin-left:8px">✅ Từ tab Nhân Vật</span>`;
+function chonBMLUT(el, lutValue){
+  document.querySelectorAll('[onclick^="chonBMLUT"]').forEach(e => {
+    e.style.borderColor = '#1a3a5a';
+    e.style.background = '#0a1520';
+  });
+  el.style.borderColor = '#3b82f6';
+  el.style.background = '#0d1e35';
+  bmLutSelected = lutValue;
+  const preview = document.getElementById('bm-lut-selected');
+  if(preview){ preview.style.display='block'; preview.textContent='OK '+lutValue.slice(0,60); }
+  capNhat();
 }
 
-async function taoAnhTuPromptCuoi(){
-  // Get current prompt
-  const promptEl = document.getElementById('ket-qua');
-  const promptText = promptEl ? (promptEl.innerText || promptEl.textContent) : '';
-  if(!promptText || promptText.includes('Nhấn "Tạo Prompt"')){
-    alert('Tạo prompt trước rồi mới tạo ảnh.');
-    return;
+async function taoPromptBoiCanh(){
+  const location = gVal('location') || '';
+  const sceneDesc = gVal('scene-desc') || '';
+  if(!location && !sceneDesc){ alert('Dien dia diem hoac mo ta khong gian truoc.'); return; }
+  const el = document.getElementById('scene-prompt-direct');
+  if(el) el.value = 'ANNAHOUSESTUDIO dang tao prompt boi canh...';
+  const system = 'You are a cinematic production designer. Write a detailed scene/environment prompt in English for Seedance/Higgsfield AI video. Include: location type, spatial dimensions, surface materials, color temperature Kelvin, lighting sources, atmospheric elements, depth layers. Output ONLY the prompt.';
+  const userMsg = 'Create scene prompt for: Location: ' + location + '. Description: ' + sceneDesc + '. Time: ' + (SS.timeofday||'') + '. Genre: ' + (SS.genre||'');
+  let acc = '';
+  try{
+    await goiClaude(system, userMsg, (chunk)=>{ acc += chunk; if(el) el.value = acc; });
+    capNhat();
+  }catch(e){ if(el) el.value = 'Loi: ' + e.message; }
+}
+
+
+// ===== LICENSE & MISC =====
+function moKhungLicense(){
+  const k = document.getElementById('khung-license');
+  if(k) k.style.display = '';
+}
+function dongKhungLicense(){
+  const k = document.getElementById('khung-license');
+  if(k) k.style.display = 'none';
+}
+function kichHoatLicense(){
+  const inp = document.getElementById('license-input');
+  const key = inp ? inp.value.trim() : '';
+  if(!key){ alert('Nhập license key.'); return; }
+  // Offline validation: ANNA-XXXX-XXXX-XXXX format
+  if(/^ANNA-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/i.test(key)){
+    licenseValid = true;
+    localStorage.setItem('anna_license', key);
+    const banner = document.getElementById('trial-banner');
+    if(banner) banner.style.display = 'none';
+    dongKhungLicense();
+    alert('✅ License đã kích hoạt!');
+  } else {
+    alert('License key không hợp lệ. Liên hệ facebook.com/PromptAnnahouse');
   }
-
-  // Show wrap
-  const wrap = document.getElementById('final-storyboard-wrap');
-  const imgWrap = document.getElementById('final-storyboard-img');
-  if(wrap) wrap.style.display = 'block';
-  if(imgWrap) imgWrap.innerHTML = '<div style="padding:20px;text-align:center;color:#818cf8;font-size:11px">⏳ Đang tạo ảnh storyboard...</div>';
-
-  // Build cinematic image prompt from final prompt
-  const system = `You are a cinematographer. Extract the key visual elements from this video prompt and create a concise image generation prompt.
-Include: shot size, camera angle, subject description, lighting (Kelvin), color palette, atmosphere.
-Add: photorealistic, cinematic film still, anamorphic, shallow DOF, 8K --ar 16:9
-Output ONLY the image prompt, max 300 words.`;
-
-  let imgPrompt = '';
-  try {
-    await goiClaude(system, promptText.slice(0, 1500), (chunk) => {
-      imgPrompt += chunk;
-    });
-  } catch(e) {
-    if(imgWrap) imgWrap.innerHTML = `<div style="padding:10px;color:var(--red)">❌ ${e.message}</div>`;
-    return;
+}
+function doiNgonNgu(){
+  // Toggle VI/EN labels
+  document.querySelectorAll('[data-en]').forEach(el => {
+    const en = el.getAttribute('data-en');
+    const vi = el.getAttribute('data-vi') || el.textContent;
+    if(!el.getAttribute('data-vi')) el.setAttribute('data-vi', vi);
+    el.textContent = el.textContent === vi ? en : vi;
+  });
+}
+function dungPhanTich(){
+  if(typeof kbCtrl !== 'undefined' && kbCtrl) kbCtrl.abort();
+  if(typeof sceneCtrl !== 'undefined' && sceneCtrl) sceneCtrl.abort();
+  if(typeof aiController !== 'undefined' && aiController) aiController.abort();
+}
+function apDungBoiCanhVaoDienXuat(){
+  const scenePrompt = document.getElementById('kb-scene-prompt');
+  const text = scenePrompt ? (scenePrompt.innerText || scenePrompt.textContent) : '';
+  if(!text || text.length < 10){ alert('Chưa có kết quả phân tích bối cảnh.'); return; }
+  const el = document.getElementById('scene-prompt-direct');
+  if(el){ el.value = text; capNhat(); alert('✅ Đã áp dụng vào Prompt Bối Cảnh.'); }
+}
+function luuFPTKey(){
+  const inp = document.getElementById('fpt-key-input');
+  if(inp && inp.value.trim()){
+    fptKey = inp.value.trim();
+    localStorage.setItem('fpt_api_key', fptKey);
+    alert('✅ Đã lưu FPT API key.');
   }
-
-  // Generate image with optional character reference
-  try {
-    const res = await fetch('/api/image', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        prompt: imgPrompt.slice(0, 1000),
-        quality: 'high',
-        referenceImages: finalNhanVatImg ? [finalNhanVatImg]
-          : (charRefImages.length > 0 ? [charRefImages[0].src] : undefined)
-      })
-    });
-
-    const data = await res.json();
-    if(!res.ok) throw new Error(data.error || 'Lỗi tạo ảnh');
-    const imgSrc = data.url || (data.b64 ? 'data:image/png;base64,' + data.b64 : null);
-    if(!imgSrc) throw new Error('Không nhận được ảnh');
-
-    if(imgWrap) imgWrap.innerHTML = `
-      <img src="${imgSrc}" style="width:100%;display:block;border-radius:0 0 9px 9px;cursor:pointer" onclick="(this.requestFullscreen||this.webkitRequestFullscreen||function(){}).call(this)">
-      <div style="display:flex;gap:6px;padding:8px 10px;background:#050510;flex-wrap:wrap">
-        <button class="btn-i" onclick="taoAnhTuPromptCuoi()" style="font-size:9px;border-color:#818cf8;color:#818cf8">↻ Tạo lại</button>
-        <a href="${imgSrc}" download="storyboard-final.png" class="btn-i" style="font-size:9px;text-decoration:none">⬇ Tải ảnh</a>
-        <button class="btn-i" onclick="robustCopy(${JSON.stringify(imgPrompt)})" style="font-size:9px">⊕ Copy prompt</button>
-      </div>`;
-
-  } catch(e) {
-    if(imgWrap) imgWrap.innerHTML = `<div style="padding:10px;color:var(--red)">❌ ${e.message}</div>`;
-  }
+}
+function layThoaiVaoFPT(){
+  const allThoai = (cacShot||[]).map(s => s.thoai).filter(t => t && t !== 'Không thoại').join(String.fromCharCode(10));
+  const ta = document.getElementById('fpt-text');
+  if(ta){ ta.value = allThoai || ''; }
+  if(!allThoai) alert('Chưa có lời thoại nào trong Dựng Cảnh.');
 }
 
 // ===== INIT =====
