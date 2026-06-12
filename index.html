@@ -488,6 +488,47 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </div>
 
 <div class="fw-block">
+  <!-- KẾT CẤU DA -->
+  <div class="fw-block">
+    <div class="fw-head" onclick="moRong('skin')"><span class="fw-num">06b</span><span class="fw-key" data-en="SKIN REALISM">KẾT CẤU DA</span><span class="fw-desc" data-en="Skin detail · SSS · Pore · Blackmagic LUT">Kết cấu da · SSS · Lỗ chân lông · Preset skin</span><span class="fw-check" id="ck-skin">○</span></div>
+    <div class="fw-body" id="fb-skin">
+      <div style="margin-bottom:10px">
+        <div class="lbl" style="margin-bottom:6px"><span class="tag">Mức độ chi tiết da</span></div>
+        <div class="chips">
+          <span class="chip s" data-g="skin_level" data-en="None">Không có</span>
+          <span class="chip s" data-g="skin_level" data-en="Standard">Tiêu chuẩn</span>
+          <span class="chip s" data-g="skin_level" data-en="High detail">Chi tiết cao</span>
+          <span class="chip s" data-g="skin_level" data-en="Ultra realistic">Cực kỳ chân thật</span>
+        </div>
+      </div>
+      <div style="margin-bottom:10px">
+        <div class="lbl" style="margin-bottom:4px"><span class="tag">Chi tiết bổ sung</span></div>
+        <div class="chips" style="flex-wrap:wrap;gap:5px">
+          <span class="chip s" data-g="skin_detail" data-en="Natural pores visible">Lỗ chân lông tự nhiên</span>
+          <span class="chip s" data-g="skin_detail" data-en="Subsurface scattering SSS">SSS ánh sáng xuyên da</span>
+          <span class="chip s" data-g="skin_detail" data-en="Peach fuzz vellus hair">Lông tơ mặt</span>
+          <span class="chip s" data-g="skin_detail" data-en="Micro-wrinkle topology">Nếp nhăn vi mô</span>
+          <span class="chip s" data-g="skin_detail" data-en="Natural skin imperfections">Khuyết điểm tự nhiên</span>
+          <span class="chip s" data-g="skin_detail" data-en="Capillary flush on cheeks">Đỏ hồng má mao mạch</span>
+          <span class="chip s" data-g="skin_detail" data-en="No AI smoothing">Không AI smoothing</span>
+        </div>
+      </div>
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div class="slbl">Dán Skin Preset hoặc mô tả tùy chỉnh</div>
+          <button onclick="danSkinPreset()" style="font-size:10px;padding:2px 8px;border-radius:5px;border:none;background:#10b981;color:#000;cursor:pointer;font-weight:500">⚡ Dán Skin Preset</button>
+        </div>
+        <textarea id="skin-full-desc" rows="3" placeholder="Paste Skin Realism Preset hoặc mô tả chi tiết da..." oninput="capNhat()" style="font-size:11px"></textarea>
+        <div id="skin-preset-preview" style="display:none;font-size:10px;color:var(--green);margin-top:4px"></div>
+        <div id="skin-preset-done" style="display:none;font-size:10px;color:var(--green);margin-top:3px"></div>
+      </div>
+      <div style="margin-top:8px">
+        <div class="slbl" style="margin-bottom:4px">Mô tả thêm (tùy chọn)</div>
+        <input id="skin-custom" type="text" placeholder="VD: Da ngăm, tàn nhang, vết sẹo nhỏ..." oninput="capNhat()" style="font-size:11px;padding:5px">
+      </div>
+    </div>
+  </div>
+
   <div class="fw-head" onclick="moRong('quality')"><span class="fw-num">07</span><span class="fw-key" data-en="QUALITY">CHẤT LƯỢNG</span><span class="fw-desc" data-en="Resolution · Film grain · Sharpness · FPS">Độ phân giải · Hạt phim · Độ nét · FPS</span><span class="fw-check" id="ck-quality">○</span></div>
   <div class="fw-body" id="fb-quality">
     <div class="r2">
@@ -2012,7 +2053,8 @@ function taoVI(){
     L.push('');
   }
   if(MM.director.length||MM.visual.length||MM.colorgrade.length||pc){L.push('[PHONG CÁCH]');
-    if(SS.bm_profile||bmLutSelected){L.push('[COLOR GRADE — BLACKMAGIC 12K URSA CINE / DAVINCI RESOLVE]');if(SS.bm_profile)L.push('Camera Profile: '+SS.bm_profile+'.');if(bmLutSelected){L.push('LUT Style: '+bmLutSelected.split('—')[0].trim()+'.');L.push(bmLutSelected+'.');}if(MM.dv_node&&MM.dv_node.length)L.push('DaVinci Nodes: '+MM.dv_node.join(' · ')+'.');L.push('');}
+    if(SS.bm_profile||bmLutSelected){L.push('[COLOR GRADE — BLACKMAGIC 12K URSA CINE / DAVINCI RESOLVE]');if(SS.bm_profile)L.push('Camera Profile: '+SS.bm_profile+'.');if(bmLutSelected){L.push('LUT Style: '+bmLutSelected.split('—')[0].trim()+'.');L.push(bmLutSelected+'.');}const _bmCustom=gVal('bm-lut-custom');if(_bmCustom)L.push(_bmCustom);
+  if(MM.dv_node&&MM.dv_node.length)L.push('DaVinci Nodes: '+MM.dv_node.join(' · ')+'.');L.push('');}
     if(MM.director.length)L.push('Tham chiếu: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grade: '+MM.colorgrade.join(', ')+'.');if(MM.visual.length)L.push('Hình ảnh: '+MM.visual.join(', ')+'.');if(pc)L.push(pc);L.push('');}
   const cl=[];if(SS.res)cl.push(SS.res);if(SS.fps)cl.push(SS.fps);MM.grain.forEach(g=>cl.push(g));MM.qtag.forEach(q=>cl.push(q));
   if(cl.length){L.push('[CHẤT LƯỢNG]');L.push(cl.join(', ')+'.');L.push('');}
