@@ -584,13 +584,15 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <div>
           <div class="lbl" style="margin-bottom:6px"><span class="tag">Số shot đề xuất</span></div>
           <div class="chips">
-            <span class="chip s" data-g="kb_shots">1 shot</span>
-            <span class="chip s" data-g="kb_shots">2 shots</span>
-            <span class="chip s" data-g="kb_shots" id="kb-shots-default">3 shots</span>
-            <span class="chip s" data-g="kb_shots">4 shots</span>
-            <span class="chip s" data-g="kb_shots">5 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(1)">1 shot</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(2)">2 shots</span>
+            <span class="chip s" data-g="kb_shots" id="kb-shots-default" onclick="taoKBShotSetup(3)">3 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(4)">4 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(5)">5 shots</span>
           </div>
         </div>
+          <!-- SHOT SETUP CARDS -->
+          <div id="kb-shot-setup" style="margin-top:8px"></div>
       </div>
 
       <!-- NGÔN NGỮ + PHÂN TÍCH -->
@@ -3220,9 +3222,23 @@ PROMPT NHÁP:
 
   try{
     // Use Vercel backend via goiAI
+    // Build camera instructions from kbShotSetupData
+    let shotCamNote = '';
+    if(kbShotSetupData && kbShotSetupData.length > 0){
+      const hasCam = kbShotSetupData.some(s => s.cuMay || s.shotSize || s.lens);
+      if(hasCam){
+        shotCamNote = '\n\n⚠️ CÚ MÁY ĐÃ XÁC ĐỊNH — BẮT BUỘC GIỮ NGUYÊN:\n';
+        kbShotSetupData.forEach((s, i) => {
+          const parts = [s.cuMay, s.shotSize, s.lens].filter(Boolean);
+          if(parts.length) shotCamNote += `Shot ${i+1}: ${parts.join(' | ')}\n`;
+        });
+        shotCamNote += 'KHÔNG thay đổi hay đề xuất cú máy khác.';
+      }
+    }
+
     await goiClaude(
       systemPrompt,
-      `Phân tích kịch bản này:\n\n${noiDung}`,
+      `Phân tích kịch bản này:\n\n${noiDung}${shotCamNote}`,
       (chunk) => {
         acc += chunk;
         const bodyEl = document.getElementById('kb-output');
@@ -3767,16 +3783,22 @@ function capNhatKBSummary(){
 
 // ===== SKIN TEXTURE HELPER =====
 function laySkinPromptVI(){
-  if(!SS.skin_level || SS.skin_level === 'Không có') return '';
   const lines = [];
+  // Full desc (pasted preset) takes priority
+  const fullDesc = gVal('skin-full-desc');
+  if(fullDesc) lines.push(fullDesc);
+  
+  if(!fullDesc){
+    if(!SS.skin_level || SS.skin_level === 'Không có') return '';
+    const levelMap = {
+      'Tiêu chuẩn': 'Kết cấu da tự nhiên, lỗ chân lông nhìn thấy.',
+      'Chi tiết cao': 'Da chi tiết cao — lỗ chân lông li ti rõ nét, nếp nhăn vi mô tự nhiên, ánh sáng xuyên qua lớp da (SSS).',
+      'Cực kỳ chân thật': 'Da siêu chân thật — từng lỗ chân lông cực nhỏ, lông tơ mặt (peach fuzz), subsurface scattering, nếp nhăn vi mô, khuyết điểm tự nhiên.'
+    };
+    lines.push(levelMap[SS.skin_level] || '');
+    if(MM.skin_detail && MM.skin_detail.length) lines.push(MM.skin_detail.join(', ') + '.');
+  }
   const custom = gVal('skin-custom');
-  const levelMap = {
-    'Tiêu chuẩn': 'Kết cấu da tự nhiên, lỗ chân lông nhìn thấy.',
-    'Chi tiết cao': 'Da chi tiết cao — lỗ chân lông li ti rõ nét, nếp nhăn vi mô tự nhiên, ánh sáng xuyên qua lớp da (SSS).',
-    'Cực kỳ chân thật': 'Da siêu chân thật — từng lỗ chân lông cực nhỏ nhìn thấy rõ, lông tơ mặt (peach fuzz), ánh sáng xuyên hạ bì (subsurface scattering), nếp nhăn vi mô, khuyết điểm da tự nhiên.'
-  };
-  lines.push(levelMap[SS.skin_level] || '');
-  if(MM.skin_detail && MM.skin_detail.length) lines.push(MM.skin_detail.join(', ') + '.');
   if(custom) lines.push(custom);
   return lines.filter(Boolean).join(' ');
 }
