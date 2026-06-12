@@ -356,6 +356,61 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </div>
 
 <div class="fw-block">
+  <div class="fw-head" onclick="moRong('action')"><span class="fw-num">02</span><span class="fw-key" data-en="ACTION">HÀNH ĐỘNG</span><span class="fw-desc" data-en="Character action · Body language · Movement">Hành động nhân vật · Ngôn ngữ cơ thể · Chuyển động</span><span class="fw-check" id="ck-action">○</span></div>
+  <div class="fw-body" id="fb-action">
+    <div>
+      <div class="lbl"><span class="lbl-tag" data-en="Action description">Mô tả hành động chính</span></div>
+      <textarea id="action-desc" rows="5" placeholder="Mô tả hành động cụ thể — ai làm gì, bộ phận cơ thể nào, tốc độ, hướng chuyển động...
+VD: Người đàn ông chậm rãi đặt tay trái lên mặt bàn, ngón trỏ gõ nhịp 1 lần rồi dừng. Mắt nhìn xuống ly cà phê, không chớp trong 3 giây." oninput="capNhat()"></textarea>
+    </div>
+    <div style="margin-top:8px">
+      <div class="lbl" style="margin-bottom:6px"><span class="tag">Ngôn ngữ cơ thể</span></div>
+      <div class="chips" style="flex-wrap:wrap;gap:5px">
+        <span class="chip s" data-g="body">Căng thẳng — vai co lại</span>
+        <span class="chip s" data-g="body">Bình thản — thở đều sâu</span>
+        <span class="chip s" data-g="body">Lo lắng — tay bất an</span>
+        <span class="chip s" data-g="body">Kiên quyết — tư thế thẳng</span>
+        <span class="chip s" data-g="body">Mệt mỏi — vai xệ xuống</span>
+        <span class="chip s" data-g="body">Phòng thủ — tay khoanh</span>
+        <span class="chip s" data-g="body">Tự tin — chiếm không gian</span>
+        <span class="chip s" data-g="body">Sợ hãi — co rút lại</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fw-block">
+  <div class="fw-head" onclick="moRong('chaos')"><span class="fw-num">03</span><span class="fw-key" data-en="CHAOS ELEMENTS">YẾU TỐ CHAOS</span><span class="fw-desc" data-en="Particles · Environment · Atmosphere">Hạt · Môi trường · Khí quyển</span><span class="fw-check" id="ck-chaos">○</span></div>
+  <div class="fw-body" id="fb-chaos">
+    <div id="chaos-env-wrap">
+      <div class="lbl" style="margin-bottom:6px;display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span class="lbl-tag" style="background:#1a0a1a;border-color:#f59e0b;color:#fbbf24">✨ HẠT & MÔI TRƯỜNG</span>
+        <span style="font-size:10px;color:var(--muted)">Mật độ:</span>
+        <div style="display:flex;align-items:center;gap:8px;flex:1;min-width:200px">
+          <input type="range" id="chaos-env-int" min="1" max="100" value="30" style="flex:1;accent-color:#f59e0b;height:4px" oninput="capNhatSlider('chaos-env-int','chaos-env-int-val','chaos-env-int-label',CHAOS_ENV_LABELS)">
+          <span id="chaos-env-int-val" style="font-size:11px;color:#fbbf24;font-weight:500;min-width:28px">30</span>
+          <span id="chaos-env-int-label" style="font-size:10px;color:var(--muted);min-width:80px">Thưa</span>
+        </div>
+      </div>
+      <div class="chips" style="flex-wrap:wrap;gap:5px">
+        <span class="chip s" data-g="chaos_env">Bụi vàng trong ánh nắng</span>
+        <span class="chip s" data-g="chaos_env">Khói mỏng bay lơ lửng</span>
+        <span class="chip s" data-g="chaos_env">Tuyết rơi nhẹ</span>
+        <span class="chip s" data-g="chaos_env">Tro bay trong gió</span>
+        <span class="chip s" data-g="chaos_env">Cánh hoa bay</span>
+        <span class="chip s" data-g="chaos_env">Bọt xà phòng</span>
+        <span class="chip s" data-g="chaos_env">Sợi vải mỏng</span>
+        <span class="chip s" data-g="chaos_env">Lông vũ rơi</span>
+        <span class="chip s" data-g="chaos_env">Mảnh giấy bay</span>
+        <span class="chip s" data-g="chaos_env">God rays — tia sáng</span>
+        <span class="chip s" data-g="chaos_env">Phản chiếu ánh nước</span>
+        <span class="chip s" data-g="chaos_env">Khói đen cuộn</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="fw-block">
   <div class="fw-head" onclick="moRong('scene')"><span class="fw-num">04</span><span class="fw-key" data-en="SCENE">BỐI CẢNH</span><span class="fw-desc">Địa điểm · Thời tiết · Không gian nền</span><span class="fw-check" id="ck-scene">○</span></div>
   <div class="fw-body" id="fb-scene">
     <div class="r2">
