@@ -5,11 +5,14 @@ export default async function handler(req, res) {
   if (req.method === 'OPTIONS') return res.status(200).end();
   if (req.method !== 'POST') return res.status(405).json({ error: 'Method not allowed' });
 
-  const { system, message, max_tokens = 16000, images } = req.body;
+  const { system, message, max_tokens, images } = req.body;
   if (!message) return res.status(400).json({ error: 'Thiếu message.' });
 
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Chưa cấu hình ANTHROPIC_API_KEY trong Vercel.' });
+
+  // Cap max_tokens — claude-sonnet-4-6 max output is 16000
+  const safeMaxTokens = Math.min(parseInt(max_tokens) || 8000, 16000);
 
   // Build content: images first (if any), then text
   let content;
@@ -38,8 +41,8 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-opus-4-8',
-        max_tokens,
+        model: 'claude-sonnet-4-6',
+        max_tokens: safeMaxTokens,
         system: system || '',
         stream: true,
         messages: [{ role: 'user', content }]
@@ -50,6 +53,7 @@ export default async function handler(req, res) {
       const errText = await upstream.text();
       let errMsg;
       try { errMsg = JSON.parse(errText).error?.message; } catch (e) {}
+      console.error('[ANNAHOUSESTUDIO] API error', upstream.status, errMsg || errText.slice(0, 300));
       return res.status(upstream.status).json({ error: errMsg || errText.slice(0, 300) });
     }
 
@@ -85,6 +89,7 @@ export default async function handler(req, res) {
     res.end();
 
   } catch (err) {
+    console.error('[ANNAHOUSESTUDIO] Handler error:', err.message);
     if (!res.headersSent) {
       res.status(500).json({ error: err.message });
     } else {
