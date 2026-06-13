@@ -4842,7 +4842,7 @@ async function taoAnh(){
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
+        model:'claude-sonnet-4-6',
         max_tokens:500,
         messages:[{role:'user',content:`Convert this Vietnamese cinematic prompt into an optimized English image generation prompt for ${style} style, ${ratio} ratio.
 Keep it under 200 words. Focus on: visual composition, lighting, mood, key elements.
@@ -5124,7 +5124,7 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
         'anthropic-dangerous-direct-browser-access':'true'
       },
       body:JSON.stringify({
-        model:'annahousestudio-engine-4-6',
+        model:'claude-sonnet-4-6',
         max_tokens:8000,
         stream:true,
         system:systemPrompt,
