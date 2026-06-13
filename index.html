@@ -1616,7 +1616,21 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         </div>
       </div>
     </div>
+  </div
+  <!-- CHARACTER SHEET 8 GÓC -->
+  <div style="background:#0a0a1a;border:1px solid #2563eb;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+    <div style="font-size:12px;font-weight:500;color:#60a5fa;margin-bottom:3px">📐 Character Sheet 8 Góc</div>
+    <div style="font-size:9.5px;color:var(--muted);margin-bottom:10px">Tạo prompt sheet 8 view (4 mặt CU + 4 body) — gen ảnh này rồi upload lại làm reference lock 3D mạnh nhất</div>
+    <button onclick="taoCharacterSheet()" style="font-size:10px;padding:6px 14px;border-radius:6px;border:none;background:#2563eb;color:#fff;cursor:pointer;font-weight:500;font-family:'IBM Plex Mono',monospace">📐 Tạo Prompt Sheet</button>
+    <div id="char-sheet-output" style="display:none;margin-top:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+        <span style="font-size:9px;color:#60a5fa">Copy prompt này → gen ảnh → upload lại ở trên</span>
+        <button onclick="robustCopy(document.getElementById('char-sheet-text').textContent)" class="btn-i" style="font-size:9px;border-color:#2563eb;color:#60a5fa">⊕ Copy</button>
+      </div>
+      <div id="char-sheet-text" style="font-size:10px;line-height:1.7;white-space:pre-wrap;color:#93c5fd;background:#050510;border:1px solid #1e3a5f;border-radius:6px;padding:9px;max-height:220px;overflow-y:auto"></div>
+    </div>
   </div>
+>
 
   <!-- NHÂN VẬT PHỤ LOCK -->
   <div style="margin-bottom:14px">
@@ -7026,6 +7040,31 @@ function danAIHD(){
     const btn = document.querySelector('[onclick="danAIHD()"]');
     if(btn){ const o=btn.textContent; btn.textContent='✅ Đã dán!'; setTimeout(()=>btn.textContent=o,2000); }
   }
+}
+
+
+// ===== CHARACTER SHEET 8 GÓC =====
+function taoCharacterSheet(){
+  // Lấy mô tả nhân vật từ Character Lock hoặc chips
+  const charDesc = charPromptText || gVal('subject-desc') || gVal('char-face') || '';
+  const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
+  const costume = gVal('char-costume') || '';
+
+  const base = [nationality, charDesc.slice(0,300), costume].filter(Boolean).join(', ');
+
+  const sheet = 'Character reference sheet, same identical person, 8 views in 2 rows on clean white seamless background:' + String.fromCharCode(10,10) +
+    'TOP ROW — 4 close-up face views (sharp facial detail, consistent features): front face, left profile, right profile, back of head.' + String.fromCharCode(10,10) +
+    'BOTTOM ROW — 4 full body views (A-pose, same clothing): front, left side, right side, back.' + String.fromCharCode(10,10) +
+    'SUBJECT: ' + (base || 'the character') + String.fromCharCode(10,10) +
+    'CRITICAL: Identical face, hair, body and clothing across all 8 views. Even neutral studio lighting. Photorealistic. SSS skin with natural pores and texture, no AI smoothing. Grid layout, evenly spaced, each view clearly separated. Wide aspect ratio so each view has enough detail --ar 16:9';
+
+  const out = document.getElementById('char-sheet-output');
+  const txt = document.getElementById('char-sheet-text');
+  if(out) out.style.display = 'block';
+  if(txt) txt.textContent = sheet;
+
+  const btn = document.querySelector('[onclick="taoCharacterSheet()"]');
+  if(btn){ const o=btn.textContent; btn.textContent='✅ Đã tạo prompt!'; setTimeout(()=>btn.textContent=o,2000); }
 }
 
 // ===== INIT =====
