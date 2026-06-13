@@ -548,6 +548,25 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
 
     <div><div class="lbl"><span class="lbl-tag" data-en="Weather / Environment">Thời tiết / Môi trường</span></div><div class="chips"><span class="chip" data-g="weather">Trời trong xanh</span><span class="chip" data-g="weather">Mưa lớn</span><span class="chip" data-g="weather">Sương mù dày</span><span class="chip" data-g="weather">Bão tuyết</span><span class="chip" data-g="weather">Ngập khói</span><span class="chip" data-g="weather">Không gian vô trùng</span><span class="chip" data-g="weather">Bụi vàng bay</span><span class="chip" data-g="weather">Chân không / Vũ trụ</span></div></div>
+
+    <!-- ===== 5 GÓC BỐI CẢNH ===== -->
+    <div style="margin-top:12px;border-top:1px solid var(--bdr);padding-top:12px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:7px">
+        <div>
+          <div style="font-size:11px;font-weight:500;color:#06b6d4;letter-spacing:.5px">📸 BỐI CẢNH 5 GÓC — Scene Reference</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Tạo 5 prompt góc chụp riêng biệt: Trước · Trái · Phải · Sau · Bird-eye giám sát</div>
+        </div>
+        <button onclick="taoBoCanhNamGoc()" style="padding:7px 16px;border-radius:7px;border:1px solid #06b6d4;background:#020f14;color:#06b6d4;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500;transition:all .15s" onmouseover="this.style.background='#041a20'" onmouseout="this.style.background='#020f14'">📸 Tạo 5 Góc Bối Cảnh</button>
+      </div>
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
+        <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">📷 Góc trước</span>
+        <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">◀ Góc trái</span>
+        <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">▶ Góc phải</span>
+        <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">🔙 Góc sau</span>
+        <span style="font-size:10px;color:#06b6d4;padding:3px 8px;border:1px solid #06b6d4;border-radius:10px">🎥 Bird-eye giám sát</span>
+      </div>
+    </div>
+
   </div>
 </div>
 
@@ -2409,49 +2428,53 @@ function layChung(){
     as:gVal('lighting-desc'),
     pc:gVal('style-desc'),
     rb:gVal('constraints-desc'),
+    wardrobe:gVal('wardrobe-lock'),
   };
 }
 
-// ===== ĐỒNG BỘ NHÂN VẬT & BỐI CẢNH =====
-// Dùng chung cho taoVI, taoSD, taoCG — đảm bảo nhất quán
+// ===== ĐỒNG BỘ NHÂN VẬT & BỐI CẢNH — dùng chung taoVI / taoSD / taoCG =====
 
-function buildCharacterBlock(lang='vi'){
-  const isEN = lang !== 'vi';
+function buildCharacterBlock(lang){
+  const isEN = lang === 'en';
   const nv = gVal('subject-desc');
-  if(!nv) return null;
-
+  if(!nv) return [];
   const lines = [];
+  const genderMap = {'Nam':'Male','Nữ':'Female','Trung tính':'Non-binary','Robot / AI':'Robot / AI','Vật thể / Sản phẩm':'Object / Product'};
+  const ageMap = {'Thiếu niên (~16)':'Teenager (~16)','Thanh niên (~25)':'Young adult (~25)','Trung niên (~40)':'Middle-aged (~40)','Cao tuổi (~60+)':'Elderly (~60+)','Không áp dụng':'N/A'};
 
-  // Gender + Age mapping
-  const genderMap = {
-    'Nam':'Male','Nữ':'Female','Trung tính':'Non-binary',
-    'Robot / AI':'Robot / AI','Vật thể / Sản phẩm':'Object / Product'
-  };
-  const ageMap = {
-    'Thiếu niên (~16)':'Teenager (~16)','Thanh niên (~25)':'Young adult (~25)',
-    'Trung niên (~40)':'Middle-aged (~40)','Cao tuổi (~60+)':'Elderly (~60+)',
-    'Không áp dụng':'N/A'
-  };
-
-  // Build identity line
-  const identity = [];
-  if(SS.gender) identity.push(isEN ? (genderMap[SS.gender]||SS.gender) : SS.gender);
-  if(SS.age)    identity.push(isEN ? (ageMap[SS.age]||SS.age) : SS.age);
-  if(MM.nationality && MM.nationality.length)
-    identity.push(MM.nationality.map(n=>n.replace(/^.{2,3}\s/,'')).join(', '));
-
-  // Character lock first (nếu có)
+  // Character lock
   if(charPromptText){
     lines.push(isEN ? '[CHARACTER LOCK — CONSISTENT IDENTITY]' : '[NHÂN VẬT NHẤT QUÁN — CHARACTER LOCK]');
     lines.push(charPromptText);
     lines.push('');
   }
+  if(typeof nvPhuList !== 'undefined' && nvPhuList.length){
+    nvPhuList.forEach(n => {
+      if(n.lockText){
+        lines.push('[CHARACTER LOCK — ' + (n.name||'NV PHỤ').toUpperCase() + ']');
+        lines.push(n.lockText);
+        lines.push('');
+      }
+    });
+  }
 
-  // Main identity line
-  const identityStr = identity.length ? identity.join(', ') + '. ' : '';
-  lines.push(identityStr + nv);
+  // Identity
+  const identity = [];
+  if(SS.gender) identity.push(isEN ? (genderMap[SS.gender]||SS.gender) : SS.gender);
+  if(SS.age)    identity.push(isEN ? (ageMap[SS.age]||SS.age) : SS.age);
+  if(MM.nationality && MM.nationality.length)
+    identity.push(MM.nationality.map(n=>n.replace(/^.{2,3}\s/,'')).join(', '));
+  lines.push((identity.length ? identity.join(', ') + '. ' : '') + nv);
 
-  // Nhân vật phụ
+  // Wardrobe lock
+  const wd = gVal('wardrobe-lock');
+  if(wd){
+    lines.push('');
+    lines.push(isEN ? '[WARDROBE — LOCKED]' : '[TRANG PHỤC — CỐ ĐỊNH]');
+    lines.push(wd);
+  }
+
+  // Secondary characters
   const nvpLines = layNVPText();
   if(nvpLines.length){
     lines.push('');
@@ -2459,29 +2482,27 @@ function buildCharacterBlock(lang='vi'){
     nvpLines.forEach(l => lines.push('• ' + l));
   }
 
-  // Layout & khoảng cách — chỉ khi có nhiều NV
+  // Layout & distance
   if(SS.layout || SS.char_dist || SS.char_layout){
     lines.push('');
-    if(SS.layout)     lines.push((isEN ? 'Composition: ' : 'Bố cục: ') + SS.layout + '.');
-    if(SS.char_dist)  lines.push((isEN ? 'Distance: ' : 'Khoảng cách: ') + SS.char_dist + '.');
-    if(SS.char_layout)lines.push((isEN ? 'Frame layout: ' : 'Bố cục frame: ') + SS.char_layout + '.');
+    if(SS.layout)      lines.push((isEN?'Composition: ':'Bố cục: ') + SS.layout + '.');
+    if(SS.char_dist)   lines.push((isEN?'Distance: ':'Khoảng cách: ') + SS.char_dist + '.');
+    if(SS.char_layout) lines.push((isEN?'Frame layout: ':'Bố cục frame: ') + SS.char_layout + '.');
   }
 
-  // Hành động NV1/2/3
-  const hd = gVal('action-desc');
-  const hd2 = gVal('action-nv2');
-  const hd3 = gVal('action-nv3');
+  // Action NV1/2/3
+  const hd = gVal('action-desc'), hd2 = gVal('action-nv2'), hd3 = gVal('action-nv3');
   if(hd || hd2 || hd3 || (MM.body && MM.body.length)){
     lines.push('');
     lines.push(isEN ? '[ACTION]' : '[HÀNH ĐỘNG]');
     if(MM.body && MM.body.length)
-      lines.push((isEN ? 'Body language: ' : 'Ngôn ngữ cơ thể: ') + MM.body.join(', ') + '.');
-    if(hd)  lines.push((isEN ? 'Character 1: ' : 'Nhân vật 1: ') + hd);
-    if(hd2) lines.push((isEN ? 'Character 2: ' : 'Nhân vật 2: ') + hd2);
-    if(hd3) lines.push((isEN ? 'Character 3: ' : 'Nhân vật 3: ') + hd3);
+      lines.push((isEN?'Body language: ':'Ngôn ngữ cơ thể: ') + MM.body.join(', ') + '.');
+    if(hd)  lines.push((isEN?'Character 1: ':'Nhân vật 1: ') + hd);
+    if(hd2) lines.push((isEN?'Character 2: ':'Nhân vật 2: ') + hd2);
+    if(hd3) lines.push((isEN?'Character 3: ':'Nhân vật 3: ') + hd3);
   }
 
-  // Skin texture
+  // Skin
   const skin = isEN ? laySkinPromptEN() : laySkinPromptVI();
   if(skin){
     lines.push('');
@@ -2489,68 +2510,82 @@ function buildCharacterBlock(lang='vi'){
     lines.push(skin);
   }
 
-  // Emotion (inline với NV)
-  if(MM.emo && MM.emo.length){
+  // Emotion inline with character
+  if((MM.emo && MM.emo.length) || (MM.sub && MM.sub.length)){
     lines.push('');
-    lines.push(isEN ? '[EMOTION — show don\'t tell]' : '[CẢM XÚC — thể hiện qua hành động]');
-    if(MM.emo.length)  lines.push((isEN?'Emotion: ':'Cảm xúc: ') + MM.emo.map(e=>e.replace(/^\S+\s/,'')).join(', ') + '.');
-    if(MM.sub && MM.sub.length)  lines.push((isEN?'Subtext: ':'Nội tâm ẩn: ') + MM.sub.join(', ') + '.');
-    if(SS.emo_intensity) lines.push((isEN?'Intensity: ':'Mức độ: ') + SS.emo_intensity + '/100.');
+    lines.push(isEN ? "[EMOTION — show don't tell]" : '[CẢM XÚC — thể hiện qua hành động]');
+    if(MM.emo && MM.emo.length)
+      lines.push((isEN?'Emotion: ':'Cảm xúc: ') + MM.emo.map(e=>e.replace(/^\S+\s/,'')).join(', ') + '.');
+    if(MM.sub && MM.sub.length)
+      lines.push((isEN?'Subtext: ':'Nội tâm ẩn: ') + MM.sub.join(', ') + '.');
+    if(SS.emo_intensity)
+      lines.push((isEN?'Intensity: ':'Mức độ: ') + SS.emo_intensity + '/100.');
     lines.push(isEN ? "Rule: Show don't tell — no direct emotional narration." : 'Nguyên tắc: Thể hiện qua hành động — không khai báo trực tiếp.');
   }
 
   return lines;
 }
 
-function buildSceneBlock(lang='vi'){
-  const isEN = lang !== 'vi';
+function buildSceneBlock(lang){
+  const isEN = lang === 'en';
   const mt = gVal('scene-desc');
   const dd = gVal('location').toUpperCase();
   const as = gVal('lighting-desc');
-
   const lines = [];
 
-  // Scene header line: INT/EXT — LOCATION — TIME
-  const inexMapVI = {'Trong nhà (INT.)':'TRONG NHÀ','Ngoài trời (EXT.)':'NGOÀI TRỜI','Hỗn hợp':'HỖN HỢP','Không gian ảo / Studio':'STUDIO'};
-  const inexMapEN = {'Trong nhà (INT.)':'INT.','Ngoài trời (EXT.)':'EXT.','Hỗn hợp':'INT./EXT.','Không gian ảo / Studio':'STUDIO'};
-  const timeMapVI = {'Ban ngày':'BAN NGÀY','Ban đêm':'BAN ĐÊM','Hoàng hôn':'HOÀNG HÔN','Bình minh':'BÌNH MINH'};
-  const timeMapEN = {'Ban ngày':'DAY','Ban đêm':'NIGHT','Hoàng hôn':'DUSK','Bình minh':'DAWN'};
+  // Header
+  const inexVI = {'Trong nhà (INT.)':'TRONG NHÀ','Ngoài trời (EXT.)':'NGOÀI TRỜI','Hỗn hợp':'HỖN HỢP','Không gian ảo / Studio':'STUDIO'};
+  const inexEN = {'Trong nhà (INT.)':'INT.','Ngoài trời (EXT.)':'EXT.','Hỗn hợp':'INT./EXT.','Không gian ảo / Studio':'STUDIO'};
+  const timeVI = {'Ban ngày':'BAN NGÀY','Ban đêm':'BAN ĐÊM','Hoàng hôn':'HOÀNG HÔN','Bình minh':'BÌNH MINH'};
+  const timeEN = {'Ban ngày':'DAY','Ban đêm':'NIGHT','Hoàng hôn':'DUSK','Bình minh':'DAWN'};
+  const inexMap = isEN ? inexEN : inexVI;
+  const timeMap = isEN ? timeEN : timeVI;
 
-  const inexMap = isEN ? inexMapEN : inexMapVI;
-  const timeMap = isEN ? timeMapEN : timeMapVI;
-
-  const headerParts = [
+  const hdr = [
     SS.inex ? (inexMap[SS.inex]||SS.inex) : (isEN?'INT.':'TRONG NHÀ'),
-    dd || (isEN ? 'LOCATION' : 'KHÔNG GIAN'),
+    dd || (isEN?'LOCATION':'KHÔNG GIAN'),
     SS.timeofday ? (timeMap[SS.timeofday]||SS.timeofday) : ''
-  ].filter(Boolean);
-  lines.push(headerParts.join(' — '));
+  ].filter(Boolean).join(' — ');
+  lines.push(hdr);
 
-  // Genre
   if(SS.genre) lines.push((isEN?'Genre: ':'Thể loại: ') + SS.genre + '.');
-
-  // Scene description
   if(mt) lines.push(mt);
-
-  // Weather / atmosphere
   if(MM.weather && MM.weather.length)
-    lines.push((isEN?'Atmosphere: ':'Thời tiết: ') + MM.weather.join(', ') + '.');
+    lines.push((isEN?'Atmosphere: ':'Thời tiết/Khí quyển: ') + MM.weather.join(', ') + '.');
 
   // Lighting
-  lines.push('');
-  lines.push(isEN ? '[LIGHTING]' : '[ÁNH SÁNG]');
-  if(SS.light_setup) lines.push((isEN?'Setup: ':'Bố cục: ') + SS.light_setup + '.');
-  if(MM.light_color && MM.light_color.length)
-    lines.push((isEN?'Color temperature: ':'Màu: ') + MM.light_color.join(', ') + '.');
-  if(SS.pal) lines.push((isEN?'Color palette: ':'Bảng màu: ') + SS.pal + '.');
-  if(as) lines.push(as);
+  if(as || SS.light_setup || (MM.light_color && MM.light_color.length) || SS.pal){
+    lines.push('');
+    lines.push(isEN ? '[LIGHTING]' : '[ÁNH SÁNG]');
+    if(SS.light_setup) lines.push((isEN?'Setup: ':'Bố cục: ') + SS.light_setup + '.');
+    if(MM.light_color && MM.light_color.length)
+      lines.push((isEN?'Color temperature: ':'Nhiệt độ màu: ') + MM.light_color.join(', ') + '.');
+    if(SS.pal) lines.push((isEN?'Color palette: ':'Bảng màu: ') + SS.pal + '.');
+    if(as) lines.push(as);
+  }
 
-  // Chaos / environment
+  // Blackmagic / LUT
+  if(SS.bm_profile || (typeof bmLutSelected !== 'undefined' && bmLutSelected)){
+    lines.push('');
+    lines.push(isEN ? '[COLOR GRADE — BLACKMAGIC URSA CINE 12K / DAVINCI RESOLVE]' : '[COLOR GRADE — BLACKMAGIC 12K URSA CINE / DAVINCI RESOLVE]');
+    if(SS.bm_profile) lines.push('Camera Profile: ' + SS.bm_profile + '.');
+    if(typeof bmLutSelected !== 'undefined' && bmLutSelected){
+      lines.push('LUT Style: ' + bmLutSelected.split('—')[0].trim() + '.');
+      lines.push(bmLutSelected + '.');
+    }
+    const bmC = gVal('bm-lut-custom');
+    if(bmC) lines.push(bmC);
+    if(MM.dv_node && MM.dv_node.length)
+      lines.push('DaVinci Nodes: ' + MM.dv_node.join(' · ') + '.');
+  }
+
+  // Chaos / particles
   const ce = MM.chaos_env || [];
   if(ce.length){
     lines.push('');
     const cei = SS.chaos_env_intensity
-      ? (isEN ? `density ${SS.chaos_env_intensity}/100` : `mật độ ${SS.chaos_env_intensity}/100 — ${getChaosLabel(SS.chaos_env_intensity, CHAOS_ENV_LABELS)}`)
+      ? (isEN ? 'density ' + SS.chaos_env_intensity + '/100'
+               : 'mật độ ' + SS.chaos_env_intensity + '/100 — ' + (typeof getChaosLabel === 'function' ? getChaosLabel(SS.chaos_env_intensity, CHAOS_ENV_LABELS) : ''))
       : '';
     lines.push((isEN?'[ENVIRONMENT & PARTICLES]':'[HẠT & MÔI TRƯỜNG]') + (cei?' — '+cei:''));
     ce.forEach(e => lines.push('• ' + e));
@@ -2559,27 +2594,112 @@ function buildSceneBlock(lang='vi'){
   return lines;
 }
 
+// ===== PROMPT BỐI CẢNH 5 GÓC =====
+// Tạo 5 prompt: Front + Left + Right + Back + Bird-eye (CCTV/Surveillance)
+function taoBoCanhNamGoc(){
+  const {dd,nv,mt,as} = layChung();
+  const sceneLines = buildSceneBlock('en');
+  const sceneCtx = sceneLines.join('\n');
+  const charCtx = nv ? nv : '';
+  const wd = gVal('wardrobe-lock');
+
+  const gocData = [
+    {
+      key:'front',
+      label:'📸 GÓC TRƯỚC — Front View',
+      cam:'Camera faces subject head-on. Subject fills center frame. Eye-level 85mm f/1.8. Direct frontal lighting.',
+      note:'Standard reveal angle. Maximum emotional impact on face.'
+    },
+    {
+      key:'left',
+      label:'📸 GÓC TRÁI — Left Side Profile',
+      cam:'Camera positioned 90° left of subject. Pure profile view. 85mm f/2.0 telephoto compression. Side-lighting rakes across face.',
+      note:'Reveals silhouette, jawline, posture depth.'
+    },
+    {
+      key:'right',
+      label:'📸 GÓC PHẢI — Right Side Profile',
+      cam:'Camera positioned 90° right of subject. Mirror profile. 85mm f/2.0. Opposite side lighting catch light in eye.',
+      note:'Shows dominant hand side. Subtle asymmetry revealed.'
+    },
+    {
+      key:'back',
+      label:'📸 GÓC SAU — Rear View',
+      cam:'Camera behind subject. Subject faces away from lens. 50mm f/1.8. Subject silhouetted against scene foreground.',
+      note:'Mystery, isolation, subject relationship with environment.'
+    },
+    {
+      key:'overhead',
+      label:'🎥 GÓC GIÁM SÁT — Bird-Eye / Surveillance',
+      cam:'Camera overhead 90° top-down CCTV angle. Wide 24mm lens. High contrast surveillance aesthetic. Subject reduced to shape and shadow. Static locked-off tripod.',
+      note:'Power imbalance, omniscience, vulnerability. Subject unaware of camera.'
+    }
+  ];
+
+  const L = [];
+  L.push('ANNAHOUSESTUDIO — BỐI CẢNH 5 GÓC (SCENE REFERENCE PROMPTS)');
+  L.push('BY LÝ MINH NHỰT');
+  L.push('═'.repeat(50));
+  L.push('');
+  L.push('[SCENE CONTEXT]');
+  L.push(sceneCtx);
+  if(charCtx){ L.push(''); L.push('[SUBJECT]'); L.push(charCtx); }
+  if(wd){ L.push(''); L.push('[WARDROBE — LOCKED]'); L.push(wd); }
+  L.push('');
+  L.push('─'.repeat(50));
+  L.push('USE: Generate 5 reference stills for art direction / location scout / continuity.');
+  L.push('─'.repeat(50));
+  L.push('');
+
+  gocData.forEach((g, i) => {
+    L.push('═'.repeat(40));
+    L.push('ANGLE ' + (i+1) + ' / 5 — ' + g.label);
+    L.push('═'.repeat(40));
+    L.push('');
+    L.push('[CAMERA SETUP]');
+    L.push(g.cam);
+    L.push('');
+    L.push('[SCENE]');
+    L.push(sceneCtx);
+    if(charCtx){ L.push(''); L.push('[SUBJECT IN FRAME]'); L.push(charCtx + '.'); }
+    if(wd){ L.push('[WARDROBE] ' + wd); }
+    L.push('');
+    L.push('[TECHNICAL]');
+    L.push('Static shot. No camera movement. Single frame reference. Cinematic lighting. No motion blur.');
+    L.push('No AI smoothing. No warped faces. No texture swimming. Photorealistic.');
+    L.push('');
+    L.push('[ART DIRECTION NOTE]');
+    L.push(g.note);
+    L.push('');
+  });
+
+  L.push('═'.repeat(50));
+  L.push('ANNAHOUSESTUDIO AI — annahousestudio.vercel.app');
+  L.push('lypro.vn — by Lý Minh Nhựt');
+
+  const result = L.join('\n');
+  kqVI = result;
+  hienKQ(result, 'vi', '📸 Bối Cảnh 5 Góc — Scene Reference');
+  document.getElementById('ghi-chu').textContent = '✦ 5 góc chụp tham chiếu bối cảnh — dùng để định vị không gian, art direction, continuity.';
+  document.getElementById('ghi-chu').style.display = 'block';
+  sw('out');
+}
+
 // ===== TẠO PROMPT VI =====
 function taoVI(){
   sw('out');
-  const{dd,nv,nvp,hd,mt,as,pc,rb}=layChung();const L=[];
+  const{dd,nv,nvp,hd,mt,as,pc,rb,wardrobe}=layChung();const L=[];
 
   L.push('[Tiêu đề cảnh]');
 
-  // ── NHÂN VẬT — dùng buildCharacterBlock đồng bộ ──
-  const charBlockVI = buildCharacterBlock('vi');
-  if(charBlockVI && charBlockVI.length){
-    L.push('[NHÂN VẬT]');
-    charBlockVI.forEach(l => L.push(l));
-    L.push('');
-  }
+  // ── NHÂN VẬT (buildCharacterBlock — đồng bộ) ──
+  const charVI = buildCharacterBlock('vi');
+  if(charVI.length){ L.push('[NHÂN VẬT]'); charVI.forEach(l=>L.push(l)); L.push(''); }
 
-  // ── BỐI CẢNH — dùng buildSceneBlock đồng bộ ──
+  // ── BỐI CẢNH (buildSceneBlock — đồng bộ) ──
   L.push('[BỐI CẢNH]');
-  buildSceneBlock('vi').forEach(l => L.push(l));
+  buildSceneBlock('vi').forEach(l=>L.push(l));
   L.push('');
-
-  if(as||SS.light_setup||MM.light_color.length){L.push('[ÁNH SÁNG]');if(SS.light_setup)L.push('Bố cục: '+SS.light_setup+'.');if(MM.light_color.length)L.push('Màu: '+MM.light_color.join(', ')+'.');if(SS.pal)L.push('Bảng màu: '+SS.pal+'.');if(as)L.push(as);L.push('');}
   const cam=[];if(SS.shot_size)cam.push(SS.shot_size);if(SS.movement)cam.push(SS.movement);if(SS.angle)cam.push(SS.angle);if(SS.lens)cam.push(SS.lens);if(SS.dof)cam.push(SS.dof);
   if(SS.cam_speed)cam.push('Tốc độ cú máy: '+SS.cam_speed.replace(/[🐌🐢🚶🚴🏃⚡🚀]/g,'').trim());
   if(cam.length){L.push('[MÁY QUAY]');L.push(cam.join(', ')+'.');L.push('');}
@@ -2593,7 +2713,8 @@ function taoVI(){
     if(MM.director.length)L.push('Tham chiếu: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grade: '+MM.colorgrade.join(', ')+'.');if(MM.visual.length)L.push('Hình ảnh: '+MM.visual.join(', ')+'.');if(pc)L.push(pc);L.push('');}
   const cl=[];if(SS.res)cl.push(SS.res);if(SS.fps)cl.push(SS.fps);MM.grain.forEach(g=>cl.push(g));MM.qtag.forEach(q=>cl.push(q));
   if(cl.length){L.push('[CHẤT LƯỢNG]');L.push(cl.join(', ')+'.');L.push('');}
-  // ===== CHAOS ELEMENTS ===== (emotion now in buildCharacterBlock)
+  // Emotion handled inside buildCharacterBlock — removed duplicate here
+  // ===== CHAOS ELEMENTS =====
   const _ce = MM.chaos_env || [];
   const _cei = SS.chaos_env_intensity ? `mật độ ${SS.chaos_env_intensity}/100 — ${getChaosLabel(SS.chaos_env_intensity, CHAOS_ENV_LABELS)}` : '';
   if(_ce.length){
@@ -2678,18 +2799,14 @@ function taoSD(){
   L.push('');
   const tl={4:'0–1.5s: Hook max impact. 1.5–3s: Single main action. 3–4s: Climax hold or cut black.',8:'0–2s: Hook. 2–4.5s: Establish location and character. 4.5–7s: Action escalation. 7–8s: Climax reveal.',10:'0–2s: Hook. 2–3.5s: Wide establishing 2ft/s. 3.5–6s: Primary action 3.5ft/s. 6–8.5s: Escalating tension 5ft/s. 8.5–10s: Climax + resolution.',15:'0–2s: Hook. 2–4.5s: Wide establishing 24mm slow pan 2ft/s. 4.5–7s: Subject intro dolly 2.5ft/s. 7–10s: Rising action 3–4ft/s. 10–12.5s: Climax max velocity. 12.5–15s: Resolution 1–2ft/s.'};
   L.push(`[TIMELINE — ${selDuration}s arc]`);L.push(tl[selDuration]||tl[8]);if(selPlatform)L.push('Platform: '+selPlatform.split(',')[0].trim()+'.');L.push('');
-  // ── SUBJECT — dùng buildCharacterBlock đồng bộ ──
-  const charBlockEN = buildCharacterBlock('en');
-  if(charBlockEN && charBlockEN.length){
-    L.push('[SUBJECT]');
-    charBlockEN.forEach(l => L.push(l));
-    L.push('');
-  }
-  // ── SCENE — dùng buildSceneBlock đồng bộ ──
+  // ── SUBJECT (buildCharacterBlock — đồng bộ với VI) ──
+  const charEN = buildCharacterBlock('en');
+  if(charEN.length){ L.push('[SUBJECT]'); charEN.forEach(l=>L.push(l)); L.push(''); }
+
+  // ── SCENE (buildSceneBlock — đồng bộ với VI) ──
   L.push('[SCENE]');
-  buildSceneBlock('en').forEach(l => L.push(l));
+  buildSceneBlock('en').forEach(l=>L.push(l));
   L.push('');
-  if(as||SS.light_setup){L.push('[LIGHTING]');if(SS.light_setup)L.push('Setup: '+SS.light_setup+'.');if(MM.light_color.length)L.push('Color temperature: '+MM.light_color.join(', ')+'.');if(SS.pal)L.push('Color palette: '+SS.pal+'.');if(as)L.push(as);L.push('');}
   const cm2=[];if(SS.shot_size)cm2.push(SS.shot_size);if(SS.movement)cm2.push(SS.movement);if(SS.angle)cm2.push(SS.angle);if(SS.lens)cm2.push(SS.lens);if(SS.dof)cm2.push(SS.dof);
   const speedMapSD={'🐌 Cực chậm — 0.5 ft/s (thiền định, nghi lễ)':'extremely slow 0.5 ft/s (meditative, ceremonial pacing)','🐢 Chậm nhẹ — 1 ft/s (trầm lắng, cảm xúc)':'very slow 1 ft/s (contemplative, emotional weight)','🚶 Chậm x2 — 2 ft/s (điện ảnh chuẩn)':'slow 2 ft/s (cinematic standard pace)','🚴 Trung bình — 3.5 ft/s (nhịp tự nhiên)':'medium 3.5 ft/s (natural rhythm)','🏃 Nhanh — 5 ft/s (căng thẳng, hành động)':'fast 5 ft/s (tension, action)','⚡ Nhanh x2 — 8 ft/s (truy đuổi, adrenaline)':'very fast 8 ft/s (chase, high adrenaline)','🚀 Cực nhanh — 12+ ft/s (impact, shock)':'extreme speed 12+ ft/s (impact, shock moment)'};
   if(SS.cam_speed)cm2.push('Camera velocity: '+(speedMapSD[SS.cam_speed]||SS.cam_speed));
@@ -2735,7 +2852,7 @@ function taoSD(){
   if(MM.director.length||MM.colorgrade.length||pc){L.push('[STYLE]');if(MM.director.length)L.push('Visual reference: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grading: '+MM.colorgrade.join(', ')+'.');if(pc)L.push(pc);L.push('');}
   const ql=[];if(SS.res)ql.push(SS.res);if(SS.fps)ql.push(SS.fps);MM.grain.forEach(g=>ql.push(g));MM.qtag.forEach(q=>ql.push(q));
   if(ql.length){L.push('[QUALITY]');L.push(ql.join(', ')+'.');L.push(`Duration: ${selDuration}s. Aspect ratio: ${selPlatform&&selPlatform.includes('9:16')?'9:16 vertical':'16:9 widescreen'}. Resolution: 720p.`);L.push('');}
-  // Emotion now handled in buildCharacterBlock — no duplicate needed
+  // Emotion handled inside buildCharacterBlock
   if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[DIALOGUE]');dsThoai.forEach(t=>{const ten=(t.ten||'CHARACTER').toUpperCase();const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(whispered)','Độc thoại':'(monologue)'};L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+(t.loi||'...'));});L.push('');}
   if(sAm||sFo||sMu||sSf||sSi){L.push('[AUDIO DESIGN]');if(sSi)L.push('Silence: '+sSi);if(sAm)L.push('Ambient (-4dB): '+sAm);if(sFo)L.push('Foley (0dB): '+sFo);if(sMu)L.push('Music (-2dB): '+sMu);if(sSf)L.push('SFX (+2dB): '+sSf);L.push('');}
@@ -2773,19 +2890,19 @@ function taoCG(){
   }
   L.push('');
   if(selRenderStyle){L.push('[RENDER STYLE]');L.push(selRenderStyle);if(MM.render_engine.length)L.push('Render engine: '+MM.render_engine.join(', ')+'.');L.push('');}
-  if(nv){
-    L.push('[SUBJECT / OBJECT]');
-    const p=[];
-    if(SS.gender&&SS.gender!=='Vật thể / Sản phẩm'){const gm={'Nam':'Male','Nữ':'Female','Trung tính':'Non-binary','Robot / AI':'Robot / AI'};p.push(gm[SS.gender]||SS.gender);}
-    if(nv)p.push(nv);
-    L.push(p.join(', ')+'.');
-    const nvpLines=layNVPText();
-    if(nvpLines.length){L.push('');L.push('Secondary characters / objects:');nvpLines.forEach(l=>L.push('• '+l));}
-    L.push('Include scale reference if applicable.');
-  }
+  // ── SUBJECT (buildCharacterBlock — đồng bộ với VI/SD) ──
+  const charCG = buildCharacterBlock('en');
+  if(charCG.length){ L.push('[SUBJECT / OBJECT]'); charCG.forEach(l=>L.push(l)); L.push('Include scale reference if applicable.'); L.push(''); }
+
   if(hd){L.push('[ACTION / ANIMATION]');L.push(hd+'.');if(cgAnimD)L.push(cgAnimD);if(SS.cg_anim)L.push('Animation type: '+SS.cg_anim+'.');L.push('');}
-  if(mt||SS.inex){L.push('[SCENE / ENVIRONMENT]');if(dd)L.push(dd+'.');if(SS.genre)L.push('Genre/context: '+SS.genre+'.');if(mt)L.push(mt);if(MM.weather.length)L.push('Atmosphere: '+MM.weather.join(', ')+'.');if(MM.cg_comp.length)L.push('Composition: '+MM.cg_comp.join(', ')+'.');if(MM.cg_atmo.length)L.push('Mood: '+MM.cg_atmo.join(', ')+'.');L.push('');}
-  if(selLightingCG||MM.cg_light_fx.length||as){L.push('[LIGHTING SETUP]');if(selLightingCG)L.push(selLightingCG);if(MM.light_color.length)L.push('Color temperature: '+MM.light_color.join(', ')+'.');if(SS.pal)L.push('Color palette: '+SS.pal+'.');if(MM.cg_light_fx.length)L.push('Special lighting FX: '+MM.cg_light_fx.join(', ')+'.');if(as)L.push(as);L.push('');}
+
+  // ── SCENE (buildSceneBlock — đồng bộ với VI/SD) ──
+  L.push('[SCENE / ENVIRONMENT]');
+  buildSceneBlock('en').forEach(l=>L.push(l));
+  if(MM.cg_comp && MM.cg_comp.length) L.push('Composition: '+MM.cg_comp.join(', ')+'.');
+  if(MM.cg_atmo && MM.cg_atmo.length) L.push('Mood: '+MM.cg_atmo.join(', ')+'.');
+  L.push('');
+  if(selLightingCG||MM.cg_light_fx.length){L.push('[CGI LIGHTING OVERRIDE]');if(selLightingCG)L.push(selLightingCG);if(MM.cg_light_fx.length)L.push('Special lighting FX: '+MM.cg_light_fx.join(', ')+'.');L.push('');}
   if(MM.cg_material.length||cgMatC){L.push('[MATERIALS & SURFACES — PBR]');MM.cg_material.forEach(m=>L.push('• '+m));if(cgMatC)L.push(cgMatC);L.push('');}
   const cm4=[];if(SS.shot_size)cm4.push(SS.shot_size);if(SS.movement)cm4.push(SS.movement);if(SS.angle)cm4.push(SS.angle);if(SS.lens)cm4.push(SS.lens);if(SS.dof)cm4.push(SS.dof);
   const speedMapCG={'🐌 Cực chậm — 0.5 ft/s (thiền định, nghi lễ)':'extremely slow 0.5 ft/s (meditative, ceremonial pacing)','🐢 Chậm nhẹ — 1 ft/s (trầm lắng, cảm xúc)':'very slow 1 ft/s (contemplative, emotional weight)','🚶 Chậm x2 — 2 ft/s (điện ảnh chuẩn)':'slow 2 ft/s (cinematic standard pace)','🚴 Trung bình — 3.5 ft/s (nhịp tự nhiên)':'medium 3.5 ft/s (natural rhythm)','🏃 Nhanh — 5 ft/s (căng thẳng, hành động)':'fast 5 ft/s (tension, action)','⚡ Nhanh x2 — 8 ft/s (truy đuổi, adrenaline)':'very fast 8 ft/s (chase, high adrenaline)','🚀 Cực nhanh — 12+ ft/s (impact, shock)':'extreme speed 12+ ft/s (impact, shock moment)'};
@@ -2978,6 +3095,8 @@ async function dichAI(){
   document.getElementById('ai-output').textContent = '';
   let acc = '';
   try{
+    const _charCtxDich = buildCharacterBlock('en').join('\n');
+    const _sceneCtxDich = buildSceneBlock('en').join('\n');
     const ok = await goiClaude(
       `You are an expert cinematic prompt translator for AI video generation (Seedance 2.0 on Higgsfield).
 Translate Vietnamese cinematic prompts to professional English.
@@ -2987,7 +3106,9 @@ Rules:
 - Keep ALL section headers uppercase ([SUBJECT], [ACTION], [SCENE], etc.)
 - Keep @material[name] references unchanged
 - Translate naturally — preserve cinematic intent
-- Output ONLY the translated prompt, no explanations`,
+- Output ONLY the translated prompt, no explanations
+${_charCtxDich ? '- CHARACTER CONTEXT: ' + _charCtxDich.split('\n')[0] : ''}
+${_sceneCtxDich ? '- SCENE CONTEXT: ' + _sceneCtxDich.split('\n')[0] : ''}`,
       `Translate this prompt to English:
 
 ${nd}`,
@@ -3327,7 +3448,7 @@ function veNVP(){
 }
 
 // Lấy text nhân vật phụ cho prompt
-async function layNVPText(){
+function layNVPText(){
   return dsNVP.filter(n=>n.moTa||n.ten).map(n=>{
     const ten = n.ten ? n.ten.toUpperCase() : n.vai.toUpperCase();
     return `${ten} (${n.vai}): ${n.moTa||'Chưa có mô tả.'}`;
@@ -3769,7 +3890,7 @@ CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP.`;
   if(_nv) ksCon.push('Nhân vật: ' + _nv);
   if(_hd) ksCon.push('Hành động: ' + _hd);
   if(_dd||_sc) ksCon.push('Bối cảnh: ' + (_dd?_dd+' — ':'') + (_sc||''));
-  if(SS.ls||_as) ksCon.push('Ánh sáng: ' + (SS.ls?SS.ls.split(':')[0]+' / ':'') + (_as||''));
+  if(SS.light_setup||_as) ksCon.push('Ánh sáng: ' + (SS.light_setup?SS.light_setup+' / ':'') + (_as||''));
   // Add shot camera data from Dựng Cảnh if available
   if(cacShot && cacShot.length > 0){
     const shotCams = cacShot.map((s,i) => {
@@ -3782,8 +3903,8 @@ CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP.`;
       return `Shot ${i+1} [${s.start}s→${s.end}s]: ${parts.join(', ')||'Máy tĩnh'}`;
     }).join('\n');
     ksCon.push('⚠️ CÚ MÁY ĐÃ XÁC ĐỊNH (KHÔNG THAY ĐỔI):\n' + shotCams);
-  } else if(SS.mov||SS.lens||SS.ss){
-    ksCon.push('Máy quay: ' + [SS.ss,SS.mov,SS.lens,SS.dof].filter(Boolean).join(', '));
+  } else if(SS.movement||SS.lens||SS.shot_size){
+    ksCon.push('Máy quay: ' + [SS.shot_size,SS.movement,SS.lens,SS.dof].filter(Boolean).join(', '));
   }
   if(SS.genre) ksCon.push('Thể loại: ' + SS.genre);
   if(SS.pal) ksCon.push('Bảng màu: ' + SS.pal);
