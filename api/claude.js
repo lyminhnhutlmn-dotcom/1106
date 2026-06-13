@@ -38,7 +38,7 @@ export default async function handler(req, res) {
         'anthropic-version': '2023-06-01'
       },
       body: JSON.stringify({
-        model: 'claude-fable-5',
+        model: 'claude-opus-4-8',
         max_tokens,
         system: system || '',
         stream: true,
