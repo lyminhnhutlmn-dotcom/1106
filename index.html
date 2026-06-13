@@ -558,12 +558,24 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         </div>
         <button onclick="taoBoCanhNamGoc()" style="padding:7px 16px;border-radius:7px;border:1px solid #06b6d4;background:#020f14;color:#06b6d4;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500;transition:all .15s" onmouseover="this.style.background='#041a20'" onmouseout="this.style.background='#020f14'">📸 Tạo 5 Góc Bối Cảnh</button>
       </div>
-      <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <div style="display:flex;gap:5px;flex-wrap:wrap;margin-bottom:9px">
         <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">📷 Góc trước</span>
         <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">◀ Góc trái</span>
         <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">▶ Góc phải</span>
         <span style="font-size:10px;color:var(--muted);padding:3px 8px;border:1px solid var(--bdr);border-radius:10px">🔙 Góc sau</span>
         <span style="font-size:10px;color:#06b6d4;padding:3px 8px;border:1px solid #06b6d4;border-radius:10px">🎥 Bird-eye giám sát</span>
+      </div>
+
+      <!-- OUTPUT PANEL — hiển thị kết quả ngay tại đây -->
+      <div id="panel-5goc" style="display:none;background:#020d12;border:1px solid #06b6d4;border-radius:9px;overflow:hidden">
+        <div style="padding:8px 12px;background:#031318;border-bottom:1px solid #0e4a5a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px">
+          <span style="font-size:10px;color:#06b6d4;font-weight:500;letter-spacing:.8px;text-transform:uppercase" id="panel-5goc-title">📸 5 Góc Bối Cảnh</span>
+          <div style="display:flex;gap:5px">
+            <button onclick="copy5Goc()" style="padding:3px 10px;border-radius:5px;border:1px solid #06b6d4;background:transparent;color:#06b6d4;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer" id="btn-cp-5goc">⊕ Copy</button>
+            <button onclick="document.getElementById('panel-5goc').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px;padding:0 2px">✕</button>
+          </div>
+        </div>
+        <div id="panel-5goc-body" style="padding:12px;font-size:11px;line-height:1.9;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:480px;overflow-y:auto;word-break:break-word"></div>
       </div>
     </div>
 
@@ -2678,11 +2690,24 @@ function taoBoCanhNamGoc(){
   L.push('lypro.vn — by Lý Minh Nhựt');
 
   const result = L.join('\n');
-  kqVI = result;
-  hienKQ(result, 'vi', '📸 Bối Cảnh 5 Góc — Scene Reference');
-  document.getElementById('ghi-chu').textContent = '✦ 5 góc chụp tham chiếu bối cảnh — dùng để định vị không gian, art direction, continuity.';
-  document.getElementById('ghi-chu').style.display = 'block';
-  sw('out');
+  kq5Goc = result;
+
+  // Hiển thị ngay trong mục 04 Bối Cảnh
+  const panel = document.getElementById('panel-5goc');
+  const body  = document.getElementById('panel-5goc-body');
+  const title = document.getElementById('panel-5goc-title');
+  if(panel && body){
+    body.textContent = result;
+    if(title) title.textContent = '📸 5 Góc Bối Cảnh — ' + result.split('\n').filter(Boolean).length + ' dòng';
+    panel.style.display = '';
+    panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+let kq5Goc = '';
+function copy5Goc(){
+  if(!kq5Goc) return;
+  robustCopy(kq5Goc, document.getElementById('btn-cp-5goc'));
 }
 
 // ===== TẠO PROMPT VI =====
