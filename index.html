@@ -1904,6 +1904,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <button class="btn-i" onclick="moKhungDan()" style="border-color:var(--green);color:var(--green)">📥 Dán Prompt</button>
         <button class="btn-i" id="nut-edit" onclick="batDauChinhSua()" style="border-color:#a855f7;color:#a855f7">✏️ Chỉnh sửa</button>
         <button class="btn-i" id="nut-optimize" onclick="moTouuHoa()" style="border-color:#f59e0b;color:#f59e0b;display:none">✂️ Tối ưu &lt;3500 ký tự</button>
+        <button class="btn-i" id="nut-heygen" onclick="moHeyGen()" style="display:none;border-color:#a855f7;color:#a855f7;background:#0d0514">🎬 HeyGen Video</button>
         <button class="btn-i" id="nut-save-edit" onclick="luuChinhSua()" style="display:none;border-color:var(--green);color:var(--green)">✓ Lưu chỉnh sửa</button>
         <button class="btn-i" id="nut-cancel-edit" onclick="huyChinhSua()" style="display:none">✕ Hủy</button>
       </div>
@@ -1955,6 +1956,98 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   </div>
 
   <div id="ghi-chu" style="display:none;margin-top:7px;font-size:11px;color:var(--muted);font-style:italic"></div>
+
+  <!-- ===== HEYGEN PANEL ===== -->
+  <div id="heygen-panel" style="display:none;margin-top:12px;background:#0d0514;border:1px solid #a855f7;border-radius:10px;overflow:hidden">
+    <div style="padding:10px 14px;background:#0a0312;border-bottom:1px solid #3b0f6a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#a855f7;letter-spacing:.5px">🎬 HEYGEN — Tạo Video AI</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:1px">Gửi prompt → HeyGen tạo video với avatar · voice · lipsync</div>
+      </div>
+      <button onclick="document.getElementById('heygen-panel').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:14px">✕</button>
+    </div>
+
+    <div style="padding:13px;display:flex;flex-direction:column;gap:10px">
+
+      <!-- API KEY -->
+      <div>
+        <div style="font-size:10px;color:#c084fc;font-weight:500;margin-bottom:4px">🔑 HeyGen API Key</div>
+        <div style="display:flex;gap:5px">
+          <input type="password" id="heygen-api-key" placeholder="Nhập HeyGen API Key..." style="font-size:11px;flex:1;border-color:#3b0f6a;background:#070010;color:#c084fc" oninput="luuHeyGenKey()">
+          <span id="heygen-key-status" style="font-size:10px;color:var(--muted);align-self:center;white-space:nowrap"></span>
+        </div>
+      </div>
+
+      <!-- SCRIPT / PROMPT -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px">
+          <div style="font-size:10px;color:#c084fc;font-weight:500">📝 Script / Nội dung video</div>
+          <button onclick="heygenDungPromptHienTai()" style="font-size:9px;padding:2px 8px;border-radius:4px;border:1px solid #a855f7;background:transparent;color:#a855f7;cursor:pointer">← Dùng prompt hiện tại</button>
+        </div>
+        <textarea id="heygen-script" rows="5" placeholder="Nhập nội dung script cho video HeyGen...&#10;&#10;Tip: Nhấn '← Dùng prompt hiện tại' để tự điền từ prompt đã tạo." style="font-size:11px;border-color:#3b0f6a;background:#070010;color:var(--ink);line-height:1.8;resize:vertical"></textarea>
+        <div style="font-size:9px;color:var(--muted);margin-top:2px" id="heygen-char-count">0 ký tự</div>
+      </div>
+
+      <!-- AVATAR + VOICE -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:10px;color:#c084fc;font-weight:500;margin-bottom:4px">👤 Avatar ID</div>
+          <input id="heygen-avatar-id" type="text" placeholder="VD: avatar_id_from_heygen" style="font-size:11px;border-color:#3b0f6a;background:#070010;color:var(--ink)">
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Lấy từ HeyGen → Avatars → Copy ID</div>
+        </div>
+        <div style="flex:1;min-width:140px">
+          <div style="font-size:10px;color:#c084fc;font-weight:500;margin-bottom:4px">🎙️ Voice ID</div>
+          <input id="heygen-voice-id" type="text" placeholder="VD: voice_id_from_heygen" style="font-size:11px;border-color:#3b0f6a;background:#070010;color:var(--ink)">
+          <div style="font-size:9px;color:var(--muted);margin-top:2px">Lấy từ HeyGen → Voices → Copy ID</div>
+        </div>
+      </div>
+
+      <!-- RATIO + QUALITY -->
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:10px;color:#c084fc;font-weight:500;margin-bottom:4px">📐 Tỷ lệ khung hình</div>
+          <select id="heygen-ratio" style="font-size:11px;border-color:#3b0f6a;background:#070010;color:var(--ink)">
+            <option value="16:9">16:9 — Landscape</option>
+            <option value="9:16">9:16 — Portrait / TikTok</option>
+            <option value="1:1">1:1 — Square</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:120px">
+          <div style="font-size:10px;color:#c084fc;font-weight:500;margin-bottom:4px">⚡ Tốc độ nói</div>
+          <select id="heygen-speed" style="font-size:11px;border-color:#3b0f6a;background:#070010;color:var(--ink)">
+            <option value="1.0">1.0x — Bình thường</option>
+            <option value="0.8">0.8x — Chậm</option>
+            <option value="1.2">1.2x — Nhanh</option>
+            <option value="1.5">1.5x — Rất nhanh</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- SUBMIT -->
+      <div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap;padding-top:4px;border-top:1px solid #2a0a4a">
+        <button onclick="guiHeyGen()" id="btn-heygen-submit" style="padding:8px 20px;border-radius:7px;border:none;background:linear-gradient(135deg,#7c3aed,#a855f7);color:#fff;font-size:12px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:600">🚀 Tạo Video HeyGen</button>
+        <button onclick="heygenLayDanhSachAvatar()" style="padding:6px 12px;border-radius:6px;border:1px solid #3b0f6a;background:transparent;color:#c084fc;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">📋 Lấy danh sách Avatar</button>
+        <span id="heygen-submit-status" style="font-size:10px;color:var(--muted);font-style:italic"></span>
+      </div>
+
+      <!-- RESULT -->
+      <div id="heygen-result" style="display:none;background:#050010;border:1px solid #7c3aed;border-radius:7px;padding:11px">
+        <div style="font-size:10px;color:#a855f7;font-weight:500;margin-bottom:6px" id="heygen-result-title">⏳ Đang xử lý...</div>
+        <div id="heygen-result-body" style="font-size:11px;color:var(--ink);line-height:1.8"></div>
+        <div style="display:flex;gap:5px;margin-top:8px;flex-wrap:wrap" id="heygen-result-actions" style="display:none">
+          <a id="heygen-video-link" href="#" target="_blank" style="padding:5px 14px;border-radius:6px;border:none;background:#7c3aed;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;text-decoration:none;display:none">▶ Xem video</a>
+          <button onclick="heygenKiemTraTrangThai()" id="btn-heygen-check" style="display:none;padding:5px 12px;border-radius:6px;border:1px solid #a855f7;background:transparent;color:#a855f7;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">🔄 Kiểm tra trạng thái</button>
+        </div>
+      </div>
+
+      <!-- AVATAR LIST -->
+      <div id="heygen-avatar-list" style="display:none;background:#050010;border:1px solid #3b0f6a;border-radius:7px;padding:10px;max-height:220px;overflow-y:auto">
+        <div style="font-size:10px;color:#c084fc;font-weight:500;margin-bottom:6px">👤 Danh sách Avatars</div>
+        <div id="heygen-avatar-list-body" style="font-size:10px;color:var(--ink);line-height:2"></div>
+      </div>
+
+    </div>
+  </div>
 
   <!-- AI PANEL -->
   <div id="ai-panel" style="margin-top:12px;display:none">
@@ -2606,7 +2699,228 @@ function buildSceneBlock(lang){
   return lines;
 }
 
-// ===== PROMPT BỐI CẢNH 5 GÓC =====
+// ===== HEYGEN INTEGRATION =====
+const HEYGEN_API = 'https://api.heygen.com';
+let heygenVideoId = '';
+let heygenCheckInterval = null;
+
+function luuHeyGenKey(){
+  const k = document.getElementById('heygen-api-key')?.value.trim();
+  if(k){ sessionStorage.setItem('heygen_key', k); }
+}
+
+function layHeyGenKey(){
+  return sessionStorage.getItem('heygen_key') || document.getElementById('heygen-api-key')?.value.trim() || '';
+}
+
+function moHeyGen(){
+  const panel = document.getElementById('heygen-panel');
+  if(!panel) return;
+  panel.style.display = panel.style.display === 'none' ? '' : 'none';
+  if(panel.style.display !== 'none'){
+    // Restore saved key
+    const saved = sessionStorage.getItem('heygen_key');
+    const inp = document.getElementById('heygen-api-key');
+    if(saved && inp) inp.value = saved;
+    panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+function heygenDungPromptHienTai(){
+  const kq = document.getElementById('ket-qua')?.innerText || '';
+  const script = document.getElementById('heygen-script');
+  if(!script) return;
+  // Strip section headers and use clean text
+  const clean = kq.replace(/\[[\w\s\/]+\]/g,'').replace(/═+/g,'').replace(/─+/g,'').trim();
+  script.value = clean.slice(0, 2000); // HeyGen script limit
+  heygenCountChar();
+}
+
+function heygenCountChar(){
+  const txt = document.getElementById('heygen-script')?.value || '';
+  const el = document.getElementById('heygen-char-count');
+  if(el) el.textContent = txt.length + ' ký tự' + (txt.length > 2000 ? ' ⚠️ vượt 2000' : '');
+}
+
+document.addEventListener('DOMContentLoaded', ()=>{
+  document.getElementById('heygen-script')?.addEventListener('input', heygenCountChar);
+});
+
+async function guiHeyGen(){
+  const apiKey = layHeyGenKey();
+  if(!apiKey){ alert('Nhập HeyGen API Key trước.'); return; }
+
+  const script = document.getElementById('heygen-script')?.value.trim();
+  if(!script){ alert('Nhập script cho video trước.'); return; }
+
+  const avatarId = document.getElementById('heygen-avatar-id')?.value.trim();
+  const voiceId  = document.getElementById('heygen-voice-id')?.value.trim();
+  if(!avatarId){ alert('Nhập Avatar ID từ HeyGen.'); return; }
+  if(!voiceId){  alert('Nhập Voice ID từ HeyGen.'); return; }
+
+  const ratio = document.getElementById('heygen-ratio')?.value || '16:9';
+  const speed = parseFloat(document.getElementById('heygen-speed')?.value || '1.0');
+
+  // Map ratio to HeyGen dimension
+  const dimMap = { '16:9':'landscape', '9:16':'portrait', '1:1':'square' };
+  const dimension = dimMap[ratio] || 'landscape';
+
+  const btn = document.getElementById('btn-heygen-submit');
+  const status = document.getElementById('heygen-submit-status');
+  const result = document.getElementById('heygen-result');
+  const resultTitle = document.getElementById('heygen-result-title');
+  const resultBody = document.getElementById('heygen-result-body');
+
+  if(btn) btn.disabled = true;
+  if(status) status.textContent = '⏳ Đang gửi yêu cầu...';
+  if(result) result.style.display = '';
+  if(resultTitle) resultTitle.textContent = '⏳ Đang tạo video...';
+  if(resultBody) resultBody.textContent = 'Đang gửi đến HeyGen API...';
+
+  try{
+    const payload = {
+      video_inputs: [{
+        character: {
+          type: 'avatar',
+          avatar_id: avatarId,
+          avatar_style: 'normal'
+        },
+        voice: {
+          type: 'text',
+          input_text: script,
+          voice_id: voiceId,
+          speed: speed
+        }
+      }],
+      dimension: dimension === 'landscape'
+        ? { width: 1280, height: 720 }
+        : dimension === 'portrait'
+          ? { width: 720, height: 1280 }
+          : { width: 720, height: 720 },
+      test: false
+    };
+
+    const resp = await fetch(`${HEYGEN_API}/v2/video/generate`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Api-Key': apiKey
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await resp.json();
+
+    if(!resp.ok || data.error){
+      throw new Error(data.error?.message || data.message || 'Lỗi HeyGen ' + resp.status);
+    }
+
+    heygenVideoId = data.data?.video_id || '';
+
+    if(resultTitle) resultTitle.textContent = '✅ Đã gửi — Video đang được tạo';
+    if(resultBody) resultBody.innerHTML =
+      `Video ID: <strong style="color:#c084fc">${heygenVideoId}</strong><br>` +
+      `Trạng thái: <span style="color:#f59e0b">Processing...</span><br>` +
+      `<span style="font-size:10px;color:var(--muted)">Thường mất 1–3 phút. Nhấn "Kiểm tra trạng thái" để cập nhật.</span>`;
+
+    const actionsEl = document.getElementById('heygen-result-actions');
+    if(actionsEl) actionsEl.style.display = '';
+    const checkBtn = document.getElementById('btn-heygen-check');
+    if(checkBtn) checkBtn.style.display = '';
+    if(status) status.textContent = '✅ Video ID: ' + heygenVideoId;
+
+    // Auto-poll every 15s
+    if(heygenCheckInterval) clearInterval(heygenCheckInterval);
+    heygenCheckInterval = setInterval(heygenKiemTraTrangThai, 15000);
+
+  } catch(e){
+    if(resultTitle) resultTitle.textContent = '❌ Lỗi';
+    if(resultBody) resultBody.innerHTML = '<span style="color:var(--red)">' + e.message + '</span>';
+    if(status) status.textContent = '❌ ' + e.message;
+  } finally {
+    if(btn) btn.disabled = false;
+  }
+}
+
+async function heygenKiemTraTrangThai(){
+  if(!heygenVideoId){ alert('Chưa có Video ID.'); return; }
+  const apiKey = layHeyGenKey();
+  if(!apiKey) return;
+
+  const resultTitle = document.getElementById('heygen-result-title');
+  const resultBody  = document.getElementById('heygen-result-body');
+  const videoLink   = document.getElementById('heygen-video-link');
+
+  try{
+    const resp = await fetch(`${HEYGEN_API}/v1/video_status.get?video_id=${heygenVideoId}`, {
+      headers: { 'X-Api-Key': apiKey }
+    });
+    const data = await resp.json();
+    const st = data.data?.status || 'unknown';
+    const url = data.data?.video_url || '';
+
+    if(st === 'completed' && url){
+      if(heygenCheckInterval){ clearInterval(heygenCheckInterval); heygenCheckInterval = null; }
+      if(resultTitle) resultTitle.textContent = '✅ Video hoàn tất!';
+      if(resultBody) resultBody.innerHTML =
+        `Trạng thái: <span style="color:var(--green)">Completed ✓</span><br>` +
+        `<a href="${url}" target="_blank" style="color:#c084fc">${url}</a>`;
+      if(videoLink){ videoLink.href = url; videoLink.style.display = ''; }
+    } else if(st === 'failed'){
+      if(heygenCheckInterval){ clearInterval(heygenCheckInterval); heygenCheckInterval = null; }
+      if(resultTitle) resultTitle.textContent = '❌ Video thất bại';
+      if(resultBody) resultBody.innerHTML = `<span style="color:var(--red)">Lỗi: ${data.data?.error || 'unknown'}</span>`;
+    } else {
+      if(resultTitle) resultTitle.textContent = '⏳ Đang xử lý — ' + st;
+      if(resultBody) resultBody.innerHTML =
+        `Trạng thái: <span style="color:#f59e0b">${st}</span><br>` +
+        `<span style="font-size:10px;color:var(--muted)">Tự động cập nhật mỗi 15 giây...</span>`;
+    }
+  } catch(e){
+    if(resultTitle) resultTitle.textContent = '⚠️ Không kiểm tra được';
+    if(resultBody) resultBody.innerHTML = '<span style="color:var(--red)">' + e.message + '</span>';
+  }
+}
+
+async function heygenLayDanhSachAvatar(){
+  const apiKey = layHeyGenKey();
+  if(!apiKey){ alert('Nhập HeyGen API Key trước.'); return; }
+
+  const wrap = document.getElementById('heygen-avatar-list');
+  const body = document.getElementById('heygen-avatar-list-body');
+  if(wrap) wrap.style.display = '';
+  if(body) body.textContent = '⏳ Đang tải...';
+
+  try{
+    const resp = await fetch(`${HEYGEN_API}/v2/avatars`, {
+      headers: { 'X-Api-Key': apiKey }
+    });
+    const data = await resp.json();
+    const avatars = data.data?.avatars || [];
+    if(!avatars.length){ if(body) body.textContent = 'Không có avatar nào.'; return; }
+
+    if(body) body.innerHTML = avatars.map(a =>
+      `<div style="display:flex;align-items:center;justify-content:space-between;padding:4px 0;border-bottom:1px solid #1a0a2a;gap:8px">
+        <span style="color:#c084fc">${a.avatar_name || a.avatar_id}</span>
+        <button onclick="document.getElementById('heygen-avatar-id').value='${a.avatar_id}';this.textContent='✓ Đã chọn'" style="padding:2px 8px;border-radius:4px;border:1px solid #7c3aed;background:transparent;color:#a855f7;font-size:9px;cursor:pointer;white-space:nowrap">Chọn</button>
+      </div>`
+    ).join('');
+  } catch(e){
+    if(body) body.innerHTML = '<span style="color:var(--red)">Lỗi: ' + e.message + '</span>';
+  }
+}
+
+// Show HeyGen button when prompt is ready
+const _origHienKQ = typeof hienKQ === 'function' ? hienKQ : null;
+if(_origHienKQ){
+  window.hienKQ = function(txt, type, title){
+    _origHienKQ(txt, type, title);
+    const btn = document.getElementById('nut-heygen');
+    if(btn) btn.style.display = '';
+  };
+}
+
+
 // Tạo 5 prompt: Front + Left + Right + Back + Bird-eye (CCTV/Surveillance)
 function taoBoCanhNamGoc(){
   const {dd,nv,mt,as} = layChung();
