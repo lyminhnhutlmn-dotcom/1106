@@ -4836,24 +4836,16 @@ async function taoAnh(){
   try{
     const optRes = await fetch((typeof BACKEND!=='undefined'?BACKEND:'')+'/api/claude',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:500,
-        messages:[{role:'user',content:`Convert this Vietnamese cinematic prompt into an optimized English image generation prompt for ${style} style, ${ratio} ratio.
-Keep it under 200 words. Focus on: visual composition, lighting, mood, key elements.
-Output ONLY the prompt, no explanations.
-
-Input: ${promptText}`}]
+        system:'You are a cinematic prompt optimizer. Output ONLY the optimized prompt, no explanations.',
+        message:`Convert this Vietnamese cinematic prompt into an optimized English image generation prompt for ${style} style, ${ratio} ratio. Keep it under 200 words. Focus on: visual composition, lighting, mood, key elements.\n\nInput: ${promptText}`,
+        max_tokens:500
       })
     });
 
     const optData = await optRes.json();
-    const optimizedPrompt = optData.content?.[0]?.text || promptText;
+    const optimizedPrompt = optData.content?.[0]?.text || optData.text || promptText;
 
     if(statusEl) statusEl.innerHTML = '✅ Prompt tối ưu xong — copy sang Midjourney/DALL-E để tạo ảnh:<br><div style="margin-top:6px;padding:8px;background:var(--bg);border:1px solid var(--bdr);border-radius:6px;font-size:11px;color:var(--ink);white-space:pre-wrap;font-family:\'IBM Plex Mono\',monospace">' + optimizedPrompt + '</div>';
 
@@ -5118,17 +5110,11 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
   try{
     const res = await fetch((typeof BACKEND!=='undefined'?BACKEND:'')+'/api/claude',{
       method:'POST',
-      headers:{
-        'Content-Type':'application/json',
-        'anthropic-version':'2023-06-01',
-        'anthropic-dangerous-direct-browser-access':'true'
-      },
+      headers:{'Content-Type':'application/json'},
       body:JSON.stringify({
-        model:'claude-sonnet-4-6',
-        max_tokens:8000,
-        stream:true,
         system:systemPrompt,
-        messages:[{role:'user',content:`COMPRESS TO UNDER ${target} CHARACTERS:\n\n${nd}`}]
+        message:`COMPRESS TO UNDER ${target} CHARACTERS:\n\n${nd}`,
+        max_tokens:8000
       }),
       signal:optCtrl.signal
     });
@@ -5145,8 +5131,9 @@ Compress now. Under ${target} characters. Start immediately with the prompt cont
           const d=line.slice(6);if(d==='[DONE]')continue;
           try{
             const j=JSON.parse(d);
-            if(j.type==='content_block_delta'&&j.delta?.text){
-              acc+=j.delta.text;
+            const chunk = j.text || (j.type==='content_block_delta'&&j.delta?.text);
+            if(chunk){
+              acc+=chunk;
               optKetQua=acc;
               bodyEl.textContent=acc;
               // Show live char count
