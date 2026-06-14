@@ -983,6 +983,79 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
   </div>
 
+  <!-- ===== SECTION 10: HIGGSFIELD SOUL ID ===== -->
+  <div class="card" style="border-color:#06b6d4">
+    <div class="fw-head" onclick="moRong('soul-id')" style="border-left:3px solid #06b6d4">
+      <span class="fw-num" style="color:#06b6d4">10</span>
+      <span class="fw-key">HIGGSFIELD SOUL ID</span>
+      <span class="fw-desc">Nhân vật nhất quán · create_character · character_id</span>
+      <span class="fw-check" id="ck-soul-id">○</span>
+    </div>
+    <div class="fw-body" id="fb-soul-id" style="display:none">
+
+      <!-- NGUỒN NHÂN VẬT -->
+      <div style="margin-bottom:10px">
+        <div class="lbl" style="margin-bottom:6px">📥 Nguồn nhân vật</div>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <span class="schip" id="soul-src-real" onclick="chonSoulSrc('real',this)" style="border-color:#06b6d4;color:#06b6d4;background:#020f14">📷 Ảnh thật</span>
+          <span class="schip" id="soul-src-ai" onclick="chonSoulSrc('ai',this)">🤖 AI generate</span>
+          <span class="schip" id="soul-src-existing" onclick="chonSoulSrc('existing',this)">✅ Đã có Soul ID</span>
+        </div>
+      </div>
+
+      <!-- ẢNH THẬT -->
+      <div id="soul-src-real-panel">
+        <div class="lbl" style="margin-bottom:4px">🔗 URL ảnh nhân vật (công khai, tối đa 5 ảnh)</div>
+        <div id="soul-img-list" style="display:flex;flex-direction:column;gap:4px;margin-bottom:5px"></div>
+        <button onclick="themSoulImg()" style="padding:4px 12px;border-radius:5px;border:1px solid #06b6d4;background:transparent;color:#06b6d4;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Thêm URL ảnh</button>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px">Upload ảnh lên Imgur / Google Drive / Cloudinary → dán URL vào đây · Cần 3–5 ảnh góc khác nhau để Soul ID chính xác</div>
+      </div>
+
+      <!-- AI GENERATE -->
+      <div id="soul-src-ai-panel" style="display:none">
+        <div style="padding:9px 11px;background:var(--card);border-radius:7px;border:1px solid #0e4a5a;font-size:11px;color:var(--muted);line-height:1.8">
+          <div style="color:#06b6d4;font-weight:500;margin-bottom:4px">Workflow AI Generate:</div>
+          1. Dùng <strong style="color:var(--ink)">Character Sheet</strong> (tab Nhân Vật → 🎬 Soul ID Sheet) để lấy prompt 4 góc<br>
+          2. Paste vào <strong style="color:var(--ink)">Higgsfield Nano Banana Pro</strong> hoặc GPT Image 2<br>
+          3. Download 4 ảnh → upload lên Imgur / Google Drive → dán URL vào ô "Ảnh thật" bên trên<br>
+          4. <strong style="color:var(--ink)">create_character</strong> với 4 URL đó → nhận character_id
+        </div>
+        <button onclick="chonSoulSrc('real',document.getElementById('soul-src-real'));document.getElementById('soul-src-ai-panel').style.display='none';document.getElementById('soul-src-real-panel').style.display='';" style="margin-top:7px;padding:4px 12px;border-radius:5px;border:1px solid #06b6d4;background:transparent;color:#06b6d4;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Chuyển sang nhập URL ảnh</button>
+      </div>
+
+      <!-- ĐÃ CÓ SOUL ID -->
+      <div id="soul-src-existing-panel" style="display:none">
+        <div class="lbl" style="margin-bottom:4px">🔑 Character ID đã có</div>
+        <input type="text" id="soul-character-id" placeholder="character_abc123 — từ Higgsfield dashboard" style="font-size:11px;border-color:#06b6d4;background:#020f14;color:#06b6d4" oninput="capNhatSoulID()">
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">Higgsfield → Characters → Copy ID</div>
+      </div>
+
+      <!-- CHARACTER ID OUTPUT -->
+      <div style="margin-top:10px;padding-top:10px;border-top:1px solid var(--bdr)">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;flex-wrap:wrap;gap:5px">
+          <div class="lbl" style="margin-bottom:0">⚡ Claude Code — create_character prompt</div>
+          <div style="display:flex;gap:4px">
+            <button onclick="taoSoulIDPrompt()" style="padding:5px 12px;border-radius:6px;border:none;background:#06b6d4;color:#000;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:600">⚡ Tạo Prompt</button>
+            <button onclick="copySoulIDPrompt()" id="btn-cp-soul" style="display:none;padding:5px 10px;border-radius:6px;border:1px solid #06b6d4;background:transparent;color:#06b6d4;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⊕ Copy</button>
+          </div>
+        </div>
+        <div id="soul-id-prompt" style="background:#020d12;border:1px solid #0e4a5a;border-radius:7px;padding:10px;font-size:11px;line-height:1.8;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;min-height:60px;max-height:280px;overflow-y:auto;display:none"></div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px" id="soul-id-hint">→ Paste vào Claude Code (đã cài Higgsfield MCP) → Claude gọi create_character → trả về character_id</div>
+      </div>
+
+      <!-- CHARACTER ID NHẬP TAY -->
+      <div style="margin-top:8px">
+        <div class="lbl" style="margin-bottom:4px">✅ character_id (sau khi tạo xong)</div>
+        <div style="display:flex;gap:5px">
+          <input type="text" id="soul-id-result" placeholder="Dán character_id nhận được từ Claude Code vào đây..." style="flex:1;font-size:11px;border-color:#06b6d4;background:#020f14;color:#4ade80" oninput="luuCharacterID()">
+          <button onclick="copyCharacterID()" style="padding:5px 10px;border-radius:6px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer;white-space:nowrap">⊕ Copy ID</button>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:3px">Character ID này sẽ tự động thêm vào tất cả video prompts khi Export → Higgsfield MCP</div>
+      </div>
+
+    </div>
+  </div>
+
 
 </div>
 
@@ -7056,6 +7129,111 @@ async function taoPromptBoiCanh(){
 }
 
 
+// ===== SECTION 10: HIGGSFIELD SOUL ID =====
+let soulSrc = 'real';
+let soulImgCount = 0;
+let soulIDResult = '';
+
+function chonSoulSrc(val, el){
+  soulSrc = val;
+  ['real','ai','existing'].forEach(s => {
+    const chip = document.getElementById('soul-src-' + s);
+    const panel = document.getElementById('soul-src-' + s + '-panel');
+    if(chip){ chip.style.borderColor=''; chip.style.color=''; chip.style.background=''; }
+    if(panel) panel.style.display = 'none';
+  });
+  if(el){ el.style.borderColor='#06b6d4'; el.style.color='#06b6d4'; el.style.background='#020f14'; }
+  const activePanel = document.getElementById('soul-src-' + val + '-panel');
+  if(activePanel) activePanel.style.display = '';
+}
+
+function themSoulImg(){
+  const list = document.getElementById('soul-img-list');
+  if(!list) return;
+  if(list.children.length >= 5){ alert('Tối đa 5 ảnh.'); return; }
+  soulImgCount++;
+  const row = document.createElement('div');
+  row.style.cssText = 'display:flex;gap:5px;align-items:center';
+  row.innerHTML = `
+    <span style="font-size:9px;color:#06b6d4;min-width:14px;font-family:'IBM Plex Mono',monospace">${soulImgCount}</span>
+    <input type="text" class="soul-img-url" placeholder="https://i.imgur.com/xxx.jpg" style="flex:1;font-size:10px;border-color:#0e4a5a;background:#020f14;color:#06b6d4;padding:5px 8px">
+    <button onclick="this.parentElement.remove()" style="padding:3px 7px;border-radius:4px;border:1px solid #0e4a5a;background:transparent;color:var(--muted);cursor:pointer;font-size:11px">✕</button>`;
+  list.appendChild(row);
+}
+
+function capNhatSoulID(){
+  const id = document.getElementById('soul-character-id')?.value.trim();
+  if(id){ const r=document.getElementById('soul-id-result'); if(r&&!r.value) r.value=id; luuCharacterID(); }
+}
+
+function luuCharacterID(){
+  soulIDResult = document.getElementById('soul-id-result')?.value.trim() || '';
+  const ck = document.getElementById('ck-soul-id');
+  if(ck) ck.textContent = soulIDResult ? '✓' : '○';
+}
+
+function copyCharacterID(){
+  const id = document.getElementById('soul-id-result')?.value.trim();
+  if(!id){ alert('Chưa có character_id.'); return; }
+  robustCopy(id, document.querySelector('button[onclick="copyCharacterID()"]'));
+}
+
+function taoSoulIDPrompt(){
+  const nv      = gVal('subject-desc') || '';
+  const face    = gVal('char-face') || '';
+  const costume = gVal('char-costume') || gVal('wardrobe-lock') || '';
+  const lock    = charPromptText || '';
+  const imgUrls = [];
+  document.querySelectorAll('.soul-img-url').forEach(inp => {
+    const url = inp.value.trim(); if(url) imgUrls.push(url);
+  });
+  const existingId = document.getElementById('soul-character-id')?.value.trim() || '';
+
+  let prompt = '';
+  if(soulSrc === 'existing' && existingId){
+    prompt = `# SOUL ID — ĐÃ CÓ CHARACTER ID\n\ncharacter_id: ${existingId}\n\nDùng character_id này trong tất cả generate_video calls:\n{ "character_id": "${existingId}" }\n\nKhông cần gọi create_character.`;
+  } else {
+    const charDesc = [
+      nv, face,
+      [SS.face_shape?SS.face_shape+' face shape':'', SS.skin_tone?SS.skin_tone+' skin':'',
+       SS.eye_color?SS.eye_color+' eyes':'', SS.hair_color?SS.hair_color+' hair':''].filter(Boolean).join(', '),
+      gVal('char-eyes'), gVal('char-hair'),
+      gVal('char-mark') ? 'Marks: ' + gVal('char-mark') : '',
+    ].filter(Boolean).join('. ');
+    const nat = (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ');
+    prompt = `# HIGGSFIELD — CREATE CHARACTER (Soul ID)
+# Paste vào Claude Code đã cài Higgsfield MCP:
+# claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
+
+Gọi tool create_character với:
+
+character_description: "${nat ? nat + '. ' : ''}${charDesc}"
+
+costume: "${costume || 'not specified'}"
+
+${imgUrls.length
+  ? 'reference_images:\n' + imgUrls.map((u,i) => `  ${i+1}. ${u}`).join('\n')
+  : '⚠️  Chưa có URL ảnh — thêm URL ảnh bên trên (3–5 ảnh góc khác nhau cho Soul ID chính xác nhất).'}
+
+${lock ? '--- CHARACTER LOCK (bổ sung cho AI) ---\n' + lock.slice(0,300) + '\n' : ''}
+→ Sau khi Claude Code trả về character_id:
+   Dán vào ô "character_id" bên dưới để tự động thêm vào video prompts.`;
+  }
+
+  const el = document.getElementById('soul-id-prompt');
+  if(el){ el.textContent = prompt; el.style.display = ''; el.setAttribute('data-prompt', prompt); }
+  const btn = document.getElementById('btn-cp-soul');
+  if(btn) btn.style.display = '';
+  const hint = document.getElementById('soul-id-hint');
+  if(hint) hint.style.display = 'none';
+}
+
+function copySoulIDPrompt(){
+  const el = document.getElementById('soul-id-prompt');
+  if(!el) return;
+  robustCopy(el.getAttribute('data-prompt') || el.textContent, document.getElementById('btn-cp-soul'));
+}
+
 function xuatHiggsfieldMCP(){
   // Build JSON with higgsfield_mcp block
   const fullJSON = xuatJSONData(); // reuse core builder
@@ -7137,16 +7315,18 @@ function xuatJSONData(){
 Setup: Make sure Higgsfield MCP is connected.
 Command: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
 
-STEP 1 — SOUL ID (create_character):
+${soulIDResult
+  ? `CHARACTER ID (đã có): ${soulIDResult}\n→ Bỏ qua STEP 1, dùng character_id này trực tiếp.`
+  : `STEP 1 — SOUL ID (create_character):
 Description: "${[gVal('subject-desc'), SS.face_shape, SS.skin_tone, gVal('char-face')].filter(Boolean).join('. ')}"
 Costume: "${gVal('char-costume') || gVal('wardrobe-lock') || 'not specified'}"
-→ Save character_id
+→ Save character_id`}
 
 STEP 2 — KEYFRAMES (generate_image, model: nano-banana-pro):
 ${(cacShot||[]).map((s,i) => `Shot ${i+1} [${s.tg||5}s]: ${(s.sbPrompt||s.moTa||'cinematic shot').slice(0,150)}`).join('\n') || 'No shots defined — add shots in Dựng Cảnh tab first.'}
 
 STEP 3 — VIDEOS (generate_video, model: seedance-2):
-Use first_frame_url from step 2 and character_id from step 1.
+Use first_frame_url from step 2 and character_id: ${soulIDResult || '(from step 1)'}.
 ${(cacShot||[]).map((s,i) => `Shot ${i+1}: ${(s._prompt||s.moTa||'').slice(0,150)}`).join('\n') || 'No shot prompts — run AI Shot Builder first.'}
 
 After each video: call get_generation_status until completed.
