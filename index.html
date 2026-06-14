@@ -6748,6 +6748,8 @@ ${skin ? 'SKIN DETAIL: ' + skin : ''}${wardrobe}${charLock}
 
 IMPORTANT: STILL IMAGE for storyboard panel — frozen single frame, no motion.`;
 
+  let acc = '';
+  try {
     await goiClaude(system, userMsg, (chunk) => {
       acc += chunk;
       if(el) el.textContent = acc;
