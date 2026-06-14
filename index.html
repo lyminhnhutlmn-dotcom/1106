@@ -989,6 +989,56 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <!-- ===== SEEDANCE TAB ===== -->
 <div class="pane" id="p-shots">
   <div class="hint" style="margin-bottom:11px;padding:9px 11px;background:var(--card);border-radius:7px;border:1px solid var(--bdr)">💡 Mỗi <strong>Sự Kiện</strong> = 1 cảnh quay. Lời thoại quản lý ở tab 💬.</div>
+
+  <!-- STORYBOARD GRID TOOLBAR -->
+  <div style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:10px;align-items:center">
+    <button onclick="taoSBGridPrompt()" style="padding:6px 14px;border-radius:7px;border:1px solid #818cf8;background:#080d1e;color:#818cf8;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500;transition:all .15s" id="btn-sb-grid">🎨 Storyboard Grid — GPT Image 2</button>
+    <button onclick="taoTatCaSBPrompt()" style="padding:6px 14px;border-radius:7px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer" id="btn-sb-all">⚡ AI Tạo Tất Cả Frame</button>
+    <span id="sb-grid-status" style="font-size:10px;color:var(--muted);font-style:italic"></span>
+  </div>
+
+  <!-- STORYBOARD GRID PANEL -->
+  <div id="sb-grid-panel" style="display:none;background:#08080e;border:1px solid #4338ca;border-radius:10px;overflow:hidden;margin-bottom:12px">
+    <div style="padding:9px 13px;background:#06060c;border-bottom:1px solid #1e1b4b;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+      <div>
+        <div style="font-size:12px;font-weight:600;color:#818cf8;letter-spacing:.5px">🎨 STORYBOARD GRID — GPT Image 2 Multi-Panel</div>
+        <div style="font-size:9px;color:var(--muted);margin-top:1px" id="sb-grid-meta">Gom tất cả shots thành 1 prompt · Paste vào GPT Image 2</div>
+      </div>
+      <div style="display:flex;gap:5px">
+        <button onclick="copySBGrid()" id="btn-cp-sb-grid" style="padding:3px 10px;border-radius:5px;border:1px solid #818cf8;background:transparent;color:#818cf8;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⊕ Copy</button>
+        <button onclick="sbGridToOutput()" style="padding:3px 10px;border-radius:5px;border:1px solid var(--green);background:transparent;color:var(--green);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Xuất Prompt</button>
+        <button onclick="document.getElementById('sb-grid-panel').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px">✕</button>
+      </div>
+    </div>
+
+    <!-- GRID OPTIONS -->
+    <div style="padding:9px 13px;border-bottom:1px solid #1e1b4b;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+      <div style="display:flex;gap:5px;align-items:center">
+        <span style="font-size:10px;color:var(--muted)">Layout:</span>
+        <span class="schip" id="sb-layout-2x2" onclick="chonSBLayout('2x2',this)" style="border-color:#818cf8;color:#818cf8;background:#080d1e">2×2</span>
+        <span class="schip" onclick="chonSBLayout('2x3',this)">2×3</span>
+        <span class="schip" onclick="chonSBLayout('3x2',this)">3×2</span>
+        <span class="schip" onclick="chonSBLayout('3x3',this)">3×3</span>
+        <span class="schip" onclick="chonSBLayout('1x4',this)">1×4 strip</span>
+      </div>
+      <div style="display:flex;gap:5px;align-items:center">
+        <span style="font-size:10px;color:var(--muted)">Style:</span>
+        <span class="schip" id="sb-style-film" onclick="chonSBStyle('film',this)" style="border-color:#818cf8;color:#818cf8;background:#080d1e">Film</span>
+        <span class="schip" onclick="chonSBStyle('sketch',this)">Sketch</span>
+        <span class="schip" onclick="chonSBStyle('noir',this)">Noir B&W</span>
+        <span class="schip" onclick="chonSBStyle('anime',this)">Anime</span>
+      </div>
+    </div>
+
+    <div id="sb-grid-body" style="padding:13px;font-size:11px;line-height:1.9;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:520px;overflow-y:auto;word-break:break-word"><span style="color:var(--muted);font-style:italic">Nhấn "🎨 Storyboard Grid" để tạo...</span></div>
+
+    <!-- NEXT STEP -->
+    <div style="padding:8px 13px;border-top:1px solid #1e1b4b;background:#06060c;display:flex;gap:6px;align-items:center;flex-wrap:wrap">
+      <span style="font-size:10px;color:#818cf8;font-weight:500">→ Phase 3:</span>
+      <span style="font-size:10px;color:var(--muted)">Sau khi có ảnh storyboard → dùng Image-to-Video với Seedance 2.0 trên Higgsfield</span>
+    </div>
+  </div>
+
   <div id="ds-shot"></div>
   <button class="btn-add-shot" onclick="themShot()">+ Thêm sự kiện / cảnh quay</button>
 </div>
@@ -1676,14 +1726,35 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <div style="background:#0a0816;border:1px solid #7c3aed;border-radius:10px;overflow:hidden;margin-bottom:12px">
     <div style="padding:10px 13px;background:#0d0a1a;border-bottom:1px solid #2a1a4a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
       <span style="font-size:11px;color:#a78bfa;letter-spacing:1px;text-transform:uppercase;font-weight:500">🔒 Character Lock Prompt (EN)</span>
-      <div style="display:flex;gap:5px">
+      <div style="display:flex;gap:5px;flex-wrap:wrap">
         <button class="btn-i" onclick="taoCharPrompt()" style="border-color:#a78bfa;color:#a78bfa;font-size:10px">⚡ Tạo Prompt</button>
         <button class="btn-i" onclick="taoCharPromptAI()" style="border-color:var(--gold);color:var(--gold);font-size:10px">✨ Tạo bằng AI</button>
         <button class="btn-i" id="nut-cp-char" onclick="saoCHepChar()" style="display:none;font-size:10px">⊕ Copy</button>
         <button class="btn-i" onclick="themVaoPrompt()" style="display:none;border-color:var(--green);color:var(--green);font-size:10px" id="nut-add-char">→ Thêm vào Prompt</button>
+        <button class="btn-i" onclick="xuatCharacterSheet()" style="display:none;border-color:#06b6d4;color:#06b6d4;font-size:10px;background:#020f14" id="nut-char-sheet">🎬 Soul ID Sheet</button>
       </div>
     </div>
     <div id="char-preview" style="padding:13px;font-size:11.5px;line-height:1.9;white-space:pre-wrap;color:var(--ink);min-height:120px;overflow-y:visible;font-family:'IBM Plex Mono',monospace"><span style="color:var(--muted);font-style:italic">Nhấn "⚡ Tạo Prompt" hoặc "✨ Tạo bằng AI" để tạo Character Lock Prompt...</span></div>
+
+    <!-- CHARACTER SHEET PANEL -->
+    <div id="char-sheet-panel" style="display:none;margin-top:10px;background:#020d12;border:1px solid #06b6d4;border-radius:9px;overflow:hidden">
+      <div style="padding:8px 12px;background:#031318;border-bottom:1px solid #0e4a5a;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:5px">
+        <div>
+          <div style="font-size:11px;font-weight:600;color:#06b6d4;letter-spacing:.5px">🎬 SOUL ID CHARACTER SHEET — Higgsfield</div>
+          <div style="font-size:9px;color:var(--muted);margin-top:1px">4 góc reference + overhead · Paste vào Higgsfield create_character hoặc Avatar Shots</div>
+        </div>
+        <div style="display:flex;gap:5px">
+          <button onclick="copyCharSheet()" id="btn-cp-char-sheet" style="padding:3px 10px;border-radius:5px;border:1px solid #06b6d4;background:transparent;color:#06b6d4;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⊕ Copy</button>
+          <button onclick="document.getElementById('char-sheet-panel').style.display='none'" style="background:none;border:none;color:var(--muted);cursor:pointer;font-size:13px">✕</button>
+        </div>
+      </div>
+      <div id="char-sheet-body" style="padding:12px;font-size:11px;line-height:1.9;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:500px;overflow-y:auto;word-break:break-word"></div>
+      <div style="padding:8px 12px;border-top:1px solid #0e4a5a;background:#031318;display:flex;gap:5px;flex-wrap:wrap;align-items:center">
+        <span style="font-size:10px;color:var(--muted)">Xuất sang:</span>
+        <button onclick="charSheetToOutput()" style="padding:3px 10px;border-radius:5px;border:1px solid var(--green);background:transparent;color:var(--green);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Xuất Prompt</button>
+        <button onclick="charSheetToStoryboard()" style="padding:3px 10px;border-radius:5px;border:1px solid #a855f7;background:transparent;color:#a855f7;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Storyboard (Phase 2)</button>
+      </div>
+    </div>
   </div>
 
   <!-- HƯỚNG DẪN -->
@@ -1870,6 +1941,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   </div>
   <div class="arow" style="margin-bottom:11px">
     <button class="btn-p" onclick="taoVI()" id="nut-tao-vi">🇻🇳 Tạo Prompt Tiếng Việt</button>
+    <button class="btn-s" onclick="xuatHiggsfieldMCP()" style="border-color:#06b6d4;color:#06b6d4;background:#020f14" title="Xuất JSON + Master Prompt cho Claude Code + Higgsfield MCP">🤖 Export → Higgsfield MCP</button>
     <button class="btn-s" onclick="luuProject()" title="Lưu toàn bộ project ra file JSON + lưu vào trình duyệt">💾 Lưu Project</button>
     <button class="btn-s" onclick="document.getElementById('input-mo-project').click()" title="Mở file .json đã lưu">📂 Mở File</button>
     <button class="btn-s" onclick="hienProjectList()" title="Xem danh sách projects đã lưu trong trình duyệt">📋 Projects</button>
@@ -5401,6 +5473,7 @@ async function taoCharPromptAI(){
     document.getElementById('char-preview').textContent = charPromptText;
     document.getElementById('nut-cp-char').style.display = '';
     document.getElementById('nut-add-char').style.display = '';
+    const _cs2=document.getElementById('nut-char-sheet');if(_cs2)_cs2.style.display='';
     const indicator = document.getElementById('char-lock-active');
     if(indicator) indicator.style.display = '';
     // Update sync banner in Dựng Cảnh
@@ -5705,16 +5778,26 @@ function xuatJSON() {
       hair_desc: gVal('char-hair') || '',
       costume: gVal('char-costume') || '',
       marks: gVal('char-mark') || '',
-      lock_prompt: charPromptText || ''
+      lock_prompt: charPromptText || '',
+      wardrobe: gVal('wardrobe-lock') || '',
+      nationality: MM.nationality || []
     },
 
-    scene_builder: cacShot ? cacShot.map(s => ({
+    scene_builder: cacShot ? cacShot.map((s,i) => ({
+      index: i + 1,
       id: s.id,
       start: s.start,
       end: s.end,
       duration: s.tg,
       camera_move: s.cuMay || '',
+      angle: s.angle || '',
+      lens: s.lens || '',
+      speed: s.speed || '',
+      shot_size: s.shotSize || '',
+      special_fx: s.specialFx || '',
       description: s.moTa || '',
+      shot_prompt: s.shotPrompt || s._prompt || '',
+      storyboard_prompt: s.sbPrompt || '',
       audio: s.thoai || ''
     })) : [],
 
@@ -5746,6 +5829,87 @@ function xuatJSON() {
       model: 'bytedance/seedance/v1/lite',
       aspect_ratio: SS.res || '16:9',
       recommended_prompt: kqEN || kqVI || ''
+    },
+
+    // ===== HIGGSFIELD MCP — Claude Code ready =====
+    higgsfield_mcp: {
+      _readme: 'Feed this block to Claude Code with Higgsfield MCP connected at https://mcp.higgsfield.ai/mcp',
+      _workflow: ['1. create_character (Soul ID)', '2. generate_image (keyframe per shot)', '3. generate_video (Seedance 2.0 image-to-video)'],
+
+      soul_id: {
+        character_description: [
+          gVal('subject-desc'),
+          SS.gender ? 'Gender: ' + SS.gender : '',
+          SS.age ? 'Age: ' + SS.age : '',
+          (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),
+          SS.face_shape ? SS.face_shape + ' face' : '',
+          SS.skin_tone ? SS.skin_tone + ' skin' : '',
+          SS.eye_color ? SS.eye_color + ' eyes' : '',
+          SS.hair_color && SS.hair_style ? SS.hair_color + ' ' + SS.hair_style + ' hair' : '',
+          gVal('char-face'),
+          gVal('char-eyes'),
+          gVal('char-hair'),
+          gVal('char-mark') ? 'Marks: ' + gVal('char-mark') : '',
+        ].filter(Boolean).join('. '),
+        costume: gVal('char-costume') || gVal('wardrobe-lock') || '',
+        lock_prompt: charPromptText || '',
+        tool: 'create_character',
+        note: 'Call create_character with character_description → get character_id → use in all generate_video calls'
+      },
+
+      keyframes: cacShot ? cacShot.map((s,i) => ({
+        shot_index: i + 1,
+        tool: 'generate_image',
+        model: 'nano-banana-pro',
+        prompt: s.sbPrompt || s.moTa || s.shotPrompt || '',
+        aspect_ratio: SS.res || '16:9',
+        note: `Keyframe for shot ${i+1} [${s.start}s–${s.end}s] — use as first_frame_url in generate_video`
+      })) : [],
+
+      videos: cacShot ? cacShot.map((s,i) => ({
+        shot_index: i + 1,
+        tool: 'generate_video',
+        model: 'seedance-2',
+        prompt: s._prompt || s.shotPrompt || s.moTa || '',
+        duration: Math.min(Math.round(s.tg), 15),
+        aspect_ratio: SS.res || '16:9',
+        camera_move: s.cuMay || '',
+        lens: s.lens || '',
+        shot_size: s.shotSize || '',
+        special_fx: s.specialFx || '',
+        first_frame_url: '(paste keyframe URL from step 2)',
+        character_id: '(paste character_id from step 1)',
+        note: `Shot ${i+1} [${s.start}s–${s.end}s · ${s.tg}s]`
+      })) : [],
+
+      master_claude_prompt: `You are a cinematic AI video director using Higgsfield MCP tools.
+
+WORKFLOW — execute in order:
+
+STEP 1 — CREATE SOUL ID CHARACTER:
+Call create_character with this description:
+"${[gVal('subject-desc'), SS.face_shape, SS.skin_tone, SS.eye_color, gVal('char-face')].filter(Boolean).join('. ')}"
+Costume: "${gVal('char-costume') || gVal('wardrobe-lock') || ''}"
+Save the returned character_id for all video calls.
+
+STEP 2 — GENERATE KEYFRAMES:
+For each shot below, call generate_image with model "nano-banana-pro" to create the opening frame.
+Aspect ratio: ${SS.res || '16:9'}
+${cacShot.map((s,i) => `Shot ${i+1}: ${s.sbPrompt || s.moTa || s.shotPrompt || '(no prompt yet)'}`).join('\n')}
+
+STEP 3 — GENERATE VIDEOS with Seedance 2.0:
+For each shot, call generate_video with:
+- model: "seedance-2"
+- first_frame_url: (keyframe from step 2)
+- character_id: (from step 1)
+- duration: shot duration in seconds
+${cacShot.map((s,i) => `Shot ${i+1} [${s.tg}s]: ${s._prompt || s.moTa || '(no prompt)'}`).join('\n')}
+
+GENRE: ${SS.genre || 'cinematic'}
+COLOR: ${SS.pal || 'cinematic palette'}
+STYLE REF: ${(MM.director||[]).join(', ') || 'none'}
+
+Execute step by step. After each generate_video, call get_generation_status to wait for completion before proceeding.`
     }
   };
 
@@ -6892,7 +7056,451 @@ async function taoPromptBoiCanh(){
 }
 
 
-// ===== LICENSE & MISC =====
+function xuatHiggsfieldMCP(){
+  // Build JSON with higgsfield_mcp block
+  const fullJSON = xuatJSONData(); // reuse core builder
+  if(!fullJSON) return;
+
+  const mcp = fullJSON.higgsfield_mcp;
+  if(!mcp){ alert('Không có data Higgsfield MCP. Điền thông tin nhân vật và shots trước.'); return; }
+
+  // Format: Master Prompt + JSON block
+  const out = [
+    '# ANNAHOUSESTUDIO → HIGGSFIELD MCP',
+    '# by Lý Minh Nhựt — annahousestudio.vercel.app',
+    '# Claude Code: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp',
+    '',
+    '## MASTER PROMPT — paste vào Claude Code:',
+    '─'.repeat(50),
+    mcp.master_claude_prompt,
+    '─'.repeat(50),
+    '',
+    '## FULL PROJECT JSON (higgsfield_mcp block):',
+    JSON.stringify({ higgsfield_mcp: mcp }, null, 2)
+  ].join('\n');
+
+  robustCopy(out, null);
+
+  // Also trigger download
+  const blob = new Blob([out], { type: 'text/plain' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = 'ANNAHOUSESTUDIO_higgsfield_mcp.txt';
+  a.click();
+  URL.revokeObjectURL(url);
+
+  // Show confirm
+  const btn = document.querySelector('button[onclick="xuatHiggsfieldMCP()"]');
+  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã copy + download!'; btn.style.color='var(--green)'; setTimeout(()=>{btn.innerHTML=o;btn.style.color='#06b6d4';},2500); }
+}
+
+function xuatJSONData(){
+  // Reuse xuatJSON logic but return object instead of downloading
+  try {
+    // Trigger normal xuatJSON which builds and downloads
+    // For MCP export we read the higgsfield block from a temp build
+    const ts = new Date().toISOString();
+    return {
+      higgsfield_mcp: {
+        soul_id: {
+          character_description: [
+            gVal('subject-desc'),
+            SS.face_shape, SS.skin_tone, SS.eye_color,
+            gVal('char-face'), gVal('char-eyes'), gVal('char-hair'),
+            gVal('char-mark') ? 'Marks: ' + gVal('char-mark') : ''
+          ].filter(Boolean).join('. '),
+          costume: gVal('char-costume') || gVal('wardrobe-lock') || '',
+          lock_prompt: charPromptText || '',
+          tool: 'create_character'
+        },
+        keyframes: (cacShot||[]).map((s,i) => ({
+          shot_index: i+1,
+          tool: 'generate_image',
+          model: 'nano-banana-pro',
+          prompt: s.sbPrompt || s.moTa || s._prompt || '',
+          aspect_ratio: SS.res || '16:9'
+        })),
+        videos: (cacShot||[]).map((s,i) => ({
+          shot_index: i+1,
+          tool: 'generate_video',
+          model: 'seedance-2',
+          prompt: s._prompt || s.shotPrompt || s.moTa || '',
+          duration: Math.min(Math.round(s.tg||5), 15),
+          aspect_ratio: SS.res || '16:9',
+          camera_move: s.cuMay || '',
+          first_frame_url: '(from keyframe step)',
+          character_id: '(from create_character step)'
+        })),
+        master_claude_prompt: `You are a cinematic AI video director using Higgsfield MCP.
+
+Setup: Make sure Higgsfield MCP is connected.
+Command: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
+
+STEP 1 — SOUL ID (create_character):
+Description: "${[gVal('subject-desc'), SS.face_shape, SS.skin_tone, gVal('char-face')].filter(Boolean).join('. ')}"
+Costume: "${gVal('char-costume') || gVal('wardrobe-lock') || 'not specified'}"
+→ Save character_id
+
+STEP 2 — KEYFRAMES (generate_image, model: nano-banana-pro):
+${(cacShot||[]).map((s,i) => `Shot ${i+1} [${s.tg||5}s]: ${(s.sbPrompt||s.moTa||'cinematic shot').slice(0,150)}`).join('\n') || 'No shots defined — add shots in Dựng Cảnh tab first.'}
+
+STEP 3 — VIDEOS (generate_video, model: seedance-2):
+Use first_frame_url from step 2 and character_id from step 1.
+${(cacShot||[]).map((s,i) => `Shot ${i+1}: ${(s._prompt||s.moTa||'').slice(0,150)}`).join('\n') || 'No shot prompts — run AI Shot Builder first.'}
+
+After each video: call get_generation_status until completed.
+Aspect ratio: ${SS.res || '16:9'} | Genre: ${SS.genre||'cinematic'}`
+      }
+    };
+  } catch(e) {
+    console.error('xuatJSONData:', e);
+    return null;
+  }
+}
+
+
+let sbGridText = '';
+let sbLayout = '2x2';
+let sbStyle = 'film';
+
+function chonSBLayout(val, el){
+  sbLayout = val;
+  document.querySelectorAll('#sb-grid-panel .schip').forEach(c => {
+    if(['2x2','2x3','3x2','3x3','1x4 strip'].includes(c.textContent.trim()) ||
+       c.id && c.id.startsWith('sb-layout')) c.classList.remove('on');
+  });
+  if(el){ el.classList.add('on'); el.style.borderColor='#818cf8'; el.style.color='#818cf8'; el.style.background='#080d1e'; }
+}
+
+function chonSBStyle(val, el){
+  sbStyle = val;
+  document.querySelectorAll('#sb-grid-panel .schip').forEach(c => {
+    if(['Film','Sketch','Noir B&W','Anime'].includes(c.textContent.trim())) c.classList.remove('on');
+  });
+  if(el){ el.classList.add('on'); el.style.borderColor='#818cf8'; el.style.color='#818cf8'; el.style.background='#080d1e'; }
+}
+
+const SB_STYLE_MAP = {
+  film:   'photorealistic cinematic film still, 35mm grain, color graded, shallow depth of field',
+  sketch: 'professional pencil sketch storyboard, clean lines, gestural shading, white paper',
+  noir:   'high contrast black and white film noir, deep shadows, dramatic lighting, no color',
+  anime:  'high quality anime key frame, clean lineart, flat color, professional animation style'
+};
+
+const SB_LAYOUT_MAP = {
+  '2x2':      { cols: 2, rows: 2, total: 4,  desc: '2 columns × 2 rows grid' },
+  '2x3':      { cols: 2, rows: 3, total: 6,  desc: '2 columns × 3 rows grid' },
+  '3x2':      { cols: 3, rows: 2, total: 6,  desc: '3 columns × 2 rows grid' },
+  '3x3':      { cols: 3, rows: 3, total: 9,  desc: '3 columns × 3 rows grid' },
+  '1x4 strip':{ cols: 4, rows: 1, total: 4,  desc: '4 panels horizontal strip' },
+};
+
+function taoSBGridPrompt(){
+  if(!cacShot.length){ alert('Thêm shots trước trong tab 🎥 Dựng Cảnh.'); return; }
+
+  const panel  = document.getElementById('sb-grid-panel');
+  const body   = document.getElementById('sb-grid-body');
+  const meta   = document.getElementById('sb-grid-meta');
+  const status = document.getElementById('sb-grid-status');
+
+  if(panel) panel.style.display = '';
+
+  const layout  = SB_LAYOUT_MAP[sbLayout] || SB_LAYOUT_MAP['2x2'];
+  const styleDesc = SB_STYLE_MAP[sbStyle] || SB_STYLE_MAP.film;
+
+  // Take shots up to layout total, cycle if fewer shots
+  const totalPanels = layout.total;
+  const shots = cacShot.slice(0, totalPanels);
+  while(shots.length < totalPanels) shots.push(cacShot[shots.length % cacShot.length]);
+
+  // Character context
+  const nv      = gVal('subject-desc') || '';
+  const face    = gVal('char-face') || '';
+  const costume = gVal('char-costume') || gVal('wardrobe-lock') || '';
+  const genre   = SS.genre || 'cinematic drama';
+  const pal     = SS.pal || 'muted cinematic palette';
+  const director = (MM.director||[]).slice(0,2).join(', ');
+  const nat     = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
+
+  // Build panel descriptions
+  const panelDescs = shots.map((s, i) => {
+    const shotLabel = [
+      s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS',
+      s.cuMay || 'static',
+      s.lens || '50mm',
+    ].filter(Boolean).join(', ');
+    const content = s.sbPrompt
+      ? s.sbPrompt.slice(0, 120).replace(/\n/g, ' ')
+      : (s.moTa || s.shotPrompt || `Shot ${i+1}`).slice(0, 100);
+    const timing = `${s.start}s–${s.end}s`;
+    const fx = s.specialFx && s.specialFx !== 'Không' ? ` | FX: ${s.specialFx}` : '';
+    return `Panel ${i+1} [${timing}]: ${shotLabel}${fx}. ${content}`;
+  });
+
+  const L = [];
+  L.push('ANNAHOUSESTUDIO — STORYBOARD GRID PROMPT');
+  L.push('GPT IMAGE 2 MULTI-PANEL · BY LÝ MINH NHỰT');
+  L.push('═'.repeat(55));
+  L.push('');
+  L.push('[GRID SPECIFICATION]');
+  L.push(`Layout: ${sbLayout} — ${layout.desc}`);
+  L.push(`Total panels: ${totalPanels} | Style: ${sbStyle.toUpperCase()}`);
+  L.push(`Visual style: ${styleDesc}`);
+  L.push('');
+  L.push('[HOW TO USE]');
+  L.push('Paste this prompt into GPT Image 2 (ChatGPT) or DALL-E 3.');
+  L.push(`Request: "Create a ${sbLayout} storyboard grid with ${totalPanels} panels. Each panel is labeled."`);
+  L.push('');
+  L.push('─'.repeat(55));
+  L.push('MAIN PROMPT — PASTE INTO GPT IMAGE 2:');
+  L.push('─'.repeat(55));
+  L.push('');
+
+  // The actual GPT Image 2 prompt
+  const gptPrompt = [
+    `Create a professional ${layout.desc} storyboard for a cinematic ${genre} film.`,
+    `Style: ${styleDesc}.`,
+    `Each panel is clearly numbered and labeled. Thin black border between panels. Clean white margins.`,
+    '',
+    // Character line
+    nv ? `CONSISTENT CHARACTER ACROSS ALL PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,60) : ''}. Same face, same costume in every panel — zero variation.` : '',
+    '',
+    // Color/style
+    `COLOR GRADE: ${pal}.${director ? ' Director reference: ' + director + '.' : ''}`,
+    `TECHNICAL: ${styleDesc}. Consistent lighting across all panels. Professional composition.`,
+    '',
+    // Panel descriptions
+    '--- PANELS ---',
+    '',
+    ...panelDescs.map(p => p + '\n'),
+    '',
+    '--- END PANELS ---',
+    '',
+    `IMPORTANT: All ${totalPanels} panels must be visible in one image. Number each panel clearly (1, 2, 3...). Maintain character consistency across all panels. ${sbStyle === 'sketch' ? 'Black ink on white paper.' : 'Cinematic color grade throughout.'}`,
+  ].filter(Boolean).join('\n');
+
+  L.push(gptPrompt);
+  L.push('');
+  L.push('─'.repeat(55));
+  L.push(`Shots used: ${Math.min(cacShot.length, totalPanels)} / ${totalPanels} panels`);
+  L.push('NEXT: Generate image → Upload to Higgsfield → Image-to-Video with Seedance 2.0');
+  L.push('─'.repeat(55));
+  L.push('ANNAHOUSESTUDIO — annahousestudio.vercel.app · by Lý Minh Nhựt');
+
+  sbGridText = L.join('\n');
+  if(body) body.textContent = sbGridText;
+  if(meta) meta.textContent = `${layout.desc} · ${totalPanels} panels · ${sbStyle} style · ${sbGridText.length} ký tự`;
+  if(status) status.textContent = `✓ ${totalPanels} panels`;
+  if(panel) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+async function taoTatCaSBPrompt(){
+  if(!cacShot.length){ alert('Thêm shots trước.'); return; }
+  const btn = document.getElementById('btn-sb-all');
+  const status = document.getElementById('sb-grid-status');
+  if(btn) btn.disabled = true;
+
+  for(let i = 0; i < cacShot.length; i++){
+    const s = cacShot[i];
+    if(status) status.textContent = `⏳ Frame ${i+1}/${cacShot.length}...`;
+    await taoStoryboardPrompt(s.id);
+    await new Promise(r => setTimeout(r, 400));
+  }
+
+  if(status) status.textContent = `✓ ${cacShot.length} frames xong — nhấn 🎨 Storyboard Grid`;
+  if(btn) btn.disabled = false;
+
+  // Auto generate grid after all frames done
+  setTimeout(taoSBGridPrompt, 300);
+}
+
+function copySBGrid(){
+  if(!sbGridText) return;
+  robustCopy(sbGridText, document.getElementById('btn-cp-sb-grid'));
+}
+
+function sbGridToOutput(){
+  if(!sbGridText) return;
+  kqVI = sbGridText;
+  sw('out');
+  hienKQ(sbGridText, 'vi', '🎨 Storyboard Grid — GPT Image 2');
+}
+
+// Link from Character Sheet Phase 1 → Phase 2
+function charSheetToStoryboard(){
+  sw('shots');
+  setTimeout(()=>{
+    const panel = document.getElementById('sb-grid-panel');
+    if(panel){ panel.style.display = ''; panel.scrollIntoView({ behavior:'smooth', block:'nearest' }); }
+    const status = document.getElementById('sb-grid-status');
+    if(status) status.textContent = '← Character Sheet đã sẵn sàng — thêm shots rồi tạo grid';
+  }, 200);
+}
+
+
+let charSheetText = '';
+
+function xuatCharacterSheet(){
+  if(!charPromptText){ alert('Tạo Character Lock Prompt trước.'); return; }
+
+  const face    = gVal('char-face');
+  const eyes    = gVal('char-eyes');
+  const hair    = gVal('char-hair');
+  const costume = gVal('char-costume');
+  const mark    = gVal('char-mark');
+  const nv      = gVal('subject-desc');
+  const wd      = gVal('wardrobe-lock');
+
+  // Identity line
+  const identity = [];
+  const genderMap = {'Nam':'Male','Nữ':'Female','Trung tính':'Non-binary','Robot / AI':'Robot / AI'};
+  const ageMap = {'Thiếu niên (~16)':'Teenager (~16)','Thanh niên (~25)':'Young adult (~25)','Trung niên (~40)':'Middle-aged (~40)','Cao tuổi (~60+)':'Elderly (~60+)'};
+  if(SS.gender) identity.push(genderMap[SS.gender]||SS.gender);
+  if(SS.age)    identity.push(ageMap[SS.age]||SS.age);
+  if(MM.nationality&&MM.nationality.length) identity.push(MM.nationality.map(n=>n.replace(/^.{2,3}\s/,'')).join(', '));
+  const identityLine = identity.join(', ');
+
+  // Physical descriptors
+  const physicals = [
+    SS.face_shape  ? SS.face_shape + ' face shape'    : '',
+    SS.skin_tone   ? SS.skin_tone + ' skin'           : '',
+    SS.eye_color   ? SS.eye_color + ' eyes'           : '',
+    SS.eye_shape   ? SS.eye_shape + ' eye shape'      : '',
+    SS.hair_color  ? SS.hair_color + ' hair'          : '',
+    SS.hair_style  ? SS.hair_style + ' hairstyle'     : '',
+  ].filter(Boolean).join(', ');
+
+  // 4 VIEW ANGLES — Soul ID chuẩn Higgsfield
+  const views = [
+    {
+      tag: 'VIEW 1 — FRONT PORTRAIT (0°)',
+      cam: 'Camera straight ahead, eye-level, 85mm f/1.8. Subject faces lens directly. Neutral expression. Studio lighting: key light 45° left at 5600K, fill right at 0.5 ratio. Clean neutral gray background.',
+      focus: 'Face geometry, eye color, skin texture, hair structure — all fully legible.',
+      note: 'PRIMARY REFERENCE — highest identity information density.'
+    },
+    {
+      tag: 'VIEW 2 — 3/4 ANGLE (45° right)',
+      cam: 'Camera 45° right of subject. Eye-level. 85mm f/2.0. Subject turns 3/4 toward lens. Same studio lighting setup. Clean background.',
+      focus: 'Nose profile, jawline, cheekbone structure, ear, hair volume, depth of face.',
+      note: 'Secondary reference — reveals depth and 3D structure of face.'
+    },
+    {
+      tag: 'VIEW 3 — FULL BODY FRONT',
+      cam: 'Camera straight ahead, eye-level. 35mm f/4.0 full body. Subject stands naturally, arms slightly relaxed at sides. Entire silhouette visible from crown to feet. Same studio setup.',
+      focus: 'Height, body proportions, posture, costume full detail, footwear, accessories.',
+      note: 'Costume reference — locked wardrobe, scale reference for AI.'
+    },
+    {
+      tag: 'VIEW 4 — CLOSE-UP FACE (ECU)',
+      cam: '100mm macro f/2.8. Camera fills frame with face only — forehead to chin. Eye-level. Key light same direction. No fill — slight shadow side for texture.',
+      focus: 'Pore detail, skin texture SSS, exact eye iris pattern, lip shape, facial hair if any, identifying marks.',
+      note: 'Skin and micro-detail lock — prevents AI from smoothing or drifting.'
+    }
+  ];
+
+  const L = [];
+  L.push('ANNAHOUSESTUDIO — SOUL ID CHARACTER SHEET');
+  L.push('HIGGSFIELD AI · SEEDANCE 2.0 · BY LÝ MINH NHỰT');
+  L.push('═'.repeat(55));
+  L.push('');
+  L.push('[CHARACTER IDENTITY]');
+  if(identityLine) L.push(identityLine + '.');
+  if(nv) L.push(nv);
+  L.push('');
+  L.push('[PHYSICAL DESCRIPTORS — LOCKED]');
+  if(physicals) L.push(physicals + '.');
+  if(face) L.push('Face detail: ' + face);
+  if(eyes) L.push('Eyes detail: ' + eyes);
+  if(hair) L.push('Hair detail: ' + hair);
+  if(mark) L.push('Identifying marks: ' + mark);
+  L.push('');
+  L.push('[COSTUME — LOCKED ACROSS ALL SHOTS]');
+  if(costume) L.push(costume);
+  if(wd) L.push(wd);
+  if(!costume && !wd) L.push('(no costume lock defined — add in Wardrobe Lock field)');
+  L.push('');
+  L.push('[CHARACTER LOCK PROMPT — paste this into every shot]');
+  L.push(charPromptText);
+  L.push('');
+  L.push('─'.repeat(55));
+  L.push('SOUL ID REFERENCE SHEET — 4 CAMERA ANGLES');
+  L.push('Generate each view separately. Use same seed if platform allows.');
+  L.push('Upload all 4 to Higgsfield → create_character or Soul ID training.');
+  L.push('─'.repeat(55));
+  L.push('');
+
+  views.forEach((v, i) => {
+    L.push('═'.repeat(45));
+    L.push(`SHOT ${i+1} / 4 — ${v.tag}`);
+    L.push('═'.repeat(45));
+    L.push('');
+    L.push('[CAMERA]');
+    L.push(v.cam);
+    L.push('');
+    L.push('[SUBJECT]');
+    if(identityLine) L.push(identityLine + '.');
+    if(nv) L.push(nv);
+    if(physicals) L.push(physicals + '.');
+    if(face) L.push(face);
+    if(eyes) L.push(eyes);
+    if(hair) L.push(hair);
+    if(mark) L.push('Mark: ' + mark);
+    L.push('');
+    if(i < 3 && (costume || wd)){
+      L.push('[COSTUME]');
+      if(costume) L.push(costume);
+      if(wd) L.push(wd);
+      L.push('');
+    }
+    L.push('[FOCUS]');
+    L.push(v.focus);
+    L.push('');
+    L.push('[TECHNICAL]');
+    L.push('Photorealistic. No AI smoothing. No idealization. No beauty filter.');
+    L.push('Consistent skin tone across all 4 views. Same lighting temperature 5600K.');
+    L.push('No motion blur. Static single frame reference only.');
+    L.push('');
+    L.push('[NOTE]');
+    L.push(v.note);
+    L.push('');
+  });
+
+  L.push('═'.repeat(55));
+  L.push('WORKFLOW: Generate 4 shots → Upload to Higgsfield Soul ID → Use character_id in every video prompt.');
+  L.push('NEXT: Phase 2 — Storyboard Grid (GPT Image 2 multi-panel)');
+  L.push('─'.repeat(55));
+  L.push('ANNAHOUSESTUDIO AI — annahousestudio.vercel.app · by Lý Minh Nhựt');
+
+  charSheetText = L.join('\n');
+
+  const panel = document.getElementById('char-sheet-panel');
+  const body  = document.getElementById('char-sheet-body');
+  if(panel && body){
+    body.textContent = charSheetText;
+    panel.style.display = '';
+    panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+}
+
+function copyCharSheet(){
+  if(!charSheetText) return;
+  robustCopy(charSheetText, document.getElementById('btn-cp-char-sheet'));
+}
+
+function charSheetToOutput(){
+  if(!charSheetText) return;
+  kqVI = charSheetText;
+  sw('out');
+  hienKQ(charSheetText, 'vi', '🎬 Soul ID Character Sheet');
+}
+
+function charSheetToStoryboard(){
+  // Phase 2 placeholder — will link to storyboard grid builder
+  alert('Phase 2 — Storyboard Grid sẽ được build tiếp theo.\nCharacter Sheet đã sẵn sàng để pass vào.');
+}
+
+
 function moKhungLicense(){
   const k = document.getElementById('khung-license');
   if(k) k.style.display = '';
