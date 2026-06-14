@@ -7162,10 +7162,10 @@ function chonSoulSrc(val, el){
   ['real','ai','existing'].forEach(s => {
     const chip = document.getElementById('soul-src-' + s);
     const panel = document.getElementById('soul-src-' + s + '-panel');
-    if(chip){ chip.style.borderColor=''; chip.style.color=''; chip.style.background=''; }
+    if(chip){ chip.classList.remove('on'); chip.style.borderColor=''; chip.style.color=''; chip.style.background=''; }
     if(panel) panel.style.display = 'none';
   });
-  if(el){ el.style.borderColor='#06b6d4'; el.style.color='#06b6d4'; el.style.background='#020f14'; }
+  if(el){ el.classList.add('on'); el.style.borderColor='#06b6d4'; el.style.color='#06b6d4'; el.style.background='#020f14'; }
   const activePanel = document.getElementById('soul-src-' + val + '-panel');
   if(activePanel) activePanel.style.display = '';
 }
@@ -7369,17 +7369,18 @@ let sbStyle = 'film';
 
 function chonSBLayout(val, el){
   sbLayout = val;
-  document.querySelectorAll('#sb-grid-panel .schip').forEach(c => {
-    if(['2x2','2x3','3x2','3x3','1x4 strip'].includes(c.textContent.trim()) ||
-       c.id && c.id.startsWith('sb-layout')) c.classList.remove('on');
+  document.querySelectorAll('[onclick^="chonSBLayout"]').forEach(c => {
+    c.classList.remove('on');
+    c.style.borderColor = ''; c.style.color = ''; c.style.background = '';
   });
   if(el){ el.classList.add('on'); el.style.borderColor='#818cf8'; el.style.color='#818cf8'; el.style.background='#080d1e'; }
 }
 
 function chonSBStyle(val, el){
   sbStyle = val;
-  document.querySelectorAll('#sb-grid-panel .schip').forEach(c => {
-    if(['Film','Sketch','Noir B&W','Anime'].includes(c.textContent.trim())) c.classList.remove('on');
+  document.querySelectorAll('[onclick^="chonSBStyle"]').forEach(c => {
+    c.classList.remove('on');
+    c.style.borderColor = ''; c.style.color = ''; c.style.background = '';
   });
   if(el){ el.classList.add('on'); el.style.borderColor='#818cf8'; el.style.color='#818cf8'; el.style.background='#080d1e'; }
 }
