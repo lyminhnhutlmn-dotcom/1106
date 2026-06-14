@@ -3296,42 +3296,43 @@ async function caiThienAI(){
   // Nếu prompt dài > 2500 ký tự → chia 2 pass
   const IS_LONG = nd.length > 2500;
 
-  const systemPrompt = `You are a master cinematographer and prompt engineer for Seedance 2.0 on Higgsfield.
-Your mission: elevate any prompt into a CINEMATIC MASTERPIECE worthy of a feature film.
+    const systemPrompt = `You are a master cinematographer and prompt engineer for Seedance 2.0 on Higgsfield.
+Elevate any prompt into a cinematic masterpiece.
 
-⚠️ CRITICAL OUTPUT RULES:
-- Output the COMPLETE upgraded prompt — never truncate, never summarize, never use "..."
-- If the input has multiple shots/sections, upgrade ALL of them fully
-- Minimum output: same length as input. Preferred: 1.5–2x longer with added cinematic detail
-- Do NOT stop mid-sentence. Do NOT cut off — pace yourself to finish completely
-- Write every section to completion before moving to the next
-- If you are given PART 1 or PART 2, output only that part — complete and untruncated
+RULES:
+- Output the COMPLETE upgraded version — never truncate, never use "..."
+- Upgrade ALL sections fully. Minimum same length as input, preferred 1.5x longer.
+- Do NOT ask for missing parts. Do NOT say "I don't see part X". Just upgrade what you receive.
+- Same language as input.
 
-UPGRADE EACH SECTION WITH:
-[CAMERA] Exact movement + speed ft/s or deg/sec + focal length mm + aperture f-stop + easing curve
-[LIGHTING] Kelvin temperature + direction degrees + key:fill ratio + practical sources + rim color
-[ATMOSPHERE] 3 depth layers FG/MG/BG + particles + air density + weather micro-detail
-[SUBJECT ACTION] Precise micro-actions per second: muscle tension + breath + eye movement
-[SKIN TEXTURE] SSS subsurface scattering + visible pores + vellus hair + capillary flush
-[EMOTIONAL SUBTEXT] Show-don't-tell — camera angle + light color + movement speed carry emotion
-[COLOR GRADE] Film stock reference + shadow tone + highlight rolloff + saturation
-[CONSTRAINTS] Always append: No AI smoothing. No flickering. No warped faces. No texture swimming.
+UPGRADE WITH:
+[CAMERA] movement + speed ft/s + lens mm + aperture + easing
+[LIGHTING] Kelvin + direction° + key:fill ratio + practicals + rim
+[ATMOSPHERE] FG/MG/BG layers + particles + air density
+[SUBJECT] micro-actions per second: muscle + breath + eye movement
+[SKIN] SSS + pores + vellus hair + capillary flush. No smoothing.
+[EMOTION] show-don't-tell via camera + light + speed
+[COLOR] film stock + shadow tone + highlight rolloff
+[CONSTRAINTS] No AI smoothing. No flickering. No warped faces. No texture swimming.
 
-OUTPUT FORMAT:
-${IS_LONG ? 'Output only the improved prompt sections assigned to you. No preamble. No summary.' :
-`Line 1: "📊 ANALYSIS: [2-sentence cinematic assessment]"
-Line 2: "🎯 UPGRADES: [comma-list of improvements]"
-Line 3: "---"
-Then: COMPLETE upgraded prompt.`}
-Same language as input.`;
+${IS_LONG ? 'Output only the upgraded version of what you receive. No preamble.' :
+`Start with:
+"📊 [2-sentence assessment]"
+"🎯 [upgrades made]"
+"---"
+Then full upgraded prompt.`}`;
 
   try{
     if(IS_LONG){
-      // Split by SỰ KIỆN / SHOT blocks
-      const blocks = nd.split(/(?=(?:═{3,}|─{3,})\s*(?:SỰ KIỆN|SHOT|Event)\s*\d)/i);
-      const half = Math.ceil(blocks.length / 2);
-      const part1 = blocks.slice(0, half).join('');
-      const part2 = blocks.slice(half).join('');
+      // Split tại điểm giữa gần nhất với dòng trống — tránh cắt giữa câu
+      const mid = Math.floor(nd.length / 2);
+      const splitAt = nd.indexOf('\n\n', mid) > -1
+        ? nd.indexOf('\n\n', mid)
+        : nd.indexOf('\n', mid) > -1
+          ? nd.indexOf('\n', mid)
+          : mid;
+      const part1 = nd.slice(0, splitAt).trim();
+      const part2 = nd.slice(splitAt).trim();
 
       document.getElementById('ai-output').textContent = '⏳ Pass 1/2 — cải thiện nửa đầu...';
 
@@ -7314,23 +7315,12 @@ function taoSoulIDPrompt(){
       gVal('char-mark') ? 'Marks: ' + gVal('char-mark') : '',
     ].filter(Boolean).join('. ');
     const nat = (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ');
-    prompt = `# HIGGSFIELD — CREATE CHARACTER (Soul ID)
-# Paste vào Claude Code đã cài Higgsfield MCP:
-# claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
-
-Gọi tool create_character với:
-
+    prompt = `HIGGSFIELD create_character
 character_description: "${nat ? nat + '. ' : ''}${charDesc}"
-
 costume: "${costume || 'not specified'}"
-
-${imgUrls.length
-  ? 'reference_images:\n' + imgUrls.map((u,i) => `  ${i+1}. ${u}`).join('\n')
-  : '⚠️  Chưa có URL ảnh — thêm URL ảnh bên trên (3–5 ảnh góc khác nhau cho Soul ID chính xác nhất).'}
-
-${lock ? '--- CHARACTER LOCK (bổ sung cho AI) ---\n' + lock.slice(0,300) + '\n' : ''}
-→ Sau khi Claude Code trả về character_id:
-   Dán vào ô "character_id" bên dưới để tự động thêm vào video prompts.`;
+${imgUrls.length ? 'images:\n' + imgUrls.map((u,i) => `  ${i+1}. ${u}`).join('\n') : '⚠️ Chưa có URL ảnh — thêm 3–5 ảnh bên trên.'}
+${lock ? 'lock: ' + lock.slice(0,200) : ''}
+→ Sau khi có character_id: dán vào ô bên dưới.`;
   }
 
   const el = document.getElementById('soul-id-prompt');
@@ -7357,9 +7347,7 @@ function xuatHiggsfieldMCP(){
 
   // Format: Master Prompt + JSON block
   const out = [
-    '# ANNAHOUSESTUDIO → HIGGSFIELD MCP CHAINED WORKFLOW',
-    '# GPT Image 2 + Seedance 2.0 · by Lý Minh Nhựt',
-    '# Paste toàn bộ nội dung này vào Claude Code đã cài Higgsfield MCP',
+    '# ANNAHOUSESTUDIO → HIGGSFIELD MCP',
     '# claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp',
     '',
     mcp.master_claude_prompt,
@@ -7418,137 +7406,44 @@ function xuatJSONData(){
           first_frame_url: '(from keyframe step)',
           character_id: '(from create_character step)'
         })),
-        master_claude_prompt: `# ANNAHOUSESTUDIO — HIGGSFIELD MCP CHAINED WORKFLOW
-# GPT Image 2 + Seedance 2.0 · by Lý Minh Nhựt
-# MCP: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
-#
-# ⚠️ CHAINED WORKFLOW — each step must COMPLETE before starting the next.
-# Later steps use outputs from earlier steps as direct inputs.
-# After each generate call: poll get_generation_status until status = "completed".
-# ═══════════════════════════════════════════════════════════
+        master_claude_prompt: `ANNAHOUSESTUDIO → HIGGSFIELD MCP
+MCP: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
+CHAIN: each step must complete before next. Poll get_generation_status after each call.
 
-# ─── PROJECT CONTEXT ───
-SUBJECT: ${[gVal('subject-desc'), gVal('char-face') ? gVal('char-face').slice(0,100) : ''].filter(Boolean).join('. ')}
-COSTUME: ${gVal('char-costume') || gVal('wardrobe-lock') || 'not specified'}
-NATIONALITY: ${(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ') || 'not specified'}
-GENRE: ${SS.genre || 'cinematic drama'}
-COLOR PALETTE: ${SS.pal || 'muted cinematic'}
-DIRECTOR REF: ${(MM.director||[]).join(', ') || 'not specified'}
-ASPECT RATIO: ${SS.res || '16:9'}
-TOTAL DURATION: ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0).toFixed(1)}s across ${(cacShot||[]).length} shots
+PROJECT: ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ')].filter(Boolean).join(', ')} | ${SS.genre||'cinematic'} | ${SS.pal||'muted'} | ${SS.res||'16:9'} | ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0).toFixed(1)}s
+COSTUME: ${gVal('char-costume')||gVal('wardrobe-lock')||'not set'}
+DIRECTOR REF: ${(MM.director||[]).join(', ')||'none'}
 
-# ═══════════════════════════════════════════════════════════
-# STEP 1 — STORYBOARD GRID (GPT Image 2)
-# Generate first. Output = output_1 (image URL)
-# ═══════════════════════════════════════════════════════════
+━━━ STEP 1: STORYBOARD GRID (GPT Image 2) → save as output_1 ━━━
+tool: generate_image | model: gpt-image-2 | aspect_ratio: 16:9
+prompt:
+3×3 cinematic beat sheet. 9 panels numbered. Black border, white margin. 16:9 layout.
+VISUAL DNA (identical all panels): ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),gVal('char-face')?'Face: '+gVal('char-face').slice(0,80):'',gVal('char-costume')||gVal('wardrobe-lock')?'Costume: '+(gVal('char-costume')||gVal('wardrobe-lock')).slice(0,80):''].filter(Boolean).join('. ')}
+SAME face+costume every panel — zero variation.
+PANELS: ${(cacShot||[]).map((s,i)=>`[${i+1}] ${s.shotSize||'MS'}|${s.cuMay||'static'}|${(s.moTa||'').slice(0,50)}`).join(' / ')||'Cinematic sequence'}
+Style: Photorealistic. Film grain. ${SS.pal||'muted cinematic'}. No motion blur.
 
-Call generate_image with:
-  model: "gpt-image-2"
-  aspect_ratio: "16:9"
-  prompt: |
-    Create a cinematic beat sheet in a 3×3 grid format. Include production notes for character actions and camera work.
-    Style: Cinematic, Live-action, Photorealistic, Lifelike, 16:9 page layout.
-    Each panel numbered 1–9. Thin black border between panels. White margin around grid.
+━━━ STEP 2: CHARACTER SHEET (GPT Image 2) → save as output_2 ━━━
+tool: generate_image | model: gpt-image-2 | aspect_ratio: 16:9
+medias: [{role:"image", value: output_1}]
+prompt:
+Character reference sheet. 4 columns × 2 rows = 8 shots.
+Character: ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),SS.age||''].filter(Boolean).join(', ')}${gVal('char-face')?'. '+gVal('char-face'):''}${gVal('char-eyes')?'. '+gVal('char-eyes'):''}${gVal('char-hair')?'. '+gVal('char-hair'):''}${gVal('char-costume')||gVal('wardrobe-lock')?'. Costume: '+(gVal('char-costume')||gVal('wardrobe-lock')):''}${gVal('char-mark')?'. Marks: '+gVal('char-mark'):''}
+TOP ROW (full-body head-to-toe, no cropping): Front | Side 90° | Three-quarter | Back
+BOTTOM ROW (face close-up): Front | Profile right | Three-quarter | Profile left
+Style: Photorealistic DSLR 35mm. NOT 3D render. Consistent face+costume all 8 shots.
 
-    VISUAL DNA — locked identical across all 9 panels:
-    Subject: ${[gVal('subject-desc'), (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ')].filter(Boolean).join(', ')}
-    ${gVal('char-face') ? 'Face: ' + gVal('char-face').slice(0,120) : ''}
-    ${gVal('char-costume') || gVal('wardrobe-lock') ? 'Costume (locked): ' + (gVal('char-costume') || gVal('wardrobe-lock')).slice(0,120) : ''}
-    SAME face, SAME costume in every panel — zero variation allowed.
+━━━ STEP 3: SEEDANCE 2.0 VIDEO → final output ━━━
+tool: generate_video | model: seedance-2 | duration: ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0)||15} | aspect_ratio: ${SS.res||'16:9'}
+medias: [{role:"image", value:output_1}, {role:"image", value:output_2}]
+NOTE: output_1 = image_reference only (NOT start_image). output_2 = identity reference.
+prompt:
+${(cacShot||[]).map((s,i)=>`[${s.start||0}s–${s.end||(s.tg||5)}s] ${(s.shotSize||'MS').replace(/\s*—.*/,'')}|${s.cuMay||'static'}|${s.lens||'50mm'}${s.specialFx&&s.specialFx!=='Không'?'|'+s.specialFx:''}. ${(s._prompt||s.moTa||'').slice(0,120)}`).join('\n')||'Cinematic sequence from storyboard.'}
+CHARACTER: ${charPromptText?charPromptText.slice(0,300):[gVal('subject-desc'),gVal('char-costume')||gVal('wardrobe-lock')].filter(Boolean).join('. ')}
+RULES: Sequential shots not one image. Follow panel order+camera from output_1. ${SS.genre||'cinematic'}. ${SS.pal||'muted'}. No AI smoothing. No warped faces. Film grain.
 
-    Main Storyline: ${(cacShot||[]).map((s,i) => `Panel ${i+1}: ${(s.moTa||s.shotPrompt||'').slice(0,80)}`).join(' | ') || 'Cinematic sequence'}
+CONTINUE: "next sequence"=new grid same char | "skip to Seedance"=use existing outputs | "new character"=full cycle`
 
-    Shot breakdown per panel:
-    ${(cacShot||[]).map((s,i) => `Panel ${i+1} [${s.tg||5}s]: ${s.shotSize||'MS'} | ${s.cuMay||'static'} | ${s.lens||'50mm'} — ${(s.moTa||'').slice(0,60)}`).join('\n    ')}
-
-    TECHNICAL: Each panel = frozen single cinematic frame. No motion blur. Photorealistic film grain.
-    COLOR: ${SS.pal || 'muted cinematic'}. ${(MM.director||[]).length ? 'Visual ref: ' + MM.director.join(', ') : ''}
-
-→ WAIT for completion. Save result URL as output_1.
-
-# ═══════════════════════════════════════════════════════════
-# STEP 2 — CHARACTER SHEET (GPT Image 2)
-# Uses: output_1 as visual reference
-# Output = output_2 (image URL)
-# ═══════════════════════════════════════════════════════════
-
-After output_1 is completed, call generate_image with:
-  model: "gpt-image-2"
-  aspect_ratio: "16:9"
-  medias: [{ role: "image", value: output_1 }]
-  prompt: |
-    Create a professional character reference sheet for the main character from the attached storyboard.
-    Character: ${[gVal('subject-desc'), (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '), SS.age||''].filter(Boolean).join(', ')}
-    ${gVal('char-face') ? 'Face: ' + gVal('char-face') : ''}
-    ${gVal('char-eyes') ? 'Eyes: ' + gVal('char-eyes') : ''}
-    ${gVal('char-hair') ? 'Hair: ' + gVal('char-hair') : ''}
-    ${gVal('char-costume') || gVal('wardrobe-lock') ? 'Costume: ' + (gVal('char-costume') || gVal('wardrobe-lock')) : ''}
-    ${gVal('char-mark') ? 'Marks: ' + gVal('char-mark') : ''}
-
-    Divide the sheet into four vertical columns, each a different angle. Total 8 shots:
-    TOP ROW (full-body, head to toe, no cropping at ankles/knees/head):
-    - Column 1: Front view
-    - Column 2: Side view (90° right)
-    - Column 3: Three-quarter view
-    - Column 4: Back view
-    BOTTOM ROW (close-up face shots corresponding to each full-body above):
-    - Column 1: Face front
-    - Column 2: Face profile right
-    - Column 3: Face three-quarter
-    - Column 4: Face profile left
-
-    Style: Photorealistic, live-action, shot on DSLR 35mm film, muted color tones.
-    NOT a 3D render. NOT illustration. Real human photography aesthetic.
-    Consistent face, costume, hair across all 8 shots — zero variation.
-
-→ WAIT for completion. Save result URL as output_2.
-
-# ═══════════════════════════════════════════════════════════
-# STEP 3 — SEEDANCE 2.0 VIDEO (15 seconds)
-# Uses: output_1 as image_reference (NOT start_image)
-#       output_2 as image_reference (character sheet)
-# Output = final 15-second cinematic video
-# ═══════════════════════════════════════════════════════════
-
-After output_1 AND output_2 are both completed, call generate_video with:
-  model: "seedance-2"
-  duration: 15
-  aspect_ratio: "${SS.res || '16:9'}"
-  medias: [
-    { role: "image", value: output_1 },   ← storyboard grid (motion reference, NOT start_image)
-    { role: "image", value: output_2 }    ← character sheet (identity reference)
-  ]
-  prompt: |
-    ${(cacShot||[]).map((s,i) => {
-      const cam = s.cuMay || 'static shot';
-      const lens = s.lens || '50mm';
-      const size = (s.shotSize||'MS').replace(/\s*—.*/,'');
-      const fx = s.specialFx && s.specialFx !== 'Không' ? ' | FX: ' + s.specialFx : '';
-      return `[${s.start||0}s–${s.end||(s.tg||5)}s] Shot ${i+1}: ${size} | ${cam} | ${lens}${fx}. ${(s._prompt||s.moTa||'').slice(0,150)}`;
-    }).join('\n    ') || 'Cinematic 15-second sequence based on storyboard grid.'}
-
-    CHARACTER (maintain across all shots):
-    ${charPromptText ? charPromptText.slice(0,400) : [gVal('subject-desc'), gVal('char-costume')||gVal('wardrobe-lock')].filter(Boolean).join('. ')}
-
-    IMPORTANT NOTES:
-    - Read storyboard panels as SEQUENTIAL SHOTS — not as one image
-    - Follow panel order, camera logic, motion arrows and framing from output_1
-    - Character sheet (output_2) is identity reference — maintain exact likeness
-    - output_1 is image_reference only — DO NOT set as start_image
-    - Smooth transitions between shots. Consistent color grade throughout.
-    - Genre: ${SS.genre || 'cinematic'}. Palette: ${SS.pal || 'muted cinematic'}.
-    ${(MM.director||[]).length ? '- Visual reference: ' + MM.director.join(', ') : ''}
-    - No AI smoothing. No warped faces. Photorealistic. Film grain.
-
-→ WAIT for completion. Return final video URL.
-
-# ═══════════════════════════════════════════════════════════
-# CONTINUATION OPTIONS (after first cycle):
-# - "Generate next sequence" → new 3×3 grid, skip character sheet, use same character refs
-# - "Skip to Seedance" → use existing output_1 + output_2, generate next 15s clip
-# - "New character" → full 3-step cycle with new character description
-# ═══════════════════════════════════════════════════════════
-# ANNAHOUSESTUDIO — annahousestudio.vercel.app · by Lý Minh Nhựt`
 
       }
     };
