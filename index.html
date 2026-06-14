@@ -3292,9 +3292,11 @@ async function caiThienAI(){
   moAIPanel('💡 🎬 Đang phân tích và cải thiện prompt...');
   document.getElementById('ai-output').textContent = '';
   let acc = '';
-  try{
-    const ok = await goiClaude(
-      `You are a master cinematographer and prompt engineer for Seedance 2.0 on Higgsfield.
+
+  // Nếu prompt dài > 2500 ký tự → chia 2 pass
+  const IS_LONG = nd.length > 2500;
+
+  const systemPrompt = `You are a master cinematographer and prompt engineer for Seedance 2.0 on Higgsfield.
 Your mission: elevate any prompt into a CINEMATIC MASTERPIECE worthy of a feature film.
 
 ⚠️ CRITICAL OUTPUT RULES:
@@ -3303,44 +3305,61 @@ Your mission: elevate any prompt into a CINEMATIC MASTERPIECE worthy of a featur
 - Minimum output: same length as input. Preferred: 1.5–2x longer with added cinematic detail
 - Do NOT stop mid-sentence. Do NOT cut off — pace yourself to finish completely
 - Write every section to completion before moving to the next
+- If you are given PART 1 or PART 2, output only that part — complete and untruncated
 
 UPGRADE EACH SECTION WITH:
-
-[CAMERA] Exact movement type + speed ft/s or deg/sec + focal length mm + aperture f-stop + easing curve
-Example: "dolly forward 1.5ft/s ease-in cubic, anamorphic 85mm f/1.4, shallow 2cm DOF"
-
+[CAMERA] Exact movement + speed ft/s or deg/sec + focal length mm + aperture f-stop + easing curve
 [LIGHTING] Kelvin temperature + direction degrees + key:fill ratio + practical sources + rim color
-Example: "3200K warm key 45° left, fill 1:3 at 5600K, cool blue rim 6500K 20%, neon green practical BG"
-
 [ATMOSPHERE] 3 depth layers FG/MG/BG + particles + air density + weather micro-detail
-Example: "golden dust motes in 3 light shafts FG, ground fog 0–2ft MG, heat shimmer at horizon BG"
-
 [SUBJECT ACTION] Precise micro-actions per second: muscle tension + breath + eye movement
-Example: "jaw tightens 0.3s, exhale frost mist visible at lips, right fingertips graze cold steel"
-
-[SKIN TEXTURE] SSS subsurface scattering + visible pores + vellus hair + capillary flush + imperfections
-Never: plastic skin, AI smoothing, pore-less, beauty filter, uncanny valley
-
+[SKIN TEXTURE] SSS subsurface scattering + visible pores + vellus hair + capillary flush
 [EMOTIONAL SUBTEXT] Show-don't-tell — camera angle + light color + movement speed carry emotion
-
 [COLOR GRADE] Film stock reference + shadow tone + highlight rolloff + saturation
-Example: "Kodak Vision3 500T push +1, lifted shadows #2a2035, highlight rolloff 85%, desaturated reds"
-
-[CONSTRAINTS] Always append:
-No AI smoothing. No flickering. No warped faces. No texture swimming. No subject duplication. No floating limbs.
+[CONSTRAINTS] Always append: No AI smoothing. No flickering. No warped faces. No texture swimming.
 
 OUTPUT FORMAT:
-Line 1: "📊 ANALYSIS: [2-sentence cinematic assessment]"
+${IS_LONG ? 'Output only the improved prompt sections assigned to you. No preamble. No summary.' :
+`Line 1: "📊 ANALYSIS: [2-sentence cinematic assessment]"
 Line 2: "🎯 UPGRADES: [comma-list of improvements]"
 Line 3: "---"
-Then: COMPLETE upgraded prompt — all sections fully written, nothing truncated.
-Same language as input.`,
-      `Improve this prompt completely — do not truncate any section:
+Then: COMPLETE upgraded prompt.`}
+Same language as input.`;
 
-${nd}`,
-      chunk => { acc += chunk; aiKetQua = acc; document.getElementById('ai-output').textContent = acc; }
-    );
-    if(ok !== null){
+  try{
+    if(IS_LONG){
+      // Split by SỰ KIỆN / SHOT blocks
+      const blocks = nd.split(/(?=(?:═{3,}|─{3,})\s*(?:SỰ KIỆN|SHOT|Event)\s*\d)/i);
+      const half = Math.ceil(blocks.length / 2);
+      const part1 = blocks.slice(0, half).join('');
+      const part2 = blocks.slice(half).join('');
+
+      document.getElementById('ai-output').textContent = '⏳ Pass 1/2 — cải thiện nửa đầu...';
+
+      let part1Result = '';
+      await goiClaude(systemPrompt,
+        `Improve PART 1 of this prompt completely:\n\n${part1}`,
+        chunk => { part1Result += chunk; document.getElementById('ai-output').textContent = '⏳ Pass 1/2...\n' + part1Result; }
+      );
+
+      document.getElementById('ai-output').textContent = part1Result + '\n\n⏳ Pass 2/2 — cải thiện nửa sau...';
+
+      let part2Result = '';
+      await goiClaude(systemPrompt,
+        `Improve PART 2 of this prompt completely:\n\n${part2}`,
+        chunk => { part2Result += chunk; document.getElementById('ai-output').textContent = part1Result + '\n\n' + part2Result; }
+      );
+
+      acc = part1Result + '\n\n' + part2Result;
+      aiKetQua = acc;
+      document.getElementById('ai-output').textContent = acc;
+
+    } else {
+      const ok = await goiClaude(systemPrompt,
+        `Improve this prompt completely — do not truncate any section:\n\n${nd}`,
+        chunk => { acc += chunk; aiKetQua = acc; document.getElementById('ai-output').textContent = acc; }
+      );
+    }
+    if(true){
       document.getElementById('nut-dung-ai').style.display = 'none';
       document.getElementById('nut-ap-dung').style.display = '';
       document.getElementById('nut-cp-ai').style.display = '';
