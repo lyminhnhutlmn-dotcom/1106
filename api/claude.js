@@ -11,21 +11,16 @@ export default async function handler(req, res) {
   const apiKey = process.env.ANTHROPIC_API_KEY;
   if (!apiKey) return res.status(500).json({ error: 'Chưa cấu hình ANTHROPIC_API_KEY trong Vercel.' });
 
-  // Cap max_tokens — claude-sonnet-4-6 max output is 16000
-  const safeMaxTokens = Math.min(parseInt(max_tokens) || 8000, 16000);
+  // max_tokens: dùng giá trị từ request, fallback 16000, cap tại 16000
+  const safeMaxTokens = Math.min(parseInt(max_tokens) || 16000, 16000);
 
-  // Build content: images first (if any), then text
+  // Build content
   let content;
   if (images && Array.isArray(images) && images.length > 0) {
     content = [];
     for (const img of images.slice(0, 4)) {
       const m = String(img).match(/^data:(image\/(?:jpeg|png|gif|webp));base64,(.+)$/);
-      if (m) {
-        content.push({
-          type: 'image',
-          source: { type: 'base64', media_type: m[1], data: m[2] }
-        });
-      }
+      if (m) content.push({ type: 'image', source: { type: 'base64', media_type: m[1], data: m[2] } });
     }
     content.push({ type: 'text', text: message });
   } else {
@@ -57,32 +52,42 @@ export default async function handler(req, res) {
       return res.status(upstream.status).json({ error: errMsg || errText.slice(0, 300) });
     }
 
-    // Stream SSE to client
+    // Stream SSE
     res.setHeader('Content-Type', 'text/event-stream');
     res.setHeader('Cache-Control', 'no-cache');
     res.setHeader('Connection', 'keep-alive');
+    res.setHeader('X-Accel-Buffering', 'no'); // disable nginx buffering
 
     const reader = upstream.body.getReader();
     const decoder = new TextDecoder('utf-8');
     let buf = '';
 
-    while (true) {
-      const { done, value } = await reader.read();
-      if (done) break;
-      buf += decoder.decode(value, { stream: true });
-      const lines = buf.split('\n');
-      buf = lines.pop() || '';
-      for (const line of lines) {
-        if (!line.startsWith('data: ')) continue;
-        const data = line.slice(6).trim();
-        if (!data || data === '[DONE]') continue;
-        try {
-          const j = JSON.parse(data);
-          if (j.type === 'content_block_delta' && j.delta?.text) {
-            res.write(`data: ${JSON.stringify({ text: j.delta.text })}\n\n`);
-          }
-        } catch (e) {}
+    // Keep-alive ping every 8s to prevent timeout
+    const keepAlive = setInterval(() => {
+      try { res.write(': ping\n\n'); } catch(e) {}
+    }, 8000);
+
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        buf += decoder.decode(value, { stream: true });
+        const lines = buf.split('\n');
+        buf = lines.pop() || '';
+        for (const line of lines) {
+          if (!line.startsWith('data: ')) continue;
+          const data = line.slice(6).trim();
+          if (!data || data === '[DONE]') continue;
+          try {
+            const j = JSON.parse(data);
+            if (j.type === 'content_block_delta' && j.delta?.text) {
+              res.write(`data: ${JSON.stringify({ text: j.delta.text })}\n\n`);
+            }
+          } catch (e) {}
+        }
       }
+    } finally {
+      clearInterval(keepAlive);
     }
 
     res.write('data: [DONE]\n\n');
