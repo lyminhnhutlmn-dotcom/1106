@@ -3998,9 +3998,16 @@ async function phanTichKichBan(){
     ? 'Viết phân tích bằng tiếng Việt, prompt nháp bằng tiếng Anh.'
     : 'Viết toàn bộ bằng tiếng Việt, riêng các thuật ngữ điện ảnh giữ tiếng Anh.';
 
+  const durSec = parseInt(dur) || 15;
   const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản điện ảnh và shot breakdown cho Seedance 2.0 / Higgsfield.
 
 ${langInstruct}
+
+⛔ TỔNG THỜI LƯỢNG BẮT BUỘC: ${durSec} GIÂY — KHÔNG ĐƯỢC VƯỢT QUÁ.
+Tất cả shots cộng lại phải đúng bằng ${durSec}s.
+Ví dụ hợp lệ với ${durSec}s và 3 shot: [0–5s] + [5–10s] + [10–15s] = ${durSec}s ✓
+Ví dụ SAI: [0–10s] + [10–20s] + [20–30s] = 30s ✗ — bị từ chối.
+Kiểm tra tổng thời gian trước khi output. Nhắc lại ở cuối: "Tổng: Xs / ${durSec}s".
 
 NHIỆM VỤ: Phân tích kịch bản thành shot breakdown với HÀNH ĐỘNG CỤ THỂ từng shot.
 
@@ -4019,7 +4026,7 @@ ${shotInstruct}
 FORMAT TỪNG SHOT:
 
 ═══ SỰ KIỆN [N] ═══
-⏱ Thời gian: [Xs – Ys (Zs)]
+⏱ Thời gian: [Xs – Ys (Zs)] ← tổng tất cả shots = ${durSec}s
 🎯 Vai trò: [1 câu — shot này phục vụ gì]
 📷 Cú máy: [nếu đã xác định ghi "GIỮ NGUYÊN: ..."]
 🔭 Tiêu cự: [mm + lý do]
@@ -4036,7 +4043,8 @@ FORMAT TỪNG SHOT:
 PROMPT NHÁP (EN):
 [Prompt tiếng Anh đầy đủ sẵn dùng cho Seedance — gồm hành động chi tiết]
 
-CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP.`;
+CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP. + "✓ Tổng: ${durSec}s / ${durSec}s"`;
+
 
   // Build Khung Sườn context
   const ksCon = [];
@@ -6694,39 +6702,52 @@ async function taoPromptShot(id){
   const skin = SS.skin_level || '';
 
   // Include character lock if set
-  const charLock = charPromptText ? `\n\n[CHARACTER CONSISTENCY]\n${charPromptText.slice(0,300)}` : '';
+  const charLock = charPromptText
+    ? `\n\nCHARACTER CONSISTENCY LOCK — maintain across ALL panels:\n${charPromptText.slice(0, 500)}`
+    : '';
+  const wardrobe = gVal('wardrobe-lock')
+    ? `\nWARDROBE (locked): ${gVal('wardrobe-lock')}`
+    : '';
+  const sceneCtx = buildSceneBlock('en').join(' ');
 
-  const system = `You are a master DOP (Director of Photography) writing Seedance/Veo3 video prompts.
-Create a COMPLETE, PRODUCTION-READY cinematic video prompt for ONE shot.
+  const system = `You are a professional storyboard artist and cinematographer writing image generation prompts for AI image tools (GPT Image 2, Midjourney, Flux, Ideogram, Nano Banana Pro).
 
-MANDATORY structure:
-[CAMERA] Shot size, movement, lens, speed ft/s, angle
-[SUBJECT] Nationality, age range, exact action, micro-expression, body language, clothing texture
-[SKIN] SSS, pore detail, vellus hair, capillary flush, NO AI smoothing — biological realism
-[LIGHTING] Kelvin temperature, direction, key:shadow ratio, practical sources, rim, motivated source
-[DEPTH] Foreground / Midground / Background — 3 layers
-[ATMOSPHERE] Particles, dust, smoke, steam, weather, air density
-[COLOR] Film stock reference, grade, saturation, shadow tone
-[EMOTION] Show don't tell — encoded in physics and light
-[CONSTRAINTS] No warped faces, no extra fingers, no flickering, no texture swimming
+Your output is a STILL IMAGE PROMPT — not a video prompt. One single frozen frame.
 
-Write in professional cinematography language. Output ONLY the prompt. No preamble.`;
+MANDATORY OUTPUT FORMAT:
 
-  const userMsg = `Write complete video prompt:
+[FRAME] {shot_size} — {subject_position}. {camera_angle}, {lens}mm f/{aperture}. Static single frame.
+[SUBJECT] {nationality, age} {exact_frozen_pose} — {muscle_tension}, {eye_direction}, {micro_expression}. {clothing_texture_detail}.
+[SKIN] SSS subsurface scattering. {skin_tone} skin. Visible pores, vellus hair, capillary flush. NO AI smoothing. NO beauty filter. Biological realism.
+[LIGHTING] {Kelvin}K. {direction}° key light, {ratio} fill ratio. {practical_source}. Rim: {rim_color}. Shadow: {shadow_quality}.
+[DEPTH] FG: {foreground}. MG: {subject_env}. BG: {background_blur}.
+[ATMOSPHERE] {particles/dust/steam/air_density}.
+[COLOR] {film_stock}. {grade}. Shadows: {shadow_tone}. Highlights: {highlight_tone}.
+[CONSTRAINTS] No motion blur. No duplicate limbs. No warped faces. No AI smoothing. Sharp focus. Photorealistic.
 
-SHOT: ${size} | ${cam} | ${lens} | ${timing}
-${fx ? 'FX: ' + fx : ''}
-ACTION: ${content || 'Scene from ' + genre}
+Rules:
+- Fill every section — no skipping
+- Exact numbers: "3200K", "85mm f/1.4", "45° left", "0.3 fill ratio"
+- Clothing: fabric texture + drape + wrinkle pattern
+- Expression: name specific facial muscles
+- Output ONLY the formatted prompt. No explanation. No preamble.`;
+
+  const userMsg = `Write storyboard image prompt — ONE frozen frame:
+
+SHOT: ${size} | ${cam} | ${lens} | TIMING: ${timing}
+${fx ? 'FX (frozen peak moment of): ' + fx : ''}
+ACTION (frozen at peak): ${content || 'Cinematic scene'}
 SUBJECT: ${nationality ? nationality + ', ' : ''}${nv || 'character'}
-EMOTION: ${emo || 'tension'}
+EMOTION: ${emo || 'quiet tension'}
+SCENE: ${sceneCtx.slice(0, 200)}
 LIGHTING: ${lightType}
-COLOR: ${colorPal}
+COLOR PALETTE: ${colorPal}
 GENRE: ${genre}
-${director ? 'DIRECTOR REF: ' + director : ''}
-${skin ? 'SKIN: ' + skin : ''}${charLock}`;
+${director ? 'VISUAL REF: ' + director : ''}
+${skin ? 'SKIN DETAIL: ' + skin : ''}${wardrobe}${charLock}
 
-  let acc = '';
-  try {
+IMPORTANT: STILL IMAGE for storyboard panel — frozen single frame, no motion.`;
+
     await goiClaude(system, userMsg, (chunk) => {
       acc += chunk;
       if(el) el.textContent = acc;
@@ -7439,26 +7460,29 @@ function taoSBGridPrompt(){
 
   // The actual GPT Image 2 prompt
   const gptPrompt = [
-    `Create a professional ${layout.desc} storyboard for a cinematic ${genre} film.`,
+    `Create a professional ${layout.desc} storyboard grid. ${totalPanels} panels total, each panel clearly numbered (1, 2, 3...).`,
     `Style: ${styleDesc}.`,
-    `Each panel is clearly numbered and labeled. Thin black border between panels. Clean white margins.`,
+    `Layout: ${layout.cols} columns × ${layout.rows} rows. Thin black 2px border between panels. White 8px margin around entire grid. Panel numbers in top-left corner, small bold font.`,
     '',
-    // Character line
-    nv ? `CONSISTENT CHARACTER ACROSS ALL PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,60) : ''}. Same face, same costume in every panel — zero variation.` : '',
+    // Character consistency
+    nv ? `CONSISTENT CHARACTER ACROSS ALL ${totalPanels} PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. Face: ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,80) : ''}. SAME face structure, SAME costume, SAME hair in every panel — zero variation allowed.` : '',
     '',
-    // Color/style
-    `COLOR GRADE: ${pal}.${director ? ' Director reference: ' + director + '.' : ''}`,
-    `TECHNICAL: ${styleDesc}. Consistent lighting across all panels. Professional composition.`,
+    `VISUAL STYLE: ${styleDesc}.`,
+    `COLOR GRADE: ${pal}.${director ? ' Director visual reference: ' + director + '.' : ''}`,
+    `TECHNICAL: Each panel is a frozen single frame — no motion blur. Consistent lighting and color temperature across all panels. Professional cinematic composition.`,
     '',
-    // Panel descriptions
-    '--- PANELS ---',
+    `--- PANEL DESCRIPTIONS ---`,
     '',
-    ...panelDescs.map(p => p + '\n'),
+    ...panelDescs.map((p, i) => `PANEL ${i+1}: ${p}\n`),
+    `--- END PANELS ---`,
     '',
-    '--- END PANELS ---',
-    '',
-    `IMPORTANT: All ${totalPanels} panels must be visible in one image. Number each panel clearly (1, 2, 3...). Maintain character consistency across all panels. ${sbStyle === 'sketch' ? 'Black ink on white paper.' : 'Cinematic color grade throughout.'}`,
-  ].filter(Boolean).join('\n');
+    `CRITICAL RULES:`,
+    `1. All ${totalPanels} panels MUST be visible in ONE single image`,
+    `2. Number each panel clearly in top-left corner`,
+    `3. ${nv ? 'Character face and costume MUST be identical across all panels' : 'Maintain consistent visual style across all panels'}`,
+    `4. Each panel shows a FROZEN STILL FRAME — cinematic composition`,
+    `5. ${sbStyle === 'sketch' ? 'Black ink lines on white paper. Clean gestural linework.' : sbStyle === 'noir' ? 'High contrast black and white only. Deep shadows. No color.' : sbStyle === 'anime' ? 'Clean anime keyframe style. Flat cel shading. Professional animation quality.' : 'Photorealistic cinematic stills. Film grain. Color graded.'}`,
+  ].filter(v => v !== null && v !== undefined).join('\n');
 
   L.push(gptPrompt);
   L.push('');
