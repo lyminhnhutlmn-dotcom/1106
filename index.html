@@ -6479,17 +6479,42 @@ function hienShotCards(text){
   if(!shotBlocks.length) return;
 
   kbShotData = shotBlocks.map((block, i) => {
-    const timeMatch = block.match(/(?:⏱|Time|Thời gian)[^\d]*(\d+(?:\.\d+)?)\s*[s–\-→]\s*(\d+(?:\.\d+)?)/i);
-    const camMatch = block.match(/(?:📷|Camera|Cú máy|Máy quay)[^\n]*:\s*([^\n]+)/i);
-    const actionMatch = block.match(/(?:🎭|Action|Hành động|Diễn xuất)[^\n]*:\s*([^\n]+)/i);
-    const promptMatch = block.match(/(?:PROMPT|Prompt)[\s\S]*?:\s*([\s\S]+?)(?:\n\n|\n[═─]{3}|$)/i);
+    // TIME — match: "0s – 5s", "0s–5s (5s)", "Thời gian: 0s – 5s", "[0–5s]"
+    const timeMatch = block.match(/(?:⏱[^:]*:|Thời\s*gian[^:]*:|\[)?\s*(\d+(?:\.\d+)?)\s*s?\s*[–\-→]\s*(\d+(?:\.\d+)?)\s*s/i);
+
+    // CAMERA
+    const camMatch = block.match(/(?:📷|Cú\s*máy|Camera|Máy\s*quay)[^:\n]*:\s*(?:GIỮ\s*NGUYÊN:\s*)?([^\n]+)/i);
+
+    // SHOT SIZE
+    const sizeMatch = block.match(/(?:Khung\s*hình|Shot\s*size|Cỡ\s*cảnh|🎬)[^:\n]*:\s*([^\n]+)/i);
+
+    // LENS
+    const lensMatch = block.match(/(?:Tiêu\s*cự|Lens|🔭)[^:\n]*:\s*([^\n]+)/i);
+
+    // ACTION — multiline, match "HÀNH ĐỘNG CHI TIẾT" và "Hành động"
+    const actionMatch = block.match(/(?:🎭|HÀNH\s*ĐỘNG(?:\s*CHI\s*TIẾT)?|Hành\s*động|Action)[^:\n]*:\s*([\s\S]+?)(?=\n🎙|\n📷|\n🎯|\n💡|\nPROMPT|\n[═─]{3}|$)/i);
+
+    // PROMPT NHÁP
+    const promptMatch = block.match(/PROMPT[^:\n]*:\s*([\s\S]+?)(?:\n[═─]{3,}|$)/i);
+
+    // VAI TRÒ
+    const roleMatch = block.match(/(?:Vai\s*trò|🎯)[^:\n]*:\s*([^\n]+)/i);
+
+    const action = actionMatch
+      ? actionMatch[1].trim().replace(/\n+/g,' ').slice(0, 300)
+      : block.trim().slice(0, 200);
 
     return {
-      idx: i + 1,
-      time: timeMatch ? `${timeMatch[1]}s – ${timeMatch[2]}s` : '',
-      cam: camMatch ? camMatch[1].trim().slice(0, 50) : '',
-      action: actionMatch ? actionMatch[1].trim() : '',
-      prompt: promptMatch ? promptMatch[1].trim() : '',
+      idx:      i + 1,
+      time:     timeMatch ? `${timeMatch[1]}s – ${timeMatch[2]}s` : '',
+      startSec: timeMatch ? parseFloat(timeMatch[1]) : null,
+      endSec:   timeMatch ? parseFloat(timeMatch[2]) : null,
+      cam:      camMatch  ? camMatch[1].trim().slice(0, 80)  : '',
+      lens:     lensMatch ? lensMatch[1].trim().slice(0, 40) : '',
+      shotSize: sizeMatch ? sizeMatch[1].trim().slice(0, 40) : '',
+      role:     roleMatch ? roleMatch[1].trim().slice(0, 80) : '',
+      action,
+      prompt:   promptMatch ? promptMatch[1].trim() : '',
       fullBlock: block.trim()
     };
   });
@@ -6522,22 +6547,20 @@ async function apDungMot(idx){
   const s = kbShotData[idx];
   if(!s) return;
   soId++;
-  const timeMatch = s.time ? s.time.match(/(\d+(?:\.\d+)?)\s*[s–\-]\s*(\d+(?:\.\d+)?)/) : null;
-  const start = timeMatch ? parseFloat(timeMatch[1]) : (idx * 5);
-  const end = timeMatch ? parseFloat(timeMatch[2]) : (start + 5);
 
-  // Detect if content is English → translate to Vietnamese
-  const rawText = s.prompt || s.action || '';
-  let moTaVI = rawText;
-  const isEnglish = rawText && /[a-zA-Z]{3,}/.test(rawText) && 
-                    rawText.replace(/[^a-zA-Z\s]/g,'').length > rawText.length * 0.3;
+  // Dùng startSec/endSec đã parse sẵn
+  const start = s.startSec !== null && s.startSec !== undefined ? s.startSec : (idx * 5);
+  const end   = s.endSec   !== null && s.endSec   !== undefined ? s.endSec   : (start + 5);
+
+  // Ưu tiên: prompt nháp → action → fullBlock
+  const rawText = (s.prompt || s.action || s.fullBlock || '').slice(0, 400);
 
   const newShotId = soId;
   cacShot.unshift({
-    id: newShotId, start, end, tg: end - start,
-    cuMay: s.cuMay || s.cam || '', angle: '', lens: s.lens || '', speed: '',
+    id: newShotId, start, end, tg: Math.max(end - start, 1),
+    cuMay: s.cam || '', angle: '', lens: s.lens || '', speed: '',
     shotSize: s.shotSize || '', specialFx: '',
-    moTa: moTaVI,
+    moTa: rawText,
     thoai: 'Không thoại'
   });
   veShot();
@@ -6545,32 +6568,28 @@ async function apDungMot(idx){
   window.scrollTo({top:0, behavior:'smooth'});
   setTimeout(()=>{ const bd=document.getElementById('sb-'+newShotId); if(bd)bd.style.display=''; }, 100);
 
-  const btn = document.querySelector(`[onclick="apDungMot(${idx})"]`);
-  if(btn){ const o=btn.innerHTML; btn.innerHTML='✓ Đã thêm!'; setTimeout(()=>btn.innerHTML=o, 2000); }
+  document.querySelectorAll(`[onclick="apDungMot(${idx})"]`).forEach(btn => {
+    const o=btn.innerHTML; btn.innerHTML='✓ Đã thêm!'; setTimeout(()=>btn.innerHTML=o, 2000);
+  });
 
-  // Auto translate if English
+  // Auto translate nếu tiếng Anh
+  const isEnglish = rawText && /[a-zA-Z]{3,}/.test(rawText) &&
+                    rawText.replace(/[^a-zA-Z\s]/g,'').length > rawText.length * 0.3;
   if(isEnglish && rawText.length > 10){
     const ta = document.getElementById('mota-' + newShotId);
     if(ta) ta.value = '⏳ Đang dịch...';
     try {
       let translated = '';
       await goiClaude(
-        'Dịch đoạn mô tả cảnh quay sau sang tiếng Việt. Giữ nguyên thuật ngữ kỹ thuật điện ảnh (SSS, DOF, Kelvin, mm, ft/s...). Chỉ trả về bản dịch, không giải thích.',
+        'Dịch mô tả cảnh quay sang tiếng Việt. Giữ nguyên thuật ngữ kỹ thuật (SSS, DOF, Kelvin, mm, ft/s...). Chỉ trả về bản dịch.',
         rawText,
-        (chunk) => {
-          translated += chunk;
-          const ta2 = document.getElementById('mota-' + newShotId);
-          if(ta2) ta2.value = translated;
-        }
+        (chunk) => { translated += chunk; const t=document.getElementById('mota-'+newShotId); if(t)t.value=translated; }
       );
-      // Save translated
       const shot = cacShot.find(x => x.id === newShotId);
       if(shot) shot.moTa = translated;
-      const ta3 = document.getElementById('mota-' + newShotId);
-      if(ta3) ta3.value = translated;
     } catch(e) {
-      const ta4 = document.getElementById('mota-' + newShotId);
-      if(ta4) ta4.value = rawText; // fallback to original
+      const t = document.getElementById('mota-'+newShotId);
+      if(t) t.value = rawText;
     }
   }
 }
@@ -6580,14 +6599,13 @@ function apDungTatCa(){
   // Clear existing shots and add in correct order
   kbShotData.forEach((s, i) => {
     soId++;
-    const timeMatch = s.time ? s.time.match(/(\d+(?:\.\d+)?)\s*[s–\-]\s*(\d+(?:\.\d+)?)/) : null;
-    const start = timeMatch ? parseFloat(timeMatch[1]) : (i * 5);
-    const end = timeMatch ? parseFloat(timeMatch[2]) : (start + 5);
+    const start = s.startSec !== null && s.startSec !== undefined ? s.startSec : (i * 5);
+    const end   = s.endSec   !== null && s.endSec   !== undefined ? s.endSec   : (start + 5);
     cacShot.push({
-      id: soId, start, end, tg: end - start,
-      cuMay: s.cuMay || s.cam || '', angle: '', lens: s.lens || '', speed: '',
+      id: soId, start, end, tg: Math.max(end - start, 1),
+      cuMay: s.cam || '', angle: '', lens: s.lens || '', speed: '',
       shotSize: s.shotSize || '', specialFx: '',
-      moTa: s.prompt || s.action || '',
+      moTa: s.prompt || s.action || s.fullBlock.slice(0,200) || '',
       shotPrompt: '',
       thoai: 'Không thoại'
     });
@@ -7554,14 +7572,43 @@ function taoSBGridPrompt(){
     const shotLabel = [
       s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS',
       s.cuMay || 'static',
+      s.angle || '',
       s.lens || '50mm',
     ].filter(Boolean).join(', ');
-    const content = s.sbPrompt
-      ? s.sbPrompt.slice(0, 120).replace(/\n/g, ' ')
-      : (s.moTa || s.shotPrompt || `Shot ${i+1}`).slice(0, 100);
-    const timing = `${s.start}s–${s.end}s`;
     const fx = s.specialFx && s.specialFx !== 'Không' ? ` | FX: ${s.specialFx}` : '';
-    return `Panel ${i+1} [${timing}]: ${shotLabel}${fx}. ${content}`;
+    const timing = `${s.start}s–${s.end}s (${(s.tg||s.end-s.start||5).toFixed(1)}s)`;
+
+    // Extract clean content — ưu tiên: _prompt > sbPrompt (cleaned) > moTa
+    let content = '';
+    if(s._prompt && s._prompt.length > 20){
+      // Extract [SUBJECT] + [SCENE] from structured prompt
+      const subj = s._prompt.match(/\[SUBJECT\](.*?)(?=\[|$)/s)?.[1]?.trim() || '';
+      const scene = s._prompt.match(/\[SCENE\](.*?)(?=\[|$)/s)?.[1]?.trim() || '';
+      const action = s._prompt.match(/\[ACTION\](.*?)(?=\[|$)/s)?.[1]?.trim() || '';
+      content = [subj, action, scene].filter(Boolean).join('. ').slice(0, 300);
+    } else if(s.sbPrompt && s.sbPrompt.length > 20){
+      // Clean sbPrompt — xoá metadata thừa, lấy nội dung thực
+      const cleaned = s.sbPrompt
+        .replace(/\*+/g, '')                        // remove markdown **
+        .replace(/\(shot gốc[^)]*\)/gi, '')          // remove "(shot gốc...)"
+        .replace(/\(phần còn lại[^)]*\)/gi, '')      // remove "(phần còn lại...)"
+        .replace(/\(shot bổ sung[^)]*\)/gi, '')       // remove "(shot bổ sung...)"
+        .replace(/\[FRAME\][^\n]*/gi, '')             // remove [FRAME] header line
+        .replace(/\[SUBJECT\]/gi, '')
+        .replace(/\[SCENE\]/gi, '')
+        .replace(/\[LIGHTING\]/gi, '')
+        .replace(/\[DEPTH\]/gi, '')
+        .replace(/\[ATMOSPHERE\]/gi, '')
+        .replace(/\[COLOR\]/gi, '')
+        .replace(/\[CONSTRAINTS\]/gi, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+      content = cleaned.slice(0, 400);
+    } else {
+      content = (s.moTa || s.shotPrompt || `Shot ${i+1} — cinematic frame`).slice(0, 300);
+    }
+
+    return `Panel ${i+1} [${timing}]: ${shotLabel}${fx}.\n${content}`;
   });
 
   const L = [];
