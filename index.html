@@ -2611,93 +2611,106 @@ function taoBoCanhNamGoc(){
   const {dd,nv,mt,as} = layChung();
   const sceneLines = buildSceneBlock('en');
   const sceneCtx = sceneLines.join('\n');
-  const charCtx = nv ? nv : '';
+  const charCtx = buildCharacterBlock('en').join('\n');
   const wd = gVal('wardrobe-lock');
+  const location = dd || gVal('scene-desc') || 'the space';
 
+  // Tất cả 4 góc: từ tâm điểm nhìn ra 4 hướng (outward POV)
+  // + 1 góc giám sát từ trên cao nhìn xuống
   const gocData = [
     {
-      key:'front',
-      label:'📸 GÓC TRƯỚC — Front View',
-      cam:'Camera faces subject head-on. Subject fills center frame. Eye-level 85mm f/1.8. Direct frontal lighting.',
-      note:'Standard reveal angle. Maximum emotional impact on face.'
+      idx: 1,
+      label: '⬆ GÓC BẮC — Looking North (Forward / 12 o\'clock)',
+      cam: `POV from center of ${location||'the space'}, camera faces FORWARD (North / 12 o'clock direction). Wide 24mm f/4.0. Eye-level horizon. Subject stands at center, back to camera, facing into the space ahead. Full environment revealed in front: depth, layers, vanishing point.`,
+      depth: 'Foreground: floor/ground surface. Mid: ${location} extending forward. Background: far wall / open horizon / sky.',
+      note: 'Primary establishing angle. Reveals what lies ahead — the world the subject inhabits or walks into. Maximum depth and scale.'
     },
     {
-      key:'left',
-      label:'📸 GÓC TRÁI — Left Side Profile',
-      cam:'Camera positioned 90° left of subject. Pure profile view. 85mm f/2.0 telephoto compression. Side-lighting rakes across face.',
-      note:'Reveals silhouette, jawline, posture depth.'
+      idx: 2,
+      label: '➡ GÓC ĐÔNG — Looking East (Right / 3 o\'clock)',
+      cam: `POV from center of ${location||'the space'}, camera rotates 90° RIGHT (East / 3 o'clock direction). 35mm f/2.8. Eye-level. Subject at center-left of frame, facing right. Right side of environment fully revealed — walls, windows, passages, light sources on the right flank.`,
+      depth: 'Foreground: right edge of space. Mid: right corridor / wall / opening. Background: what lies to the East.',
+      note: 'Lateral reveal — dominant hand side. Often where light enters (morning / East light). Shows exits and passages.'
     },
     {
-      key:'right',
-      label:'📸 GÓC PHẢI — Right Side Profile',
-      cam:'Camera positioned 90° right of subject. Mirror profile. 85mm f/2.0. Opposite side lighting catch light in eye.',
-      note:'Shows dominant hand side. Subtle asymmetry revealed.'
+      idx: 3,
+      label: '⬇ GÓC NAM — Looking South (Backward / 6 o\'clock)',
+      cam: `POV from center of ${location||'the space'}, camera rotates 180° to face BACKWARD (South / 6 o'clock direction). 28mm f/3.5. Eye-level. Subject faces camera — full frontal reveal against the space behind them. Where they came from is now fully visible.`,
+      depth: 'Foreground: subject full frontal. Mid: origin point / entrance / where they entered from. Background: entry wall / exterior / origin.',
+      note: 'Reverse reveal — shows origin and what was left behind. Subject confronted with the camera. Emotional tension.'
     },
     {
-      key:'back',
-      label:'📸 GÓC SAU — Rear View',
-      cam:'Camera behind subject. Subject faces away from lens. 50mm f/1.8. Subject silhouetted against scene foreground.',
-      note:'Mystery, isolation, subject relationship with environment.'
+      idx: 4,
+      label: '⬅ GÓC TÂY — Looking West (Left / 9 o\'clock)',
+      cam: `POV from center of ${location||'the space'}, camera rotates 270° (West / 9 o'clock direction). 35mm f/2.8. Eye-level. Subject at center-right of frame, facing left. Left side of environment fully revealed — shadow side, West walls, secondary passages, left-flank architecture.`,
+      depth: 'Foreground: left edge of space. Mid: left corridor / wall / shadow zone. Background: what lies to the West.',
+      note: 'Shadow side of the space. Often cooler, dimmer. Reveals hidden corners, secondary exits, contrast to the East light.'
     },
     {
-      key:'overhead',
-      label:'🎥 GÓC GIÁM SÁT — Bird-Eye / Surveillance',
-      cam:'Camera overhead 90° top-down CCTV angle. Wide 24mm lens. High contrast surveillance aesthetic. Subject reduced to shape and shadow. Static locked-off tripod.',
-      note:'Power imbalance, omniscience, vulnerability. Subject unaware of camera.'
+      idx: 5,
+      label: '🎥 GÓC GIÁM SÁT — Overhead Bird-Eye (Surveillance / 90° Top-Down)',
+      cam: `Camera mounted directly OVERHEAD, 90° straight down. Full top-down plan view of ${location||'the space'}. Wide 16mm f/5.6. The entire spatial layout revealed as a floor plan come to life — subject reduced to shape, shadow, and crown of head. Static locked-off. High contrast. CCTV / surveillance aesthetic.`,
+      depth: 'No foreground/background — pure 2D plan view. Subject as silhouette. Room geometry fully legible. Shadows cast downward.',
+      note: 'The God view. Reveals spatial relationships, scale, proximity between elements invisible from eye-level. Subject is small, surveilled, unaware. Maximum omniscience.'
     }
   ];
 
   const L = [];
-  L.push('ANNAHOUSESTUDIO — BỐI CẢNH 5 GÓC (SCENE REFERENCE PROMPTS)');
+  L.push('ANNAHOUSESTUDIO — BỐI CẢNH 5 GÓC (OUTWARD POV + SURVEILLANCE)');
   L.push('BY LÝ MINH NHỰT');
-  L.push('═'.repeat(50));
+  L.push('═'.repeat(55));
+  L.push('');
+  L.push('[CONCEPT]');
+  L.push('Angles 1–4: Camera at CENTER of space, rotating outward 90° each step (N → E → S → W).');
+  L.push('Angle 5: Overhead surveillance — 90° top-down, entire floor plan visible.');
+  L.push('Use: spatial mapping, location scout, art direction, continuity, set design reference.');
   L.push('');
   L.push('[SCENE CONTEXT]');
   L.push(sceneCtx);
   if(charCtx){ L.push(''); L.push('[SUBJECT]'); L.push(charCtx); }
   if(wd){ L.push(''); L.push('[WARDROBE — LOCKED]'); L.push(wd); }
   L.push('');
-  L.push('─'.repeat(50));
-  L.push('USE: Generate 5 reference stills for art direction / location scout / continuity.');
-  L.push('─'.repeat(50));
+  L.push('─'.repeat(55));
   L.push('');
 
-  gocData.forEach((g, i) => {
-    L.push('═'.repeat(40));
-    L.push('ANGLE ' + (i+1) + ' / 5 — ' + g.label);
-    L.push('═'.repeat(40));
+  gocData.forEach(g => {
+    L.push('═'.repeat(45));
+    L.push(`ANGLE ${g.idx} / 5 — ${g.label}`);
+    L.push('═'.repeat(45));
     L.push('');
     L.push('[CAMERA SETUP]');
     L.push(g.cam);
     L.push('');
+    L.push('[DEPTH LAYERS]');
+    L.push(g.depth);
+    L.push('');
     L.push('[SCENE]');
     L.push(sceneCtx);
-    if(charCtx){ L.push(''); L.push('[SUBJECT IN FRAME]'); L.push(charCtx + '.'); }
-    if(wd){ L.push('[WARDROBE] ' + wd); }
+    if(wd) L.push('[WARDROBE] ' + wd);
     L.push('');
     L.push('[TECHNICAL]');
-    L.push('Static shot. No camera movement. Single frame reference. Cinematic lighting. No motion blur.');
-    L.push('No AI smoothing. No warped faces. No texture swimming. Photorealistic.');
+    L.push('Static shot. No camera movement. Single frame reference only.');
+    L.push('Photorealistic. No AI smoothing. No texture swimming. No warped architecture.');
+    L.push('Consistent lighting across all 5 angles — same time of day, same light sources.');
     L.push('');
     L.push('[ART DIRECTION NOTE]');
     L.push(g.note);
     L.push('');
   });
 
-  L.push('═'.repeat(50));
+  L.push('═'.repeat(55));
   L.push('ANNAHOUSESTUDIO AI — annahousestudio.vercel.app');
   L.push('lypro.vn — by Lý Minh Nhựt');
 
   const result = L.join('\n');
   kq5Goc = result;
 
-  // Hiển thị ngay trong mục 04 Bối Cảnh
   const panel = document.getElementById('panel-5goc');
   const body  = document.getElementById('panel-5goc-body');
   const title = document.getElementById('panel-5goc-title');
   if(panel && body){
     body.textContent = result;
-    if(title) title.textContent = '📸 5 Góc Bối Cảnh — ' + result.split('\n').filter(Boolean).length + ' dòng';
+    if(title) title.textContent = '📸 5 Góc Bối Cảnh — N · E · S · W · Overhead';
     panel.style.display = '';
     panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
   }
@@ -6849,6 +6862,32 @@ async function taoPromptBoiCanh(){
   try{
     await goiClaude(system, userMsg, (chunk)=>{ acc += chunk; if(el) el.value = acc; });
     capNhat();
+
+    // ── AUTO-LINK: điền text vào scene-desc rồi tạo 5 góc luôn ──
+    if(acc.trim()){
+      const sceneEl = document.getElementById('scene-desc');
+      if(sceneEl){
+        // Append vào scene-desc nếu chưa có, hoặc replace nếu trùng
+        const existing = sceneEl.value.trim();
+        if(!existing || existing.length < 30){
+          sceneEl.value = acc.trim();
+        } else {
+          sceneEl.value = existing + '\n\n' + acc.trim();
+        }
+        capNhat();
+      }
+      // Tự động tạo 5 góc bối cảnh
+      setTimeout(()=>{
+        taoBoCanhNamGoc();
+        // Highlight nút 5 góc briefly
+        const btn5goc = document.querySelector('button[onclick="taoBoCanhNamGoc()"]');
+        if(btn5goc){
+          const orig = btn5goc.style.background;
+          btn5goc.style.background = '#0e3a4a';
+          setTimeout(()=> btn5goc.style.background = orig, 1500);
+        }
+      }, 300);
+    }
   }catch(e){ if(el) el.value = 'Loi: ' + e.message; }
 }
 
