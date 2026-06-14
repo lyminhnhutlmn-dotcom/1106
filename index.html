@@ -4011,15 +4011,14 @@ async function phanTichKichBan(){
   const ssVal = parseInt(SS.kb_dur) || 0;
   const durSec = sliderVal || customVal || ssVal || 15;
   const dur = durSec + ' giây';
-  console.log('[KB] durSec =', durSec, '| SS.kb_dur =', SS.kb_dur, '| slider =', sliderVal, '| custom =', customVal);
-  console.log('[KB] shots =', shots, '| numShots =', numShots, '| SS.kb_shots =', SS.kb_shots);
-  console.log('[KB] kbShotSetupData =', kbShotSetupData.length, 'items | cacShot =', cacShot.length, 'items');
   const shots = SS.kb_shots || 'AI tự quyết định';
   const styles = MM.kb_style || [];
   const lang = SS.kb_lang || 'Tiếng Việt';
-
-  // Parse số shot thực tế
   const numShots = parseInt(shots) || 0;
+
+  console.log('[KB] durSec =', durSec, '| SS.kb_dur =', SS.kb_dur, '| slider =', sliderVal, '| custom =', customVal);
+  console.log('[KB] shots =', shots, '| numShots =', numShots, '| SS.kb_shots =', SS.kb_shots);
+  console.log('[KB] kbShotSetupData =', kbShotSetupData.length, 'items | cacShot =', cacShot.length, 'items');
 
   // Tính thời gian mỗi shot nếu biết số shot
   let shotTimeHint = '';
