@@ -4003,17 +4003,41 @@ async function phanTichKichBan(){
 
   // API handled by Vercel backend
 
-  // Get settings
-  const dur = SS.kb_dur || '15 giây';
+  // Get settings — đọc trực tiếp từ slider/input để tránh stale SS.kb_dur
+  const sliderEl = document.getElementById('kb-dur-slider');
+  const customEl = document.getElementById('kb-dur-custom');
+  const sliderVal = sliderEl ? parseInt(sliderEl.value) : 0;
+  const customVal = customEl ? parseInt(customEl.value) : 0;
+  const ssVal = parseInt(SS.kb_dur) || 0;
+  const durSec = sliderVal || customVal || ssVal || 15;
+  const dur = durSec + ' giây';
+  console.log('[KB] durSec =', durSec, '| SS.kb_dur =', SS.kb_dur, '| slider =', sliderVal, '| custom =', customVal);
+  console.log('[KB] shots =', shots, '| numShots =', numShots, '| SS.kb_shots =', SS.kb_shots);
+  console.log('[KB] kbShotSetupData =', kbShotSetupData.length, 'items | cacShot =', cacShot.length, 'items');
   const shots = SS.kb_shots || 'AI tự quyết định';
   const styles = MM.kb_style || [];
   const lang = SS.kb_lang || 'Tiếng Việt';
 
-  const shotInstruct = shots === 'AI tự quyết định'
-    ? 'Tự quyết định số lượng shot phù hợp nhất (1-5 shot) dựa trên nội dung.'
-    : `Bắt buộc chia thành đúng ${shots}.`;
+  // Parse số shot thực tế
+  const numShots = parseInt(shots) || 0;
 
-  // Build per-shot camera instructions from kbShotSetupData
+  // Tính thời gian mỗi shot nếu biết số shot
+  let shotTimeHint = '';
+  if(numShots > 0 && durSec > 0){
+    const avgSec = (durSec / numShots).toFixed(1);
+    const shotTimes = Array.from({length: numShots}, (_,i) => {
+      const s = Math.round(i * durSec / numShots * 10) / 10;
+      const e = i === numShots-1 ? durSec : Math.round((i+1) * durSec / numShots * 10) / 10;
+      return `Shot ${i+1}: [${s}s – ${e}s] (${(e-s).toFixed(1)}s)`;
+    }).join('\n');
+    shotTimeHint = `\n\n📐 PHÂN BỐ THỜI GIAN GỢI Ý (${numShots} shots × ~${avgSec}s/shot):\n${shotTimes}\nCó thể điều chỉnh ±1s nhưng tổng PHẢI = ${durSec}s.`;
+  }
+
+  const shotInstruct = numShots > 0
+    ? `Bắt buộc chia thành đúng ${numShots} shot. Không thêm, không bớt.${shotTimeHint}`
+    : `Tự quyết định số lượng shot phù hợp (1–${Math.ceil(durSec/3)} shot tối đa) dựa trên nội dung ${durSec}s.`;
+
+  // Build per-shot camera instructions
   let shotCamInstructs = '';
   if(kbShotSetupData && kbShotSetupData.length > 0){
     const hasCam = kbShotSetupData.some(s => s.cuMay || s.shotSize || s.lens);
@@ -4025,6 +4049,21 @@ async function phanTichKichBan(){
       });
       shotCamInstructs += 'KHÔNG thay đổi hay đề xuất cú máy khác cho các shot đã xác định.';
     }
+  } else if(cacShot && cacShot.length > 0){
+    // Fallback: dùng camera từ Dựng Cảnh nếu có
+    const hasCam = cacShot.some(s => s.cuMay || s.shotSize || s.lens);
+    if(hasCam){
+      shotCamInstructs = '\n\n⚠️ CÚ MÁY TỪ DỰNG CẢNH — BẮT BUỘC GIỮ NGUYÊN:\n';
+      cacShot.slice(0, numShots || cacShot.length).forEach((s, i) => {
+        const parts = [s.cuMay, s.shotSize, s.lens, s.angle].filter(Boolean);
+        if(parts.length) shotCamInstructs += `Shot ${i+1} [${s.start}s–${s.end}s]: ${parts.join(', ')}\n`;
+      });
+      shotCamInstructs += 'KHÔNG thay đổi cú máy đã xác định.';
+    }
+  } else if(SS.movement || SS.shot_size || SS.lens){
+    // Fallback: dùng global camera từ Khung Sườn
+    const globalCam = [SS.shot_size, SS.movement, SS.lens].filter(Boolean).join(', ');
+    shotCamInstructs = `\n\nCú máy toàn cục (áp dụng cho tất cả shots nếu không có chỉ định riêng): ${globalCam}.`;
   }
 
   const langInstruct = lang === 'Tiếng Anh (EN)'
@@ -4033,7 +4072,6 @@ async function phanTichKichBan(){
     ? 'Viết phân tích bằng tiếng Việt, prompt nháp bằng tiếng Anh.'
     : 'Viết toàn bộ bằng tiếng Việt, riêng các thuật ngữ điện ảnh giữ tiếng Anh.';
 
-  const durSec = parseInt(dur) || 15;
   const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản điện ảnh và shot breakdown cho Seedance 2.0 / Higgsfield.
 
 ${langInstruct}
@@ -4123,7 +4161,7 @@ CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP. + "✓ Tổng: ${durSec}
     ? '\nKỹ thuật đặc biệt cần tích hợp (chọn shot phù hợp nhất):\n' + fxList.map(f=>'  • '+f).join('\n')
     : '';
 
-  const userMsg = `Kịch bản cần phân tích:\n---\n${noiDung}${ksContext}\n---\nTổng thời lượng: ${dur}${shotTimeInstr}${fxInstr}\nPhong cách: ${styles.length ? styles.join(', ') : 'Không giới hạn'}\nHướng dẫn: Giữ đúng nhân vật, ánh sáng, máy quay từ Khung Sườn. Tuân theo thời gian từng shot nếu được chỉ định.`;
+  const userMsg = `Kịch bản cần phân tích:\n---\n${noiDung}${ksContext}\n---\n⛔ TỔNG THỜI LƯỢNG: ${durSec} GIÂY — KHÔNG ĐƯỢC VƯỢT QUÁ. Tất cả shots cộng lại = ${durSec}s.\n${shotTimeInstr}${fxInstr}\nPhong cách: ${styles.length ? styles.join(', ') : 'Không giới hạn'}\nHướng dẫn: Giữ đúng nhân vật, ánh sáng, máy quay từ Khung Sườn. Tuân theo thời gian từng shot nếu được chỉ định.`;
 
   // Show result area
   const kbRes = document.getElementById('kb-result');
