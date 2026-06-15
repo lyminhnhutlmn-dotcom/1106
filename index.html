@@ -1803,6 +1803,9 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       <div style="display:flex;gap:5px;flex-wrap:wrap">
         <button class="btn-i" onclick="taoCharPrompt()" style="border-color:#a78bfa;color:#a78bfa;font-size:10px">⚡ Tạo Prompt</button>
         <button class="btn-i" onclick="taoCharPromptAI()" style="border-color:var(--gold);color:var(--gold);font-size:10px">✨ Tạo bằng AI</button>
+        <button class="btn-i" onclick="taoPromptChanDung()" style="border-color:#f472b6;color:#f472b6;font-size:10px;background:#150a0f">📸 Prompt Chân Dung</button>
+        <button class="btn-i" onclick="document.getElementById('input-anh-chan-dung').click()" style="border-color:#f472b6;color:#f472b6;font-size:10px;background:#150a0f">📷 Phân Tích Ảnh</button>
+        <input type="file" id="input-anh-chan-dung" accept="image/*" style="display:none" onchange="phanTichAnhChanDung(this)">
         <button class="btn-i" id="nut-cp-char" onclick="saoCHepChar()" style="display:none;font-size:10px">⊕ Copy</button>
         <button class="btn-i" onclick="themVaoPrompt()" style="display:none;border-color:var(--green);color:var(--green);font-size:10px" id="nut-add-char">→ Thêm vào Prompt</button>
         <button class="btn-i" onclick="xuatCharacterSheet()" style="display:none;border-color:#06b6d4;color:#06b6d4;font-size:10px;background:#020f14" id="nut-char-sheet">🎬 Soul ID Sheet</button>
