@@ -265,6 +265,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <h1 style="font-family:'Playfair Display',serif;font-size:26px;font-weight:700;color:var(--gold);letter-spacing:2px;margin-bottom:2px">ANNAHOUSESTUDIO</h1>
 <p style="font-size:10px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px">Cinematic Prompt Builder — by LÝ MINH NHỰT</p>
 <p class="sub" id="app-sub">// Nhân Vật · Khung Sườn · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · AI Dịch & Cải Thiện</p>
+  <div id="autosave-indicator" style="font-size:9px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-top:3px;height:14px;transition:color .3s"></div>
 <div class="tabs">
   <button class="tab on" onclick="sw('char')" id="tab-char">🔒 Nhân Vật</button>
   <button class="tab" onclick="sw('fw')">① Khung Sườn</button>
@@ -1802,6 +1803,9 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       <div style="display:flex;gap:5px;flex-wrap:wrap">
         <button class="btn-i" onclick="taoCharPrompt()" style="border-color:#a78bfa;color:#a78bfa;font-size:10px">⚡ Tạo Prompt</button>
         <button class="btn-i" onclick="taoCharPromptAI()" style="border-color:var(--gold);color:var(--gold);font-size:10px">✨ Tạo bằng AI</button>
+        <button class="btn-i" onclick="taoPromptChanDung()" style="border-color:#f472b6;color:#f472b6;font-size:10px;background:#150a0f">📸 Prompt Chân Dung</button>
+        <button class="btn-i" onclick="document.getElementById('input-anh-chan-dung').click()" style="border-color:#f472b6;color:#f472b6;font-size:10px;background:#150a0f">📷 Phân Tích Ảnh</button>
+        <input type="file" id="input-anh-chan-dung" accept="image/*" style="display:none" onchange="phanTichAnhChanDung(this)">
         <button class="btn-i" id="nut-cp-char" onclick="saoCHepChar()" style="display:none;font-size:10px">⊕ Copy</button>
         <button class="btn-i" onclick="themVaoPrompt()" style="display:none;border-color:var(--green);color:var(--green);font-size:10px" id="nut-add-char">→ Thêm vào Prompt</button>
         <button class="btn-i" onclick="xuatCharacterSheet()" style="display:none;border-color:#06b6d4;color:#06b6d4;font-size:10px;background:#020f14" id="nut-char-sheet">🎬 Soul ID Sheet</button>
@@ -3007,18 +3011,34 @@ function taoSD(){
   }
   if(MM.director.length||MM.colorgrade.length||pc){L.push('[STYLE]');if(MM.director.length)L.push('Visual reference: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grading: '+MM.colorgrade.join(', ')+'.');if(pc)L.push(pc);L.push('');}
   const ql=[];if(SS.res)ql.push(SS.res);if(SS.fps)ql.push(SS.fps);MM.grain.forEach(g=>ql.push(g));MM.qtag.forEach(q=>ql.push(q));
-  if(ql.length){L.push('[QUALITY]');L.push(ql.join(', ')+'.');L.push(`Duration: ${selDuration}s. Aspect ratio: ${selPlatform&&selPlatform.includes('9:16')?'9:16 vertical':'16:9 widescreen'}. Resolution: 720p.`);L.push('');}
+  // Map SS.res → Seedance valid aspect_ratio
+  const resMapSD = {
+    '16:9 — Ngang (Cinema)':'16:9','9:16 — Dọc (Reels / TikTok)':'9:16',
+    '1:1 — Vuông (Instagram)':'1:1','4:3 — Cổ điển':'4:3',
+    '21:9 — Anamorphic':'21:9','4K Ultra HD':'16:9',
+    '1080p Cinematic':'16:9','720p Chuẩn':'16:9','16:9':'16:9','9:16':'9:16'
+  };
+  const seedanceAR = resMapSD[SS.res] || '16:9';
+
+  // Map duration → Seedance max 10s
+  const seedanceDur = Math.min(parseInt(selDuration) || 8, 10);
+  if(parseInt(selDuration) > 10){
+    const warn = document.getElementById('ghi-chu');
+    if(warn){ warn.textContent = '⚠️ Seedance 2.0 max 10s. Duration đã được cap tại 10s — cân nhắc chia thành nhiều clips.'; warn.style.display='block'; warn.style.color='var(--gold)'; }
+  }
+
+  if(ql.length){L.push('[QUALITY]');L.push(`aspect_ratio: ${seedanceAR}. duration: ${seedanceDur}s.${MM.grain.length?' Film grain: '+MM.grain.join(', ').replace(/Phim/gi,'').trim()+'.':''}`);L.push('');}
   // Emotion handled inside buildCharacterBlock
   if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[DIALOGUE]');dsThoai.forEach(t=>{const ten=(t.ten||'CHARACTER').toUpperCase();const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(whispered)','Độc thoại':'(monologue)'};L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+(t.loi||'...'));});L.push('');}
   if(sAm||sFo||sMu||sSf||sSi){L.push('[AUDIO DESIGN]');if(sSi)L.push('Silence: '+sSi);if(sAm)L.push('Ambient (-4dB): '+sAm);if(sFo)L.push('Foley (0dB): '+sFo);if(sMu)L.push('Music (-2dB): '+sMu);if(sSf)L.push('SFX (+2dB): '+sSf);L.push('');}
   if(cacShot.length){L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';L.push(d.trim()||'no description');L.push('');});}
   if(matRefs.length){L.push('[MATERIAL INTEGRATION]');matRefs.forEach(r=>L.push(`@material[${r.n}]: Apply ${r.t} reference characteristics.`));L.push('');}
-  L.push('[OUTPUT]');L.push(`Duration: ${selDuration}s. Resolution: 720p. ${selPlatform?'Platform: '+selPlatform.split(' ')[0]+'.':''}`);
+  L.push('[OUTPUT]');L.push(`aspect_ratio: ${seedanceAR}. duration: ${seedanceDur}s. No text. No watermark. No extra people. Photorealistic.`);
   kqSD=L.join('\n');kqCG='';
-  const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
-  const _ml = layMasterLockBlock();
-  const _ftr = String.fromCharCode(10,10) + '═'.repeat(50) + String.fromCharCode(10) + 'ANNAHOUSESTUDIO AI — annahousestudio.vercel.app' + String.fromCharCode(10) + 'lypro.vn';
+  const _hdr = '';
+  const _ml = '';
+  const _ftr = '';
   kqSD = _hdr + _ml + kqSD + _ftr;
   hienKQ(kqSD,'sd','🎬 Seedance Prompt (EN)');
   document.getElementById('ghi-chu').textContent='✦ Dán trực tiếp vào ô prompt Seedance 2.0 trên Higgsfield.';
@@ -3324,7 +3344,7 @@ Then full upgraded prompt.`}`;
 
   try{
     if(IS_LONG){
-      // Split tại điểm giữa gần nhất với dòng trống — tránh cắt giữa câu
+      // Split tại điểm giữa gần nhất với dòng trống
       const mid = Math.floor(nd.length / 2);
       const splitAt = nd.indexOf('\n\n', mid) > -1
         ? nd.indexOf('\n\n', mid)
@@ -3338,7 +3358,7 @@ Then full upgraded prompt.`}`;
 
       let part1Result = '';
       await goiClaude(systemPrompt,
-        `Improve PART 1 of this prompt completely:\n\n${part1}`,
+        `Upgrade this cinematic prompt section. Output ONLY the upgraded text, no headers, no "PART" labels:\n\n${part1}`,
         chunk => { part1Result += chunk; document.getElementById('ai-output').textContent = '⏳ Pass 1/2...\n' + part1Result; }
       );
 
@@ -3346,17 +3366,25 @@ Then full upgraded prompt.`}`;
 
       let part2Result = '';
       await goiClaude(systemPrompt,
-        `Improve PART 2 of this prompt completely:\n\n${part2}`,
+        `Upgrade this cinematic prompt section. Output ONLY the upgraded text, no headers, no "PART" labels:\n\n${part2}`,
         chunk => { part2Result += chunk; document.getElementById('ai-output').textContent = part1Result + '\n\n' + part2Result; }
       );
 
-      acc = part1Result + '\n\n' + part2Result;
+      // Strip artifact headers AI tự thêm
+      const stripArtifacts = (t) => t
+        .replace(/^#+\s*PART\s*\d[^\n]*/gim, '')
+        .replace(/^#+\s*UPGRADED CINEMATIC PROMPT[^\n]*/gim, '')
+        .replace(/^---+\s*\n/gim, '')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+
+      acc = stripArtifacts(part1Result) + '\n\n' + stripArtifacts(part2Result);
       aiKetQua = acc;
       document.getElementById('ai-output').textContent = acc;
 
     } else {
       const ok = await goiClaude(systemPrompt,
-        `Improve this prompt completely — do not truncate any section:\n\n${nd}`,
+        `Upgrade this cinematic prompt. Output ONLY the upgraded text, no "PART" headers:\n\n${nd}`,
         chunk => { acc += chunk; aiKetQua = acc; document.getElementById('ai-output').textContent = acc; }
       );
     }
@@ -3366,6 +3394,20 @@ Then full upgraded prompt.`}`;
       document.getElementById('nut-cp-ai').style.display = '';
       document.getElementById('ai-panel-title').textContent = '💡 Cải thiện hoàn tất — ANNAHOUSESTUDIO AI';
       logEvent('improve_prompt');
+
+      // Seedance validation warnings
+      const warnings = [];
+      const txt = aiKetQua || '';
+      if(/720.degree|720°|double spin|triple spin/i.test(txt))
+        warnings.push('⚠️ 720° spin có thể gây artifact trong Seedance 2.0 — nên giảm xuống 360° hoặc thêm slow-mo 0.5x');
+      if(/16mm.*low angle|low angle.*16mm/i.test(txt))
+        warnings.push('⚠️ 16mm ultra-wide ở góc thấp sẽ gây barrel distortion nặng — cần ghi rõ "intentional" hoặc đổi 24mm');
+      if(/pull.back.*strike|strike.*pull.back/i.test(txt))
+        warnings.push('⚠️ Timing: arm strikes + pull-back trong cùng 3s có thể overlap — kiểm tra tổng giây');
+      if(warnings.length){
+        const warnEl = document.getElementById('ai-output');
+        if(warnEl) warnEl.textContent = txt + '\n\n' + '─'.repeat(40) + '\n🔍 SEEDANCE VALIDATION:\n' + warnings.join('\n');
+      }
     }
   } catch(e){
     document.getElementById('ai-output').innerHTML = '<span style="color:var(--red)">Lỗi: ' + e.message + '</span>';
@@ -5507,7 +5549,123 @@ function xoaCharLock(id){
 
 function capNhatCharPreview(){ /* live preview — optional */ }
 
-function taoCharPrompt(){
+async function phanTichAnhChanDung(input){
+  const file = input.files?.[0];
+  if(!file) return;
+  input.value = '';
+
+  const preview = document.getElementById('char-preview');
+  const cpBtn   = document.getElementById('nut-cp-char');
+
+  if(preview) preview.innerHTML = '<span style="color:#f472b6;font-style:italic">📷 Đang phân tích ảnh...</span>';
+
+  // Convert to base64
+  const base64 = await new Promise((res, rej) => {
+    const r = new FileReader();
+    r.onload = () => res(r.result);
+    r.onerror = rej;
+    r.readAsDataURL(file);
+  });
+
+  const system = `You are a professional casting director and character analyst.
+Analyze the face in this photo and generate a detailed casting headshot prompt using EXACTLY this template. Fill in every [bracket] with specific observations. Be precise, clinical, and objective — like a casting agency profile.
+
+OUTPUT FORMAT (fill every bracket, output only the filled prompt, nothing else):
+
+Ultra-realistic model casting headshot, straight on, shoulders square to camera. Subject: [sex], [age], [ethnicity], [skin tone] skin tone. Hair: [color + style]. Eyes: [shape + color]. [Eyebrows — describe thickness, shape, color]. Face: [shape], [jawline description], [cheekbones description], [nose description], [lips description]. [Freckles / marks / moles if visible, or "No distinguishing marks"]. Body: [type based on visible frame], [estimated height if inferrable, else "medium height"].
+
+Clean face, no makeup beyond invisible grooming — natural brows, lashes, lip color. Keep real high-frequency skin detail: visible pores, faint freckles, tiny blemishes, natural asymmetry. Do not smooth or perfect the skin. Tight headshot from below the chin to just above the head, no wardrobe visible. Spine straight, shoulders level, head untilted, long relaxed neck. Neutral but strong expression, no smile, eyes into the lens.
+
+Bright light-grey seamless studio backdrop, no texture or props. Honest front flash that shows every detail, shadows falling softly behind. Full-frame camera, 70–85mm, ~f/8 so the whole face is sharp, 3:4 vertical, subtle realistic sensor noise. Neutral daylight ~5800K, natural skin tone, no filters, glow, or bokeh. It must read as a real, unretouched agency casting digital — not a beauty campaign, not a render.`;
+
+  try{
+    let acc = '';
+    await goiClaude(system,
+      'Analyze this face and fill the casting headshot prompt template:',
+      chunk => {
+        acc += chunk;
+        if(preview) preview.textContent = acc;
+      },
+      [base64]
+    );
+
+    charPromptText = acc.trim();
+    if(preview) preview.textContent = charPromptText;
+    if(cpBtn) cpBtn.style.display = '';
+    const sheetBtn = document.getElementById('nut-char-sheet');
+    if(sheetBtn) sheetBtn.style.display = '';
+    const addBtn = document.getElementById('nut-add-char');
+    if(addBtn) addBtn.style.display = '';
+
+    // Hiện indicator
+    const ind = document.getElementById('autosave-indicator');
+    if(ind){ ind.textContent = '✓ Phân tích ảnh xong — prompt chân dung đã sẵn sàng'; ind.style.color = '#f472b6'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},4000); }
+
+  } catch(e){
+    if(preview) preview.innerHTML = '<span style="color:var(--red)">❌ Lỗi: ' + e.message + '</span>';
+  }
+}
+
+
+  // Map gender
+  const genderMap = {'Nam':'male','Nữ':'female','Trung tính':'non-binary','Robot / AI':'android','Vật thể / Sản phẩm':'subject'};
+  const ageMap = {'Thiếu niên (~16)':'16 years old','Thanh niên (~25)':'mid-20s','Trung niên (~40)':'early 40s','Cao tuổi (~60+)':'60s'};
+
+  const sex       = genderMap[SS.gender] || '[sex]';
+  const age       = ageMap[SS.age] || SS.age || '[age]';
+  const nat       = (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ') || '[ethnicity]';
+  const skinTone  = SS.skin_tone || '[skin tone]';
+  const hairColor = SS.hair_color || '[color]';
+  const hairStyle = SS.hair_style || '[style]';
+  const eyeShape  = SS.eye_shape || '[shape]';
+  const eyeColor  = SS.eye_color || '[color]';
+  const faceShape = SS.face_shape || '[shape]';
+  const nv        = gVal('subject-desc') || '';
+
+  // Extract face details from char-face field
+  const faceDetail = gVal('char-face') || '';
+  const eyeDetail  = gVal('char-eyes') || '';
+  const hairDetail = gVal('char-hair') || '';
+  const markDetail = gVal('char-mark') || '';
+
+  // Parse body type from subject-desc or SS fields
+  const bodyType = nv.match(/athletic|stocky|slim|muscular|petite|plus.size|lean/i)?.[0] || '[type]';
+  const height   = nv.match(/\d+[cm|m]|\d+'\d+"|\btall\b|\bshort\b/i)?.[0] || '[height]';
+
+  // Build eyebrows line
+  let eyebrows = '[Eyebrows]';
+  if(eyeDetail) eyebrows = eyeDetail.match(/brow[^.]+/i)?.[0] || (faceDetail.match(/brow[^.]+/i)?.[0]) || 'Natural brows, well-defined';
+
+  // Build face details
+  const jawline = faceDetail.match(/jaw[^,.]+/i)?.[0] || '[jawline]';
+  const cheeks  = faceDetail.match(/cheek[^,.]+/i)?.[0] || '[cheekbones]';
+  const nose    = faceDetail.match(/nose[^,.]+/i)?.[0] || '[nose]';
+  const lips    = faceDetail.match(/lip[^,.]+/i)?.[0] || eyeDetail.match(/lip[^,.]+/i)?.[0] || '[lips]';
+
+  const prompt = `Ultra-realistic model casting headshot, straight on, shoulders square to camera. Subject: ${sex}, ${age}, ${nat}, ${skinTone} skin tone. Hair: ${hairColor}, ${hairStyle}${hairDetail ? ' — ' + hairDetail.slice(0,60) : ''}. Eyes: ${eyeShape}, ${eyeColor}${eyeDetail ? ' — ' + eyeDetail.slice(0,60) : ''}. ${eyebrows}. Face: ${faceShape} face shape, ${jawline}, ${cheeks}, ${nose}, ${lips}. ${markDetail ? 'Marks: ' + markDetail + '.' : 'No distinguishing marks.'} Body: ${bodyType} build, ${height}.
+
+Clean face, no makeup beyond invisible grooming — natural brows, lashes, lip color. Keep real high-frequency skin detail: visible pores, faint freckles, tiny blemishes, natural asymmetry. Do not smooth or perfect the skin. Tight headshot from below the chin to just above the head, no wardrobe visible. Spine straight, shoulders level, head untilted, long relaxed neck. Neutral but strong expression, no smile, eyes into the lens.
+
+Bright light-grey seamless studio backdrop, no texture or props. Honest front flash that shows every detail, shadows falling softly behind. Full-frame camera, 70–85mm, ~f/8 so the whole face is sharp, 3:4 vertical, subtle realistic sensor noise. Neutral daylight ~5800K, natural skin tone, no filters, glow, or bokeh. It must read as a real, unretouched agency casting digital — not a beauty campaign, not a render.`;
+
+  // Display in char-preview
+  const preview = document.getElementById('char-preview');
+  if(preview) preview.textContent = prompt;
+
+  // Store and show copy button
+  charPromptText = prompt;
+  const cpBtn = document.getElementById('nut-cp-char');
+  if(cpBtn) cpBtn.style.display = '';
+  const sheetBtn = document.getElementById('nut-char-sheet');
+  if(sheetBtn) sheetBtn.style.display = '';
+  const addBtn = document.getElementById('nut-add-char');
+  if(addBtn) addBtn.style.display = '';
+
+  // Scroll to preview
+  if(preview) preview.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+
   const face = gVal('char-face');
   const eyes = gVal('char-eyes');
   const hair = gVal('char-hair');
@@ -7410,17 +7568,17 @@ function xuatJSONData(){
 MCP: claude mcp add --transport http --scope user higgsfield https://mcp.higgsfield.ai/mcp
 CHAIN: each step must complete before next. Poll get_generation_status after each call.
 
-PROJECT: ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ')].filter(Boolean).join(', ')} | ${SS.genre||'cinematic'} | ${SS.pal||'muted'} | ${SS.res||'16:9'} | ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0).toFixed(1)}s
-COSTUME: ${gVal('char-costume')||gVal('wardrobe-lock')||'not set'}
+PROJECT: ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ')].filter(Boolean).join(', ')||'(Chưa điền nhân vật)'} | ${SS.genre||'cinematic'} | ${SS.pal||'muted'} | ${({'16:9 — Ngang (Cinema)':'16:9','9:16 — Dọc (Reels / TikTok)':'9:16','1:1 — Vuông (Instagram)':'1:1','4:3 — Cổ điển':'4:3','21:9 — Anamorphic':'21:9','4K Ultra HD':'16:9','1080p Cinematic':'16:9','720p Chuẩn':'16:9'}[SS.res]||SS.res||'16:9')} | ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0).toFixed(1)}s
+COSTUME: ${gVal('char-costume')||gVal('wardrobe-lock')||'⚠️ not set — add in Wardrobe Lock'}
 DIRECTOR REF: ${(MM.director||[]).join(', ')||'none'}
 
 ━━━ STEP 1: STORYBOARD GRID (GPT Image 2) → save as output_1 ━━━
 tool: generate_image | model: gpt-image-2 | aspect_ratio: 16:9
 prompt:
 3×3 cinematic beat sheet. 9 panels numbered. Black border, white margin. 16:9 layout.
-VISUAL DNA (identical all panels): ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),gVal('char-face')?'Face: '+gVal('char-face').slice(0,80):'',gVal('char-costume')||gVal('wardrobe-lock')?'Costume: '+(gVal('char-costume')||gVal('wardrobe-lock')).slice(0,80):''].filter(Boolean).join('. ')}
+VISUAL DNA (identical all panels): ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),gVal('char-face')?'Face: '+gVal('char-face').slice(0,120):'',gVal('char-eyes')?'Eyes: '+gVal('char-eyes').slice(0,60):'',gVal('char-costume')||gVal('wardrobe-lock')?'Costume: '+(gVal('char-costume')||gVal('wardrobe-lock')).slice(0,120):''].filter(Boolean).join('. ')||'⚠️ Chưa điền thông tin nhân vật — vào Khung Sườn điền trước'}
 SAME face+costume every panel — zero variation.
-PANELS: ${(cacShot||[]).map((s,i)=>`[${i+1}] ${s.shotSize||'MS'}|${s.cuMay||'static'}|${(s.moTa||'').slice(0,50)}`).join(' / ')||'Cinematic sequence'}
+PANELS: ${(cacShot||[]).map((s,i)=>`[${i+1}] ${s.shotSize||'MS'}|${s.cuMay||'static'}|${(s.moTa||s._prompt||'').slice(0,150)}`).join('\n')||'Cinematic sequence'}
 Style: Photorealistic. Film grain. ${SS.pal||'muted cinematic'}. No motion blur.
 
 ━━━ STEP 2: CHARACTER SHEET (GPT Image 2) → save as output_2 ━━━
@@ -7428,13 +7586,13 @@ tool: generate_image | model: gpt-image-2 | aspect_ratio: 16:9
 medias: [{role:"image", value: output_1}]
 prompt:
 Character reference sheet. 4 columns × 2 rows = 8 shots.
-Character: ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),SS.age||''].filter(Boolean).join(', ')}${gVal('char-face')?'. '+gVal('char-face'):''}${gVal('char-eyes')?'. '+gVal('char-eyes'):''}${gVal('char-hair')?'. '+gVal('char-hair'):''}${gVal('char-costume')||gVal('wardrobe-lock')?'. Costume: '+(gVal('char-costume')||gVal('wardrobe-lock')):''}${gVal('char-mark')?'. Marks: '+gVal('char-mark'):''}
+Character: ${[gVal('subject-desc'),(MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', '),SS.gender?({'Nam':'Male','Nữ':'Female','Trung tính':'Non-binary'}[SS.gender]||SS.gender):'',SS.age||'',SS.skin_tone||'',SS.eye_color||'',SS.hair_color&&SS.hair_style?SS.hair_color+' '+SS.hair_style+' hair':''].filter(Boolean).join(', ')}${gVal('char-face')?'. '+gVal('char-face'):''}${gVal('char-eyes')?'. '+gVal('char-eyes'):''}${gVal('char-hair')?'. '+gVal('char-hair'):''}${gVal('char-costume')||gVal('wardrobe-lock')?'. Costume: '+(gVal('char-costume')||gVal('wardrobe-lock')):''}${gVal('char-mark')?'. Marks: '+gVal('char-mark'):''}${!gVal('subject-desc')?'\n⚠️ Nhân vật trống — điền Subject-desc trong Khung Sườn':''}
 TOP ROW (full-body head-to-toe, no cropping): Front | Side 90° | Three-quarter | Back
 BOTTOM ROW (face close-up): Front | Profile right | Three-quarter | Profile left
 Style: Photorealistic DSLR 35mm. NOT 3D render. Consistent face+costume all 8 shots.
 
 ━━━ STEP 3: SEEDANCE 2.0 VIDEO → final output ━━━
-tool: generate_video | model: seedance-2 | duration: ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0)||15} | aspect_ratio: ${SS.res||'16:9'}
+tool: generate_video | model: seedance-2 | duration: ${(cacShot||[]).reduce((a,s)=>a+(s.tg||5),0)||15} | aspect_ratio: ${{'16:9 — Ngang (Cinema)':'16:9','9:16 — Dọc (Reels / TikTok)':'9:16','1:1 — Vuông (Instagram)':'1:1','4:3 — Cổ điển':'4:3','21:9 — Anamorphic':'21:9','4K Ultra HD':'16:9','1080p Cinematic':'16:9','720p Chuẩn':'16:9'}[SS.res]||'16:9'}
 medias: [{role:"image", value:output_1}, {role:"image", value:output_2}]
 NOTE: output_1 = image_reference only (NOT start_image). output_2 = identity reference.
 prompt:
@@ -8271,8 +8429,128 @@ veThoai();
 veNVP();
 veKBShotTimes();
 taiGiong();
+
+// ===== AUTO-SAVE & SESSION RESTORE =====
+const AUTOSAVE_KEY = 'annahousestudio_autosave';
+const AUTOSAVE_INTERVAL = 30000;
+let autoSaveTimer = null;
+let lastAutoSaveHash = '';
+
+function layStateHash(state){
+  const s = JSON.stringify({
+    fields: state.fields,
+    shots: state.cacShot?.length,
+    genre: state.SS?.genre,
+    dur: state.SS?.kb_dur
+  });
+  return s.length + '_' + (s.charCodeAt(0)||0);
+}
+
+function autoSave(){
+  try{
+    const state = layToanBoState();
+    const hasContent = state.fields && Object.values(state.fields).some(v => v && v.trim().length > 3);
+    const hasShots = state.cacShot && state.cacShot.length > 0;
+    if(!hasContent && !hasShots) return;
+    const hash = layStateHash(state);
+    if(hash === lastAutoSaveHash) return;
+    lastAutoSaveHash = hash;
+    state._autosave = true;
+    state._savedAt = Date.now();
+    state._charPromptText = charPromptText || '';
+    state._kqVI = kqVI || '';
+    state._kqSD = kqSD || '';
+    state._soulIDResult = soulIDResult || '';
+    localStorage.setItem(AUTOSAVE_KEY, JSON.stringify(state));
+    const ind = document.getElementById('autosave-indicator');
+    if(ind){
+      const t = new Date().toLocaleTimeString('vi-VN', {hour:'2-digit', minute:'2-digit', second:'2-digit'});
+      ind.textContent = '✓ Tự động lưu lúc ' + t;
+      ind.style.color = '#4ade80';
+      setTimeout(() => { if(ind) ind.style.color = 'var(--muted)'; }, 3000);
+    }
+  } catch(e){ console.warn('Auto-save error:', e); }
+}
+
+function batDauAutoSave(){
+  if(autoSaveTimer) clearInterval(autoSaveTimer);
+  autoSaveTimer = setInterval(autoSave, AUTOSAVE_INTERVAL);
+  window.addEventListener('beforeunload', () => autoSave());
+  window.addEventListener('visibilitychange', () => { if(document.visibilityState === 'hidden') autoSave(); });
+}
+
+function kiemTraSessionCu(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(!raw) return;
+    const state = JSON.parse(raw);
+    if(!state || !state._savedAt) return;
+    if(Date.now() - state._savedAt > 7*24*3600*1000) return;
+    const hasContent = state.fields && Object.values(state.fields).some(v => v && v.trim().length > 3);
+    const hasShots = state.cacShot && state.cacShot.length > 0;
+    if(!hasContent && !hasShots) return;
+    const t = new Date(state._savedAt).toLocaleString('vi-VN');
+    const info = document.getElementById('restore-info');
+    const preview = document.getElementById('restore-preview');
+    const modal = document.getElementById('restore-modal');
+    if(info) info.textContent = 'Phiên làm việc từ ' + t;
+    if(preview){
+      const parts = [];
+      if(state.fields?.['subject-desc']) parts.push('Nhân vật: ' + state.fields['subject-desc'].slice(0,40));
+      if(state.fields?.['scene-desc']) parts.push('Bối cảnh: ' + state.fields['scene-desc'].slice(0,30));
+      if(state.cacShot?.length) parts.push(state.cacShot.length + ' shots');
+      if(state.SS?.genre) parts.push(state.SS.genre);
+      preview.textContent = parts.join(' · ') || 'Có dữ liệu chưa lưu';
+    }
+    if(modal) modal.style.display = 'flex';
+  } catch(e){}
+}
+
+function xacNhanKhoiPhuc(){
+  try{
+    const raw = localStorage.getItem(AUTOSAVE_KEY);
+    if(!raw) return;
+    const state = JSON.parse(raw);
+    apDungState(state);
+    if(state._charPromptText) charPromptText = state._charPromptText;
+    if(state._kqVI) kqVI = state._kqVI;
+    if(state._kqSD) kqSD = state._kqSD;
+    if(state._soulIDResult){
+      soulIDResult = state._soulIDResult;
+      const el = document.getElementById('soul-id-result');
+      if(el) el.value = soulIDResult;
+      if(typeof luuCharacterID === 'function') luuCharacterID();
+    }
+    const modal = document.getElementById('restore-modal');
+    if(modal) modal.style.display = 'none';
+    const ind = document.getElementById('autosave-indicator');
+    if(ind){ ind.textContent = '✓ Đã khôi phục phiên làm việc'; ind.style.color = '#4ade80'; }
+  } catch(e){ alert('Lỗi khôi phục: ' + e.message); }
+}
+
+function boQuaKhoiPhuc(){
+  document.getElementById('restore-modal').style.display = 'none';
+  localStorage.removeItem(AUTOSAVE_KEY);
+}
+
+// Khởi động auto-save và kiểm tra session cũ
+batDauAutoSave();
+setTimeout(kiemTraSessionCu, 800);
 themShot();
 themShot();
 </script>
+<!-- ===== SESSION RESTORE MODAL ===== -->
+<div id="restore-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.75);z-index:9999;display:flex;align-items:center;justify-content:center">
+  <div style="background:#0d1117;border:1px solid #f59e0b;border-radius:12px;padding:24px 28px;max-width:420px;width:90%;font-family:'IBM Plex Mono',monospace">
+    <div style="font-size:14px;font-weight:600;color:#f59e0b;margin-bottom:8px">🔄 Khôi phục phiên làm việc?</div>
+    <div style="font-size:11px;color:var(--muted);margin-bottom:6px" id="restore-info">Phát hiện dữ liệu chưa lưu từ phiên trước.</div>
+    <div style="font-size:10px;color:#4ade80;margin-bottom:18px" id="restore-preview"></div>
+    <div style="display:flex;gap:8px">
+      <button onclick="xacNhanKhoiPhuc()" style="flex:1;padding:9px;border-radius:7px;border:none;background:#f59e0b;color:#0d0d0d;font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:600;cursor:pointer">✓ Khôi phục</button>
+      <button onclick="boQuaKhoiPhuc()" style="flex:1;padding:9px;border-radius:7px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace;cursor:pointer">✕ Bỏ qua</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
