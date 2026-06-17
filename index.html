@@ -587,7 +587,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
       </div>
     </div>
 
-  </div>
 
 <div class="fw-block">
   <div class="fw-head" onclick="moRong('lighting')"><span class="fw-num">05</span><span class="fw-key" data-en="LIGHTING">ÁNH SÁNG</span><span class="fw-desc">Bố cục sáng · Màu sắc · Nhiệt độ Kelvin</span><span class="fw-check" id="ck-lighting">○</span></div>
@@ -1070,6 +1069,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
 
 
+</div>
 <!-- ===== SEEDANCE TAB ===== -->
 <div class="pane" id="p-shots">
   <div class="hint" style="margin-bottom:11px;padding:9px 11px;background:var(--card);border-radius:7px;border:1px solid var(--bdr)">💡 Mỗi <strong>Sự Kiện</strong> = 1 cảnh quay. Lời thoại quản lý ở tab 💬.</div>
@@ -1583,6 +1583,50 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
 </div>
 
+  <div id="emo-nv2-panel" style="display:none">
+    <div style="padding:9px 11px;background:#0a0a0a;border-radius:7px;border:1px solid #2a2a2a;margin-bottom:10px;font-size:10px;color:var(--muted);line-height:1.8">
+      👤 <strong style="color:var(--ink)">Nhân vật 2</strong> — chọn cảm xúc riêng, sẽ được thêm vào prompt với nhãn <span style="color:#f59e0b">[NV2]</span>
+    </div>
+    <div class="sec">
+      <div class="lbl">💔 Cảm xúc cơ bản — NV2</div>
+      <div class="egrid">
+        <span class="ec" data-g="emo2" data-en="😔 Lonely [NV2]">😔 Cô đơn</span>
+        <span class="ec" data-g="emo2" data-en="😤 Angry [NV2]">😤 Tức giận</span>
+        <span class="ec" data-g="emo2" data-en="😨 Fear [NV2]">😨 Sợ hãi</span>
+        <span class="ec" data-g="emo2" data-en="🥹 Moved [NV2]">🥹 Xúc động</span>
+        <span class="ec" data-g="emo2" data-en="😍 Deeply in love [NV2]">😍 Yêu say</span>
+        <span class="ec" data-g="emo2" data-en="😞 Despair [NV2]">😞 Tuyệt vọng</span>
+        <span class="ec" data-g="emo2" data-en="😏 Confident [NV2]">😏 Tự tin</span>
+        <span class="ec" data-g="emo2" data-en="🤔 Conflicted [NV2]">🤔 Phân vân</span>
+        <span class="ec" data-g="emo2" data-en="😌 Peaceful [NV2]">😌 Bình yên</span>
+        <span class="ec" data-g="emo2" data-en="😈 Scheming [NV2]">😈 Mưu toan</span>
+        <span class="ec" data-g="emo2" data-en="💔 Suffering [NV2]">💔 Đau khổ</span>
+        <span class="ec" data-g="emo2" data-en="🥶 Cold [NV2]">🥶 Lạnh lùng</span>
+        <span class="ec" data-g="emo2" data-en="💪 Determined [NV2]">💪 Quyết tâm</span>
+        <span class="ec" data-g="emo2" data-en="🤯 Overwhelmed [NV2]">🤯 Quá tải</span>
+        <span class="ec" data-g="emo2" data-en="🫠 Lost [NV2]">🫠 Mất hướng</span>
+        <span class="ec" data-g="emo2" data-en="😐 Numb [NV2]">😐 Vô cảm</span>
+      </div>
+    </div>
+    <div class="divd"></div>
+    <div class="sec">
+      <div class="lbl">🎭 Cảm xúc phức tạp — NV2</div>
+      <div class="egrid">
+        <span class="ec" data-g="emo2" data-en="🌪 Inner chaos [NV2]">🌪 Hỗn loạn nội tâm</span>
+        <span class="ec" data-g="emo2" data-en="🫥 Emotional paralysis [NV2]">🫥 Tê liệt cảm xúc</span>
+        <span class="ec" data-g="emo2" data-en="🌊 Being swept away [NV2]">🌊 Bị cuốn trôi</span>
+        <span class="ec" data-g="emo2" data-en="🔥 Burning passion [NV2]">🔥 Đam mê cháy bỏng</span>
+        <span class="ec" data-g="emo2" data-en="🧊 Ice-cold composure [NV2]">🧊 Điềm tĩnh lạnh toát</span>
+        <span class="ec" data-g="emo2" data-en="🕳 Complete emptiness [NV2]">🕳 Trống rỗng hoàn toàn</span>
+        <span class="ec" data-g="emo2" data-en="⚡ Peak tension [NV2]">⚡ Căng thẳng tột đỉnh</span>
+        <span class="ec" data-g="emo2" data-en="🌫 Vague detachment [NV2]">🌫 Mơ hồ xa cách</span>
+        <span class="ec" data-g="emo2" data-en="💀 Accepting fate [NV2]">💀 Chấp nhận số phận</span>
+        <span class="ec" data-g="emo2" data-en="🦋 Fragile hope [NV2]">🦋 Hy vọng mong manh</span>
+        <span class="ec" data-g="emo2" data-en="🗡 Deep wound [NV2]">🗡 Tổn thương sâu thẳm</span>
+        <span class="ec" data-g="emo2" data-en="🎭 Two-faced mask [NV2]">🎭 Hai mặt — mặt nạ</span>
+      </div>
+    </div>
+  </div><!-- end emo-nv2-panel -->
 </div>
 <!-- ===== NHÂN VẬT NHẤT QUÁN ===== -->
 <div class="pane on" id="p-char">
@@ -2105,7 +2149,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
     <p style="font-size:10px;color:var(--muted);margin-top:5px;font-style:italic">⚡ Powered by ANNAHOUSESTUDIO AI</p>
   </div>
-</div>
 
 <!-- TỐI ƯU ĐỘ DÀI PROMPT -->
 <div id="optimize-panel" style="display:none;margin-top:10px;background:#0d0b00;border:1px solid #f59e0b;border-radius:9px;overflow:hidden">
@@ -2137,52 +2180,9 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <span id="opt-result-count" style="font-size:10px;color:var(--muted);margin-left:auto"></span>
   </div>
   </div><!-- end emo-nv1-panel -->
+</div>
 
   <!-- NV2 EMOTIONS -->
-  <div id="emo-nv2-panel" style="display:none">
-    <div style="padding:9px 11px;background:#0a0a0a;border-radius:7px;border:1px solid #2a2a2a;margin-bottom:10px;font-size:10px;color:var(--muted);line-height:1.8">
-      👤 <strong style="color:var(--ink)">Nhân vật 2</strong> — chọn cảm xúc riêng, sẽ được thêm vào prompt với nhãn <span style="color:#f59e0b">[NV2]</span>
-    </div>
-    <div class="sec">
-      <div class="lbl">💔 Cảm xúc cơ bản — NV2</div>
-      <div class="egrid">
-        <span class="ec" data-g="emo2" data-en="😔 Lonely [NV2]">😔 Cô đơn</span>
-        <span class="ec" data-g="emo2" data-en="😤 Angry [NV2]">😤 Tức giận</span>
-        <span class="ec" data-g="emo2" data-en="😨 Fear [NV2]">😨 Sợ hãi</span>
-        <span class="ec" data-g="emo2" data-en="🥹 Moved [NV2]">🥹 Xúc động</span>
-        <span class="ec" data-g="emo2" data-en="😍 Deeply in love [NV2]">😍 Yêu say</span>
-        <span class="ec" data-g="emo2" data-en="😞 Despair [NV2]">😞 Tuyệt vọng</span>
-        <span class="ec" data-g="emo2" data-en="😏 Confident [NV2]">😏 Tự tin</span>
-        <span class="ec" data-g="emo2" data-en="🤔 Conflicted [NV2]">🤔 Phân vân</span>
-        <span class="ec" data-g="emo2" data-en="😌 Peaceful [NV2]">😌 Bình yên</span>
-        <span class="ec" data-g="emo2" data-en="😈 Scheming [NV2]">😈 Mưu toan</span>
-        <span class="ec" data-g="emo2" data-en="💔 Suffering [NV2]">💔 Đau khổ</span>
-        <span class="ec" data-g="emo2" data-en="🥶 Cold [NV2]">🥶 Lạnh lùng</span>
-        <span class="ec" data-g="emo2" data-en="💪 Determined [NV2]">💪 Quyết tâm</span>
-        <span class="ec" data-g="emo2" data-en="🤯 Overwhelmed [NV2]">🤯 Quá tải</span>
-        <span class="ec" data-g="emo2" data-en="🫠 Lost [NV2]">🫠 Mất hướng</span>
-        <span class="ec" data-g="emo2" data-en="😐 Numb [NV2]">😐 Vô cảm</span>
-      </div>
-    </div>
-    <div class="divd"></div>
-    <div class="sec">
-      <div class="lbl">🎭 Cảm xúc phức tạp — NV2</div>
-      <div class="egrid">
-        <span class="ec" data-g="emo2" data-en="🌪 Inner chaos [NV2]">🌪 Hỗn loạn nội tâm</span>
-        <span class="ec" data-g="emo2" data-en="🫥 Emotional paralysis [NV2]">🫥 Tê liệt cảm xúc</span>
-        <span class="ec" data-g="emo2" data-en="🌊 Being swept away [NV2]">🌊 Bị cuốn trôi</span>
-        <span class="ec" data-g="emo2" data-en="🔥 Burning passion [NV2]">🔥 Đam mê cháy bỏng</span>
-        <span class="ec" data-g="emo2" data-en="🧊 Ice-cold composure [NV2]">🧊 Điềm tĩnh lạnh toát</span>
-        <span class="ec" data-g="emo2" data-en="🕳 Complete emptiness [NV2]">🕳 Trống rỗng hoàn toàn</span>
-        <span class="ec" data-g="emo2" data-en="⚡ Peak tension [NV2]">⚡ Căng thẳng tột đỉnh</span>
-        <span class="ec" data-g="emo2" data-en="🌫 Vague detachment [NV2]">🌫 Mơ hồ xa cách</span>
-        <span class="ec" data-g="emo2" data-en="💀 Accepting fate [NV2]">💀 Chấp nhận số phận</span>
-        <span class="ec" data-g="emo2" data-en="🦋 Fragile hope [NV2]">🦋 Hy vọng mong manh</span>
-        <span class="ec" data-g="emo2" data-en="🗡 Deep wound [NV2]">🗡 Tổn thương sâu thẳm</span>
-        <span class="ec" data-g="emo2" data-en="🎭 Two-faced mask [NV2]">🎭 Hai mặt — mặt nạ</span>
-      </div>
-    </div>
-  </div><!-- end emo-nv2-panel -->
 
 
 
