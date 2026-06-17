@@ -48,6 +48,11 @@ select option{background:var(--card)}
 .fw-block-p{border-color:#2a1f4a}.fw-block-t{border-color:#0f2a2a}
 .fw-head{display:flex;align-items:center;gap:10px;padding:9px 13px;background:var(--card2);border-bottom:1px solid var(--bdr);cursor:pointer;user-select:none}
 .fw-head-p{border-bottom-color:#2a1f4a;background:#130e20}.fw-head-t{border-bottom-color:#0f2a2a;background:#0a1414}
+.dir-qa-item{display:flex;align-items:center;gap:7px;cursor:pointer;padding:6px 8px;border-radius:6px;border:1px solid transparent;font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;transition:all .15s;user-select:none}
+.dir-qa-item:hover{background:#0d0014;border-color:#3b0060}
+.dir-qa-item:has(input:checked){background:#0d0014;border-color:#7c3aed;color:var(--ink)}
+.dir-qa-item:has(input:checked) .dir-qa-num{color:#c084fc}
+.dir-qa-num{color:#4a0080;font-weight:600;font-size:9px;min-width:18px}
 .fw-num{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:1px;min-width:24px}
 .fw-num-p{color:var(--purple)}.fw-num-t{color:var(--teal)}
 .fw-key{font-size:12px;font-weight:500;color:var(--ink);min-width:100px}
@@ -272,7 +277,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <button class="tab" onclick="sw('shots')">🎥 Dựng Cảnh</button>
   <button class="tab" onclick="sw('thoai')">💬 Lời Thoại</button>
   <button class="tab" onclick="sw('emo')">💔 Cảm Xúc</button>
-  <button class="tab" onclick="sw('voice')">🎙️ Giọng Nói</button>
+  <button class="tab" onclick="sw('director')" style="border-color:#f59e0b;color:#f59e0b">🎬 Director</button>
   <button class="tab" onclick="sw('out')">📋 Xuất Prompt</button>
   <button class="tab" onclick="sw('lib')">📚 Thư Viện</button>
 </div>
@@ -549,6 +554,8 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
 
     <div><div class="lbl"><span class="lbl-tag" data-en="Weather / Environment">Thời tiết / Môi trường</span></div><div class="chips"><span class="chip" data-g="weather">Trời trong xanh</span><span class="chip" data-g="weather">Mưa lớn</span><span class="chip" data-g="weather">Sương mù dày</span><span class="chip" data-g="weather">Bão tuyết</span><span class="chip" data-g="weather">Ngập khói</span><span class="chip" data-g="weather">Không gian vô trùng</span><span class="chip" data-g="weather">Bụi vàng bay</span><span class="chip" data-g="weather">Chân không / Vũ trụ</span></div></div>
+</div>
+</div>
 
     <!-- ===== 5 GÓC BỐI CẢNH ===== -->
     <div style="margin-top:12px;border-top:1px solid var(--bdr);padding-top:12px">
@@ -581,7 +588,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
 
   </div>
-</div>
 
 <div class="fw-block">
   <div class="fw-head" onclick="moRong('lighting')"><span class="fw-num">05</span><span class="fw-key" data-en="LIGHTING">ÁNH SÁNG</span><span class="fw-desc">Bố cục sáng · Màu sắc · Nhiệt độ Kelvin</span><span class="fw-check" id="ck-lighting">○</span></div>
@@ -812,6 +818,11 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
             <span class="chip s" data-g="kb_shots" id="kb-shots-default" onclick="taoKBShotSetup(3)">3 shots</span>
             <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(4)">4 shots</span>
             <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(5)">5 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(6)">6 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(7)">7 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(8)">8 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(9)">9 shots</span>
+            <span class="chip s" data-g="kb_shots" onclick="taoKBShotSetup(10)">10 shots</span>
           </div>
           <!-- SHOT SETUP CARDS -->
           <div id="kb-shot-setup" style="display:flex;flex-direction:column;gap:6px"></div>
@@ -1058,7 +1069,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   </div>
 
 
-</div>
 
 <!-- ===== SEEDANCE TAB ===== -->
 <div class="pane" id="p-shots">
@@ -1087,9 +1097,13 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
     <!-- GRID OPTIONS -->
     <div style="padding:9px 13px;border-bottom:1px solid #1e1b4b;display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-      <div style="display:flex;gap:5px;align-items:center">
+      <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
         <span style="font-size:10px;color:var(--muted)">Layout:</span>
-        <span class="schip" id="sb-layout-2x2" onclick="chonSBLayout('2x2',this)" style="border-color:#818cf8;color:#818cf8;background:#080d1e">2×2</span>
+        <span class="schip" id="sb-layout-auto" onclick="chonSBLayout('auto',this)" style="border-color:#4ade80;color:#4ade80;background:#001a0a">Auto</span>
+        <span class="schip" onclick="chonSBLayout('1x2',this)">1×2</span>
+        <span class="schip" onclick="chonSBLayout('1x3',this)">1×3</span>
+        <span class="schip" id="sb-layout-2x2" onclick="chonSBLayout('2x2',this)">2×2</span>
+        <span class="schip" onclick="chonSBLayout('2+3',this)">2+3</span>
         <span class="schip" onclick="chonSBLayout('2x3',this)">2×3</span>
         <span class="schip" onclick="chonSBLayout('3x2',this)">3×2</span>
         <span class="schip" onclick="chonSBLayout('3x3',this)">3×3</span>
@@ -1218,6 +1232,17 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
 <!-- ===== CẢM XÚC ===== -->
 <div class="pane" id="p-emo">
+
+  <!-- CHỌN NHÂN VẬT -->
+  <div style="display:flex;gap:6px;align-items:center;margin-bottom:10px;padding:8px 10px;background:var(--card);border-radius:8px;border:1px solid var(--bdr)">
+    <span style="font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace">Cảm xúc cho:</span>
+    <span class="schip" id="emo-nv1" onclick="chonEmoNV(1,this)" style="border-color:#a78bfa;color:#a78bfa;background:#0d0820">👤 Nhân vật 1</span>
+    <span class="schip" id="emo-nv2" onclick="chonEmoNV(2,this)">👤 Nhân vật 2</span>
+    <span style="font-size:9px;color:var(--muted);margin-left:auto" id="emo-nv-label">Đang chọn cảm xúc cho NV1</span>
+  </div>
+
+  <!-- NV1 EMOTIONS -->
+  <div id="emo-nv1-panel">
   <!-- CẢM XÚC CƠ BẢN -->
   <div class="sec">
     <div class="lbl" data-en="💔 Basic Emotions">💔 Cảm xúc cơ bản</div>
@@ -1558,55 +1583,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
 </div>
 
-<!-- ===== GIỌNG NÓI ===== -->
-<div class="pane" id="p-voice">
-  <div class="canh-bao" id="canh-bao">⚠️ Dùng <strong>Chrome</strong> hoặc <strong>Edge</strong>.</div>
-  <div class="vpanel" id="panel-stt">
-    <div class="vhead"><span class="vtitle">🎤 Nói → Văn bản</span><span class="vstatus"><span class="vdot" id="stt-dot"></span><span id="tt-stt">Sẵn sàng</span></span></div>
-    <div class="vbody">
-      <div class="vcontrols">
-        <select class="vsel" id="ng-ngu"><option value="vi-VN" selected>🇻🇳 Tiếng Việt</option><option value="en-US">🇺🇸 English</option></select>
-        <select class="vsel" id="che-do" style="max-width:130px"><option value="continuous">Liên tục</option><option value="single">Một lần</option></select>
-        <button class="btn-mic" id="nut-noi" onclick="batDau()">🎙️ Bắt đầu nói</button>
-        <button class="btn-stop" id="nut-dung" onclick="dungNoi()">⏹ Dừng</button>
-      </div>
-      <div><div class="slbl">Văn bản nhận được</div><div class="vtranscript" id="hop-vb"><span class="vph">Nhấn "Bắt đầu nói"...</span></div></div>
-      <div><div class="slbl" style="margin-bottom:4px">Điền nhanh</div>
-        <div class="vactions">
-          <button class="vfbtn" onclick="dien('scene-desc')">→ Bối cảnh</button>
-          <button class="vfbtn" onclick="dien('subject-desc')">→ Nhân vật</button>
-          <button class="vfbtn" onclick="dien('action-desc')">→ Hành động</button>
-          <button class="vfbtn" onclick="dien('lighting-desc')">→ Ánh sáng</button>
-          <button class="vfbtn" onclick="dien('hook-custom')">→ Hook SD</button>
-          <button class="vfbtn" onclick="dien('cg-hook-custom')">→ Hook CGI</button>
-          <button class="vfbtn" onclick="dienShot()">→ Cảnh hiện tại</button>
-          <button class="vfbtn" onclick="dienThoai()">→ Lời thoại</button>
-          <button class="vfbtn" onclick="dien('hop-doc')">→ Ô đọc</button>
-          <button class="vfbtn" onclick="xoaVB()">✕ Xóa</button>
-        </div>
-      </div>
-      <div><div class="slbl" style="margin-bottom:4px">Lịch sử</div><div class="vhist" id="lich-su"><div style="font-size:11px;color:var(--muted);font-style:italic">Chưa có...</div></div></div>
-    </div>
-  </div>
-  <div class="vpanel">
-    <div class="vhead"><span class="vtitle">🔊 Văn bản → Giọng nói</span><span class="vstatus"><span class="vdot" id="tts-dot"></span><span id="tt-tts">Sẵn sàng</span></span></div>
-    <div class="vbody">
-      <div><div class="slbl">Nhập văn bản</div><div class="hop-doc" id="hop-doc" contenteditable="true" data-ph="Nhập văn bản để nghe đọc..."></div></div>
-      <div class="vcontrols">
-        <select class="vsel" id="chon-giong" style="flex:2"><option>Đang tải...</option></select>
-        <div class="hang-toc"><label>Tốc độ</label><input type="range" id="toc-do" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('rv').textContent=this.value+'x'"><span id="rv" style="font-size:11px;color:var(--muted);min-width:28px">1x</span></div>
-        <div class="hang-toc"><label>Cao độ</label><input type="range" id="cao-do" min="0.5" max="2" step="0.1" value="1" oninput="document.getElementById('pv').textContent=this.value"><span id="pv" style="font-size:11px;color:var(--muted);min-width:18px">1</span></div>
-      </div>
-      <div style="display:flex;gap:6px;flex-wrap:wrap">
-        <button class="btn-s" onclick="docTo()">▶ Đọc to</button>
-        <button class="btn-i" onclick="window.speechSynthesis.pause()">⏸</button>
-        <button class="btn-i" onclick="dungDoc()">⏹</button>
-        <button class="btn-s" onclick="docPrompt()">📋 Đọc prompt</button>
-      </div>
-    </div>
-  </div>
 </div>
-
 <!-- ===== NHÂN VẬT NHẤT QUÁN ===== -->
 <div class="pane on" id="p-char">
 
@@ -1950,6 +1927,8 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </div>
 
 
+
+
 <!-- ===== XUẤT PROMPT ===== -->
 <div class="pane" id="p-out">
 
@@ -2157,8 +2136,271 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <button class="btn-i" id="opt-copy-btn" onclick="saoCHepOptimize()" style="display:none">⊕ Sao chép</button>
     <span id="opt-result-count" style="font-size:10px;color:var(--muted);margin-left:auto"></span>
   </div>
-</div>
+  </div><!-- end emo-nv1-panel -->
 
+  <!-- NV2 EMOTIONS -->
+  <div id="emo-nv2-panel" style="display:none">
+    <div style="padding:9px 11px;background:#0a0a0a;border-radius:7px;border:1px solid #2a2a2a;margin-bottom:10px;font-size:10px;color:var(--muted);line-height:1.8">
+      👤 <strong style="color:var(--ink)">Nhân vật 2</strong> — chọn cảm xúc riêng, sẽ được thêm vào prompt với nhãn <span style="color:#f59e0b">[NV2]</span>
+    </div>
+    <div class="sec">
+      <div class="lbl">💔 Cảm xúc cơ bản — NV2</div>
+      <div class="egrid">
+        <span class="ec" data-g="emo2" data-en="😔 Lonely [NV2]">😔 Cô đơn</span>
+        <span class="ec" data-g="emo2" data-en="😤 Angry [NV2]">😤 Tức giận</span>
+        <span class="ec" data-g="emo2" data-en="😨 Fear [NV2]">😨 Sợ hãi</span>
+        <span class="ec" data-g="emo2" data-en="🥹 Moved [NV2]">🥹 Xúc động</span>
+        <span class="ec" data-g="emo2" data-en="😍 Deeply in love [NV2]">😍 Yêu say</span>
+        <span class="ec" data-g="emo2" data-en="😞 Despair [NV2]">😞 Tuyệt vọng</span>
+        <span class="ec" data-g="emo2" data-en="😏 Confident [NV2]">😏 Tự tin</span>
+        <span class="ec" data-g="emo2" data-en="🤔 Conflicted [NV2]">🤔 Phân vân</span>
+        <span class="ec" data-g="emo2" data-en="😌 Peaceful [NV2]">😌 Bình yên</span>
+        <span class="ec" data-g="emo2" data-en="😈 Scheming [NV2]">😈 Mưu toan</span>
+        <span class="ec" data-g="emo2" data-en="💔 Suffering [NV2]">💔 Đau khổ</span>
+        <span class="ec" data-g="emo2" data-en="🥶 Cold [NV2]">🥶 Lạnh lùng</span>
+        <span class="ec" data-g="emo2" data-en="💪 Determined [NV2]">💪 Quyết tâm</span>
+        <span class="ec" data-g="emo2" data-en="🤯 Overwhelmed [NV2]">🤯 Quá tải</span>
+        <span class="ec" data-g="emo2" data-en="🫠 Lost [NV2]">🫠 Mất hướng</span>
+        <span class="ec" data-g="emo2" data-en="😐 Numb [NV2]">😐 Vô cảm</span>
+      </div>
+    </div>
+    <div class="divd"></div>
+    <div class="sec">
+      <div class="lbl">🎭 Cảm xúc phức tạp — NV2</div>
+      <div class="egrid">
+        <span class="ec" data-g="emo2" data-en="🌪 Inner chaos [NV2]">🌪 Hỗn loạn nội tâm</span>
+        <span class="ec" data-g="emo2" data-en="🫥 Emotional paralysis [NV2]">🫥 Tê liệt cảm xúc</span>
+        <span class="ec" data-g="emo2" data-en="🌊 Being swept away [NV2]">🌊 Bị cuốn trôi</span>
+        <span class="ec" data-g="emo2" data-en="🔥 Burning passion [NV2]">🔥 Đam mê cháy bỏng</span>
+        <span class="ec" data-g="emo2" data-en="🧊 Ice-cold composure [NV2]">🧊 Điềm tĩnh lạnh toát</span>
+        <span class="ec" data-g="emo2" data-en="🕳 Complete emptiness [NV2]">🕳 Trống rỗng hoàn toàn</span>
+        <span class="ec" data-g="emo2" data-en="⚡ Peak tension [NV2]">⚡ Căng thẳng tột đỉnh</span>
+        <span class="ec" data-g="emo2" data-en="🌫 Vague detachment [NV2]">🌫 Mơ hồ xa cách</span>
+        <span class="ec" data-g="emo2" data-en="💀 Accepting fate [NV2]">💀 Chấp nhận số phận</span>
+        <span class="ec" data-g="emo2" data-en="🦋 Fragile hope [NV2]">🦋 Hy vọng mong manh</span>
+        <span class="ec" data-g="emo2" data-en="🗡 Deep wound [NV2]">🗡 Tổn thương sâu thẳm</span>
+        <span class="ec" data-g="emo2" data-en="🎭 Two-faced mask [NV2]">🎭 Hai mặt — mặt nạ</span>
+      </div>
+    </div>
+  </div><!-- end emo-nv2-panel -->
+
+
+
+<!-- ===== SEEDANCE DIRECTOR PANE ===== -->
+<div class="pane" id="p-director">
+
+  <div style="margin-bottom:14px">
+    <div style="font-size:13px;font-weight:600;color:#f59e0b;letter-spacing:.5px;margin-bottom:4px">🎬 SEEDANCE 2.0 PRO DIRECTOR</div>
+    <div style="font-size:10px;color:var(--muted);line-height:1.7">Framework chuyên nghiệp theo <strong style="color:var(--ink)">7 câu hỏi + 12-bước QA</strong>. Nhập ý tưởng → AI build prompt chuẩn sản xuất với blocking map, reference plan, và QA checklist.</div>
+  </div>
+
+  <!-- MODE SELECTION -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:10px;color:#f59e0b;font-weight:500;letter-spacing:.8px;margin-bottom:7px">⚙️ THIẾT LẬP SHOT</div>
+    <div style="display:flex;gap:10px;flex-wrap:wrap">
+      <div style="flex:1;min-width:120px">
+        <div class="lbl" style="margin-bottom:4px">Chế độ</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="schip" id="dir-t2v" onclick="chonDirMode('T2V',this)" style="border-color:#f59e0b;color:#f59e0b;background:#1a0f00">T2V</span>
+          <span class="schip" onclick="chonDirMode('I2V',this)">I2V</span>
+          <span class="schip" onclick="chonDirMode('R2V',this)">R2V</span>
+          <span class="schip" onclick="chonDirMode('V2V',this)">V2V</span>
+        </div>
+        <div style="font-size:9px;color:var(--muted);margin-top:4px" id="dir-mode-hint">T2V: Chỉ text, không có ảnh/video</div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div class="lbl" style="margin-bottom:4px">Duration</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          ${['5s','8s','10s'].map(d=>`<span class="schip" id="dir-dur-${d}" onclick="chonDirDur('${d}',this)">${d}</span>`).join('')}
+        </div>
+      </div>
+      <div style="flex:1;min-width:100px">
+        <div class="lbl" style="margin-bottom:4px">Aspect Ratio</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap">
+          <span class="schip" id="dir-ar-169" onclick="chonDirAR('16:9',this)" style="border-color:#f59e0b;color:#f59e0b;background:#1a0f00">16:9</span>
+          <span class="schip" onclick="chonDirAR('9:16',this)">9:16</span>
+          <span class="schip" onclick="chonDirAR('1:1',this)">1:1</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7 CÂU HỎI -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:10px;color:#f59e0b;font-weight:500;letter-spacing:.8px;margin-bottom:10px">🎯 7 CÂU HỎI CỐT LÕI</div>
+
+    <div style="display:flex;flex-direction:column;gap:8px">
+      <div>
+        <div class="lbl" style="margin-bottom:3px">① Ai đang trong khung hình? <span style="color:var(--muted);font-weight:400">(nhân vật, số lượng, danh tính)</span></div>
+        <textarea id="dir-q1" rows="2" placeholder="VD: Một người phụ nữ trung niên châu Á, tóc đen ngắn, mặc áo khoác đen..." oninput="dirAutoFillFromKS()" style="font-size:11px;resize:vertical"></textarea>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:3px">② Họ đứng ở đâu chính xác? <span style="color:var(--muted);font-weight:400">(left/center/right third, depth layer)</span></div>
+        <textarea id="dir-q2" rows="2" placeholder="VD: Nhân vật đứng ở 1/3 trái frame, lớp giữa, cách camera 3m..." style="font-size:11px;resize:vertical"></textarea>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:3px">③ Trạng thái và tư thế? <span style="color:var(--muted);font-weight:400">(pose, expression, gaze direction)</span></div>
+        <textarea id="dir-q3" rows="2" placeholder="VD: Đứng thẳng, vai hơi cúi, mắt nhìn thẳng vào camera, biểu cảm điềm tĩnh nhưng căng thẳng..." style="font-size:11px;resize:vertical"></textarea>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:3px">④ Cái gì đang chuyển động? <span style="color:var(--muted);font-weight:400">(subject motion)</span></div>
+        <textarea id="dir-q4" rows="2" placeholder="VD: Tay phải từ từ nâng lên, đầu xoay 15° sang trái trong 2 giây cuối..." style="font-size:11px;resize:vertical"></textarea>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:3px">⑤ Cái gì bị khóa cố định? <span style="color:var(--muted);font-weight:400">(continuity locks)</span></div>
+        <textarea id="dir-q5" rows="2" placeholder="VD: Khuôn mặt không thay đổi, trang phục giữ nguyên, ánh sáng không thay đổi..." style="font-size:11px;resize:vertical"></textarea>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:3px">⑥ Máy quay di chuyển như thế nào? <span style="color:var(--muted);font-weight:400">(camera plan)</span></div>
+        <textarea id="dir-q6" rows="2" placeholder="VD: Dolly-in chậm 0.3 ft/s từ MS đến MCU, 35mm, f/2.0, không tilt..." style="font-size:11px;resize:vertical"></textarea>
+      </div>
+      <div>
+        <div class="lbl" style="margin-bottom:3px">⑦ Khung hình cuối phải thấy gì? <span style="color:var(--muted);font-weight:400">(final frame)</span></div>
+        <textarea id="dir-q7" rows="2" placeholder="VD: MCU khuôn mặt nhân vật chiếm 60% frame, mắt nhìn thẳng vào lens, background blur..." style="font-size:11px;resize:vertical"></textarea>
+      </div>
+    </div>
+  </div>
+
+  <!-- REFERENCES -->
+  <div class="card" style="margin-bottom:10px">
+    <div style="font-size:10px;color:#f59e0b;font-weight:500;letter-spacing:.8px;margin-bottom:7px">📎 THAM CHIẾU <span style="color:var(--muted);font-weight:400">(tùy chọn)</span></div>
+    <div id="dir-refs-list" style="display:flex;flex-direction:column;gap:5px;margin-bottom:6px"></div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <button onclick="themDirRef('image')" style="padding:4px 10px;border-radius:5px;border:1px solid #3a3a3a;background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Image</button>
+      <button onclick="themDirRef('video')" style="padding:4px 10px;border-radius:5px;border:1px solid #3a3a3a;background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Video</button>
+      <button onclick="themDirRef('audio')" style="padding:4px 10px;border-radius:5px;border:1px solid #3a3a3a;background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Audio</button>
+    </div>
+  </div>
+
+  <!-- QA CHECKLIST TĨNH — tự check trước khi generate -->
+  <div class="card" style="margin-bottom:10px;border-color:#2a0040">
+    <div style="font-size:10px;color:#a855f7;font-weight:600;letter-spacing:.8px;margin-bottom:10px">✅ QA CHECKLIST — 12 ĐIỂM <span style="color:var(--muted);font-weight:400;font-size:9px">tự check trước khi generate</span></div>
+
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:3px" id="dir-qa-static">
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q1" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">01</span> Có chủ thể và chuyển động?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q2" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">02</span> NV có vị trí màn hình?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q3" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">03</span> NV có lớp chiều sâu (depth)?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q4" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">04</span> NV có tư thế và trạng thái?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q5" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">05</span> NV có hướng nhìn?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q6" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">06</span> Điểm tiếp xúc giữa các NV?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q7" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">07</span> Cấm NV đổi chỗ/vượt qua?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q8" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">08</span> NV và camera tách biệt?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q9" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">09</span> Camera giữ đúng bố cục?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q10" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">10</span> Có continuity lock?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q11" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">11</span> Có khung hình cuối?</span>
+      </label>
+
+      <label class="dir-qa-item" onclick="capNhatQAScore()">
+        <input type="checkbox" id="dir-qa-q12" onchange="capNhatQAScore()" style="accent-color:#a855f7;width:13px;height:13px;flex-shrink:0">
+        <span><span class="dir-qa-num">12</span> Prompt không quá tải?</span>
+      </label>
+
+    </div>
+
+    <!-- SCORE BAR -->
+    <div style="margin-top:10px;padding-top:8px;border-top:1px solid #2a0040;display:flex;align-items:center;gap:8px">
+      <div id="dir-qa-score" style="font-size:11px;font-family:'IBM Plex Mono',monospace;color:#a855f7;font-weight:600;min-width:50px">0 / 12</div>
+      <div style="flex:1;height:5px;background:#1a0028;border-radius:3px">
+        <div id="dir-qa-fill" style="height:100%;width:0%;background:#a855f7;border-radius:3px;transition:width .3s"></div>
+      </div>
+      <div id="dir-qa-label" style="font-size:10px;color:var(--muted);font-family:'IBM Plex Mono',monospace;min-width:110px;text-align:right">🔴 Chưa sẵn sàng</div>
+    </div>
+
+    <!-- HINT + AUTO-FIX -->
+    <div id="dir-qa-actions" style="display:none;margin-top:8px;display:flex;gap:6px;flex-wrap:wrap">
+      <button onclick="qaGoiY()" style="padding:5px 12px;border-radius:6px;border:1px solid #f59e0b;background:transparent;color:#f59e0b;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">💡 Gợi Ý</button>
+      <button onclick="qaAutoFix()" id="btn-qa-autofix" style="padding:5px 12px;border-radius:6px;border:1px solid #a855f7;background:transparent;color:#a855f7;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">🔧 Auto-Fix</button>
+    </div>
+    <div id="dir-qa-hints" style="display:none;margin-top:8px;background:#0d0014;border:1px solid #3b0060;border-radius:7px;padding:10px;font-size:10px;color:var(--muted);line-height:1.9;font-family:'IBM Plex Mono',monospace"></div>
+  </div>
+
+  <!-- GENERATE BUTTON -->
+  <div style="display:flex;gap:8px;margin-bottom:12px;flex-wrap:wrap;align-items:center">
+    <button onclick="directorGenerate()" id="btn-dir-gen" style="padding:9px 20px;border-radius:8px;border:none;background:linear-gradient(135deg,#b45309,#f59e0b);color:#000;font-size:12px;font-family:'IBM Plex Mono',monospace;font-weight:700;cursor:pointer">⚡ AI Build Prompt</button>
+    <button onclick="directorAutoFill()" style="padding:7px 14px;border-radius:7px;border:1px solid #f59e0b;background:transparent;color:#f59e0b;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer" title="Tự điền từ Khung Sườn">← Auto-fill từ Khung Sườn</button>
+    <button onclick="directorClear()" style="padding:7px 12px;border-radius:7px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer">↺ Clear</button>
+    <span id="dir-status" style="font-size:10px;color:var(--muted);font-style:italic"></span>
+  </div>
+
+  <!-- OUTPUT PANEL -->
+  <div id="dir-output-panel" style="display:none">
+
+    <!-- DIRECTOR'S INTERPRETATION -->
+    <div style="background:#0d0d00;border:1px solid #2a2200;border-radius:8px;padding:11px;margin-bottom:8px">
+      <div style="font-size:10px;color:#f59e0b;font-weight:500;letter-spacing:.5px;margin-bottom:5px">🎬 DIỄN GIẢI ĐẠO DIỄN</div>
+      <div id="dir-interpretation" style="font-size:11px;color:var(--ink);line-height:1.8;white-space:pre-wrap;font-family:'IBM Plex Mono',monospace"></div>
+    </div>
+
+    <!-- BLOCKING MAP -->
+    <div style="background:#000d0d;border:1px solid #002a2a;border-radius:8px;padding:11px;margin-bottom:8px">
+      <div style="font-size:10px;color:#06b6d4;font-weight:500;letter-spacing:.5px;margin-bottom:5px">🗺️ BLOCKING MAP</div>
+      <div id="dir-blocking" style="font-size:11px;color:var(--ink);line-height:1.8;white-space:pre-wrap;font-family:'IBM Plex Mono',monospace"></div>
+    </div>
+
+    <!-- SEEDANCE PROMPT -->
+    <div style="background:#080d18;border:1px solid #1a3a6a;border-radius:8px;overflow:hidden;margin-bottom:8px">
+      <div style="padding:8px 12px;background:#0a1020;border-bottom:1px solid #1a3a6a;display:flex;align-items:center;justify-content:space-between">
+        <div style="font-size:11px;font-weight:600;color:#5b9cf6;letter-spacing:.5px">✨ SEEDANCE 2.0 PROMPT</div>
+        <div style="display:flex;gap:5px">
+          <button onclick="copyDirPrompt()" id="btn-cp-dir" style="padding:3px 10px;border-radius:5px;border:1px solid #5b9cf6;background:transparent;color:#5b9cf6;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⊕ Copy</button>
+          <button onclick="dirPromptToOutput()" style="padding:3px 10px;border-radius:5px;border:1px solid var(--green);background:transparent;color:var(--green);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Xuất Prompt</button>
+        </div>
+      </div>
+      <div id="dir-prompt" style="padding:13px;font-size:11px;line-height:1.9;white-space:pre-wrap;color:var(--ink);font-family:'IBM Plex Mono',monospace;max-height:500px;overflow-y:auto;word-break:break-word"></div>
+    </div>
+
+    <!-- QA CHECKLIST -->
+    <div style="background:#0a000d;border:1px solid #2a0040;border-radius:8px;padding:11px">
+      <div style="font-size:10px;color:#a855f7;font-weight:500;letter-spacing:.5px;margin-bottom:7px">✅ QA CHECKLIST — 12 ĐIỂM</div>
+      <div id="dir-qa" style="font-size:11px;color:var(--ink);line-height:2;font-family:'IBM Plex Mono',monospace"></div>
+    </div>
+
+  </div>
+
+</div>
 
 <!-- ===== THƯ VIỆN PROMPT ===== -->
 <div class="pane" id="p-lib">
@@ -2326,6 +2568,23 @@ document.querySelectorAll('.ec').forEach(c=>{
     i===-1?(MM[g].push(t),c.classList.add('on')):(MM[g].splice(i,1),c.classList.remove('on'));
   });
 });
+
+// ===== CẢM XÚC 2 NHÂN VẬT =====
+function chonEmoNV(n, el){
+  ['emo-nv1','emo-nv2'].forEach(id => {
+    const chip = document.getElementById(id);
+    if(chip){ chip.style.borderColor=''; chip.style.color=''; chip.style.background=''; }
+  });
+  ['emo-nv1-panel','emo-nv2-panel'].forEach(id => {
+    const p = document.getElementById(id);
+    if(p) p.style.display = 'none';
+  });
+  if(el){ el.style.borderColor='#a78bfa'; el.style.color='#a78bfa'; el.style.background='#0d0820'; }
+  const panel = document.getElementById('emo-nv' + n + '-panel');
+  if(panel) panel.style.display = '';
+  const lbl = document.getElementById('emo-nv-label');
+  if(lbl) lbl.textContent = 'Đang chọn cảm xúc cho NV' + n;
+}
 
 // ===== HOOKS DATA =====
 const SD_HOOKS=[
@@ -2671,16 +2930,24 @@ function buildCharacterBlock(lang){
     lines.push(skin);
   }
 
-  // Emotion inline with character
+  // Emotion NV1
   if((MM.emo && MM.emo.length) || (MM.sub && MM.sub.length)){
     lines.push('');
-    lines.push(isEN ? "[EMOTION — show don't tell]" : '[CẢM XÚC — thể hiện qua hành động]');
+    lines.push(isEN ? "[EMOTION NV1 — show don't tell]" : '[CẢM XÚC NV1 — thể hiện qua hành động]');
     if(MM.emo && MM.emo.length)
-      lines.push((isEN?'Emotion: ':'Cảm xúc: ') + MM.emo.map(e=>e.replace(/^\S+\s/,'')).join(', ') + '.');
+      lines.push((isEN?'Emotion: ':'Cảm xúc: ') + MM.emo.map(e=>e.replace(/^\S+\s/,'').replace(/\s*\[NV\d\]/,'')).join(', ') + '.');
     if(MM.sub && MM.sub.length)
       lines.push((isEN?'Subtext: ':'Nội tâm ẩn: ') + MM.sub.join(', ') + '.');
     if(SS.emo_intensity)
       lines.push((isEN?'Intensity: ':'Mức độ: ') + SS.emo_intensity + '/100.');
+    lines.push(isEN ? "Rule: Show don't tell — no direct emotional narration." : 'Nguyên tắc: Thể hiện qua hành động — không khai báo trực tiếp.');
+  }
+
+  // Emotion NV2
+  if(MM.emo2 && MM.emo2.length){
+    lines.push('');
+    lines.push(isEN ? "[EMOTION NV2 — show don't tell]" : '[CẢM XÚC NV2 — thể hiện qua hành động]');
+    lines.push((isEN?'Emotion: ':'Cảm xúc: ') + MM.emo2.map(e=>e.replace(/^\S+\s/,'').replace(/\s*\[NV\d\]/,'')).join(', ') + '.');
     lines.push(isEN ? "Rule: Show don't tell — no direct emotional narration." : 'Nguyên tắc: Thể hiện qua hành động — không khai báo trực tiếp.');
   }
 
@@ -2750,6 +3017,31 @@ function buildSceneBlock(lang){
       : '';
     lines.push((isEN?'[ENVIRONMENT & PARTICLES]':'[HẠT & MÔI TRƯỜNG]') + (cei?' — '+cei:''));
     ce.forEach(e => lines.push('• ' + e));
+  }
+
+  // ── PHONG CÁCH — MASTER LOCK (không thêm lại ở nơi khác) ──
+  const pc  = gVal('style-desc') || '';
+  const hasStyle = MM.director.length || MM.visual.length || MM.colorgrade.length || MM.filmstock.length || pc;
+  if(hasStyle){
+    lines.push('');
+    lines.push(isEN ? '[STYLE]' : '[PHONG CÁCH]');
+    if(MM.director.length)   lines.push((isEN?'Visual reference: ':'Tham chiếu: ')   + MM.director.join(', ')   + '.');
+    if(MM.filmstock.length)  lines.push((isEN?'Film stock: ':'Film stock: ')          + MM.filmstock.join(', ')  + '.');
+    if(MM.colorgrade.length) lines.push((isEN?'Color grade: ':'Color grade: ')        + MM.colorgrade.join(', ') + '.');
+    if(MM.visual.length)     lines.push((isEN?'Visual style: ':'Hình ảnh: ')          + MM.visual.join(', ')     + '.');
+    if(pc) lines.push(pc);
+  }
+
+  // ── CHẤT LƯỢNG — MASTER LOCK (không thêm lại ở nơi khác) ──
+  const ql = [...(MM.grain||[]), ...(MM.quality||[])];
+  if(SS.res || SS.fps || ql.length){
+    lines.push('');
+    lines.push(isEN ? '[QUALITY]' : '[CHẤT LƯỢNG]');
+    const qParts = [];
+    if(SS.res) qParts.push(SS.res);
+    if(SS.fps) qParts.push(SS.fps);
+    if(ql.length) qParts.push(ql.join(', '));
+    lines.push(qParts.join('. ') + '.');
   }
 
   return lines;
@@ -2894,19 +3186,8 @@ function taoVI(){
     MM.special_fx.forEach(fx=>L.push('• '+fx.replace(/^[^ ]+ /,'')));
     L.push('');
   }
-  if(MM.director.length||MM.visual.length||MM.colorgrade.length||pc){L.push('[PHONG CÁCH]');
-    if(MM.director.length)L.push('Tham chiếu: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grade: '+MM.colorgrade.join(', ')+'.');if(MM.visual.length)L.push('Hình ảnh: '+MM.visual.join(', ')+'.');if(pc)L.push(pc);L.push('');}
-  const cl=[];if(SS.res)cl.push(SS.res);if(SS.fps)cl.push(SS.fps);MM.grain.forEach(g=>cl.push(g));MM.qtag.forEach(q=>cl.push(q));
-  if(cl.length){L.push('[CHẤT LƯỢNG]');L.push(cl.join(', ')+'.');L.push('');}
-  // Emotion handled inside buildCharacterBlock — removed duplicate here
-  // ===== CHAOS ELEMENTS =====
-  const _ce = MM.chaos_env || [];
-  const _cei = SS.chaos_env_intensity ? `mật độ ${SS.chaos_env_intensity}/100 — ${getChaosLabel(SS.chaos_env_intensity, CHAOS_ENV_LABELS)}` : '';
-  if(_ce.length){
-    L.push('[HẠT & MÔI TRƯỜNG]' + (_cei ? ' — ' + _cei : ''));
-    _ce.forEach(e => L.push('• ' + e));
-    L.push('');
-  }
+  // ── PHONG CÁCH, CHẤT LƯỢNG, HẠT & MÔI TRƯỜNG ──
+  // Đã được thêm vào buildSceneBlock('vi') ở trên — KHÔNG thêm lại ở đây
 
   if(MM.prohibit.length||MM.consist.length||rb){L.push('[RÀNG BUỘC]');if(MM.prohibit.length){
     // Separate hand anatomy constraints for emphasis
@@ -3009,7 +3290,7 @@ function taoSD(){
     });
     L.push('');
   }
-  if(MM.director.length||MM.colorgrade.length||pc){L.push('[STYLE]');if(MM.director.length)L.push('Visual reference: '+MM.director.join(', ')+'.');if(MM.filmstock.length)L.push('Film stock: '+MM.filmstock.join(', ')+'.');if(MM.colorgrade.length)L.push('Color grading: '+MM.colorgrade.join(', ')+'.');if(pc)L.push(pc);L.push('');}
+  // ── STYLE, QUALITY ── already in buildSceneBlock('en') above — do NOT add again
   const ql=[];if(SS.res)ql.push(SS.res);if(SS.fps)ql.push(SS.fps);MM.grain.forEach(g=>ql.push(g));MM.qtag.forEach(q=>ql.push(q));
   // Map SS.res → Seedance valid aspect_ratio
   const resMapSD = {
@@ -3149,34 +3430,6 @@ function lamMoi(){
   document.getElementById('nut-cp').style.display='none';document.getElementById('nut-vi').style.display='none';document.getElementById('nut-sd').style.display='none';document.getElementById('nut-cg').style.display='none';document.getElementById('ghi-chu').style.display='none';
   themShot();themShot();veTimeline();capNhat();
 }
-
-// ===== GIỌNG NÓI =====
-let nhanDang=null,vanBan='',lichSu=[];
-function kiemTra(){const ok=!!(window.SpeechRecognition||window.webkitSpeechRecognition);if(!ok){document.getElementById('canh-bao').style.display='block';document.getElementById('panel-stt').style.opacity='.4';document.getElementById('panel-stt').style.pointerEvents='none';}else document.getElementById('stt-dot').classList.add('ready');return ok;}
-function batDau(){
-  if(!kiemTra())return;
-  const SR=window.SpeechRecognition||window.webkitSpeechRecognition;nhanDang=new SR();
-  nhanDang.lang=document.getElementById('ng-ngu').value;nhanDang.continuous=document.getElementById('che-do').value==='continuous';nhanDang.interimResults=true;
-  nhanDang.onstart=()=>{document.getElementById('stt-dot').className='vdot listening';document.getElementById('tt-stt').textContent='Đang nghe...';document.getElementById('nut-noi').style.display='none';document.getElementById('nut-dung').style.display='';};
-  nhanDang.onresult=(e)=>{let tam='',cuoi='';for(let i=e.resultIndex;i<e.results.length;i++){const t=e.results[i][0].transcript;if(e.results[i].isFinal){cuoi+=t+' ';themLS(t.trim());}else tam+=t;}if(cuoi)vanBan+=cuoi;document.getElementById('hop-vb').innerHTML=(vanBan||'')+(tam?`<span class="interim">${tam}</span>`:'');if(!vanBan&&!tam)document.getElementById('hop-vb').innerHTML='<span class="vph">Đang nghe...</span>';};
-  nhanDang.onerror=(e)=>{const loi={'not-allowed':'Cho phép microphone.','no-speech':'Không nghe thấy.','network':'Lỗi mạng.'};document.getElementById('tt-stt').textContent=loi[e.error]||'Lỗi: '+e.error;};
-  nhanDang.onend=()=>{document.getElementById('stt-dot').className='vdot ready';document.getElementById('tt-stt').textContent='Hoàn thành';document.getElementById('nut-noi').style.display='';document.getElementById('nut-dung').style.display='none';};
-  nhanDang.start();
-}
-function dungNoi(){if(nhanDang)nhanDang.stop();}
-function xoaVB(){vanBan='';document.getElementById('hop-vb').innerHTML='<span class="vph">Nhấn "Bắt đầu nói"...</span>';}
-function themLS(t){if(!t)return;lichSu.unshift({id:Date.now(),t});if(lichSu.length>15)lichSu.pop();veLS();}
-function veLS(){document.getElementById('lich-su').innerHTML=lichSu.length?lichSu.map(h=>`<div class="vitem"><span>${h.t}</span><span class="vitag">VN</span><button class="videl" onclick="lichSu=lichSu.filter(x=>x.id!=${h.id});veLS()">✕</button></div>`).join(''):'<div style="font-size:11px;color:var(--muted);font-style:italic">Chưa có...</div>';}
-function dien(id){const t=vanBan.trim();if(!t)return;if(id==='hop-doc'){document.getElementById('hop-doc').textContent=t;}else{const e=document.getElementById(id);if(e)e.value=(e.value?e.value+'\n':'')+t;capNhat();}}
-function dienShot(){const t=vanBan.trim();if(!t||!cacShot.length)return;const s=cacShot[cacShot.length-1];s.moTa=(s.moTa?s.moTa+' ':'')+t;veShot();sw('shots');}
-function dienThoai(){const t=vanBan.trim();if(!t)return;if(!dsThoai.length)themThoai();const d=dsThoai[dsThoai.length-1];d.loi=(d.loi?d.loi+' ':'')+t;veThoai();sw('thoai');}
-let dsGiong=[];
-function taiGiong(){dsGiong=window.speechSynthesis.getVoices();const s=document.getElementById('chon-giong');const vi=dsGiong.filter(v=>v.lang.startsWith('vi'));const kh=dsGiong.filter(v=>!v.lang.startsWith('vi'));s.innerHTML='';if(vi.length){const g=document.createElement('optgroup');g.label='🇻🇳 Tiếng Việt';vi.forEach(v=>{const o=document.createElement('option');o.value=v.name;o.textContent=v.name;g.appendChild(o);});s.appendChild(g);}if(kh.length){const g=document.createElement('optgroup');g.label='Khác';kh.slice(0,8).forEach(v=>{const o=document.createElement('option');o.value=v.name;o.textContent=v.name+' ('+v.lang+')';g.appendChild(o);});s.appendChild(g);}if(!dsGiong.length)s.innerHTML='<option>Chưa có giọng</option>';}
-if(window.speechSynthesis){window.speechSynthesis.onvoiceschanged=taiGiong;taiGiong();}
-function docTo(){if(!window.speechSynthesis)return;const nd=(document.getElementById('hop-doc').textContent||'').trim();if(!nd)return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(nd);const gn=document.getElementById('chon-giong').value;const g=dsGiong.find(v=>v.name===gn);if(g)u.voice=g;u.lang='vi-VN';u.rate=parseFloat(document.getElementById('toc-do').value)||1;u.pitch=parseFloat(document.getElementById('cao-do').value)||1;u.onstart=()=>{document.getElementById('tts-dot').className='vdot listening';document.getElementById('tt-tts').textContent='Đang đọc...';};u.onend=u.onerror=()=>{document.getElementById('tts-dot').className='vdot ready';document.getElementById('tt-tts').textContent='Sẵn sàng';};window.speechSynthesis.speak(u);}
-function dungDoc(){window.speechSynthesis.cancel();document.getElementById('tts-dot').className='vdot ready';document.getElementById('tt-tts').textContent='Sẵn sàng';}
-function docPrompt(){const nd=dangHien==='vi'?kqVI:dangHien==='cg'?kqCG:kqSD;if(!nd)return;document.getElementById('hop-doc').textContent=nd;sw('voice');setTimeout(docTo,300);}
-
 
 // ===== CLAUDE AI — DỊCH & CẢI THIỆN =====
 let aiKey = sessionStorage.getItem('annahouseKey') || '';
@@ -5668,6 +5921,61 @@ Bright light-grey seamless studio backdrop, no texture or props. Honest front fl
 
 
 
+function taoCharPrompt(){
+  const {nv, wardrobe} = layChung();
+  const face    = gVal('char-face');
+  const eyes    = gVal('char-eyes');
+  const hair    = gVal('char-hair');
+  const costume = gVal('char-costume') || wardrobe;
+  const mark    = gVal('char-mark');
+  const nat     = (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ');
+  const gender  = {'Nam':'Male','Nữ':'Female','Trung tính':'Non-binary','Robot / AI':'Robot/AI'}[SS.gender] || SS.gender || '';
+  const age     = SS.age || '';
+  const skin    = SS.skin_tone || '';
+  const eyeC    = SS.eye_color || '';
+  const hairC   = SS.hair_color || '';
+  const hairS   = SS.hair_style || '';
+  const face_s  = SS.face_shape || '';
+  const lines = [];
+  if(nat||gender||age) lines.push([nat,gender,age].filter(Boolean).join(', ') + '.');
+  if(nv) lines.push(nv);
+  if(face_s) lines.push('Face shape: ' + face_s + '.');
+  if(skin)   lines.push('Skin: ' + skin + '.');
+  if(eyeC)   lines.push('Eyes: ' + eyeC + (SS.eye_shape ? ', ' + SS.eye_shape : '') + '.');
+  if(hairC||hairS) lines.push('Hair: ' + [hairC, hairS].filter(Boolean).join(', ') + '.');
+  if(face)   lines.push(face);
+  if(eyes)   lines.push(eyes);
+  if(hair)   lines.push(hair);
+  if(mark)   lines.push('Identifying marks: ' + mark);
+  if(costume) lines.push('[WARDROBE — LOCKED] ' + costume);
+  charPromptText = lines.join('\n');
+  const preview = document.getElementById('char-preview');
+  if(preview) preview.textContent = charPromptText || '(Chưa có thông tin nhân vật)';
+  const cpBtn = document.getElementById('nut-cp-char');
+  if(cpBtn) cpBtn.style.display = charPromptText ? '' : 'none';
+  const addBtn = document.getElementById('nut-add-char');
+  if(addBtn) addBtn.style.display = charPromptText ? '' : 'none';
+  const sheetBtn = document.getElementById('nut-char-sheet');
+  if(sheetBtn) sheetBtn.style.display = charPromptText ? '' : 'none';
+}
+
+function copySBPrompt(id){
+  const s = cacShot.find(x => x.id === id);
+  if(!s || !s.sbPrompt) return;
+  robustCopy(s.sbPrompt, null);
+}
+
+function luuSBPrompt(id, text){
+  const s = cacShot.find(x => x.id === id);
+  if(s) s.sbPrompt = text;
+}
+
+function docPrompt(){
+  const nd = dangHien === 'vi' ? kqVI : dangHien === 'cg' ? kqCG : kqSD;
+  if(!nd){ alert('Tạo prompt trước.'); return; }
+  robustCopy(nd, null);
+}
+
 async function taoCharPromptAI(){
   const face = gVal('char-face');
   const eyes = gVal('char-eyes');
@@ -6734,20 +7042,46 @@ async function apDungMot(idx){
 
 function apDungTatCa(){
   if(!kbShotData.length){ alert('Chưa có shot nào.'); return; }
-  // Clear existing shots and add in correct order
+
+  // Nếu đã có shots → hỏi user
+  if(cacShot.length > 0){
+    const choice = confirm(
+      `Dựng Cảnh đang có ${cacShot.length} shot.\n\n` +
+      `• OK → Thêm vào cuối (giữ nguyên shots cũ)\n` +
+      `• Cancel → Thay thế hoàn toàn (xoá shots cũ)`
+    );
+    if(!choice){
+      // Replace — clear trước
+      cacShot = [];
+      soId = Math.max(0, ...cacShot.map(s=>s.id), 0);
+    }
+    // OK → append (giữ nguyên cacShot, chỉ thêm vào)
+  }
+
+  // Tính start time tiếp theo nếu append
+  const lastEnd = cacShot.length > 0 ? Math.max(...cacShot.map(s => s.end || 0)) : 0;
+  let timeOffset = cacShot.length > 0 ? lastEnd : 0;
+
   kbShotData.forEach((s, i) => {
     soId++;
-    const start = s.startSec !== null && s.startSec !== undefined ? s.startSec : (i * 5);
-    const end   = s.endSec   !== null && s.endSec   !== undefined ? s.endSec   : (start + 5);
+    let start = s.startSec !== null && s.startSec !== undefined ? s.startSec : (i * 5);
+    let end   = s.endSec   !== null && s.endSec   !== undefined ? s.endSec   : (start + 5);
+
+    // Nếu append, offset timing
+    if(cacShot.length > 0 && timeOffset > 0){
+      start = timeOffset + (s.startSec || i * 5);
+      end   = timeOffset + (s.endSec   || start + 5 - (s.startSec || 0));
+    }
+
     cacShot.push({
       id: soId, start, end, tg: Math.max(end - start, 1),
       cuMay: s.cam || '', angle: '', lens: s.lens || '', speed: '',
       shotSize: s.shotSize || '', specialFx: '',
-      moTa: s.prompt || s.action || s.fullBlock.slice(0,200) || '',
-      shotPrompt: '',
-      thoai: 'Không thoại'
+      moTa: s.prompt || s.action || (s.fullBlock||'').slice(0,200) || '',
+      shotPrompt: '', thoai: 'Không thoại'
     });
   });
+
   veShot();
   sw('shots');
   document.querySelectorAll('[onclick="apDungTatCa()"]').forEach(btn => {
@@ -7008,56 +7342,90 @@ async function taoStoryboardPrompt(id){
   if(!s) return;
 
   const wrap = document.getElementById('shot-sb-wrap-' + id);
-  const el = document.getElementById('shot-sb-' + id);
+  const el   = document.getElementById('shot-sb-' + id);
   if(wrap) wrap.style.display = 'block';
-  if(el) el.textContent = '⏳ Đang tạo prompt storyboard...';
+  if(el)   el.textContent = '⏳ Đang tạo prompt storyboard...';
 
-  const cam = s.cuMay || 'static shot';
-  const lens = s.lens || '50mm';
-  const size = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS';
-  const fx = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
-  const content = s.moTa || s.shotPrompt || '';
-  const timing = `${s.start}s → ${s.end}s (${s.tg}s)`;
+  // Shot data
+  const cam      = s.cuMay   || 'static shot';
+  const lens     = s.lens    || '50mm';
+  const size     = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS';
+  const fx       = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
+  const content  = s.moTa || s.shotPrompt || '';
+  const startT   = typeof s.start === 'number' ? s.start : 0;
+  const endT     = typeof s.end   === 'number' ? s.end   : startT + (s.tg||5);
+  const durT     = (endT - startT).toFixed(1);
+  const timing   = `${startT}s → ${endT}s (${durT}s)`;
 
-  const nv = gVal('subject-desc') || '';
-  const genre = SS.genre || 'cinematic drama';
-  const emo = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
-  const lightType = (MM.light_type||[]).slice(0,2).join(', ') || 'natural cinematic light';
-  const colorPal = SS.pal || 'muted cinematic palette';
-  const director = (MM.director||[]).slice(0,2).join(', ');
-  const skin = SS.skin_level || '';
-  const nationality = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
+  // Project context
+  const nv         = gVal('subject-desc') || '';
+  const charLock   = charPromptText ? charPromptText.slice(0, 400) : '';
+  const wardrobe   = gVal('wardrobe-lock') || gVal('char-costume') || '';
+  const face       = gVal('char-face') || '';
+  const eyes       = gVal('char-eyes') || '';
+  const genre      = SS.genre || 'cinematic';
+  const emo        = (MM.emo||[]).slice(0,3).map(e=>e.replace(/^\S+\s/,'')).join(', ');
+  const lightType  = SS.light_setup || (MM.light_type||[]).slice(0,2).join(', ') || '';
+  const lightColor = (MM.light_color||[]).slice(0,2).join(', ') || '';
+  const colorPal   = SS.pal || '';
+  const director   = (MM.director||[]).slice(0,2).join(', ');
+  const nat        = (MM.nationality||[]).slice(0,1).map(n=>n.replace(/^.{2,3}\s/,'')).join('');
+  const skinLvl    = SS.skin_level || '';
+  const sceneCtx   = buildSceneBlock('en').join(' ').slice(0, 300);
+  const bmLut      = (typeof bmLutSelected !== 'undefined' && bmLutSelected) ? bmLutSelected.split('—')[0].trim() : '';
+  const bmProfile  = SS.bm_profile || '';
+  const grain      = (MM.grain||[]).join(', ') || '';
 
-  const system = `You are a world-class cinematographer and storyboard artist.
-Create a HIGHLY DETAILED, PHOTOREALISTIC image generation prompt for ONE storyboard frame.
-Optimized for GPT Image / DALL-E 3 / Midjourney / Flux.
+  const system = `You are a world-class DOP and storyboard artist optimizing for Seedance 2.0 Image-to-Video generation.
 
-MANDATORY elements to include:
-1. SHOT: exact framing (ECU/CU/MCU/MS/WS/ELS) + subject position in frame
-2. CAMERA: lens mm, aperture f/stop, camera height, tilt angle
-3. SUBJECT: nationality, age, physical details, exact pose, micro-expression, muscle tension
-4. SKIN: SSS subsurface scattering, pore detail, vellus hair, natural imperfection — NO AI smoothing
-5. LIGHTING: color temperature Kelvin, direction, ratio key:shadow, practical sources, rim/fill
-6. DEPTH: 3 layers — foreground detail, midground action, background atmosphere
-7. COLOR: specific palette, grade reference (Kodak 5219 / Fuji 400H / etc)
-8. ATMOSPHERE: dust, smoke, steam, particles, weather
-9. TECHNICAL: film grain %, lens flare character, anamorphic oval bokeh if applicable
-10. STYLE: director reference, film reference
+Your task: Write a SINGLE FROZEN FRAME image prompt — the perfect keyframe that Seedance will use as start_image for I2V generation.
 
-Output ONLY the prompt. No explanation. No headers. Pure descriptive text.`;
+This is NOT a video prompt. It is a STILL IMAGE that will become the first frame of a Seedance video.
 
-  const userMsg = `Create storyboard image prompt:
+CRITICAL: The image must encode maximum cinematic information so Seedance can continue it into motion.
 
-SHOT: ${size} | ${cam} | ${lens} | timing: ${timing}
-CONTENT: ${content || 'Cinematic scene'}
-${fx ? 'FX: ' + fx : ''}
-SUBJECT: ${nationality ? nationality + ', ' : ''}${nv || 'character'}
-EMOTION: ${emo || 'tension, quiet drama'}
-LIGHTING: ${lightType}
-COLOR: ${colorPal}
+OUTPUT FORMAT — use these exact sections in order:
+
+[FRAME] {shot_size} — {subject position in frame, depth layer}. {camera}: {lens}mm f/{aperture}, {height}. Static frozen frame.
+
+[SUBJECT] {nationality, age, build}. Exact frozen pose: {muscle groups engaged, joint angles, weight distribution}. Gaze: {direction, eye state}. Expression: {specific facial muscles — not emotion words}. ${wardrobe ? 'Costume: ' + wardrobe.slice(0,100) + '.' : ''}
+
+[SKIN] SSS: warm pink-red at ear edges, nostrils, inner eye corners. Micro-pore topology: nose bridge, cheekbones. Vellus hair catching rim light. Capillary flush undertone. T-zone oil sheen. NO AI smoothing. Biological imperfection = cinematic truth.
+
+[LIGHTING] {Kelvin}K {direction}° key. {ratio} fill. {rim color} rim. Practical: {source}. Shadow: {density}% under {location}. Motivated by: {light source in scene}.
+
+[DEPTH] FG: {foreground element 0–1m}. MG: {subject + immediate environment 1–4m}. BG: {background 4m+, bokeh level}.
+
+[ATMOSPHERE] {particles/dust/steam/haze density and behavior}. Air: {quality — humid/dry/smoky}.
+
+[COLOR] Film: {stock reference}. Grade: {shadow tone} shadows, {highlight tone} highlights. Palette: {dominant colors}.
+
+[SEEDANCE_MOTION_HINT] {1 sentence describing what movement Seedance should generate from this frame — this helps encode motion potential into the image}
+
+[CONSTRAINTS] No motion blur. No duplicate limbs. No warped faces. No AI smoothing. No floating elements. Sharp focus on subject. Photorealistic film photography.
+
+Write in plain cinematic English. Use exact numbers everywhere. Output ONLY the formatted prompt — no explanation, no preamble.`;
+
+  const userMsg = `Create Seedance I2V keyframe prompt for this shot:
+
+SHOT: ${size} | Camera: ${cam} | Lens: ${lens} | Timing: ${timing}
+${fx ? 'SPECIAL FX (frozen at peak of): ' + fx : ''}
+ACTION (frozen at peak moment): ${content || 'Cinematic scene'}
+SUBJECT: ${nat ? nat + ', ' : ''}${nv}
+${face ? 'FACE: ' + face.slice(0,120) : ''}
+${eyes ? 'EYES: ' + eyes.slice(0,80) : ''}
+EMOTION: ${emo || 'quiet controlled tension'}
+SCENE: ${sceneCtx}
+LIGHTING SETUP: ${lightType}${lightColor ? ' | Color: ' + lightColor : ''}
+COLOR PALETTE: ${colorPal}
 GENRE: ${genre}
-${director ? 'STYLE REF: ' + director : ''}
-${skin ? 'SKIN LEVEL: ' + skin : ''}`;
+${director ? 'DIRECTOR REF: ' + director : ''}
+${bmLut ? 'LUT: ' + bmLut : ''}${bmProfile ? ' | Camera: ' + bmProfile : ''}
+${grain ? 'GRAIN: ' + grain : ''}
+${skinLvl ? 'SKIN DETAIL LEVEL: ' + skinLvl : ''}
+${charLock ? '\nCHARACTER LOCK:\n' + charLock : ''}
+
+IMPORTANT: This image will be used as start_image for Seedance 2.0 I2V generation. Encode motion potential — the pose, lighting, and composition should suggest the movement that follows.`;
 
   let acc = '';
   try {
@@ -7065,12 +7433,35 @@ ${skin ? 'SKIN LEVEL: ' + skin : ''}`;
       acc += chunk;
       if(el) el.textContent = acc;
     });
-    s.sbPrompt = acc;
-    if(el){ el.textContent = acc; el.contentEditable = 'true'; }
+    s.sbPrompt = acc.trim();
+    if(el){
+      el.textContent = s.sbPrompt;
+      el.contentEditable = 'true';
+    }
+    // Show Higgsfield I2V guide after prompt
+    const guideId = 'shot-i2v-guide-' + id;
+    let guide = document.getElementById(guideId);
+    if(!guide){
+      guide = document.createElement('div');
+      guide.id = guideId;
+      guide.style.cssText = 'margin-top:8px;padding:8px 10px;background:#050d1a;border:1px solid #1a3a6a;border-radius:7px;font-size:10px;color:var(--muted);line-height:1.8;font-family:"IBM Plex Mono",monospace';
+      guide.innerHTML = `<div style="color:#5b9cf6;font-weight:500;margin-bottom:4px">🚀 NEXT: Upload → Higgsfield I2V</div>
+1. Copy prompt bên trên → paste vào <strong style="color:var(--ink)">GPT Image 2</strong> hoặc <strong style="color:var(--ink)">Nano Banana Pro</strong><br>
+2. Download ảnh keyframe<br>
+3. Upload lên <strong style="color:var(--ink)">Higgsfield</strong> → <strong style="color:#f59e0b">Avatar Shots</strong> hoặc <strong style="color:#f59e0b">Generate Video</strong><br>
+4. Chọn <strong style="color:#4ade80">Image-to-Video (I2V)</strong> → set ảnh làm <strong>start_image</strong><br>
+5. Paste shot prompt từ <strong style="color:var(--gold)">✨ Prompt</strong> làm video prompt<br>
+6. Model: <strong style="color:var(--ink)">Seedance 2.0</strong> | Duration: <strong style="color:var(--ink)">${durT}s</strong> | AR: <strong style="color:var(--ink)">${({'16:9 — Ngang (Cinema)':'16:9','9:16 — Dọc (Reels / TikTok)':'9:16','1:1 — Vuông (Instagram)':'1:1'}[SS.res]||SS.res||'16:9')}</strong>`;
+      const sbWrap = document.getElementById('shot-sb-wrap-' + id);
+      if(sbWrap) sbWrap.appendChild(guide);
+    }
+    guide.style.display = '';
+
   } catch(e) {
     if(el) el.textContent = '❌ ' + e.message;
   }
 }
+
 
 
 
@@ -7540,12 +7931,16 @@ let sbLayout = '2x2';
 let sbStyle = 'film';
 
 function chonSBLayout(val, el){
+  // Normalize key aliases
+  if(val === '1x4') val = '1x4 strip';
   sbLayout = val;
   document.querySelectorAll('[onclick^="chonSBLayout"]').forEach(c => {
     c.classList.remove('on');
     c.style.borderColor = ''; c.style.color = ''; c.style.background = '';
   });
   if(el){ el.classList.add('on'); el.style.borderColor='#818cf8'; el.style.color='#818cf8'; el.style.background='#080d1e'; }
+  // Auto chip gets its own color
+  if(val === 'auto' && el){ el.style.borderColor='#4ade80'; el.style.color='#4ade80'; el.style.background='#001a0a'; }
 }
 
 function chonSBStyle(val, el){
@@ -7565,12 +7960,30 @@ const SB_STYLE_MAP = {
 };
 
 const SB_LAYOUT_MAP = {
+  '1x2':      { cols: 2, rows: 1, total: 2,  desc: '2 panels horizontal strip' },
+  '1x3':      { cols: 3, rows: 1, total: 3,  desc: '3 panels horizontal strip' },
   '2x2':      { cols: 2, rows: 2, total: 4,  desc: '2 columns × 2 rows grid' },
+  '2+3':      { cols: 3, rows: 2, total: 5,  desc: '2 panels top + 3 panels bottom' },
   '2x3':      { cols: 2, rows: 3, total: 6,  desc: '2 columns × 3 rows grid' },
   '3x2':      { cols: 3, rows: 2, total: 6,  desc: '3 columns × 2 rows grid' },
   '3x3':      { cols: 3, rows: 3, total: 9,  desc: '3 columns × 3 rows grid' },
   '1x4 strip':{ cols: 4, rows: 1, total: 4,  desc: '4 panels horizontal strip' },
+  'auto':     { cols: 0, rows: 0, total: 0,  desc: 'Auto' },
 };
+
+// Auto-select best layout for shot count
+function bestLayoutForShots(n){
+  if(n === 1) return { cols: 1, rows: 1, total: 1, desc: '1 panel' };
+  if(n === 2) return SB_LAYOUT_MAP['1x2'];
+  if(n === 3) return SB_LAYOUT_MAP['1x3'];
+  if(n === 4) return SB_LAYOUT_MAP['2x2'];
+  if(n === 5) return SB_LAYOUT_MAP['2+3'];
+  if(n === 6) return SB_LAYOUT_MAP['3x2'];
+  if(n === 7) return { cols: 4, rows: 2, total: 7, desc: '4+3 panels' };
+  if(n === 8) return { cols: 4, rows: 2, total: 8, desc: '4×2 panels' };
+  if(n === 9) return SB_LAYOUT_MAP['3x3'];
+  return { cols: 4, rows: Math.ceil(n/4), total: n, desc: `${n} panels grid` };
+}
 
 function taoSBGridPrompt(){
   if(!cacShot.length){ alert('Thêm shots trước trong tab 🎥 Dựng Cảnh.'); return; }
@@ -7582,13 +7995,18 @@ function taoSBGridPrompt(){
 
   if(panel) panel.style.display = '';
 
-  const layout  = SB_LAYOUT_MAP[sbLayout] || SB_LAYOUT_MAP['2x2'];
+  // AUTO-FIT: dùng layout user chọn hoặc auto-fit theo số shots
+  const userLayout = SB_LAYOUT_MAP[sbLayout];
+  const actualShots = cacShot.length;
+  const layout = (sbLayout === 'auto' || !userLayout || userLayout.total > actualShots)
+    ? bestLayoutForShots(actualShots)
+    : userLayout;
+
   const styleDesc = SB_STYLE_MAP[sbStyle] || SB_STYLE_MAP.film;
 
-  // Take shots up to layout total, cycle if fewer shots
-  const totalPanels = layout.total;
+  // Dùng đúng số shots thực tế — KHÔNG cycle, KHÔNG pad
+  const totalPanels = Math.min(layout.total, actualShots);
   const shots = cacShot.slice(0, totalPanels);
-  while(shots.length < totalPanels) shots.push(cacShot[shots.length % cacShot.length]);
 
   // Character context
   const nv      = gVal('subject-desc') || '';
@@ -7608,39 +8026,32 @@ function taoSBGridPrompt(){
       s.lens || '50mm',
     ].filter(Boolean).join(', ');
     const fx = s.specialFx && s.specialFx !== 'Không' ? ` | FX: ${s.specialFx}` : '';
-    const timing = `${s.start}s–${s.end}s (${(s.tg||s.end-s.start||5).toFixed(1)}s)`;
+    // Timing — luôn hiển thị
+    const startT = typeof s.start === 'number' ? s.start : 0;
+    const endT   = typeof s.end   === 'number' ? s.end   : (startT + (s.tg||5));
+    const durT   = (endT - startT).toFixed(1);
+    const timing = `${startT}s–${endT}s (${durT}s)`;
 
-    // Extract clean content — ưu tiên: _prompt > sbPrompt (cleaned) > moTa
+    // Nội dung — ưu tiên sbPrompt cleaned > _prompt > moTa
     let content = '';
-    if(s._prompt && s._prompt.length > 20){
-      // Extract [SUBJECT] + [SCENE] from structured prompt
-      const subj = s._prompt.match(/\[SUBJECT\](.*?)(?=\[|$)/s)?.[1]?.trim() || '';
-      const scene = s._prompt.match(/\[SCENE\](.*?)(?=\[|$)/s)?.[1]?.trim() || '';
-      const action = s._prompt.match(/\[ACTION\](.*?)(?=\[|$)/s)?.[1]?.trim() || '';
-      content = [subj, action, scene].filter(Boolean).join('. ').slice(0, 300);
-    } else if(s.sbPrompt && s.sbPrompt.length > 20){
-      // Clean sbPrompt — xoá metadata thừa, lấy nội dung thực
-      const cleaned = s.sbPrompt
-        .replace(/\*+/g, '')                        // remove markdown **
-        .replace(/\(shot gốc[^)]*\)/gi, '')          // remove "(shot gốc...)"
-        .replace(/\(phần còn lại[^)]*\)/gi, '')      // remove "(phần còn lại...)"
-        .replace(/\(shot bổ sung[^)]*\)/gi, '')       // remove "(shot bổ sung...)"
-        .replace(/\[FRAME\][^\n]*/gi, '')             // remove [FRAME] header line
-        .replace(/\[SUBJECT\]/gi, '')
-        .replace(/\[SCENE\]/gi, '')
-        .replace(/\[LIGHTING\]/gi, '')
-        .replace(/\[DEPTH\]/gi, '')
-        .replace(/\[ATMOSPHERE\]/gi, '')
-        .replace(/\[COLOR\]/gi, '')
-        .replace(/\[CONSTRAINTS\]/gi, '')
-        .replace(/\n{3,}/g, '\n\n')
-        .trim();
-      content = cleaned.slice(0, 400);
+    if(s.sbPrompt && s.sbPrompt.length > 20){
+      content = s.sbPrompt
+        .replace(/\*+/g,'')
+        .replace(/\(shot gốc[^)]*\)/gi,'')
+        .replace(/\(phần còn lại[^)]*\)/gi,'')
+        .replace(/\(shot bổ sung[^)]*\)/gi,'')
+        .replace(/\[FRAME\][^\n]*/gi,'')
+        .replace(/\[SUBJECT\]|\[SCENE\]|\[LIGHTING\]|\[DEPTH\]|\[ATMOSPHERE\]|\[COLOR\]|\[CONSTRAINTS\]/gi,'')
+        .replace(/\n{2,}/g,' ')
+        .trim()
+        .slice(0, 300);
+    } else if(s._prompt && s._prompt.length > 20){
+      content = s._prompt.slice(0, 300);
     } else {
-      content = (s.moTa || s.shotPrompt || `Shot ${i+1} — cinematic frame`).slice(0, 300);
+      content = (s.moTa || s.shotPrompt || `Shot ${i+1}`).slice(0, 200);
     }
 
-    return `Panel ${i+1} [${timing}]: ${shotLabel}${fx}.\n${content}`;
+    return `PANEL ${i+1} [${timing}] — ${shotLabel}${fx}:\n${content}`;
   });
 
   const L = [];
@@ -7649,8 +8060,9 @@ function taoSBGridPrompt(){
   L.push('═'.repeat(55));
   L.push('');
   L.push('[GRID SPECIFICATION]');
-  L.push(`Layout: ${sbLayout} — ${layout.desc}`);
-  L.push(`Total panels: ${totalPanels} | Style: ${sbStyle.toUpperCase()}`);
+  L.push(`Layout: ${layout.cols > 0 ? layout.cols+'×'+layout.rows : 'auto'} — ${layout.desc}`);
+  L.push(`Panels: ${totalPanels} (= số shots thực tế) | Style: ${sbStyle.toUpperCase()}`);
+  L.push(`Total duration: ${shots.reduce((a,s)=>a+(s.tg||0),0).toFixed(1)}s across ${totalPanels} shots`);
   L.push(`Visual style: ${styleDesc}`);
   L.push('');
   L.push('[HOW TO USE]');
@@ -7664,28 +8076,26 @@ function taoSBGridPrompt(){
 
   // The actual GPT Image 2 prompt
   const gptPrompt = [
-    `Create a professional ${layout.desc} storyboard grid. ${totalPanels} panels total, each panel clearly numbered (1, 2, 3...).`,
+    `Create a professional storyboard grid with exactly ${totalPanels} panels${layout.cols > 0 ? ` arranged in ${layout.cols} columns × ${layout.rows} rows` : ''}. Each panel is clearly numbered 1–${totalPanels}. Thin black 2px border between panels. White 8px margin. Panel number in top-left corner of each panel.`,
     `Style: ${styleDesc}.`,
-    `Layout: ${layout.cols} columns × ${layout.rows} rows. Thin black 2px border between panels. White 8px margin around entire grid. Panel numbers in top-left corner, small bold font.`,
+    `IMPORTANT: Generate EXACTLY ${totalPanels} panels — no more, no less. Do not add extra panels or repeat content.`,
     '',
-    // Character consistency
-    nv ? `CONSISTENT CHARACTER ACROSS ALL ${totalPanels} PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. Face: ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,80) : ''}. SAME face structure, SAME costume, SAME hair in every panel — zero variation allowed.` : '',
+    nv ? `CONSISTENT CHARACTER ACROSS ALL ${totalPanels} PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. Face: ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,80) : ''}. SAME face, SAME costume in every panel — zero variation.` : '',
     '',
-    `VISUAL STYLE: ${styleDesc}.`,
-    `COLOR GRADE: ${pal}.${director ? ' Director visual reference: ' + director + '.' : ''}`,
-    `TECHNICAL: Each panel is a frozen single frame — no motion blur. Consistent lighting and color temperature across all panels. Professional cinematic composition.`,
+    `COLOR GRADE: ${pal}.${director ? ' Director reference: ' + director + '.' : ''}`,
+    `TECHNICAL: ${styleDesc}. Each panel = frozen single frame. No motion blur. Cinematic composition.`,
     '',
-    `--- PANEL DESCRIPTIONS ---`,
+    `--- PANEL DESCRIPTIONS (${totalPanels} panels total) ---`,
     '',
-    ...panelDescs.map((p, i) => `PANEL ${i+1}: ${p}\n`),
-    `--- END PANELS ---`,
+    ...panelDescs.map(p => p + '\n'),
+    `--- END (${totalPanels} panels) ---`,
     '',
-    `CRITICAL RULES:`,
-    `1. All ${totalPanels} panels MUST be visible in ONE single image`,
-    `2. Number each panel clearly in top-left corner`,
-    `3. ${nv ? 'Character face and costume MUST be identical across all panels' : 'Maintain consistent visual style across all panels'}`,
-    `4. Each panel shows a FROZEN STILL FRAME — cinematic composition`,
-    `5. ${sbStyle === 'sketch' ? 'Black ink lines on white paper. Clean gestural linework.' : sbStyle === 'noir' ? 'High contrast black and white only. Deep shadows. No color.' : sbStyle === 'anime' ? 'Clean anime keyframe style. Flat cel shading. Professional animation quality.' : 'Photorealistic cinematic stills. Film grain. Color graded.'}`,
+    `RULES:`,
+    `1. EXACTLY ${totalPanels} panels in ONE image — not ${totalPanels+1}, not ${totalPanels-1}`,
+    `2. Number each panel clearly (1 through ${totalPanels})`,
+    `3. Each panel shows the ACTION at the specified TIMECODE`,
+    nv ? `4. Character face and costume MUST be identical across all panels` : '4. Maintain consistent visual style across all panels',
+    `5. ${sbStyle === 'sketch' ? 'Black ink on white paper.' : sbStyle === 'noir' ? 'High contrast black and white only.' : sbStyle === 'anime' ? 'Clean anime keyframe style.' : 'Photorealistic cinematic stills.'}`,
   ].filter(v => v !== null && v !== undefined).join('\n');
 
   L.push(gptPrompt);
@@ -7698,8 +8108,8 @@ function taoSBGridPrompt(){
 
   sbGridText = L.join('\n');
   if(body) body.textContent = sbGridText;
-  if(meta) meta.textContent = `${layout.desc} · ${totalPanels} panels · ${sbStyle} style · ${sbGridText.length} ký tự`;
-  if(status) status.textContent = `✓ ${totalPanels} panels`;
+  if(meta) meta.textContent = `${totalPanels} panels thực tế · ${layout.desc} · ${sbStyle} · tổng ${shots.reduce((a,s)=>a+(s.tg||0),0).toFixed(1)}s`;
+  if(status) status.textContent = `✓ ${totalPanels} panels (${actualShots} shots)`;
   if(panel) panel.scrollIntoView({ behavior:'smooth', block:'nearest' });
 }
 
@@ -8351,9 +8761,438 @@ capNhat();
 veThoai();
 veNVP();
 veKBShotTimes();
-taiGiong();
+// taiGiong removed with voice tab
 
-// ===== AUTO-SAVE & SESSION RESTORE =====
+// ===== SEEDANCE 2.0 PRO DIRECTOR =====
+let dirMode = 'T2V';
+let dirDur  = '8s';
+let dirAR   = '16:9';
+let dirRefs = [];
+let dirPromptText = '';
+
+const DIR_MODE_HINTS = {
+  'T2V': 'T2V: Chỉ text, không có ảnh/video tham chiếu',
+  'I2V': 'I2V: Một ảnh → hoạt hóa nhân vật, keyframe, sản phẩm',
+  'R2V': 'R2V: Nhiều tham chiếu kết hợp lại',
+  'V2V': 'V2V: Chuyển motion/camera từ clip có sẵn'
+};
+
+function chonDirMode(val, el){
+  dirMode = val;
+  document.querySelectorAll('#p-director .schip[onclick^="chonDirMode"]').forEach(c=>{
+    c.style.borderColor=''; c.style.color=''; c.style.background='';
+  });
+  if(el){ el.style.borderColor='#f59e0b'; el.style.color='#f59e0b'; el.style.background='#1a0f00'; }
+  const hint = document.getElementById('dir-mode-hint');
+  if(hint) hint.textContent = DIR_MODE_HINTS[val] || '';
+}
+
+function chonDirDur(val, el){
+  dirDur = val;
+  document.querySelectorAll('#p-director .schip[onclick^="chonDirDur"]').forEach(c=>{
+    c.style.borderColor=''; c.style.color=''; c.style.background='';
+  });
+  if(el){ el.style.borderColor='#f59e0b'; el.style.color='#f59e0b'; el.style.background='#1a0f00'; }
+}
+
+function chonDirAR(val, el){
+  dirAR = val;
+  document.querySelectorAll('#p-director .schip[onclick^="chonDirAR"]').forEach(c=>{
+    c.style.borderColor=''; c.style.color=''; c.style.background='';
+  });
+  if(el){ el.style.borderColor='#f59e0b'; el.style.color='#f59e0b'; el.style.background='#1a0f00'; }
+}
+
+function themDirRef(type){
+  const list = document.getElementById('dir-refs-list');
+  if(!list) return;
+  const idx = dirRefs.length + 1;
+  const typeLabel = { image:'Image', video:'Video', audio:'Audio' }[type];
+  const roles = {
+    image: ['Character identity','Character costume','Environment & lighting','Composition','Pose reference'],
+    video: ['Motion reference','Camera movement reference','Scene transformation'],
+    audio: ['Rhythm & atmosphere reference','Dialogue reference']
+  }[type] || [];
+
+  const ref = { type, label: `${typeLabel} ${idx}`, role: roles[0] || '', url: '' };
+  dirRefs.push(ref);
+  const i = dirRefs.length - 1;
+
+  const row = document.createElement('div');
+  row.id = `dir-ref-${i}`;
+  row.style.cssText = 'display:flex;gap:5px;align-items:center;flex-wrap:wrap';
+  row.innerHTML = `
+    <span style="font-size:9px;padding:2px 7px;border-radius:10px;border:1px solid #3a3a3a;color:var(--muted);white-space:nowrap;font-family:'IBM Plex Mono',monospace">${typeLabel} ${idx}</span>
+    <select onchange="dirRefs[${i}].role=this.value" style="font-size:10px;flex:1;min-width:140px;border-color:#2a2a2a;background:#0a0a0a;color:var(--ink)">
+      ${roles.map(r=>`<option value="${r}">${r}</option>`).join('')}
+    </select>
+    <input type="text" placeholder="URL hoặc mô tả..." onchange="dirRefs[${i}].url=this.value" style="flex:2;font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--ink)">
+    <button onclick="this.parentElement.remove();dirRefs.splice(${i},1)" style="padding:2px 7px;border-radius:4px;border:1px solid #2a2a2a;background:transparent;color:var(--muted);cursor:pointer;font-size:11px">✕</button>`;
+  list.appendChild(row);
+}
+
+function directorAutoFill(){
+  const {nv, hd, mt, dd, as} = layChung();
+  const charLock = charPromptText || '';
+  const wardrobe = gVal('wardrobe-lock') || '';
+  const nat = (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ');
+
+  // Q1 — Who
+  const q1parts = [nat, SS.gender, SS.age, nv, wardrobe ? 'Outfit: '+wardrobe : ''].filter(Boolean);
+  if(q1parts.length) document.getElementById('dir-q1').value = q1parts.join('. ');
+
+  // Q2 — Where (layout chips)
+  const q2 = [SS.layout, SS.char_dist, SS.char_layout].filter(Boolean).join('. ') || 'Center frame, mid-ground depth layer';
+  document.getElementById('dir-q2').value = q2;
+
+  // Q3 — State/pose
+  const q3 = [hd, (MM.emo||[]).slice(0,2).join(', ')].filter(Boolean).join('. ');
+  document.getElementById('dir-q3').value = q3 || '';
+
+  // Q4 — Motion
+  const q4 = (MM.body||[]).join(', ') || hd || '';
+  document.getElementById('dir-q4').value = q4;
+
+  // Q5 — Locked
+  const q5parts = ['Same face and costume throughout'];
+  if(SS.light_setup) q5parts.push('Lighting fixed: ' + SS.light_setup);
+  document.getElementById('dir-q5').value = q5parts.join('. ');
+
+  // Q6 — Camera
+  const cam = [SS.movement, SS.lens, SS.shot_size].filter(Boolean).join(', ') || '';
+  document.getElementById('dir-q6').value = cam;
+
+  // Q7 — Final frame
+  const q7 = SS.shot_size ? `Final frame: ${SS.shot_size} of subject, sharp focus on face` : '';
+  document.getElementById('dir-q7').value = q7;
+
+  const status = document.getElementById('dir-status');
+  if(status){ status.textContent = '✓ Auto-filled từ Khung Sườn'; setTimeout(()=>status.textContent='',2500); }
+}
+
+function dirAutoFillFromKS(){ /* triggered oninput — silent */ }
+
+function capNhatQAScore(){
+  let checked = 0;
+  for(let i = 1; i <= 12; i++){
+    const el = document.getElementById(`dir-qa-q${i}`);
+    if(el && el.checked) checked++;
+  }
+  const pct = Math.round(checked / 12 * 100);
+  const score = document.getElementById('dir-qa-score');
+  const fill  = document.getElementById('dir-qa-fill');
+  const label = document.getElementById('dir-qa-label');
+  const acts  = document.getElementById('dir-qa-actions');
+  if(score) score.textContent = `${checked} / 12`;
+  if(fill){ fill.style.width = pct + '%'; fill.style.background = pct >= 90 ? '#4ade80' : pct >= 60 ? '#f59e0b' : '#a855f7'; }
+  if(label){
+    if(pct === 100)    { label.textContent = '🟢 Sẵn sàng!'; label.style.color = '#4ade80'; }
+    else if(pct >= 75) { label.textContent = '🟡 Gần xong'; label.style.color = '#f59e0b'; }
+    else if(pct >= 50) { label.textContent = '🟠 Cần thêm'; label.style.color = '#f59e0b'; }
+    else               { label.textContent = '🔴 Chưa sẵn sàng'; label.style.color = 'var(--muted)'; }
+  }
+  // Show/hide action buttons
+  if(acts) acts.style.display = (checked < 12 && checked > 0) ? 'flex' : 'none';
+
+  // Auto-show inline hints for unchecked items
+  const hintsEl = document.getElementById('dir-qa-hints');
+  if(hintsEl){
+    if(checked > 0 && checked < 12){
+      const missing = [];
+      for(let i=1;i<=12;i++){
+        const el = document.getElementById(`dir-qa-q${i}`);
+        if(el && !el.checked) missing.push(i);
+      }
+      const lines = [`<div style="color:#f59e0b;font-size:9px;font-weight:600;margin-bottom:6px;letter-spacing:.5px">💡 ${missing.length} ĐIỂM THIẾU — CẦN BỔ SUNG:</div>`];
+      missing.forEach(n => {
+        const m = QA_MAP[n];
+        lines.push(`<div style="margin-bottom:5px;padding:4px 7px;background:#0d0014;border-radius:5px;border-left:2px solid #7c3aed">
+          <span style="color:#c084fc;font-weight:600">${String(n).padStart(2,'0')}. ${m.label}</span>
+          <span style="color:var(--muted)"> → ${m.hint}</span>
+        </div>`);
+      });
+      hintsEl.innerHTML = lines.join('') +
+        `<button onclick="qaAutoFix()" id="btn-qa-autofix" style="margin-top:6px;padding:5px 14px;border-radius:6px;border:1px solid #7c3aed;background:#0d0014;color:#c084fc;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:600">🔧 Auto-Fix — AI bổ sung tự động</button>
+         <span id="dir-autofix-status" style="font-size:10px;color:var(--muted);margin-left:8px;font-style:italic"></span>`;
+      hintsEl.style.display = '';
+    } else {
+      hintsEl.style.display = 'none';
+    }
+  }
+
+  const btn = document.getElementById('btn-dir-gen');
+  if(btn) btn.style.background = pct >= 75
+    ? 'linear-gradient(135deg,#15803d,#4ade80)'
+    : 'linear-gradient(135deg,#b45309,#f59e0b)';
+}
+
+// Map checklist item → which Q field it affects
+const QA_MAP = {
+  1: { q: 'q4', label: 'Chủ thể + chuyển động', hint: 'Thêm: Tên/mô tả nhân vật + hành động cụ thể họ đang làm' },
+  2: { q: 'q2', label: 'Vị trí màn hình', hint: 'Thêm vào Q②: "left third / center / right third of frame"' },
+  3: { q: 'q2', label: 'Lớp chiều sâu', hint: 'Thêm vào Q②: "foreground / midground / background, Xm from camera"' },
+  4: { q: 'q3', label: 'Tư thế và trạng thái', hint: 'Thêm vào Q③: tư thế cụ thể (đứng/ngồi/nghiêng), cơ bắp nào engaged' },
+  5: { q: 'q3', label: 'Hướng nhìn', hint: 'Thêm vào Q③: "eyes looking into camera / looking left / gaze downward"' },
+  6: { q: 'q2', label: 'Điểm tiếp xúc', hint: 'Thêm vào Q②: "Character A\'s hand on Character B\'s left shoulder"' },
+  7: { q: 'q5', label: 'Cấm đổi chỗ', hint: 'Thêm vào Q⑤: "Character A stays left, Character B stays right — no position swap"' },
+  8: { q: 'q6', label: 'NV vs camera tách biệt', hint: 'Q④ = chuyển động nhân vật. Q⑥ = chuyển động camera. Đừng lẫn lộn' },
+  9: { q: 'q6', label: 'Camera giữ bố cục', hint: 'Thêm vào Q⑥: "subject stays center frame throughout camera movement"' },
+  10: { q: 'q5', label: 'Continuity lock', hint: 'Thêm vào Q⑤: "Same costume, same lighting direction, no color shift"' },
+  11: { q: 'q7', label: 'Khung hình cuối', hint: 'Điền Q⑦: frame cuối cùng phải thấy gì — shot size, vị trí nhân vật' },
+  12: { q: 'q4', label: 'Prompt không quá tải', hint: 'Giảm xuống ≤2 hành động và ≤2 cú máy trong Q④ và Q⑥' },
+};
+
+function qaGoiY(){
+  const missing = [];
+  for(let i = 1; i <= 12; i++){
+    const el = document.getElementById(`dir-qa-q${i}`);
+    if(el && !el.checked) missing.push(i);
+  }
+  if(!missing.length){ alert('✓ Tất cả 12 điểm đã OK!'); return; }
+
+  const hintsEl = document.getElementById('dir-qa-hints');
+  if(!hintsEl) return;
+
+  const lines = [`<span style="color:#f59e0b;font-weight:500">Thiếu ${missing.length} điểm — cần bổ sung:</span>\n`];
+  missing.forEach(n => {
+    const m = QA_MAP[n];
+    lines.push(`<span style="color:#a855f7">${String(n).padStart(2,'0')}. ${m.label}</span>\n   → ${m.hint}\n`);
+  });
+
+  hintsEl.innerHTML = lines.join('\n').replace(/\n/g,'<br>');
+  hintsEl.style.display = '';
+  hintsEl.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+async function qaAutoFix(){
+  const missing = [];
+  for(let i = 1; i <= 12; i++){
+    const el = document.getElementById(`dir-qa-q${i}`);
+    if(el && !el.checked) missing.push(i);
+  }
+  if(!missing.length){ alert('✓ Không cần fix — tất cả đã OK!'); return; }
+
+  const btn2 = document.getElementById('btn-qa-autofix');
+  const status2 = document.getElementById('dir-autofix-status');
+  if(btn2){ btn2.disabled = true; btn2.textContent = '⏳ Đang fix...'; }
+  if(status2) status2.textContent = '';
+
+  // Collect current answers
+  const q = [1,2,3,4,5,6,7].map(n => ({
+    n,
+    id: `dir-q${n}`,
+    val: document.getElementById(`dir-q${n}`)?.value.trim() || ''
+  }));
+
+  const missingDescs = missing.map(n => `Point ${n}: ${QA_MAP[n].label} → affects ${QA_MAP[n].q} (${QA_MAP[n].hint})`).join('\n');
+
+  const system = `You are a Seedance 2.0 Pro Director assistant.
+The user has filled in 7 questions to build a Seedance prompt, but some QA checklist items are missing.
+Your job: analyze the existing answers and ADD the missing information to the appropriate question fields.
+
+For each missing QA point, determine which question field needs updating and add specific, concrete detail.
+Return ONLY a JSON object with question IDs as keys and the UPDATED (complete) text as values.
+Only include questions that need updating.
+Format: {"dir-q1": "updated text", "dir-q2": "updated text", ...}
+Do not include unchanged questions. Output valid JSON only.`;
+
+  const userMsg = `Current question answers:
+${q.map(x => `Q${x.n}: ${x.val || '(empty)'}`).join('\n')}
+
+Project context:
+Subject: ${gVal('subject-desc') || 'not set'}
+Action: ${gVal('action-desc') || 'not set'}
+Scene: ${gVal('scene-desc') || 'not set'}
+Camera: ${SS.movement || ''} ${SS.shot_size || ''} ${SS.lens || ''}
+Genre: ${SS.genre || 'cinematic'}
+
+Missing QA points to fix:
+${missingDescs}
+
+Add the missing information naturally into the appropriate question fields.
+Keep existing content, only ADD what's missing.`;
+
+  try{
+    let acc = '';
+    await goiClaude(system, userMsg, chunk => { acc += chunk; });
+
+    // Parse JSON response
+    const clean = acc.replace(/```json|```/g,'').trim();
+    const updates = JSON.parse(clean);
+
+    let fixedCount = 0;
+    Object.entries(updates).forEach(([id, val]) => {
+      const el = document.getElementById(id);
+      if(el){ el.value = val; fixedCount++; }
+    });
+
+    if(status2) status2.textContent = `✓ Đã bổ sung ${fixedCount} ô`;
+    if(status2) status2.style.color = '#4ade80';
+
+    // Highlight updated fields briefly
+    Object.keys(updates).forEach(id => {
+      const el = document.getElementById(id);
+      if(el){ el.style.borderColor='#a855f7'; setTimeout(()=>el.style.borderColor='',3000); }
+    });
+
+  } catch(e){
+    if(status2) { status2.textContent = '❌ ' + e.message; status2.style.color = 'var(--red)'; }
+  } finally {
+    if(btn2){ btn2.disabled = false; btn2.textContent = '🔧 Auto-Fix'; }
+  }
+}
+
+
+
+function directorClear(){
+  ['dir-q1','dir-q2','dir-q3','dir-q4','dir-q5','dir-q6','dir-q7'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.value = '';
+  });
+  dirRefs = [];
+  const list = document.getElementById('dir-refs-list');
+  if(list) list.innerHTML = '';
+  for(let i=1;i<=12;i++){ const el=document.getElementById(`dir-qa-q${i}`); if(el) el.checked=false; }
+  capNhatQAScore();
+  const panel = document.getElementById('dir-output-panel');
+  if(panel) panel.style.display = 'none';
+}
+
+async function directorGenerate(){
+  const q1 = document.getElementById('dir-q1')?.value.trim();
+  if(!q1){ alert('Điền ít nhất câu hỏi ① — Ai trong khung hình?'); return; }
+
+  const q = [1,2,3,4,5,6,7].map(n => document.getElementById(`dir-q${n}`)?.value.trim() || '');
+  const refs = dirRefs.filter(r => r.role);
+
+  const btn = document.getElementById('btn-dir-gen');
+  const status = document.getElementById('dir-status');
+  const panel = document.getElementById('dir-output-panel');
+  if(btn) btn.disabled = true;
+  if(status) status.textContent = '⏳ AI đang build prompt...';
+  if(panel) panel.style.display = '';
+
+  // Clear outputs
+  ['dir-interpretation','dir-blocking','dir-prompt','dir-qa'].forEach(id=>{
+    const el = document.getElementById(id);
+    if(el) el.textContent = '⏳ Đang tạo...';
+  });
+
+  const charLock = charPromptText ? `\nCHARACTER LOCK:\n${charPromptText.slice(0,400)}` : '';
+  const refsBlock = refs.length
+    ? '\nREFERENCES:\n' + refs.map((r,i)=>`- Use ${r.label} as ${r.role}${r.url?' ('+r.url+')':''}`).join('\n')
+    : '';
+
+  const systemPrompt = `You are an elite Seedance 2.0 Pro Director. Convert user inputs into production-ready Seedance 2.0 prompts following the exact Pro Director framework.
+
+OUTPUT FORMAT — output all 4 sections separated by these exact headers:
+===INTERPRETATION===
+[2-3 sentences: your directorial read of the scene]
+
+===BLOCKING MAP===
+[ASCII or text spatial map showing who is where in frame, depth layers, gaze directions]
+Example:
+LEFT THIRD | CENTER | RIGHT THIRD
+[Character A] | empty | [Character B]
+Depth: A=mid-ground (3m), B=foreground (1.5m)
+Gaze: A→B, B→camera
+
+===SEEDANCE PROMPT===
+[The final production-ready prompt in English. Start with: Duration: Xs | Aspect: Y:Y | Mode: T2V/I2V/R2V/V2V]
+[Then full prompt using: Subject + Position + State + Motion + Camera + Environment + Aesthetics + Lighting + Audio + Continuity + Final frame]
+[Use plain concrete English. One instruction per sentence. No poetry.]
+
+===QA CHECKLIST===
+[12 checkboxes — mark ✓ or ✗ for each:]
+1. Subject and motion defined: [✓/✗]
+2. Each character has screen position: [✓/✗]
+3. Each character has depth layer: [✓/✗]
+4. Each character has pose and state: [✓/✗]
+5. Each character has gaze direction: [✓/✗]
+6. Contact points defined (if applicable): [✓/✗]
+7. Character swapping forbidden (if multi-char): [✓/✗]
+8. Subject motion and camera motion separated: [✓/✗]
+9. Camera preserves required composition: [✓/✗]
+10. Continuity lock included: [✓/✗]
+11. Final frame specified: [✓/✗]
+12. Prompt not overloaded (≤2 actions, ≤2 camera moves): [✓/✗]`;
+
+  const userMsg = `Build a Seedance 2.0 Pro Director prompt from these inputs:
+
+MODE: ${dirMode} | DURATION: ${dirDur} | ASPECT RATIO: ${dirAR}
+
+7 CORE QUESTIONS:
+1. Who is in frame: ${q[0] || 'not specified'}
+2. Exact position in frame: ${q[1] || 'not specified'}
+3. State and pose: ${q[2] || 'not specified'}
+4. What is moving: ${q[3] || 'not specified'}
+5. What is locked: ${q[4] || 'not specified'}
+6. Camera movement: ${q[5] || 'not specified'}
+7. Final frame must show: ${q[6] || 'not specified'}
+${charLock}${refsBlock}
+
+Context from project:
+Scene: ${gVal('scene-desc') || 'not set'}
+Location: ${gVal('location') || 'not set'}
+Lighting: ${gVal('lighting-desc') || 'not set'}
+Genre: ${SS.genre || 'not set'}
+Color palette: ${SS.pal || 'not set'}`;
+
+  try{
+    let acc = '';
+    await goiClaude(systemPrompt, userMsg, chunk => {
+      acc += chunk;
+      // Parse sections on the fly
+      const parseSection = (tag) => {
+        const m = acc.match(new RegExp(`===${tag}===\\n([\\s\\S]*?)(?:===|$)`));
+        return m ? m[1].trim() : '';
+      };
+      const interp = parseSection('INTERPRETATION');
+      const block  = parseSection('BLOCKING MAP');
+      const prompt = parseSection('SEEDANCE PROMPT');
+      const qa     = parseSection('QA CHECKLIST');
+      if(interp) document.getElementById('dir-interpretation').textContent = interp;
+      if(block)  document.getElementById('dir-blocking').textContent = block;
+      if(prompt) document.getElementById('dir-prompt').textContent = prompt;
+      if(qa)     document.getElementById('dir-qa').textContent = qa;
+    });
+
+    // Final parse
+    const parseSection = (tag) => {
+      const m = acc.match(new RegExp(`===${tag}===\\n([\\s\\S]*?)(?:===|$)`));
+      return m ? m[1].trim() : acc;
+    };
+    dirPromptText = parseSection('SEEDANCE PROMPT');
+
+    if(status) status.textContent = '✓ Prompt hoàn tất — đã gửi sang Xuất Prompt';
+    setTimeout(()=>{ if(status) status.textContent=''; }, 3000);
+
+    // Auto-send to Xuất Prompt
+    if(dirPromptText){
+      kqSD = dirPromptText;
+      hienKQ(dirPromptText, 'sd', '🎬 Seedance Director Prompt');
+    }
+
+  } catch(e){
+    if(status) status.textContent = '❌ Lỗi: ' + e.message;
+  } finally {
+    if(btn) btn.disabled = false;
+  }
+}
+
+function copyDirPrompt(){
+  if(!dirPromptText){ alert('Chưa có prompt.'); return; }
+  robustCopy(dirPromptText, document.getElementById('btn-cp-dir'));
+}
+
+function dirPromptToOutput(){
+  if(!dirPromptText) return;
+  kqSD = dirPromptText;
+  sw('out');
+  hienKQ(dirPromptText, 'sd', '🎬 Seedance Director Prompt');
+}
+
+
 const AUTOSAVE_KEY = 'annahousestudio_autosave';
 const AUTOSAVE_INTERVAL = 30000;
 let autoSaveTimer = null;
@@ -8473,7 +9312,8 @@ themShot();
       <button onclick="boQuaKhoiPhuc()" style="flex:1;padding:9px;border-radius:7px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace;cursor:pointer">✕ Bỏ qua</button>
     </div>
   </div>
-</div>
 
 </body>
 </html>
+</div>
+</div>
