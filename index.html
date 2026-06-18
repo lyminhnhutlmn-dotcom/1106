@@ -3541,14 +3541,47 @@ function taoSD(){
   if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[DIALOGUE]');dsThoai.forEach(t=>{const ten=(t.ten||'CHARACTER').toUpperCase();const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(whispered)','Độc thoại':'(monologue)'};L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+(t.loi||'...'));});L.push('');}
   if(sAm||sFo||sMu||sSf||sSi){L.push('[AUDIO DESIGN]');if(sSi)L.push('Silence: '+sSi);if(sAm)L.push('Ambient (-4dB): '+sAm);if(sFo)L.push('Foley (0dB): '+sFo);if(sMu)L.push('Music (-2dB): '+sMu);if(sSf)L.push('SFX (+2dB): '+sSf);L.push('');}
-  if(cacShot.length){L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';
-    // Inject emotion physics
+  if(cacShot.length){
+    // Lighting + color consistency block
+    const _lt = SS.light_setup || (MM.light_type||[]).slice(0,1).join('');
+    const _lk = SS.light_kelvin || '';
+    const _lc = (MM.light_color||[]).slice(0,1).join('');
+    const _lut= (MM.colorgrade||[]).slice(0,1).join('');
+    const _gr = (MM.grain||[]).slice(0,1).join('');
+    const consistLock = [
+      _lt ? 'Lighting: '+_lt : '',
+      _lk ? _lk+'K' : '',
+      _lc ? _lc+' tone' : '',
+      _lut ? 'LUT: '+_lut : '',
+      _gr ? _gr : ''
+    ].filter(Boolean).join(' | ');
+    if(consistLock){ L.push('[CONSISTENCY LOCK]'); L.push(consistLock+' — UNCHANGED across all shots.'); L.push(''); }
+    L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';
+    // Emotion → distilled concept cho Seedance (không dùng anatomy)
     const emoKey = s.emotion||'';
-    const emoPhy = emoKey && emoKey!=='custom' && typeof EMOTION_PHYSICS!=='undefined' && EMOTION_PHYSICS[emoKey]
-      ? `[EMOTION — ${EMOTION_PHYSICS[emoKey].name.toUpperCase()}] ${EMOTION_PHYSICS[emoKey].text}`
-      : (s.emotionCustom ? `[EMOTION] ${s.emotionCustom}` : '');
+    const _SDEMO = {
+      joy:'genuine wide smile, bright eyes, warm open energy',
+      pride:'chin lifted, chest open, shoulders back, direct confident gaze',
+      fatigue:'heavy drooping eyelids, slumped spine, limp arms on desk, slack jaw',
+      fear:'eyes wide open, shoulders raised, body frozen, breath held',
+      anger:'jaw clenched, brows furrowed, rigid body, intense burning gaze',
+      grief:'face crumpled, eyes downcast, body collapsed inward, throat tight',
+      surprise:'eyes wide, mouth open, sharp inhale, body momentarily frozen',
+      contempt:'one-sided lip raised, slow deliberate blink, head slightly tilted away',
+      determination:'lips pressed firm, focused narrow gaze, spine fully erect, still hands',
+      shame:'head bowed, eyes averted, shoulders rolled inward, ears flushed',
+      longing:'soft unfocused gaze beyond frame, lips barely parted, slow quiet breath',
+      relief:'long slow exhale, shoulders drop, eyes close briefly then open soft',
+      love:'soft genuine smile, slow breathing, body leaning naturally toward subject',
+      tension:'shallow breathing, tight shoulders, fingers pressing surface, lip micro-sweat',
+      numbness:'blank expressionless face, unfocused middle-distance stare, total stillness',
+      confidence:'relaxed open stance, direct unhurried gaze, calm slow breathing'
+    };
+    const emoDistilled = emoKey && emoKey!=='custom' && _SDEMO[emoKey]
+      ? `[EMOTION] ${_SDEMO[emoKey]}`
+      : (s.emotionCustom ? `[EMOTION] ${s.emotionCustom.slice(0,100)}` : '');
     L.push(d.trim()||'no description');
-    if(emoPhy) L.push(emoPhy);
+    if(emoDistilled) L.push(emoDistilled);
     L.push('');});}
   if(matRefs.length){L.push('[MATERIAL INTEGRATION]');matRefs.forEach(r=>L.push(`@material[${r.n}]: Apply ${r.t} reference characteristics.`));L.push('');}
   L.push('[OUTPUT]');L.push(`aspect_ratio: ${seedanceAR}. duration: ${seedanceDur}s. No text. No watermark. No extra people. Photorealistic.`);
@@ -4603,51 +4636,44 @@ async function phanTichKichBan(){
     ? 'Viết phân tích bằng tiếng Việt, prompt nháp bằng tiếng Anh.'
     : 'Viết toàn bộ bằng tiếng Việt, riêng các thuật ngữ điện ảnh giữ tiếng Anh.';
 
-  const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản điện ảnh và shot breakdown cho Seedance 2.0 / Higgsfield.
+  const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản và viết Seedance 2.0 prompt chuẩn sản xuất.
 
 ${langInstruct}
 
-⛔ TỔNG THỜI LƯỢNG BẮT BUỘC: ${durSec} GIÂY — KHÔNG ĐƯỢC VƯỢT QUÁ.
-Tất cả shots cộng lại phải đúng bằng ${durSec}s.
-Ví dụ hợp lệ với ${durSec}s và 3 shot: [0–5s] + [5–10s] + [10–15s] = ${durSec}s ✓
-Ví dụ SAI: [0–10s] + [10–20s] + [20–30s] = 30s ✗ — bị từ chối.
-Kiểm tra tổng thời gian trước khi output. Nhắc lại ở cuối: "Tổng: Xs / ${durSec}s".
-
-NHIỆM VỤ: Phân tích kịch bản thành shot breakdown với HÀNH ĐỘNG CỤ THỂ từng shot.
-
-QUY TẮC BẮT BUỘC:
-1. Mỗi shot PHẢI có hành động nhân vật rõ ràng — KHÔNG viết chung chung
-2. Hành động = động từ cụ thể + bộ phận cơ thể + tốc độ + cảm xúc qua vật lý
-   ĐÚNG: "Tay trái đặt nhẹ lên mặt bàn, ngón trỏ gõ nhịp chậm 1 lần rồi dừng"
-   SAI: "nhân vật ngồi ở bàn"
-3. Micro-expression: nét mặt thay đổi cụ thể từng cơ
-4. Cảm xúc thể hiện qua vật lý — KHÔNG nói thẳng cảm xúc
+⛔ TỔNG THỜI LƯỢNG BẮT BUỘC: ${durSec} GIÂY. Tất cả shots cộng lại = ${durSec}s.
 
 ${shotInstruct}
 
-⚠️ NẾU CÓ "CÚ MÁY ĐÃ XÁC ĐỊNH" → BẮT BUỘC giữ nguyên, KHÔNG thay đổi.
+NGUYÊN TẮC SEEDANCE 2.0 (bắt buộc):
+• Max 2 hành động chính mỗi shot
+• Max 1 camera move mỗi shot
+• CẢM XÚC = visual behavior, KHÔNG dùng từ cảm xúc trừu tượng
+  ✓ "heavy drooping eyelids, slumped spine, limp arms on desk"
+  ✗ "mệt mỏi, buồn ngủ, cảm thấy kiệt sức"
+  ✓ "genuine wide smile, bright eyes, warm open energy"
+  ✗ "vui vẻ, hạnh phúc, phấn khích"
+• KHÔNG dùng số liệu anatomy (mm, degrees, %)
+• NHẤT QUÁN xuyên suốt: cùng nhân vật, cùng trang phục, cùng hướng sáng, cùng Kelvin
+• Seedance prompt mỗi shot: 40-80 từ tiếng Anh
 
-FORMAT TỪNG SHOT:
+FORMAT MỖI SHOT:
 
 ═══ SỰ KIỆN [N] ═══
-⏱ Thời gian: [Xs – Ys (Zs)] ← tổng tất cả shots = ${durSec}s
-🎯 Vai trò: [1 câu — shot này phục vụ gì]
-📷 Cú máy: [nếu đã xác định ghi "GIỮ NGUYÊN: ..."]
-🔭 Tiêu cự: [mm + lý do]
-🎬 Khung hình: [ECU/CU/MCU/MS/WS/ELS + lý do]
-💡 Ánh sáng: [Kelvin + hướng + tỷ lệ]
+⏱ [Xs – Ys | Zs]
+📷 [Shot type] | [Camera move] | [Lens]
 
-🎭 HÀNH ĐỘNG CHI TIẾT:
-[Từng giây: ai làm gì, bộ phận nào, tốc độ, hướng]
-[Micro-expression: cơ mặt nào thay đổi, mắt nhìn đâu]
-[Nhịp thở, độ căng vai, tư thế]
+🎭 SEEDANCE PROMPT (EN — dùng trực tiếp):
+[Style]. [Character: appearance 10w max].
+([Xs-Ys]) [Shot type]. [1 main action] + [emotion as visual behavior].
+[Camera if any]. [Environment + light tone].
+No text, no extra people, photorealistic.
 
-🎙 ÂM THANH/THOẠI: [nếu có]
+🎬 PHÂN TÍCH (VI):
+[Ý đồ đạo diễn, cảm xúc, kỹ thuật — cho DOP]
 
-PROMPT NHÁP (EN):
-[Prompt tiếng Anh đầy đủ sẵn dùng cho Seedance — gồm hành động chi tiết]
+⚠️ NẾU CÓ "CÚ MÁY ĐÃ XÁC ĐỊNH" → BẮT BUỘC giữ nguyên.
 
-CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP. + "✓ Tổng: ${durSec}s / ${durSec}s"`;
+CUỐI: "✓ Tổng: ${durSec}s / ${durSec}s" + 1 dòng lưu ý kỹ thuật.`
 
 
   // Build Khung Sườn context
@@ -7635,7 +7661,7 @@ OUTPUT FORMAT — use these exact sections in order:
 
 [SKIN] SSS: warm pink-red at ear edges, nostrils, inner eye corners. Micro-pore topology: nose bridge, cheekbones. Vellus hair catching rim light. Capillary flush undertone. T-zone oil sheen. NO AI smoothing. Biological imperfection = cinematic truth.
 
-[LIGHTING] {Kelvin}K {direction}° key. {ratio} fill. {rim color} rim. Practical: {source}. Shadow: {density}% under {location}. Motivated by: {light source in scene}.
+[LIGHTING] {exact Kelvin}K {direction}° key — match scene lighting temperature exactly. {ratio} fill. {rim color} rim from {practical source}. Consistent light direction throughout. Motivated by scene light source.
 
 [DEPTH] FG: {foreground element 0–1m}. MG: {subject + immediate environment 1–4m}. BG: {background 4m+, bokeh level}.
 
@@ -7660,7 +7686,7 @@ ${face ? 'FACE: ' + face.slice(0,120) : ''}
 ${eyes ? 'EYES: ' + eyes.slice(0,80) : ''}
 EMOTION: ${emo || 'quiet controlled tension'}
 SCENE: ${sceneCtx}
-LIGHTING SETUP: ${lightType}${lightColor ? ' | Color: ' + lightColor : ''}
+LIGHTING SETUP: ${lightType}${lightColor ? ' | Color: ' + lightColor : ''}${SS.light_kelvin ? ' | ' + SS.light_kelvin + 'K' : ''} — LOCK light direction and Kelvin across all shots
 COLOR PALETTE: ${colorPal}
 GENRE: ${genre}
 ${director ? 'DIRECTOR REF: ' + director : ''}
@@ -8328,28 +8354,60 @@ function taoSBGridPrompt(){
   L.push('');
 
   // The actual GPT Image 2 prompt
+  // Character anchor — ngắn gọn cho GPT Image 2
+  const charAnchor = [
+    nat,
+    nv ? nv.slice(0,60) : '',
+    face ? face.slice(0,50) : '',
+    costume ? costume.slice(0,60) : ''
+  ].filter(Boolean).join(', ');
+
+  // Panel descriptions — cực ngắn, GPT Image 2 đọc tốt nhất
+  const panelLines = shots.map((s,i) => {
+    const size = s.shotSize ? s.shotSize.replace(/\s*—.*/,'').trim() : 'MS';
+    const cam  = s.cuMay || 'static';
+    const startT = typeof s.start==='number'?s.start:0;
+    const endT   = typeof s.end==='number'?s.end:(startT+(s.tg||5));
+    // Emotion distill
+    const SD_EMO_SB = {
+      joy:'smiling, bright eyes',pride:'chin up, confident',fatigue:'drooping, slumped',
+      fear:'wide eyes, frozen',anger:'clenched jaw, tense',grief:'downcast, collapsed',
+      surprise:'eyes wide, mouth open',contempt:'one-sided smirk',
+      determination:'focused, jaw set',shame:'head down, averted',
+      longing:'distant gaze',relief:'exhaling, releasing',
+      love:'soft smile, leaning',tension:'tight, shallow breath',
+      numbness:'blank, still',confidence:'open, direct gaze'
+    };
+    const emoTag = s.emotion && s.emotion!=='custom' && SD_EMO_SB[s.emotion]
+      ? ` [${SD_EMO_SB[s.emotion]}]` : '';
+    // Action — max 30 chars
+    const action = (s.moTa||'').slice(0,50);
+    return `PANEL ${i+1} [${startT}s-${endT}s] ${size} ${cam}${emoTag}${action?' — '+action:''}`;
+  });
+
   const gptPrompt = [
-    `Create a professional storyboard grid with exactly ${totalPanels} panels${layout.cols > 0 ? ` arranged in ${layout.cols} columns × ${layout.rows} rows` : ''}. Each panel is clearly numbered 1–${totalPanels}. Thin black 2px border between panels. White 8px margin. Panel number in top-left corner of each panel.`,
-    `Style: ${styleDesc}.`,
-    `IMPORTANT: Generate EXACTLY ${totalPanels} panels — no more, no less. Do not add extra panels or repeat content.`,
+    // Layout instruction — critical for GPT Image 2
+    `${layout.cols > 0 ? layout.cols+'×'+layout.rows : totalPanels+'-panel'} storyboard grid. EXACTLY ${totalPanels} numbered panels. Black 2px borders. White margins. Panel numbers top-left.`,
     '',
-    nv ? `CONSISTENT CHARACTER ACROSS ALL ${totalPanels} PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. Face: ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,80) : ''}. SAME face, SAME costume in every panel — zero variation.` : '',
+    // Style
+    sbStyle==='sketch'   ? 'Style: Black ink sketch on white paper. Fast gestural lines.' :
+    sbStyle==='noir'     ? 'Style: High contrast B&W film noir. Deep shadows.' :
+    sbStyle==='anime'    ? 'Style: Clean anime keyframe. Flat cel shading.' :
+    `Style: Photorealistic cinematic still. ${pal||'Muted tones'}. Film grain. No motion blur.`,
     '',
-    `COLOR GRADE: ${pal}.${director ? ' Director reference: ' + director + '.' : ''}`,
-    `TECHNICAL: ${styleDesc}. Each panel = frozen single frame. No motion blur. Cinematic composition.`,
+    // Character lock — short
+    charAnchor ? `CHARACTER (identical in ALL ${totalPanels} panels): ${charAnchor}. Same face, same costume, zero variation.` : '',
     '',
-    `--- PANEL DESCRIPTIONS (${totalPanels} panels total) ---`,
+    // Director ref
+    director ? `Visual reference: ${director}.` : '',
     '',
-    ...panelDescs.map(p => p + '\n'),
-    `--- END (${totalPanels} panels) ---`,
+    // Panels — one line each
+    `PANELS:`,
+    ...panelLines,
     '',
-    `RULES:`,
-    `1. EXACTLY ${totalPanels} panels in ONE image — not ${totalPanels+1}, not ${totalPanels-1}`,
-    `2. Number each panel clearly (1 through ${totalPanels})`,
-    `3. Each panel shows the ACTION at the specified TIMECODE`,
-    nv ? `4. Character face and costume MUST be identical across all panels` : '4. Maintain consistent visual style across all panels',
-    `5. ${sbStyle === 'sketch' ? 'Black ink on white paper.' : sbStyle === 'noir' ? 'High contrast black and white only.' : sbStyle === 'anime' ? 'Clean anime keyframe style.' : 'Photorealistic cinematic stills.'}`,
-  ].filter(v => v !== null && v !== undefined).join('\n');
+    // Hard rules
+    `RULES: ${totalPanels} panels total. Each = frozen single frame. No motion blur. No extra people. No text overlays.`,
+  ].filter(v => v !== null && v !== undefined && v !== '').join('\n');
 
   L.push(gptPrompt);
   L.push('');
