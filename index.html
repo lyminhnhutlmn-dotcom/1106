@@ -2196,6 +2196,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   </div>
   <div class="arow" style="margin-bottom:11px">
     <button class="btn-p" onclick="taoVI()" id="nut-tao-vi">🇻🇳 Tạo Prompt Tiếng Việt</button>
+    <button class="btn-p" onclick="taoMasterSeedance()" id="nut-master-sd" style="background:linear-gradient(135deg,#1e3a8a,#7c3aed);border-color:#7c3aed;color:#fff">⚡ Master Seedance Prompt</button>
     <button class="btn-s" onclick="xuatHiggsfieldMCP()" style="border-color:#06b6d4;color:#06b6d4;background:#020f14" title="Xuất JSON + Master Prompt cho Claude Code + Higgsfield MCP">🤖 Export → Higgsfield MCP</button>
     <button class="btn-s" onclick="luuProject()" title="Lưu toàn bộ project ra file JSON + lưu vào trình duyệt">💾 Lưu Project</button>
     <button class="btn-s" onclick="document.getElementById('input-mo-project').click()" title="Mở file .json đã lưu">📂 Mở File</button>
@@ -2628,6 +2629,7 @@ const SS={};const MM={};
 ['gender','age','inex','timeofday','genre','pal','shot_size','movement','res','thoai_format','cg_anim','cg_duration','cg_fps','light_setup','layout','char_dist','kb_dur','kb_shots','kb_lang','skin_level','emo_intensity','img_ratio','img_style','face_shape','skin_tone','eye_color','eye_shape','hair_color','hair_style','char_img_angle','char_img_bg','bm_profile'].forEach(k=>SS[k]='');
 ['weather','light_color','director','filmstock','visual','grain','qtag','prohibit','consist','emo','sub','body','colorgrade','render_engine','cg_material','cg_light_fx','cg_particle','cg_comp','cg_atmo','skin_detail','kb_style','emo_arc','special_fx','kb_fx','dv_node','chaos_water','chaos_breath','chaos_env','chaos_water_int','chaos_breath_int','chaos_env_int'].forEach(k=>MM[k]=[]);
 let cacShot=[],soId=0,dsThoai=[],thoaiId=0;
+let dsDaoCu=[],daoCuId=0;
 let selHook='',selPlatform='',selRenderStyle='',selLightingCG='',selDuration=8,selCGHook='',selNoHookSD=false,selNoHookCG=false;
 let kqVI='',kqSD='',kqCG='',dangHien='';
 
@@ -9015,6 +9017,96 @@ veKBShotTimes();
 veDaoCu();
 // taiGiong removed with voice tab
 
+// ===== MASTER SEEDANCE PROMPT — AI DISTILL =====
+async function taoMasterSeedance(){
+  sw('out');
+  const btn = document.getElementById('nut-master-sd');
+  if(btn){ btn.disabled=true; btn.textContent='⏳ AI đang distill...'; }
+
+  const {dd,nv,nvp,hd,mt,as,pc,rb,wardrobe} = layChung();
+  const charLock  = charPromptText || buildCharacterBlock('en').join('\n');
+  const sceneLock = buildSceneBlock('en').join('\n');
+  const daoCuBlock= layDaoCuBlock('en').join('\n');
+  const nat       = (MM.nationality||[]).map(n=>n.replace(/^.{2,3}\s/,'')).join(', ');
+  const genre     = SS.genre||'cinematic';
+  const pal       = SS.pal||'';
+  const arMap     = {'16:9 — Ngang (Cinema)':'16:9','9:16 — Dọc (Reels / TikTok)':'9:16',
+    '1:1 — Vuông (Instagram)':'1:1','4:3 — Cổ điển':'4:3','21:9 — Anamorphic':'21:9',
+    '4K Ultra HD':'16:9','1080p Cinematic':'16:9','720p Chuẩn':'16:9'};
+  const ar = arMap[SS.res]||'16:9';
+
+  const shotsData = (cacShot||[]).map((s,i)=>{
+    const emoKey = s.emotion||'';
+    const emoConcept = emoKey && emoKey!=='custom' && EMOTION_PHYSICS[emoKey]
+      ? (EMOTION_PHYSICS[emoKey].name.split(' / ')[1]||EMOTION_PHYSICS[emoKey].name)
+      : (s.emotionCustom||'');
+    const ts=s.start??0; const te=s.end??(ts+(s.tg||5));
+    return { idx:i+1, timing:`${ts}s–${te}s (${(te-ts).toFixed(1)}s)`,
+      size:s.shotSize||'MS', camera:s.cuMay||'static', lens:s.lens||'50mm',
+      aperture:s.aperture||'', emotion:emoConcept, action:s.moTa||'', angle:s.angle||'' };
+  });
+
+  const system = `You are a Seedance 2.0 expert prompt engineer. Distill cinematic data into clean Seedance 2.0 prompts.
+
+SEEDANCE 2.0 RULES:
+1. Max 500 chars per clip
+2. CONCEPT language only — NO anatomy numbers (no "65% eyelid", no "18mm sternum", no "f/2.8")
+3. One primary action + one camera move per clip
+4. Emotion via BEHAVIOR not anatomy
+
+EMOTION → BEHAVIOR:
+Fatigue → "heavy-lidded, slumped forward, limp hands, unfocused stare"
+Joy → "wide genuine smile, bright lifted eyes, open posture"
+Surprise → "jaw drops, eyes snap wide, breath catches"
+Confidence → "chin up, direct gaze, shoulders back, deliberate movement"
+Determination → "jaw set, focused squint, spine straight, hands ready"
+Tension → "jaw tight, shallow breath, fingers press surface, neck taut"
+Pride → "chest open, chin raised, unhurried gaze, stance wide"
+Relief → "long exhale, shoulders drop, eyes close briefly then soften"
+
+OUTPUT — each clip:
+━━━ CLIP [N] — [timing] ━━━
+Duration: Xs | Aspect: ${ar} | Mode: T2V
+
+[Max 3 sentences. Subject + emotion-as-behavior + action + camera. Plain English.]`;
+
+  const userMsg = `Distill into Seedance 2.0 clips:
+
+CHARACTER: ${nat?nat+', ':''}${nv||'(see lock)'}${wardrobe?'. Wearing: '+wardrobe:''}
+${charLock?charLock.slice(0,300):''}
+
+SCENE: ${dd||''}
+${sceneLock.slice(0,200)}
+${daoCuBlock?'PROPS: '+daoCuBlock:''}
+
+${shotsData.length} CLIPS:
+${shotsData.map(s=>`CLIP ${s.idx} [${s.timing}] ${s.size} | ${s.camera}${s.aperture?' '+s.aperture:''} | EMOTION: ${s.emotion||'neutral'}
+Action: ${s.action.slice(0,150)||'unspecified'}`).join('\n\n')}
+
+Write ${shotsData.length} clips. Each ≤500 chars. Concept language only.`;
+
+  const kq = document.getElementById('ket-qua');
+  const td = document.getElementById('tieu-de-out');
+  if(kq) kq.textContent = '⏳ AI đang distill...';
+  if(td) td.textContent = '⚡ Master Seedance Prompt';
+
+  let acc='';
+  try{
+    await goiClaude(system, userMsg, chunk=>{
+      acc+=chunk;
+      if(kq) kq.textContent=acc;
+    });
+    kqSD=acc.trim();
+    if(kq) kq.textContent=kqSD;
+    ['nut-cp','nut-ai-imp','nut-edit'].forEach(id=>{const el=document.getElementById(id);if(el)el.style.display='';});
+    if(btn){btn.disabled=false;btn.textContent='⚡ Master Seedance Prompt';}
+    logEvent('master_seedance');
+  }catch(e){
+    if(kq) kq.textContent='❌ '+e.message;
+    if(btn){btn.disabled=false;btn.textContent='⚡ Master Seedance Prompt';}
+  }
+}
+
 // ===== ELEMENT ID PANEL =====
 const ELEMENT_LABELS = {
   'el-nv1':     { label:'NV CHÍNH',   color:'#a78bfa' },
@@ -9082,9 +9174,6 @@ function xoaAllElements(){
 }
 
 // ===== ĐẠO CỤ & SẢN PHẨM =====
-let dsDaoCu = [];
-let daoCuId = 0;
-
 function themDaoCu(type){
   daoCuId++;
   dsDaoCu.push({
