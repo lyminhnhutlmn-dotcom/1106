@@ -2116,6 +2116,65 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <!-- ===== XUẤT PROMPT ===== -->
 <div class="pane" id="p-out">
 
+  <!-- @ ELEMENT PANEL — cố định trên đầu -->
+  <div style="background:#050d1a;border:1px solid #1a3a6a;border-radius:10px;padding:12px 14px;margin-bottom:12px">
+    <div style="font-size:12px;font-weight:600;color:#5b9cf6;margin-bottom:2px">@ ELEMENT IDs — Higgsfield Reference</div>
+    <div style="font-size:9px;color:var(--muted);margin-bottom:10px">Paste Element ID từ Higgsfield → tự động inject <code style="color:#f59e0b"><<<id>>></code> vào Seedance prompt</div>
+
+    <div style="display:flex;flex-direction:column;gap:6px" id="element-id-list">
+
+      <!-- NV1 -->
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="font-size:9px;color:#a78bfa;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#0d0014;padding:4px 8px;border-radius:5px;border:1px solid #3b0060">👤 NV CHÍNH</div>
+        <input id="el-nv1" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#1a3a6a;background:#030a12;color:#5b9cf6">
+        <button onclick="copyElement('el-nv1','NV1')" style="padding:3px 8px;border-radius:5px;border:1px solid #1a3a6a;background:transparent;color:#5b9cf6;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace" title="Copy <<<id>>>">@</button>
+        <button onclick="injectElement('el-nv1','NV1')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace" title="Inject vào prompt">↓</button>
+      </div>
+
+      <!-- NV2 -->
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="font-size:9px;color:#f472b6;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#150a0f;padding:4px 8px;border-radius:5px;border:1px solid #3b0060">👤 NV PHỤ</div>
+        <input id="el-nv2" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#2a0040;background:#030a12;color:#f472b6">
+        <button onclick="copyElement('el-nv2','NV2')" style="padding:3px 8px;border-radius:5px;border:1px solid #2a0040;background:transparent;color:#f472b6;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
+        <button onclick="injectElement('el-nv2','NV2')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
+      </div>
+
+      <!-- BỐI CẢNH -->
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="font-size:9px;color:#06b6d4;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#030d10;padding:4px 8px;border-radius:5px;border:1px solid #0e4a52">🏢 BỐI CẢNH</div>
+        <input id="el-scene" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#0e4a52;background:#030a12;color:#06b6d4">
+        <button onclick="copyElement('el-scene','SCENE')" style="padding:3px 8px;border-radius:5px;border:1px solid #0e4a52;background:transparent;color:#06b6d4;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
+        <button onclick="injectElement('el-scene','SCENE')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
+      </div>
+
+      <!-- STORYBOARD -->
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="font-size:9px;color:#f59e0b;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#0d0800;padding:4px 8px;border-radius:5px;border:1px solid #52380e">🎬 STORYBOARD</div>
+        <input id="el-sb" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#52380e;background:#030a12;color:#f59e0b">
+        <button onclick="copyElement('el-sb','SB')" style="padding:3px 8px;border-radius:5px;border:1px solid #52380e;background:transparent;color:#f59e0b;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
+        <button onclick="injectElement('el-sb','SB')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
+      </div>
+
+      <!-- SẢN PHẨM -->
+      <div style="display:flex;align-items:center;gap:6px">
+        <div style="font-size:9px;color:#4ade80;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#001a0d;padding:4px 8px;border-radius:5px;border:1px solid #0e521a">📦 SẢN PHẨM</div>
+        <input id="el-product" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#0e521a;background:#030a12;color:#4ade80">
+        <button onclick="copyElement('el-product','PRODUCT')" style="padding:3px 8px;border-radius:5px;border:1px solid #0e521a;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
+        <button onclick="injectElement('el-product','PRODUCT')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
+      </div>
+
+    </div>
+
+    <!-- Preview -->
+    <div id="element-preview" style="display:none;margin-top:8px;padding:7px 10px;background:#020810;border:1px solid #1a3a6a;border-radius:6px;font-size:9px;font-family:'IBM Plex Mono',monospace;color:#5b9cf6;line-height:1.8"></div>
+
+    <!-- Quick inject all -->
+    <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
+      <button onclick="injectAllElements()" style="padding:5px 12px;border-radius:6px;border:none;background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:600;cursor:pointer">⚡ Inject Tất Cả → Prompt</button>
+      <button onclick="xoaAllElements()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">↺ Clear</button>
+    </div>
+  </div>
+
   <!-- MASTER LOCK -->
   <div style="background:linear-gradient(135deg,#0d0a1a,#1a0a10);border:1px solid #f59e0b;border-radius:10px;padding:12px 14px;margin-bottom:14px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
@@ -8963,6 +9022,72 @@ veThoai();
 veNVP();
 veKBShotTimes();
 // taiGiong removed with voice tab
+
+// ===== ELEMENT ID PANEL =====
+const ELEMENT_LABELS = {
+  'el-nv1':     { label:'NV CHÍNH',   color:'#a78bfa' },
+  'el-nv2':     { label:'NV PHỤ',     color:'#f472b6' },
+  'el-scene':   { label:'BỐI CẢNH',  color:'#06b6d4' },
+  'el-sb':      { label:'STORYBOARD', color:'#f59e0b' },
+  'el-product': { label:'SẢN PHẨM',  color:'#4ade80' }
+};
+
+function capNhatElementPreview(){
+  const lines = [];
+  Object.entries(ELEMENT_LABELS).forEach(([id, meta]) => {
+    const val = document.getElementById(id)?.value.trim();
+    if(val) lines.push(`<<<${val}>>> — ${meta.label}`);
+  });
+  const prev = document.getElementById('element-preview');
+  if(prev){
+    if(lines.length){
+      prev.style.display = '';
+      prev.innerHTML = '<span style="color:var(--muted)">Active elements:</span><br>' +
+        lines.map(l => `• ${l}`).join('<br>');
+    } else { prev.style.display = 'none'; }
+  }
+}
+
+function copyElement(inputId, label){
+  const val = document.getElementById(inputId)?.value.trim();
+  if(!val){ alert('Chưa có element_id.'); return; }
+  navigator.clipboard.writeText(`<<<${val}>>>`).then(()=>{
+    const btn = event.currentTarget;
+    if(btn){ const o=btn.textContent; btn.textContent='✓'; setTimeout(()=>btn.textContent=o,1200); }
+  });
+}
+
+function injectElement(inputId, label){
+  const val = document.getElementById(inputId)?.value.trim();
+  if(!val){ alert('Paste element_id trước.'); return; }
+  const tag = `[${label}: <<<${val}>>>]`;
+  const sdEl = document.getElementById('kq-sd');
+  kqSD = tag + '\n' + (kqSD||'');
+  if(sdEl) sdEl.textContent = kqSD;
+  const ind = document.getElementById('autosave-indicator');
+  if(ind){ ind.textContent=`✓ Đã inject ${label}`; ind.style.color='#5b9cf6'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},1800); }
+}
+
+function injectAllElements(){
+  const active = [];
+  Object.entries(ELEMENT_LABELS).forEach(([id, meta]) => {
+    const val = document.getElementById(id)?.value.trim();
+    if(val) active.push(`[${meta.label}: <<<${val}>>>]`);
+  });
+  if(!active.length){ alert('Chưa có element_id nào.'); return; }
+  kqSD = active.join('\n') + '\n\n' + (kqSD||'');
+  const sdEl = document.getElementById('kq-sd');
+  if(sdEl) sdEl.textContent = kqSD;
+  const ind = document.getElementById('autosave-indicator');
+  if(ind){ ind.textContent=`✓ Inject ${active.length} elements vào Seedance prompt`; ind.style.color='#5b9cf6'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},2000); }
+}
+
+function xoaAllElements(){
+  ['el-nv1','el-nv2','el-scene','el-sb','el-product'].forEach(id=>{
+    const el = document.getElementById(id); if(el) el.value='';
+  });
+  capNhatElementPreview();
+}
 
 // ===== EMOTION PHYSICS LIBRARY =====
 const EMOTION_PHYSICS = {
