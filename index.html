@@ -594,6 +594,21 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 
 
 <div class="fw-block">
+  <div class="fw-head" onclick="moRong('daoCu')"><span class="fw-num" style="color:#f472b6">ĐC</span><span class="fw-key" data-en="PROPS & PRODUCTS">ĐẠO CỤ & SẢN PHẨM</span><span class="fw-desc">Vị trí · Diễn viên cầm · Tay trái / phải</span><span class="fw-check" id="ck-daoCu">○</span></div>
+  <div class="fw-body" id="fb-daoCu">
+    <p class="hint" style="margin-bottom:10px">Mô tả đạo cụ và sản phẩm — vị trí trong cảnh và cách diễn viên cầm. Tự động đưa vào Master Lock.</p>
+
+    <div id="dao-cu-list" style="display:flex;flex-direction:column;gap:10px;margin-bottom:10px"></div>
+
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button onclick="themDaoCu('prop')" style="padding:5px 12px;border-radius:6px;border:1px solid #f472b6;background:transparent;color:#f472b6;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Đạo Cụ</button>
+      <button onclick="themDaoCu('product')" style="padding:5px 12px;border-radius:6px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Sản Phẩm</button>
+      <button onclick="xoaHetDaoCu()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">↺ Clear</button>
+    </div>
+  </div>
+</div>
+
+<div class="fw-block">
   <div class="fw-head" onclick="moRong('lighting')"><span class="fw-num">05</span><span class="fw-key" data-en="LIGHTING">ÁNH SÁNG</span><span class="fw-desc">Bố cục sáng · Màu sắc · Nhiệt độ Kelvin</span><span class="fw-check" id="ck-lighting">○</span></div>
   <div class="fw-body" id="fb-lighting">
     <div><div class="lbl"><span class="lbl-tag" data-en="Lighting setup (choose one)">Bố cục ánh sáng (chọn một)</span></div>
@@ -3211,6 +3226,13 @@ function buildSceneBlock(lang){
     ce.forEach(e => lines.push('• ' + e));
   }
 
+  // ── ĐẠO CỤ & SẢN PHẨM — MASTER LOCK ──
+  const daoCuLines = (typeof layDaoCuBlock === 'function') ? layDaoCuBlock(isEN ? 'en' : 'vi') : [];
+  if(daoCuLines.length){
+    lines.push('');
+    daoCuLines.forEach(l => lines.push(l));
+  }
+
   // ── PHONG CÁCH — MASTER LOCK (không thêm lại ở nơi khác) ──
   const pc  = gVal('style-desc') || '';
   const hasStyle = MM.director.length || MM.visual.length || MM.colorgrade.length || MM.filmstock.length || pc;
@@ -3360,19 +3382,7 @@ function taoVI(){
   sw('out');
   const{dd,nv,nvp,hd,mt,as,pc,rb,wardrobe}=layChung();const L=[];
 
-  // ── AUTO-INJECT ELEMENT IDs — luôn xuất hiện ──
-  const elNV1b     = document.getElementById('el-nv1')?.value.trim();
-  const elNV2b     = document.getElementById('el-nv2')?.value.trim();
-  const elSceneb   = document.getElementById('el-scene')?.value.trim();
-  const elSBb      = document.getElementById('el-sb')?.value.trim();
-  const elProductb = document.getElementById('el-product')?.value.trim();
-  L.push('[@ ELEMENTS — HIGGSFIELD]');
-  L.push(`👤 NV CHÍNH:   ${elNV1b    ? '<<<'+elNV1b+'>>>'    : '<<<paste_element_id>>>'}`);
-  L.push(`👤 NV PHỤ:     ${elNV2b    ? '<<<'+elNV2b+'>>>'    : '<<<paste_element_id>>>'}`);
-  L.push(`🏢 BỐI CẢNH:  ${elSceneb  ? '<<<'+elSceneb+'>>>'  : '<<<paste_element_id>>>'}`);
-  L.push(`🎬 STORYBOARD: ${elSBb     ? '<<<'+elSBb+'>>>'     : '<<<paste_element_id>>>'}`);
-  L.push(`📦 SẢN PHẨM:  ${elProductb? '<<<'+elProductb+'>>>' : '<<<paste_element_id>>>'}`);
-  L.push('');
+
 
   L.push('[Tiêu đề cảnh]');
 
@@ -3440,19 +3450,7 @@ function taoSD(){
   const L=[];
   L.push('SEEDANCE 2.0 ON HIGGSFIELD — CINEMATIC PROMPT');L.push('');
 
-  // ── AUTO-INJECT ELEMENT IDs — luôn xuất hiện ──
-  const elNV1     = document.getElementById('el-nv1')?.value.trim();
-  const elNV2     = document.getElementById('el-nv2')?.value.trim();
-  const elScene   = document.getElementById('el-scene')?.value.trim();
-  const elSB      = document.getElementById('el-sb')?.value.trim();
-  const elProduct = document.getElementById('el-product')?.value.trim();
-  L.push('[@ ELEMENTS — HIGGSFIELD]');
-  L.push(`👤 NV CHÍNH:   ${elNV1   ? '<<<' + elNV1    + '>>>' : '<<<paste_element_id_here>>>'}`);
-  L.push(`👤 NV PHỤ:     ${elNV2   ? '<<<' + elNV2    + '>>>' : '<<<paste_element_id_here>>>'}`);
-  L.push(`🏢 BỐI CẢNH:  ${elScene  ? '<<<' + elScene  + '>>>' : '<<<paste_element_id_here>>>'}`);
-  L.push(`🎬 STORYBOARD: ${elSB    ? '<<<' + elSB     + '>>>' : '<<<paste_element_id_here>>>'}`);
-  L.push(`📦 SẢN PHẨM:  ${elProduct? '<<<' + elProduct+ '>>>' : '<<<paste_element_id_here>>>'}`);
-  L.push('');
+
   const matRefs=[];
   if(matImg)matImg.split('\n').filter(Boolean).forEach(m=>{const n=m.split('—')[0].trim();if(n)matRefs.push({n,t:'image',d:m});});
   if(matVid)matVid.split('\n').filter(Boolean).forEach(m=>{const n=m.split('—')[0].trim();if(n)matRefs.push({n,t:'video',d:m});});
@@ -9014,6 +9012,7 @@ capNhat();
 veThoai();
 veNVP();
 veKBShotTimes();
+veDaoCu();
 // taiGiong removed with voice tab
 
 // ===== ELEMENT ID PANEL =====
@@ -9082,7 +9081,111 @@ function xoaAllElements(){
   capNhatElementPreview();
 }
 
-// ===== EMOTION PHYSICS LIBRARY =====
+// ===== ĐẠO CỤ & SẢN PHẨM =====
+let dsDaoCu = [];
+let daoCuId = 0;
+
+function themDaoCu(type){
+  daoCuId++;
+  dsDaoCu.push({
+    id: daoCuId, type,
+    name: '',           // Tên đạo cụ/sản phẩm
+    location: '',       // trên bàn / dưới đất / trong tay / treo tường...
+    actor: '',          // NV1 / NV2 / Không ai cầm
+    hand: '',           // Tay trái / Tay phải / Cả hai tay / Không cầm
+    note: ''            // Ghi chú thêm
+  });
+  veDaoCu();
+}
+
+function xoaDaoCu(id){ dsDaoCu = dsDaoCu.filter(d => d.id !== id); veDaoCu(); }
+function xoaHetDaoCu(){ dsDaoCu = []; veDaoCu(); }
+function updDaoCu(id, f, v){ const d = dsDaoCu.find(x => x.id === id); if(d) d[f] = v; }
+
+function veDaoCu(){
+  const el = document.getElementById('dao-cu-list');
+  if(!el) return;
+  if(!dsDaoCu.length){
+    el.innerHTML = '<div style="font-size:10px;color:var(--muted);font-style:italic">Chưa có đạo cụ nào.</div>';
+    return;
+  }
+  el.innerHTML = dsDaoCu.map((d,i) => {
+    const isProd = d.type === 'product';
+    const color  = isProd ? '#4ade80' : '#f472b6';
+    const label  = isProd ? '📦 Sản Phẩm' : '🎭 Đạo Cụ';
+    return `<div style="padding:10px 12px;background:#0a0010;border:1px solid ${isProd?'#0e521a':'#3b0060'};border-radius:8px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
+        <span style="font-size:10px;font-weight:600;color:${color};font-family:'IBM Plex Mono',monospace">${label} ${i+1}</span>
+        <button onclick="xoaDaoCu(${d.id})" style="padding:1px 8px;border-radius:4px;border:1px solid var(--bdr);background:transparent;color:var(--muted);cursor:pointer;font-size:11px">✕</button>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px">
+        <div>
+          <div class="slbl" style="margin-bottom:3px">Tên ${isProd?'sản phẩm':'đạo cụ'}</div>
+          <input type="text" value="${d.name}" placeholder="${isProd?'VD: Hộp kẹo Migita':'VD: Điện thoại, Ly cà phê'}" oninput="updDaoCu(${d.id},'name',this.value)" style="width:100%;font-size:10px">
+        </div>
+        <div>
+          <div class="slbl" style="margin-bottom:3px">Vị trí trong cảnh</div>
+          <select onchange="updDaoCu(${d.id},'location',this.value)" style="width:100%;font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--ink)">
+            <option value="" ${!d.location?'selected':''}>-- Chọn vị trí --</option>
+            <option value="trên bàn" ${d.location==='trên bàn'?'selected':''}>Trên bàn</option>
+            <option value="dưới đất" ${d.location==='dưới đất'?'selected':''}>Dưới đất</option>
+            <option value="trong túi" ${d.location==='trong túi'?'selected':''}>Trong túi</option>
+            <option value="treo tường" ${d.location==='treo tường'?'selected':''}>Treo tường</option>
+            <option value="trên ghế" ${d.location==='trên ghế'?'selected':''}>Trên ghế</option>
+            <option value="trong tay diễn viên" ${d.location==='trong tay diễn viên'?'selected':''}>Trong tay diễn viên</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl" style="margin-bottom:3px">Diễn viên cầm</div>
+          <select onchange="updDaoCu(${d.id},'actor',this.value)" style="width:100%;font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--ink)">
+            <option value="" ${!d.actor?'selected':''}>-- Chọn --</option>
+            <option value="NV Chính" ${d.actor==='NV Chính'?'selected':''}>👤 NV Chính</option>
+            <option value="NV Phụ" ${d.actor==='NV Phụ'?'selected':''}>👤 NV Phụ</option>
+            <option value="NV1 và NV2" ${d.actor==='NV1 và NV2'?'selected':''}>👥 NV1 & NV2</option>
+            <option value="Không ai cầm" ${d.actor==='Không ai cầm'?'selected':''}>— Không ai cầm</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl" style="margin-bottom:3px">Tay cầm</div>
+          <select onchange="updDaoCu(${d.id},'hand',this.value)" style="width:100%;font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--ink)">
+            <option value="" ${!d.hand?'selected':''}>-- Chọn --</option>
+            <option value="tay phải" ${d.hand==='tay phải'?'selected':''}>✋ Tay phải</option>
+            <option value="tay trái" ${d.hand==='tay trái'?'selected':''}>🤚 Tay trái</option>
+            <option value="cả hai tay" ${d.hand==='cả hai tay'?'selected':''}>🙌 Cả hai tay</option>
+            <option value="không cầm" ${d.hand==='không cầm'?'selected':''}>— Không cầm</option>
+          </select>
+        </div>
+      </div>
+      <div>
+        <div class="slbl" style="margin-bottom:3px">Ghi chú (mô tả thêm)</div>
+        <input type="text" value="${d.note}" placeholder="VD: logo hướng về phía camera, nắp mở sẵn..." oninput="updDaoCu(${d.id},'note',this.value)" style="width:100%;font-size:10px">
+      </div>
+    </div>`;
+  }).join('');
+  capNhat();
+}
+
+function layDaoCuBlock(lang){
+  if(!dsDaoCu.length) return [];
+  const isVI = lang === 'vi';
+  const lines = [];
+  lines.push(isVI ? '[ĐẠO CỤ & SẢN PHẨM]' : '[PROPS & PRODUCTS]');
+  dsDaoCu.forEach((d,i) => {
+    const label = isVI
+      ? (d.type==='product' ? `Sản Phẩm ${i+1}` : `Đạo Cụ ${i+1}`)
+      : (d.type==='product' ? `Product ${i+1}` : `Prop ${i+1}`);
+    const parts = [];
+    if(d.name)     parts.push(isVI ? `Tên: ${d.name}` : `Name: ${d.name}`);
+    if(d.location) parts.push(isVI ? `Vị trí: ${d.location}` : `Position: ${d.location}`);
+    if(d.actor && d.actor !== 'Không ai cầm') parts.push(isVI ? `${d.actor} cầm` : `Held by: ${d.actor}`);
+    if(d.hand && d.hand !== 'không cầm') parts.push(isVI ? d.hand : d.hand.replace('tay ','').replace('cả hai tay','both hands'));
+    if(d.note) parts.push(d.note);
+    lines.push(`${label}: ${parts.join(' — ') || '(chưa điền)'}`);
+  });
+  return lines;
+}
+
+
 const EMOTION_PHYSICS = {
   joy:         { name:'😊 Vui / Joy', vi:'Cơ gò má co 2 bên — khóe miệng kéo ra 14mm. Cơ vòng mắt siết — nếp chân chim 2mm ở đuôi mắt. Má nâng 5mm. Ngực nở ra khi hít thở. Vai hạ 3mm. Mắt có nếp nheo nhẹ — dấu hiệu vui thật sự.', text:'Zygomatic major contracts bilaterally — mouth corners pull 14mm laterally. Orbicularis oculi engages — crow\'s foot compression 2mm at lateral canthi. Cheeks lift 5mm. Chest expands on held breath. Shoulders settle 3mm. Eyes develop soft squint — genuine Duchenne marker.' },
   pride:       { name:'💪 Tự hào / Pride', vi:'Cằm ngẩng 12–15° so với trung tính. Hai vai kéo ra sau 18mm. Xương ức tiến về phía trước 22mm. Mắt nhìn thẳng, con ngươi ở giữa, ánh nhìn chậm rãi. Hàm siết nhẹ. Tay cách thân 8–10cm.', text:'Chin lifts 12–15° above neutral. Scapulae retract — shoulders pull back 18mm. Sternum moves forward 22mm. Eyes direct forward, pupils centered, unhurried gaze. Jaw set firm. Arms move away from body 8–10cm.' },
