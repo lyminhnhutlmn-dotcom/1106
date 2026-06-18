@@ -54,6 +54,11 @@ select option{background:var(--card)}
 .dir-qa-item:has(input:checked) .dir-qa-num{color:#c084fc}
 .dir-qa-num{color:#4a0080;font-weight:600;font-size:9px;min-width:18px}
 .fw-num{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:1px;min-width:24px}
+.emo-phy-card{padding:8px 9px;border-radius:8px;border:1px solid #2a0040;background:#0a0010;cursor:pointer;transition:all .15s}
+.emo-phy-card:hover{border-color:#7c3aed;background:#0d0014}
+.emo-phy-card.selected{border-color:#a855f7;background:#0d0014;box-shadow:0 0 0 1px #a855f7}
+.emo-phy-name{font-size:10px;font-weight:600;color:#c084fc;margin-bottom:3px;font-family:'IBM Plex Mono',monospace}
+.emo-phy-desc{font-size:9px;color:var(--muted);line-height:1.6;font-family:'IBM Plex Mono',monospace}
 .fw-num-p{color:var(--purple)}.fw-num-t{color:var(--teal)}
 .fw-key{font-size:12px;font-weight:500;color:var(--ink);min-width:100px}
 .fw-desc{font-size:11px;color:var(--muted);flex:1}
@@ -1581,6 +1586,141 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     </div>
   </div>
 
+  <!-- ① EMOTION PHYSICS LIBRARY -->
+  <div class="divd"></div>
+  <div class="sec">
+    <div class="lbl" style="color:#f472b6">⚡ EMOTION → PHYSICS <span style="color:var(--muted);font-weight:400;font-size:9px">— Seedance hiểu vật lý tốt hơn tên cảm xúc</span></div>
+    <p class="hint" style="margin-bottom:8px">Chọn cảm xúc → tự động thêm mô tả cơ-mặt, hơi thở, cơ thể vào prompt</p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:5px" id="emotion-physics-grid">
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('joy')">
+        <div class="emo-phy-name">😊 Vui — Joy</div>
+        <div class="emo-phy-desc">Zygomatic major pulls corners +14mm. Orbicularis oculi contracts — crow's foot 2mm. Chest expands on held breath.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('pride')">
+        <div class="emo-phy-name">💪 Tự hào — Pride</div>
+        <div class="emo-phy-desc">Cằm ngẩng 15°. Vai kéo ra sau 18mm. Ngực nở 22mm. Mắt nhìn thẳng. / Chin 15°, shoulders back 18mm.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('fatigue')">
+        <div class="emo-phy-name">😮‍💨 Mệt mỏi — Fatigue</div>
+        <div class="emo-phy-desc">Upper eyelid at 65% descent. Spine curves forward 25°. Shoulders drop 4cm. Jaw slack, mouth 3mm open. Breathing slow.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('fear')">
+        <div class="emo-phy-name">😨 Sợ hãi — Fear</div>
+        <div class="emo-phy-desc">Mí trên nhướng 3mm, lộ tròng trắng. Con ngươi 5.5mm. Vai nhô 8mm. Hơi thở ngừng. / Sclera visible, pupils 5.5mm.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('anger')">
+        <div class="emo-phy-name">😤 Tức giận — Anger</div>
+        <div class="emo-phy-desc">Cau mày — 3 nếp dọc. Hàm siết — cơ nhai lồi. Mũi phồng 2mm. Nắm đấm. / Brow furrows, masseter, nostrils 2mm.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('grief')">
+        <div class="emo-phy-name">😢 Đau buồn — Grief</div>
+        <div class="emo-phy-desc">Cằm nhăn nhúm. Môi trên mỏng. Rãnh mũi má sâu. Họng co thắt. / Chin crumple, nasolabial fold, throat.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('surprise')">
+        <div class="emo-phy-name">😲 Bất ngờ — Surprise</div>
+        <div class="emo-phy-desc">Lông mày nhướng 5mm. Mí mắt mở tối đa. Hàm rớt 8mm. Hơi thở ngừng 0.3s. / Brows 5mm, jaw 8mm, breath stops.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('contempt')">
+        <div class="emo-phy-name">😏 Khinh thường — Contempt</div>
+        <div class="emo-phy-desc">Khóe miệng một bên nhếch 4mm. Lông mày một bên. Đầu nghiêng 8°. Chớp mắt 0.5s. / Unilateral smile, head tilt 8°.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('determination')">
+        <div class="emo-phy-name">🔥 Quyết tâm — Determination</div>
+        <div class="emo-phy-desc">Môi ép chặt. Hàm đưa ra 3mm. Mắt nheo 15%. Cột sống thẳng. Tay nắm lỏng. / Lips tight, jaw forward, eyes narrow 15%.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('shame')">
+        <div class="emo-phy-name">😳 Xấu hổ — Shame</div>
+        <div class="emo-phy-desc">Đầu cúi — cằm về ngực. Mắt nhìn xuống. Vai cuộn 20mm. Tai ửng hồng. / Head drops, shoulders forward 20mm.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('longing')">
+        <div class="emo-phy-name">💭 Nhớ nhung — Longing</div>
+        <div class="emo-phy-desc">Mắt mờ — nhìn xa. Mí trên hạ 25%. Môi hé 1mm. Đầu nghiêng nhẹ. Hơi thở chậm. / Soft focus, eyelid 25%, lips 1mm.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('relief')">
+        <div class="emo-phy-name">😮‍💨 Nhẹ nhõm — Relief</div>
+        <div class="emo-phy-desc">Thở dài — ngực hạ 18mm, vai 6mm. Mắt nhắm 0.4s. Hàm thả lỏng. Đầu gật. / Exhale, chest -18mm, jaw releases.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('love')">
+        <div class="emo-phy-name">❤️ Yêu thương — Love</div>
+        <div class="emo-phy-desc">Con ngươi giãn 1–2mm. Nụ cười nhẹ — không cơ má lớn. Hơi thở chậm 20%. Nghiêng về phía đối tượng. / Pupils +2mm, soft smile, lean 5°.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('tension')">
+        <div class="emo-phy-name">😬 Căng thẳng — Tension</div>
+        <div class="emo-phy-desc">Cơ thái dương lộ. Vai nhô 5mm. Hơi thở nông 4mm. Ngón tay ép. Mồ hôi môi. / Temporalis, trapezius 5mm, shallow breath.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('numbness')">
+        <div class="emo-phy-name">😶 Vô cảm — Numbness</div>
+        <div class="emo-phy-desc">Mặt không biểu cảm. Mắt vô định. Hơi thở vô hình. Thân bất động. / Zero expression, no micro-movement.</div>
+      </div>
+
+      <div class="emo-phy-card" onclick="chonEmotionPhysics('confidence')">
+        <div class="emo-phy-name">😎 Tự tin — Confidence</div>
+        <div class="emo-phy-desc">Cằm nhẹ ngẩng. Nhìn thẳng, thong thả. Không cử động thừa. Tay cách thân 8cm. / Direct gaze, no fidget, arms 8cm.</div>
+      </div>
+
+    </div>
+
+    <!-- Selected physics output -->
+    <div id="emo-physics-output" style="display:none;margin-top:8px;padding:9px 11px;background:#0d0014;border:1px solid #7c3aed;border-radius:7px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--ink);line-height:1.8">
+      <div style="font-size:9px;color:#a855f7;font-weight:600;margin-bottom:4px">⚡ EMOTION PHYSICS OUTPUT — sẽ thêm vào prompt:</div>
+      <div id="emo-physics-text"></div>
+      <div style="display:flex;gap:5px;margin-top:6px">
+        <button onclick="copyEmoPhysics()" style="padding:3px 10px;border-radius:5px;border:1px solid #a855f7;background:transparent;color:#a855f7;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⊕ Copy</button>
+        <button onclick="addEmoPhysicsToPrompt()" style="padding:3px 10px;border-radius:5px;border:1px solid var(--green);background:transparent;color:var(--green);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Thêm vào Prompt</button>
+        <button onclick="document.getElementById('emo-physics-output').style.display='none'" style="padding:3px 10px;border-radius:5px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">✕</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ② EMOTIONAL ARC BUILDER -->
+  <div class="divd"></div>
+  <div class="sec">
+    <div class="lbl" style="color:#f59e0b">📈 EMOTIONAL ARC BUILDER <span style="color:var(--muted);font-weight:400;font-size:9px">— timeline cảm xúc theo giây</span></div>
+    <p class="hint" style="margin-bottom:8px">Xây dựng arc cảm xúc theo từng mốc thời gian — AI tạo transition description cho Seedance</p>
+    <div id="arc-timeline" style="display:flex;flex-direction:column;gap:5px;margin-bottom:7px"></div>
+    <div style="display:flex;gap:5px;flex-wrap:wrap">
+      <button onclick="themArcBeat()" style="padding:5px 12px;border-radius:6px;border:1px solid #f59e0b;background:transparent;color:#f59e0b;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">+ Thêm mốc</button>
+      <button onclick="taoArcPrompt()" style="padding:5px 14px;border-radius:6px;border:none;background:linear-gradient(135deg,#92400e,#f59e0b);color:#000;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:600;cursor:pointer">⚡ Tạo Arc Prompt</button>
+      <button onclick="xoaArcHet()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">↺ Clear</button>
+    </div>
+    <div id="arc-output" style="display:none;margin-top:8px;padding:9px 11px;background:#0d0a00;border:1px solid #92400e;border-radius:7px;font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--ink);line-height:1.9;white-space:pre-wrap"></div>
+  </div>
+
+  <!-- ③ SHOW DON'T TELL CHECKER -->
+  <div class="divd"></div>
+  <div class="sec">
+    <div class="lbl" style="color:#4ade80">🔍 SHOW DON'T TELL <span style="color:var(--muted);font-weight:400;font-size:9px">— AI dịch cảm xúc → vật lý</span></div>
+    <p class="hint" style="margin-bottom:8px">Paste mô tả cảm xúc → AI convert sang ngôn ngữ vật lý cụ thể cho Seedance</p>
+    <textarea id="sdt-input" rows="3" placeholder="VD: Nhân vật cảm thấy vui mừng và tự hào khi nhận được kết quả..." style="font-size:11px;margin-bottom:6px;resize:vertical"></textarea>
+    <div style="display:flex;gap:5px;align-items:center">
+      <button onclick="sdtConvert()" id="btn-sdt" style="padding:5px 14px;border-radius:6px;border:none;background:linear-gradient(135deg,#065f46,#4ade80);color:#000;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:600;cursor:pointer">🔍 Convert → Physics</button>
+      <span id="sdt-status" style="font-size:10px;color:var(--muted);font-style:italic"></span>
+    </div>
+    <div id="sdt-output" style="display:none;margin-top:8px;padding:9px 11px;background:#001a0d;border:1px solid #065f46;border-radius:7px">
+      <div style="font-size:9px;color:#4ade80;font-weight:600;margin-bottom:4px">✓ PHYSICAL DESCRIPTION — sẵn sàng cho Seedance:</div>
+      <div id="sdt-text" style="font-size:10px;font-family:'IBM Plex Mono',monospace;color:var(--ink);line-height:1.9;white-space:pre-wrap"></div>
+      <div style="display:flex;gap:5px;margin-top:6px">
+        <button onclick="copySdtOutput()" style="padding:3px 10px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">⊕ Copy</button>
+        <button onclick="addSdtToPrompt()" style="padding:3px 10px;border-radius:5px;border:1px solid var(--gold);background:transparent;color:var(--gold);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">→ Thêm vào Prompt</button>
+      </div>
+    </div>
+  </div>
+
 </div>
 
   <div id="emo-nv2-panel" style="display:none">
@@ -2750,6 +2890,7 @@ function veShot(){
     <div class="shot-card"><div class="shot-hd" onclick="moShot(${s.id})">
       <span class="shot-num">SỰ KIỆN ${i+1}</span>
       ${charPromptText?'<span title="Nhân vật đã lock" style="color:#a78bfa;font-size:10px;margin-right:4px">🔒</span>':''}
+      ${s.emotion && s.emotion!=='custom' && EMOTION_PHYSICS[s.emotion] ? `<span style="font-size:9px;padding:1px 6px;border-radius:10px;border:1px solid #7c3aed;color:#c084fc;background:#0d0014;margin-right:2px">${EMOTION_PHYSICS[s.emotion].name.split(' — ')[0]}</span>` : ''}
       <span class="shot-title">${s.cuMay||'Chưa chọn'}${s.moTa?' — '+s.moTa.slice(0,30)+'...':''}</span>
       <span class="shot-dur">${s.tg}s</span>
       <button onclick="event.stopPropagation();taoPromptShot(${s.id})" style="background:transparent;border:1px solid var(--gold);color:var(--gold);border-radius:5px;font-size:9px;padding:2px 7px;cursor:pointer;font-family:'IBM Plex Mono',monospace">✨ Prompt</button>
@@ -2764,6 +2905,33 @@ function veShot(){
       </div>
 
       
+
+      <!-- CẢM XÚC SHOT -->
+      <div style="margin-bottom:8px;padding:8px 10px;background:#0a0010;border-radius:7px;border:1px solid #2a0040">
+        <div class="slbl" style="color:#c084fc;margin-bottom:5px">💔 Cảm xúc nhân vật — Shot này</div>
+        <div style="display:flex;gap:4px;flex-wrap:wrap;margin-bottom:5px">
+          ${Object.entries(EMOTION_PHYSICS).map(([key,ep])=>`
+            <span class="schip${s.emotion===key?' s on':''}" 
+              style="${s.emotion===key?'border-color:#a855f7;color:#a855f7;background:#0d0014':''}"
+              onclick="chonShotEmotion(${s.id},'${key}')"
+              title="${ep.text.slice(0,80)}...">${ep.name.split(' — ')[0]}</span>
+          `).join('')}
+          <span class="schip${s.emotion==='custom'?' s on':''}" 
+            onclick="chonShotEmotion(${s.id},'custom')"
+            style="${s.emotion==='custom'?'border-color:#a855f7;color:#a855f7':''}"
+            >✏️ Tự viết</span>
+        </div>
+        ${s.emotion && s.emotion !== 'custom' && EMOTION_PHYSICS[s.emotion] ? `
+          <div style="font-size:9px;font-family:'IBM Plex Mono',monospace;line-height:1.7;padding:6px 8px;background:#060006;border-radius:5px;border-left:2px solid #7c3aed">
+            <span style="color:#a855f7;font-weight:600">${EMOTION_PHYSICS[s.emotion].name}</span><br>
+            <span style="color:var(--ink)">${EMOTION_PHYSICS[s.emotion].vi.slice(0,140)}...</span><br>
+            <span style="color:#4a5568;font-size:8px;margin-top:2px;display:block">${EMOTION_PHYSICS[s.emotion].text.slice(0,120)}...</span>
+          </div>` : ''}
+        ${s.emotion === 'custom' ? `
+          <textarea id="emo-custom-${s.id}" rows="2" placeholder="Mô tả vật lý cảm xúc..." 
+            oninput="updShot(${s.id},'emotionCustom',this.value)"
+            style="font-size:10px;margin-top:4px;resize:vertical">${s.emotionCustom||''}</textarea>` : ''}
+      </div>
 
       <!-- KỸ THUẬT ĐẶC BIỆT -->
       <div style="margin-bottom:8px">
@@ -2809,7 +2977,17 @@ function veShot(){
       <div style="margin-top:6px"><div class="slbl">🔊 Âm thanh</div><div class="schips">${TD_DS.map(d=>`<span class="schip${s.thoai===d?' s on':''}" onclick="chonTD(${s.id},'${d}')">${d}</span>`).join('')}</div></div>
     </div></div>`).join('');
 }
-function moShot(id){const e=document.getElementById('sb-'+id);if(e)e.style.display=e.style.display==='none'?'':'none';}
+function chonShotEmotion(id, key){
+  updShot(id, 'emotion', key);
+  veShot();
+  // Scroll to physics preview
+  setTimeout(() => {
+    const el = document.getElementById('sb-' + id);
+    if(el && el.style.display !== 'none') el.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }, 50);
+}
+
+
 function chonCM(id,v){updShot(id,'cuMay',v);veShot();}
 function chonTD(id,v){updShot(id,'thoai',v);veShot();}
 
@@ -7376,6 +7554,12 @@ async function taoStoryboardPrompt(id){
   const bmProfile  = SS.bm_profile || '';
   const grain      = (MM.grain||[]).join(', ') || '';
 
+  // Emotion physics for this shot
+  const emoKey     = s.emotion || '';
+  const emoPhysics = emoKey && emoKey !== 'custom' && typeof EMOTION_PHYSICS !== 'undefined' && EMOTION_PHYSICS[emoKey]
+    ? `[EMOTION — ${EMOTION_PHYSICS[emoKey].name.toUpperCase()}]\n${EMOTION_PHYSICS[emoKey].text}`
+    : (s.emotionCustom || '');
+
   const system = `You are a world-class DOP and storyboard artist optimizing for Seedance 2.0 Image-to-Video generation.
 
 Your task: Write a SINGLE FROZEN FRAME image prompt — the perfect keyframe that Seedance will use as start_image for I2V generation.
@@ -7411,6 +7595,7 @@ Write in plain cinematic English. Use exact numbers everywhere. Output ONLY the 
 SHOT: ${size} | Camera: ${cam} | Lens: ${lens} | Timing: ${timing}
 ${fx ? 'SPECIAL FX (frozen at peak of): ' + fx : ''}
 ACTION (frozen at peak moment): ${content || 'Cinematic scene'}
+${emoPhysics ? emoPhysics + '\n' : ''}
 SUBJECT: ${nat ? nat + ', ' : ''}${nv}
 ${face ? 'FACE: ' + face.slice(0,120) : ''}
 ${eyes ? 'EYES: ' + eyes.slice(0,80) : ''}
@@ -8763,7 +8948,182 @@ veNVP();
 veKBShotTimes();
 // taiGiong removed with voice tab
 
-// ===== SEEDANCE 2.0 PRO DIRECTOR =====
+// ===== EMOTION PHYSICS LIBRARY =====
+const EMOTION_PHYSICS = {
+  joy:         { name:'😊 Vui / Joy', vi:'Cơ gò má co 2 bên — khóe miệng kéo ra 14mm. Cơ vòng mắt siết — nếp chân chim 2mm ở đuôi mắt. Má nâng 5mm. Ngực nở ra khi hít thở. Vai hạ 3mm. Mắt có nếp nheo nhẹ — dấu hiệu vui thật sự.', text:'Zygomatic major contracts bilaterally — mouth corners pull 14mm laterally. Orbicularis oculi engages — crow\'s foot compression 2mm at lateral canthi. Cheeks lift 5mm. Chest expands on held breath. Shoulders settle 3mm. Eyes develop soft squint — genuine Duchenne marker.' },
+  pride:       { name:'💪 Tự hào / Pride', vi:'Cằm ngẩng 12–15° so với trung tính. Hai vai kéo ra sau 18mm. Xương ức tiến về phía trước 22mm. Mắt nhìn thẳng, con ngươi ở giữa, ánh nhìn chậm rãi. Hàm siết nhẹ. Tay cách thân 8–10cm.', text:'Chin lifts 12–15° above neutral. Scapulae retract — shoulders pull back 18mm. Sternum moves forward 22mm. Eyes direct forward, pupils centered, unhurried gaze. Jaw set firm. Arms move away from body 8–10cm.' },
+  fatigue:     { name:'😮‍💨 Mệt mỏi / Fatigue', vi:'Mí mắt trên sụp 65%. Cột sống cong về phía trước 25°. Hai cánh tay nặng nề đặt lên bề mặt. Vai rũ xuống 4cm. Hàm dưới thả lỏng — miệng hé 3mm. Hơi thở chậm, ngực chỉ phồng 4mm mỗi nhịp.', text:'Upper eyelid descends to 65%. Spine curves forward 25°. Both forearms heavy on surface. Shoulders drop 4cm from neutral. Jaw slack — mouth 3mm open. Breathing slow, chest rises only 4mm per breath.' },
+  fear:        { name:'😨 Sợ hãi / Fear', vi:'Mí trên nhướng 3mm — lộ tròng trắng phía trên. Con ngươi giãn đến 5.5mm. Cơ trán nâng lông mày 5mm cả 2 bên. Vai nhô lên về phía tai 8mm. Hơi thở ngừng 0.3s rồi thở nhanh nông.', text:'Upper eyelid elevates 3mm — sclera visible above iris. Pupils dilate to 5.5mm. Frontalis raises brows 5mm bilaterally. Shoulders rise toward ears 8mm. Breath stops 0.3s then resumes shallow and rapid.' },
+  anger:       { name:'😤 Tức giận / Anger', vi:'Cơ cau mày kéo 2 bên vào giữa — 3 nếp nhăn dọc giữa chân mày. Hàm siết chặt — cơ nhai lồi ở góc hàm. Cánh mũi phồng 2mm. Môi ép chặt. Tay nắm thành quyền.', text:'Corrugator supercilii draws brows medially — 3 vertical furrows visible. Jaw clenches — masseter bulge at mandible corner. Nostrils flare 2mm bilateral. Lips press firm. Hands form fists.' },
+  grief:       { name:'😢 Đau buồn / Grief', vi:'Cơ cằm nhăn nhúm. Cơ vòng miệng siết. Môi trên mỏng lại và dài ra. Má nâng tạo rãnh mũi má sâu. Khóe miệng kéo xuống. Họng co thắt — nuốt nước bọt bị kìm.', text:'Mentalis crumples chin. Orbicularis oris tightens. Upper lip thins and elongates. Cheek creates deep nasolabial fold. Throat contracts — swallowing suppressed.' },
+  surprise:    { name:'😲 Bất ngờ / Surprise', vi:'Cơ trán co hoàn toàn — lông mày nhướng 5mm cả 2 bên, trán có nếp nhăn ngang. Mí trên mở tối đa. Hàm rớt 8mm. Hơi thở hít vào nhanh 0.2s rồi ngừng 0.4s. Tay có thể giơ lên lòng bàn tay hướng ra.', text:'Frontalis contracts fully — brows rise 5mm bilaterally. Upper eyelid elevates maximally. Jaw drops 8mm. Breath intake sharp 0.2s then stops 0.4s. Hands may rise palms-forward.' },
+  contempt:    { name:'😏 Khinh thường / Contempt', vi:'Khóe miệng một bên nhếch lên 4mm (chỉ bên phải hoặc trái). Má bên đó nhô lên không đối xứng. Lông mày bên kia nhích lên 2mm. Đầu nghiêng 8° sang một bên. Chớp mắt chậm 0.4–0.6s.', text:'Unilateral lip corner rises 4mm — one side only. Corresponding cheek lifts asymmetrically. Contralateral brow raises 2mm. Head tilts 8° away. Slow deliberate blink 0.4–0.6s.' },
+  determination:{ name:'🔥 Quyết tâm / Determination', vi:'Môi ép chặt — không còn khe hở. Hàm đưa ra trước 3mm. Mắt nheo 15% — nhìn tập trung. Cột sống thẳng hoàn toàn. Hai tay nắm lỏng chuẩn bị — đốt ngón hướng về phía trước.', text:'Lips press together — zero gap. Jaw set 3mm forward. Eyes narrow 15% — focused squint. Spine fully erect. Both hands form loose preparation fists — knuckles forward.' },
+  shame:       { name:'😳 Xấu hổ / Shame', vi:'Đầu cúi — cổ cong, cằm về phía ngực. Mắt nhìn xuống. Vai cuộn về phía trước 20mm. Tai và cổ ửng hồng ấm do mao mạch giãn. Tay di chuyển che mặt hoặc thân.', text:'Head drops — chin toward sternum. Eye gaze casts downward. Shoulders roll forward 20mm. Ears and neck flush warm pink. Hands move to cover face or torso.' },
+  longing:     { name:'💭 Nhớ nhung / Longing', vi:'Mắt mờ — nhìn xa ngoài khung hình. Mí trên hạ 25%. Môi hé 1–2mm. Đầu nghiêng nhẹ 5°. Hơi thở chậm và nông — chu kỳ 4–5 giây. Nụ cười vi nhẹ ở khóe miệng, giữ 0.5s rồi tan.', text:'Eyes soften — focus extends beyond frame. Upper eyelid descends 25%. Lips part 1–2mm. Head tilts 5°. Breathing slows — shallow cycles 4–5 seconds. Micro-smile at corner, held 0.5s then fades.' },
+  relief:      { name:'😮‍💨 Nhẹ nhõm / Relief', vi:'Thở dài — ngực hạ 18mm, vai đồng thời hạ 6mm. Mắt nhắm hoàn toàn 0.4s rồi mở nhẹ nhàng. Hàm thả lỏng. Đầu gật nhẹ về phía trước rồi ngẩng lên. Tay mở ra nếu đang nắm.', text:'Long exhale — chest drops 18mm, shoulders descend 6mm. Eyes close 0.4s then open softly. Jaw unclenches. Head drops forward 10° then rises. Hands open if previously fisted.' },
+  love:        { name:'❤️ Yêu thương / Love', vi:'Con ngươi giãn 1–2mm. Nụ cười nhẹ — chỉ cơ má nhỏ, không phải cơ má lớn. Hơi thở chậm 20% và sâu hơn. Thân người nghiêng về phía đối tượng 5°. Tần suất chớp mắt giảm. Đầu nghiêng 8°.', text:'Pupils dilate 1–2mm. Soft smile — zygomatic minor only. Breathing slows 20% and deepens. Body orients toward subject — 5° lean. Blink rate decreases. Head tilts 8°.' },
+  tension:     { name:'😬 Căng thẳng / Tension', vi:'Cơ thái dương lộ ở thái dương dưới ánh sáng chéo — hàm siết mỗi 8–12 giây. Cơ thang nhô 5mm. Hơi thở nông — ngực di chuyển 4mm so với bình thường 12mm. Ngón tay ép vào bề mặt. Mồ hôi nhẹ trên môi trên.', text:'Temporalis visible at temple. Trapezius rises 5mm. Breathing shallow — chest 4mm vs normal 12mm. Fingers press against surface. Micro-sweat on upper lip.' },
+  numbness:    { name:'😶 Vô cảm / Numbness', vi:'Tất cả cơ mặt ở trạng thái nghỉ — không có tín hiệu biểu cảm. Mắt không lấy nét — nhìn vô định tầm giữa, không chuyển động 3–5 giây. Hơi thở không nhìn thấy từ bên ngoài. Thân người hoàn toàn bất động.', text:'All facial muscles at resting baseline. Eyes unfocused — locked at middle distance, no saccades 3–5 seconds. Breathing invisible. Body completely still — zero micro-movement.' },
+  confidence:  { name:'😎 Tự tin / Confidence', vi:'Cằm ở mức trung tính đến hơi ngẩng. Ánh nhìn thẳng và thong thả — không né tránh. Không có cử động thừa. Tay cách thân 8–10cm. Hơi thở chậm sâu — từ cơ hoành. Hít thở kiểm soát 0.3s trước khi nói.', text:'Chin neutral to 5° raised. Gaze direct and unhurried. Zero fidget or self-touch. Arms 8–10cm from body. Breathing slow and diaphragmatic. Controlled inhale 0.3s before responding.' }
+};
+
+let selectedEmoPhysics = null;
+let arcBeats = [];
+
+function chonEmotionPhysics(key){
+  const data = EMOTION_PHYSICS[key];
+  if(!data) return;
+  selectedEmoPhysics = data;
+
+  document.querySelectorAll('.emo-phy-card').forEach(c => c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+
+  const out = document.getElementById('emo-physics-output');
+  const txt = document.getElementById('emo-physics-text');
+  if(out) out.style.display = '';
+  if(txt) txt.textContent =
+    `[EMOTION — ${data.name.toUpperCase()}]\n` +
+    `🇻🇳 ${data.vi}\n\n` +
+    `🇬🇧 ${data.text}`;
+  out.scrollIntoView({ behavior:'smooth', block:'nearest' });
+}
+
+function copyEmoPhysics(){
+  if(!selectedEmoPhysics) return;
+  const txt = `[EMOTION — ${selectedEmoPhysics.name.toUpperCase()}]\n${selectedEmoPhysics.text}`;
+  robustCopy(txt, document.querySelector('#emo-physics-output button'));
+}
+
+function addEmoPhysicsToPrompt(){
+  if(!selectedEmoPhysics) return;
+  const txt = `[EMOTION — ${selectedEmoPhysics.name.toUpperCase()}]\n${selectedEmoPhysics.text}`;
+  MM.emo = MM.emo || [];
+  MM.emo.push(txt);
+  const ind = document.getElementById('autosave-indicator');
+  if(ind){ ind.textContent = '✓ Đã thêm Emotion Physics vào prompt'; ind.style.color='#a855f7'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},2500); }
+}
+
+// ===== EMOTIONAL ARC BUILDER =====
+function themArcBeat(){
+  const totalDur = (cacShot||[]).reduce((a,s)=>a+(s.tg||5),0) || 10;
+  const beat = { time: arcBeats.length === 0 ? '0s' : '', emotion: '', note: '' };
+  arcBeats.push(beat);
+  veArcTimeline();
+}
+
+function xoaArcHet(){
+  arcBeats = [];
+  veArcTimeline();
+  const out = document.getElementById('arc-output');
+  if(out) out.style.display = 'none';
+}
+
+function veArcTimeline(){
+  const el = document.getElementById('arc-timeline');
+  if(!el) return;
+  if(!arcBeats.length){ el.innerHTML = '<div style="font-size:10px;color:var(--muted);padding:6px 0">Chưa có mốc nào — nhấn "+ Thêm mốc"</div>'; return; }
+  el.innerHTML = arcBeats.map((b,i) => `
+    <div style="display:flex;gap:5px;align-items:center">
+      <input value="${b.time}" oninput="arcBeats[${i}].time=this.value" placeholder="0s" style="width:45px;font-size:10px;border-color:#92400e;background:#0d0a00;color:var(--ink);border-radius:5px;padding:4px 6px;font-family:'IBM Plex Mono',monospace">
+      <span style="color:#f59e0b;font-size:12px">→</span>
+      <input value="${b.emotion}" oninput="arcBeats[${i}].emotion=this.value" placeholder="VD: Mệt mỏi, Bất ngờ, Tự hào..." style="flex:2;font-size:10px;border-color:#92400e;background:#0d0a00;color:var(--ink)">
+      <input value="${b.note}" oninput="arcBeats[${i}].note=this.value" placeholder="Ghi chú..." style="flex:3;font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--muted)">
+      <button onclick="arcBeats.splice(${i},1);veArcTimeline()" style="padding:2px 7px;border-radius:4px;border:1px solid #2a2a2a;background:transparent;color:var(--muted);cursor:pointer;font-size:11px">✕</button>
+    </div>`).join('');
+}
+
+async function taoArcPrompt(){
+  if(!arcBeats.length){ alert('Thêm ít nhất 2 mốc thời gian.'); return; }
+  const out = document.getElementById('arc-output');
+  if(out){ out.style.display=''; out.textContent='⏳ AI đang tạo emotional arc...'; }
+
+  const beatDesc = arcBeats.map(b => `${b.time}: ${b.emotion}${b.note?' ('+b.note+')':''}`).join(' → ');
+  const charCtx = charPromptText ? charPromptText.slice(0,200) : (gVal('subject-desc')||'');
+  const shotCtx = (cacShot||[]).map((s,i)=>`Shot ${i+1} ${s.tg||5}s: ${s.moTa||''}`).join('. ').slice(0,300);
+
+  const system = `You are a master DOP and acting coach specializing in Seedance 2.0 prompt engineering.
+Convert emotional arc beats into precise physical descriptions for each time segment.
+For each beat transition, describe: facial muscles, breathing, body posture, eye behavior, and micro-movements.
+Use exact measurements (mm, degrees, seconds). Show don't tell — no emotion names, only physical evidence.
+Output in English. Format: [Xs–Ys] Physical description. Keep each segment under 60 words.`;
+
+  const userMsg = `Emotional arc: ${beatDesc}
+Character: ${charCtx}
+Shot context: ${shotCtx}
+Create a physical emotional arc description for Seedance 2.0 video generation.`;
+
+  let acc = '';
+  try{
+    await goiClaude(system, userMsg, chunk => {
+      acc += chunk;
+      if(out) out.textContent = acc;
+    });
+    if(out){ out.style.display=''; out.textContent=acc; }
+  } catch(e){
+    if(out) out.textContent = '❌ ' + e.message;
+  }
+}
+
+// ===== SHOW DON'T TELL CHECKER =====
+async function sdtConvert(){
+  const input = document.getElementById('sdt-input')?.value.trim();
+  if(!input){ alert('Nhập mô tả cảm xúc trước.'); return; }
+
+  const btn = document.getElementById('btn-sdt');
+  const status = document.getElementById('sdt-status');
+  const out = document.getElementById('sdt-output');
+  const txt = document.getElementById('sdt-text');
+
+  if(btn) btn.disabled = true;
+  if(status) status.textContent = '⏳ Đang convert...';
+  if(out) out.style.display = 'none';
+
+  const system = `You are a master DOP translating abstract emotional descriptions into precise physical/cinematic descriptions for Seedance 2.0 AI video generation.
+
+RULES:
+- NEVER use emotion words (happy, sad, angry, scared, proud, etc.)
+- ONLY describe physical evidence: muscle groups, joint angles, millimeter measurements, breathing rate, pupil state, skin response, micro-movements
+- Use anatomical terms where helpful: zygomatic major, orbicularis oculi, masseter, corrugator supercilii, etc.
+- Include: face, eyes, breathing, posture, hands, skin
+- Every claim must be observable by a camera
+- Output in English, clean prose, 80–150 words
+- Start directly with physical description, no preamble`;
+
+  try{
+    let acc = '';
+    await goiClaude(system,
+      `Convert this emotional description to physical/cinematic language for Seedance 2.0:\n\n"${input}"`,
+      chunk => {
+        acc += chunk;
+        if(txt) txt.textContent = acc;
+        if(out) out.style.display = '';
+      }
+    );
+    if(status) status.textContent = '✓ Convert xong';
+    setTimeout(()=>{ if(status) status.textContent=''; }, 2000);
+  } catch(e){
+    if(status) status.textContent = '❌ ' + e.message;
+  } finally {
+    if(btn){ btn.disabled = false; }
+  }
+}
+
+function copySdtOutput(){
+  const txt = document.getElementById('sdt-text')?.textContent;
+  if(txt) robustCopy(txt, document.querySelector('#sdt-output button'));
+}
+
+function addSdtToPrompt(){
+  const txt = document.getElementById('sdt-text')?.textContent;
+  if(!txt) return;
+  MM.emo = MM.emo || [];
+  MM.emo.push('[PHYSICAL EMOTION]\n' + txt);
+  const ind = document.getElementById('autosave-indicator');
+  if(ind){ ind.textContent='✓ Đã thêm vào prompt'; ind.style.color='#4ade80'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},2500); }
+}
+
+
 let dirMode = 'T2V';
 let dirDur  = '8s';
 let dirAR   = '16:9';
