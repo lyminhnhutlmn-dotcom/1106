@@ -3375,7 +3375,15 @@ function taoVI(){
     if(otherConstraints.length) L.push('Cấm: '+otherConstraints.join(', ')+'.');
   }if(MM.consist.length)L.push('Nhất quán: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[LỜI THOẠI]');const fmt=SS.thoai_format||'Kịch bản phim chuẩn';dsThoai.forEach(t=>{const ten=(t.ten||'NV').toUpperCase();const loi=t.loi||'...';const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(thì thầm)','Độc thoại':'(độc thoại)'};if(fmt.includes('phim'))L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+loi);else if(fmt.includes('Truyện'))L.push(ten+(t.loai.includes('Nội tâm')?` nghĩ: "${loi}"`:`: "${loi}"`));else L.push('['+ten+'] '+loi+(t.loai!=='Thoại thường'?' ('+t.loai+')':''));});L.push('');}
-  if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';L.push(d.trim()||'(Chưa mô tả)');L.push('');});}
+  if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';
+    L.push(d.trim()||'(Chưa mô tả)');
+    // Inject emotion — tiếng Việt cho taoVI
+    const emoKey2=s.emotion||'';
+    const emoPhy2 = emoKey2 && emoKey2!=='custom' && typeof EMOTION_PHYSICS!=='undefined' && EMOTION_PHYSICS[emoKey2]
+      ? `[CẢM XÚC — ${EMOTION_PHYSICS[emoKey2].name.toUpperCase()}]\n${EMOTION_PHYSICS[emoKey2].vi}`
+      : (s.emotionCustom ? `[CẢM XÚC]\n${s.emotionCustom}` : '');
+    if(emoPhy2) L.push(emoPhy2);
+    L.push('');});}
   kqVI=L.join('\n');kqSD='';kqCG='';
   const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
   const _ml = layMasterLockBlock();
@@ -3491,7 +3499,15 @@ function taoSD(){
   if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[DIALOGUE]');dsThoai.forEach(t=>{const ten=(t.ten||'CHARACTER').toUpperCase();const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(whispered)','Độc thoại':'(monologue)'};L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+(t.loi||'...'));});L.push('');}
   if(sAm||sFo||sMu||sSf||sSi){L.push('[AUDIO DESIGN]');if(sSi)L.push('Silence: '+sSi);if(sAm)L.push('Ambient (-4dB): '+sAm);if(sFo)L.push('Foley (0dB): '+sFo);if(sMu)L.push('Music (-2dB): '+sMu);if(sSf)L.push('SFX (+2dB): '+sSf);L.push('');}
-  if(cacShot.length){L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';L.push(d.trim()||'no description');L.push('');});}
+  if(cacShot.length){L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';
+    // Inject emotion physics
+    const emoKey = s.emotion||'';
+    const emoPhy = emoKey && emoKey!=='custom' && typeof EMOTION_PHYSICS!=='undefined' && EMOTION_PHYSICS[emoKey]
+      ? `[EMOTION — ${EMOTION_PHYSICS[emoKey].name.toUpperCase()}] ${EMOTION_PHYSICS[emoKey].text}`
+      : (s.emotionCustom ? `[EMOTION] ${s.emotionCustom}` : '');
+    L.push(d.trim()||'no description');
+    if(emoPhy) L.push(emoPhy);
+    L.push('');});}
   if(matRefs.length){L.push('[MATERIAL INTEGRATION]');matRefs.forEach(r=>L.push(`@material[${r.n}]: Apply ${r.t} reference characteristics.`));L.push('');}
   L.push('[OUTPUT]');L.push(`aspect_ratio: ${seedanceAR}. duration: ${seedanceDur}s. No text. No watermark. No extra people. Photorealistic.`);
   kqSD=L.join('\n');kqCG='';
