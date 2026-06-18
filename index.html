@@ -2116,65 +2116,6 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <!-- ===== XUẤT PROMPT ===== -->
 <div class="pane" id="p-out">
 
-  <!-- @ ELEMENT PANEL — cố định trên đầu -->
-  <div style="background:#050d1a;border:1px solid #1a3a6a;border-radius:10px;padding:12px 14px;margin-bottom:12px">
-    <div style="font-size:12px;font-weight:600;color:#5b9cf6;margin-bottom:2px">@ ELEMENT IDs — Higgsfield Reference</div>
-    <div style="font-size:9px;color:var(--muted);margin-bottom:10px">Paste Element ID từ Higgsfield → tự động inject <code style="color:#f59e0b"><<<id>>></code> vào Seedance prompt</div>
-
-    <div style="display:flex;flex-direction:column;gap:6px" id="element-id-list">
-
-      <!-- NV1 -->
-      <div style="display:flex;align-items:center;gap:6px">
-        <div style="font-size:9px;color:#a78bfa;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#0d0014;padding:4px 8px;border-radius:5px;border:1px solid #3b0060">👤 NV CHÍNH</div>
-        <input id="el-nv1" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#1a3a6a;background:#030a12;color:#5b9cf6">
-        <button onclick="copyElement('el-nv1','NV1')" style="padding:3px 8px;border-radius:5px;border:1px solid #1a3a6a;background:transparent;color:#5b9cf6;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace" title="Copy <<<id>>>">@</button>
-        <button onclick="injectElement('el-nv1','NV1')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace" title="Inject vào prompt">↓</button>
-      </div>
-
-      <!-- NV2 -->
-      <div style="display:flex;align-items:center;gap:6px">
-        <div style="font-size:9px;color:#f472b6;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#150a0f;padding:4px 8px;border-radius:5px;border:1px solid #3b0060">👤 NV PHỤ</div>
-        <input id="el-nv2" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#2a0040;background:#030a12;color:#f472b6">
-        <button onclick="copyElement('el-nv2','NV2')" style="padding:3px 8px;border-radius:5px;border:1px solid #2a0040;background:transparent;color:#f472b6;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
-        <button onclick="injectElement('el-nv2','NV2')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
-      </div>
-
-      <!-- BỐI CẢNH -->
-      <div style="display:flex;align-items:center;gap:6px">
-        <div style="font-size:9px;color:#06b6d4;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#030d10;padding:4px 8px;border-radius:5px;border:1px solid #0e4a52">🏢 BỐI CẢNH</div>
-        <input id="el-scene" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#0e4a52;background:#030a12;color:#06b6d4">
-        <button onclick="copyElement('el-scene','SCENE')" style="padding:3px 8px;border-radius:5px;border:1px solid #0e4a52;background:transparent;color:#06b6d4;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
-        <button onclick="injectElement('el-scene','SCENE')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
-      </div>
-
-      <!-- STORYBOARD -->
-      <div style="display:flex;align-items:center;gap:6px">
-        <div style="font-size:9px;color:#f59e0b;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#0d0800;padding:4px 8px;border-radius:5px;border:1px solid #52380e">🎬 STORYBOARD</div>
-        <input id="el-sb" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#52380e;background:#030a12;color:#f59e0b">
-        <button onclick="copyElement('el-sb','SB')" style="padding:3px 8px;border-radius:5px;border:1px solid #52380e;background:transparent;color:#f59e0b;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
-        <button onclick="injectElement('el-sb','SB')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
-      </div>
-
-      <!-- SẢN PHẨM -->
-      <div style="display:flex;align-items:center;gap:6px">
-        <div style="font-size:9px;color:#4ade80;font-weight:600;font-family:'IBM Plex Mono',monospace;min-width:90px;background:#001a0d;padding:4px 8px;border-radius:5px;border:1px solid #0e521a">📦 SẢN PHẨM</div>
-        <input id="el-product" type="text" placeholder="Paste element_id hoặc UUID..." oninput="capNhatElementPreview()" style="flex:1;font-size:10px;font-family:'IBM Plex Mono',monospace;border-color:#0e521a;background:#030a12;color:#4ade80">
-        <button onclick="copyElement('el-product','PRODUCT')" style="padding:3px 8px;border-radius:5px;border:1px solid #0e521a;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">@</button>
-        <button onclick="injectElement('el-product','PRODUCT')" style="padding:3px 8px;border-radius:5px;border:1px solid #4ade80;background:transparent;color:#4ade80;font-size:10px;cursor:pointer;font-family:'IBM Plex Mono',monospace">↓</button>
-      </div>
-
-    </div>
-
-    <!-- Preview -->
-    <div id="element-preview" style="display:none;margin-top:8px;padding:7px 10px;background:#020810;border:1px solid #1a3a6a;border-radius:6px;font-size:9px;font-family:'IBM Plex Mono',monospace;color:#5b9cf6;line-height:1.8"></div>
-
-    <!-- Quick inject all -->
-    <div style="margin-top:8px;display:flex;gap:5px;flex-wrap:wrap">
-      <button onclick="injectAllElements()" style="padding:5px 12px;border-radius:6px;border:none;background:linear-gradient(135deg,#1e3a8a,#3b82f6);color:#fff;font-size:10px;font-family:'IBM Plex Mono',monospace;font-weight:600;cursor:pointer">⚡ Inject Tất Cả → Prompt</button>
-      <button onclick="xoaAllElements()" style="padding:5px 10px;border-radius:6px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer">↺ Clear</button>
-    </div>
-  </div>
-
   <!-- MASTER LOCK -->
   <div style="background:linear-gradient(135deg,#0d0a1a,#1a0a10);border:1px solid #f59e0b;border-radius:10px;padding:12px 14px;margin-bottom:14px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
@@ -2934,7 +2875,7 @@ function themShot(){
   const newEnd = newStart + 5;
   cacShot.unshift({
     id: soId, start: newStart, end: newEnd, tg: 5,
-    cuMay: '', angle: '', lens: '', speed: '',
+    cuMay: '', angle: '', lens: '', aperture: '', speed: '',
     shotSize: '', specialFx: '', moTa: '', shotPrompt: '',
     image: '', imageName: '', sbPrompt: '', nhanVatRefs: [], thoai: 'Không thoại'
   });
@@ -2961,6 +2902,20 @@ function veShot(){
         <div><div class="slbl">⏱ Bắt đầu (giây)</div><input type="number" value="${s.start}" min="0" max="999" step="0.5" style="width:72px" placeholder="0" oninput="updShot(${s.id},'start',+this.value);veShot()"></div>
         <div><div class="slbl">⏱ Kết thúc (giây)</div><input type="number" value="${s.end}" min="0" max="999" step="0.5" style="width:72px" placeholder="5" oninput="updShot(${s.id},'end',+this.value);veShot()"></div>
         <div style="font-size:11px;color:var(--muted);padding-bottom:6px">→ <span style="color:var(--gold)">${s.end>s.start?(s.end-s.start).toFixed(1):'?'}s</span></div>
+        <div>
+          <div class="slbl">📷 Tiêu cự</div>
+          <select onchange="updShot(${s.id},'lens',this.value)" style="font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--ink);min-width:90px">
+            <option value="">-- mm --</option>
+            ${['14mm','24mm','35mm','50mm','85mm','100mm','135mm','Anamorphic'].map(v=>`<option value="${v}" ${s.lens===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
+        <div>
+          <div class="slbl">🔆 Khẩu độ</div>
+          <select onchange="updShot(${s.id},'aperture',this.value)" style="font-size:10px;border-color:#2a2a2a;background:#0a0a0a;color:var(--gold);min-width:80px">
+            <option value="">-- f/ --</option>
+            ${['f/1.2','f/1.4','f/1.8','f/2.0','f/2.8','f/4.0','f/5.6','f/8.0','f/11'].map(v=>`<option value="${v}" ${s.aperture===v?'selected':''}>${v}</option>`).join('')}
+          </select>
+        </div>
       </div>
 
       
@@ -3405,6 +3360,20 @@ function taoVI(){
   sw('out');
   const{dd,nv,nvp,hd,mt,as,pc,rb,wardrobe}=layChung();const L=[];
 
+  // ── AUTO-INJECT ELEMENT IDs — luôn xuất hiện ──
+  const elNV1b     = document.getElementById('el-nv1')?.value.trim();
+  const elNV2b     = document.getElementById('el-nv2')?.value.trim();
+  const elSceneb   = document.getElementById('el-scene')?.value.trim();
+  const elSBb      = document.getElementById('el-sb')?.value.trim();
+  const elProductb = document.getElementById('el-product')?.value.trim();
+  L.push('[@ ELEMENTS — HIGGSFIELD]');
+  L.push(`👤 NV CHÍNH:   ${elNV1b    ? '<<<'+elNV1b+'>>>'    : '<<<paste_element_id>>>'}`);
+  L.push(`👤 NV PHỤ:     ${elNV2b    ? '<<<'+elNV2b+'>>>'    : '<<<paste_element_id>>>'}`);
+  L.push(`🏢 BỐI CẢNH:  ${elSceneb  ? '<<<'+elSceneb+'>>>'  : '<<<paste_element_id>>>'}`);
+  L.push(`🎬 STORYBOARD: ${elSBb     ? '<<<'+elSBb+'>>>'     : '<<<paste_element_id>>>'}`);
+  L.push(`📦 SẢN PHẨM:  ${elProductb? '<<<'+elProductb+'>>>' : '<<<paste_element_id>>>'}`);
+  L.push('');
+
   L.push('[Tiêu đề cảnh]');
 
   // ── NHÂN VẬT (buildCharacterBlock — đồng bộ) ──
@@ -3434,7 +3403,7 @@ function taoVI(){
     if(otherConstraints.length) L.push('Cấm: '+otherConstraints.join(', ')+'.');
   }if(MM.consist.length)L.push('Nhất quán: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[LỜI THOẠI]');const fmt=SS.thoai_format||'Kịch bản phim chuẩn';dsThoai.forEach(t=>{const ten=(t.ten||'NV').toUpperCase();const loi=t.loi||'...';const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(thì thầm)','Độc thoại':'(độc thoại)'};if(fmt.includes('phim'))L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+loi);else if(fmt.includes('Truyện'))L.push(ten+(t.loai.includes('Nội tâm')?` nghĩ: "${loi}"`:`: "${loi}"`));else L.push('['+ten+'] '+loi+(t.loai!=='Thoại thường'?' ('+t.loai+')':''));});L.push('');}
-  if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';
+  if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';
     L.push(d.trim()||'(Chưa mô tả)');
     // Inject emotion — tiếng Việt cho taoVI
     const emoKey2=s.emotion||'';
@@ -3470,6 +3439,20 @@ function taoSD(){
   const hookTxt=selNoHookSD ? '__NOHOOK__' : (selHook||document.getElementById('hook-custom').value.trim());
   const L=[];
   L.push('SEEDANCE 2.0 ON HIGGSFIELD — CINEMATIC PROMPT');L.push('');
+
+  // ── AUTO-INJECT ELEMENT IDs — luôn xuất hiện ──
+  const elNV1     = document.getElementById('el-nv1')?.value.trim();
+  const elNV2     = document.getElementById('el-nv2')?.value.trim();
+  const elScene   = document.getElementById('el-scene')?.value.trim();
+  const elSB      = document.getElementById('el-sb')?.value.trim();
+  const elProduct = document.getElementById('el-product')?.value.trim();
+  L.push('[@ ELEMENTS — HIGGSFIELD]');
+  L.push(`👤 NV CHÍNH:   ${elNV1   ? '<<<' + elNV1    + '>>>' : '<<<paste_element_id_here>>>'}`);
+  L.push(`👤 NV PHỤ:     ${elNV2   ? '<<<' + elNV2    + '>>>' : '<<<paste_element_id_here>>>'}`);
+  L.push(`🏢 BỐI CẢNH:  ${elScene  ? '<<<' + elScene  + '>>>' : '<<<paste_element_id_here>>>'}`);
+  L.push(`🎬 STORYBOARD: ${elSB    ? '<<<' + elSB     + '>>>' : '<<<paste_element_id_here>>>'}`);
+  L.push(`📦 SẢN PHẨM:  ${elProduct? '<<<' + elProduct+ '>>>' : '<<<paste_element_id_here>>>'}`);
+  L.push('');
   const matRefs=[];
   if(matImg)matImg.split('\n').filter(Boolean).forEach(m=>{const n=m.split('—')[0].trim();if(n)matRefs.push({n,t:'image',d:m});});
   if(matVid)matVid.split('\n').filter(Boolean).forEach(m=>{const n=m.split('—')[0].trim();if(n)matRefs.push({n,t:'video',d:m});});
@@ -3558,7 +3541,7 @@ function taoSD(){
   if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[DIALOGUE]');dsThoai.forEach(t=>{const ten=(t.ten||'CHARACTER').toUpperCase();const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(whispered)','Độc thoại':'(monologue)'};L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+(t.loi||'...'));});L.push('');}
   if(sAm||sFo||sMu||sSf||sSi){L.push('[AUDIO DESIGN]');if(sSi)L.push('Silence: '+sSi);if(sAm)L.push('Ambient (-4dB): '+sAm);if(sFo)L.push('Foley (0dB): '+sFo);if(sMu)L.push('Music (-2dB): '+sMu);if(sSf)L.push('SFX (+2dB): '+sSf);L.push('');}
-  if(cacShot.length){L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';
+  if(cacShot.length){L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';
     // Inject emotion physics
     const emoKey = s.emotion||'';
     const emoPhy = emoKey && emoKey!=='custom' && typeof EMOTION_PHYSICS!=='undefined' && EMOTION_PHYSICS[emoKey]
@@ -7602,6 +7585,7 @@ async function taoStoryboardPrompt(id){
   // Shot data
   const cam      = s.cuMay   || 'static shot';
   const lens     = s.lens    || '50mm';
+  const aperture = s.aperture || '';
   const size     = s.shotSize ? s.shotSize.replace(/\s*—.*/, '') : 'MS';
   const fx       = s.specialFx && s.specialFx !== 'Không' ? s.specialFx : '';
   const content  = s.moTa || s.shotPrompt || '';
@@ -7667,7 +7651,7 @@ Write in plain cinematic English. Use exact numbers everywhere. Output ONLY the 
 
   const userMsg = `Create Seedance I2V keyframe prompt for this shot:
 
-SHOT: ${size} | Camera: ${cam} | Lens: ${lens} | Timing: ${timing}
+SHOT: ${size} | Camera: ${cam} | Lens: ${lens}${aperture?' | Aperture: '+aperture:''} | Timing: ${timing}
 ${fx ? 'SPECIAL FX (frozen at peak of): ' + fx : ''}
 ACTION (frozen at peak moment): ${content || 'Cinematic scene'}
 ${emoPhysics ? emoPhysics + '\n' : ''}
@@ -7773,6 +7757,15 @@ function taoKBShotSetup(n){
             <option>14mm ultra wide</option><option>24mm wide</option><option>35mm</option>
             <option>50mm standard</option><option>85mm portrait</option><option>100mm macro</option>
             <option>135mm telephoto</option><option>Anamorphic</option>
+          </select>
+        </div>
+        <div style="flex:1;min-width:90px">
+          <div style="font-size:9px;color:var(--muted);margin-bottom:3px">📷 Khẩu độ</div>
+          <select style="font-size:10px;width:100%" onchange="kbShotSetupData[${i}].aperture=this.value">
+            <option value="">-- Chọn --</option>
+            <option>f/1.2</option><option>f/1.4</option><option>f/1.8</option>
+            <option>f/2.0</option><option>f/2.8</option><option>f/4.0</option>
+            <option>f/5.6</option><option>f/8</option><option>f/11</option>
           </select>
         </div>
       </div>
