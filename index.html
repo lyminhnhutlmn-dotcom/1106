@@ -3388,14 +3388,14 @@ function taoVI(){
 
   L.push('[Tiêu đề cảnh]');
 
-  // ── NHÂN VẬT (buildCharacterBlock — đồng bộ) ──
-  const charVI = buildCharacterBlock('vi');
-  if(charVI.length){ L.push('[NHÂN VẬT]'); charVI.forEach(l=>L.push(l)); L.push(''); }
-
-  // ── BỐI CẢNH (buildSceneBlock — đồng bộ) ──
-  L.push('[BỐI CẢNH]');
-  buildSceneBlock('vi').forEach(l=>L.push(l));
-  L.push('');
+  // ── NHÂN VẬT + BỐI CẢNH ── chỉ thêm nếu chưa có trong Master Lock
+  if(!masterLockText){
+    const charVI = buildCharacterBlock('vi');
+    if(charVI.length){ L.push('[NHÂN VẬT]'); charVI.forEach(l=>L.push(l)); L.push(''); }
+    L.push('[BỐI CẢNH]');
+    buildSceneBlock('vi').forEach(l=>L.push(l));
+    L.push('');
+  }
   const cam=[];if(SS.shot_size)cam.push(SS.shot_size);if(SS.movement)cam.push(SS.movement);if(SS.angle)cam.push(SS.angle);if(SS.lens)cam.push(SS.lens);if(SS.dof)cam.push(SS.dof);
   if(SS.cam_speed)cam.push('Tốc độ cú máy: '+SS.cam_speed.replace(/[🐌🐢🚶🚴🏃⚡🚀]/g,'').trim());
   if(cam.length){L.push('[MÁY QUAY]');L.push(cam.join(', ')+'.');L.push('');}
@@ -3415,14 +3415,21 @@ function taoVI(){
     if(otherConstraints.length) L.push('Cấm: '+otherConstraints.join(', ')+'.');
   }if(MM.consist.length)L.push('Nhất quán: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
   if(dsThoai.length){L.push('[LỜI THOẠI]');const fmt=SS.thoai_format||'Kịch bản phim chuẩn';dsThoai.forEach(t=>{const ten=(t.ten||'NV').toUpperCase();const loi=t.loi||'...';const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(thì thầm)','Độc thoại':'(độc thoại)'};if(fmt.includes('phim'))L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+loi);else if(fmt.includes('Truyện'))L.push(ten+(t.loai.includes('Nội tâm')?` nghĩ: "${loi}"`:`: "${loi}"`));else L.push('['+ten+'] '+loi+(t.loai!=='Thoại thường'?' ('+t.loai+')':''));});L.push('');}
-  if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';if(s.moTa)d+=s.moTa.trim()+' ';if(s.thoai)d+=s.thoai+'.';
-    L.push(d.trim()||'(Chưa mô tả)');
-    // Inject emotion — tiếng Việt cho taoVI
+  if(cacShot.length){L.push('[DỰNG CẢNH]');L.push('');cacShot.forEach((s,i)=>{
+    const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);
+    L.push(`Sự kiện ${i+1} (${ts}s – ${te}s | ${td}s):`);
+    let d='';if(s.cuMay)d+=s.cuMay+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';
+    const action2=(s.moTa||'').trim();
     const emoKey2=s.emotion||'';
-    const emoPhy2 = emoKey2 && emoKey2!=='custom' && typeof EMOTION_PHYSICS!=='undefined' && EMOTION_PHYSICS[emoKey2]
-      ? `[CẢM XÚC — ${EMOTION_PHYSICS[emoKey2].name.toUpperCase()}]\n${EMOTION_PHYSICS[emoKey2].vi}`
-      : (s.emotionCustom ? `[CẢM XÚC]\n${s.emotionCustom}` : '');
-    if(emoPhy2) L.push(emoPhy2);
+    const emoVI = emoKey2&&emoKey2!=='custom'&&typeof EMOTION_PHYSICS!=='undefined'&&EMOTION_PHYSICS[emoKey2]
+      ? EMOTION_PHYSICS[emoKey2].vi
+      : (s.emotionCustom||'');
+    // Weave action + emotion
+    if(action2 && emoVI) d+=`${action2} Cảm xúc: ${emoVI}.`;
+    else if(action2) d+=action2;
+    else if(emoVI) d+=`Cảm xúc: ${emoVI}.`;
+    if(s.thoai) d+=' '+s.thoai+'.';
+    L.push(d.trim()||'(Chưa mô tả)');
     L.push('');});}
   kqVI=L.join('\n');kqSD='';kqCG='';
   const _hdr = 'ANNAHOUSESTUDIO — CINEMATIC PROMPT BUILDER' + String.fromCharCode(10) + 'BY LÝ MINH NHỰT' + String.fromCharCode(10) + '═'.repeat(50) + String.fromCharCode(10,10);
@@ -3468,14 +3475,20 @@ function taoSD(){
   L.push('');
   const tl={4:'0–1.5s: Hook max impact. 1.5–3s: Single main action. 3–4s: Climax hold or cut black.',8:'0–2s: Hook. 2–4.5s: Establish location and character. 4.5–7s: Action escalation. 7–8s: Climax reveal.',10:'0–2s: Hook. 2–3.5s: Wide establishing 2ft/s. 3.5–6s: Primary action 3.5ft/s. 6–8.5s: Escalating tension 5ft/s. 8.5–10s: Climax + resolution.',15:'0–2s: Hook. 2–4.5s: Wide establishing 24mm slow pan 2ft/s. 4.5–7s: Subject intro dolly 2.5ft/s. 7–10s: Rising action 3–4ft/s. 10–12.5s: Climax max velocity. 12.5–15s: Resolution 1–2ft/s.'};
   L.push(`[TIMELINE — ${selDuration}s arc]`);L.push(tl[selDuration]||tl[8]);if(selPlatform)L.push('Platform: '+selPlatform.split(',')[0].trim()+'.');L.push('');
-  // ── SUBJECT (buildCharacterBlock — đồng bộ với VI) ──
-  const charEN = buildCharacterBlock('en');
-  if(charEN.length){ L.push('[SUBJECT]'); charEN.forEach(l=>L.push(l)); L.push(''); }
-
-  // ── SCENE (buildSceneBlock — đồng bộ với VI) ──
-  L.push('[SCENE]');
-  buildSceneBlock('en').forEach(l=>L.push(l));
-  L.push('');
+  // ── SUBJECT + SCENE đã có trong Master Lock — KHÔNG thêm lại ──
+  // chỉ lấy lighting anchor nếu có
+  const _lightSetup = SS.light_setup||(MM.light_type||[]).slice(0,1).join('')||'';
+  const _lightK     = SS.light_kelvin||'';
+  const _lightDir   = (MM.light_color||[]).slice(0,1).join('')||'';
+  if(_lightSetup||_lightK||_lightDir){
+    L.push('[LIGHTING ANCHOR]');
+    const lp=[];
+    if(_lightSetup) lp.push(_lightSetup);
+    if(_lightK)     lp.push(_lightK+'K');
+    if(_lightDir)   lp.push(_lightDir);
+    L.push(lp.join('. ')+'. Consistent throughout all shots.');
+    L.push('');
+  }
   const cm2=[];if(SS.shot_size)cm2.push(SS.shot_size);if(SS.movement)cm2.push(SS.movement);if(SS.angle)cm2.push(SS.angle);if(SS.lens)cm2.push(SS.lens);if(SS.dof)cm2.push(SS.dof);
   const speedMapSD={'🐌 Cực chậm — 0.5 ft/s (thiền định, nghi lễ)':'extremely slow 0.5 ft/s (meditative, ceremonial pacing)','🐢 Chậm nhẹ — 1 ft/s (trầm lắng, cảm xúc)':'very slow 1 ft/s (contemplative, emotional weight)','🚶 Chậm x2 — 2 ft/s (điện ảnh chuẩn)':'slow 2 ft/s (cinematic standard pace)','🚴 Trung bình — 3.5 ft/s (nhịp tự nhiên)':'medium 3.5 ft/s (natural rhythm)','🏃 Nhanh — 5 ft/s (căng thẳng, hành động)':'fast 5 ft/s (tension, action)','⚡ Nhanh x2 — 8 ft/s (truy đuổi, adrenaline)':'very fast 8 ft/s (chase, high adrenaline)','🚀 Cực nhanh — 12+ ft/s (impact, shock)':'extreme speed 12+ ft/s (impact, shock moment)'};
   if(SS.cam_speed)cm2.push('Camera velocity: '+(speedMapSD[SS.cam_speed]||SS.cam_speed));
@@ -3538,56 +3551,40 @@ function taoSD(){
 
   if(ql.length){L.push('[QUALITY]');L.push(`aspect_ratio: ${seedanceAR}. duration: ${seedanceDur}s.${MM.grain.length?' Film grain: '+MM.grain.join(', ').replace(/Phim/gi,'').trim()+'.':''}`);L.push('');}
   // Emotion handled inside buildCharacterBlock
-  if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
+  // CONSTRAINTS already in Master Lock — not repeated here
   if(dsThoai.length){L.push('[DIALOGUE]');dsThoai.forEach(t=>{const ten=(t.ten||'CHARACTER').toUpperCase();const lm={'Nội tâm (V.O.)':'(V.O.)','Giọng ngoài (O.S.)':'(O.S.)','Thì thầm':'(whispered)','Độc thoại':'(monologue)'};L.push(ten+(lm[t.loai]?' '+lm[t.loai]:'')+'\n'+(t.loi||'...'));});L.push('');}
   if(sAm||sFo||sMu||sSf||sSi){L.push('[AUDIO DESIGN]');if(sSi)L.push('Silence: '+sSi);if(sAm)L.push('Ambient (-4dB): '+sAm);if(sFo)L.push('Foley (0dB): '+sFo);if(sMu)L.push('Music (-2dB): '+sMu);if(sSf)L.push('SFX (+2dB): '+sSf);L.push('');}
   if(cacShot.length){
-    // Lighting + color consistency block
-    const _lt = SS.light_setup || (MM.light_type||[]).slice(0,1).join('');
-    const _lk = SS.light_kelvin || '';
-    const _lc = (MM.light_color||[]).slice(0,1).join('');
-    const _lut= (MM.colorgrade||[]).slice(0,1).join('');
-    const _gr = (MM.grain||[]).slice(0,1).join('');
-    const consistLock = [
-      _lt ? 'Lighting: '+_lt : '',
-      _lk ? _lk+'K' : '',
-      _lc ? _lc+' tone' : '',
-      _lut ? 'LUT: '+_lut : '',
-      _gr ? _gr : ''
-    ].filter(Boolean).join(' | ');
-    if(consistLock){ L.push('[CONSISTENCY LOCK]'); L.push(consistLock+' — UNCHANGED across all shots.'); L.push(''); }
-    L.push('[SHOT-BY-SHOT]');L.push('');cacShot.forEach((s,i)=>{const cm3={'Máy tĩnh':'static locked-off','Dolly tiến':'dolly in','Dolly lùi':'dolly out','Orbital 360°':'slow orbital rotation 45°/sec','Tracking':'tracking shot','Pan ngang':'pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus','Dolly zoom':'dolly zoom vertigo'};const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(s.tg||5);const td=(te-ts).toFixed(1);L.push(`Event ${i+1} (${ts}s – ${te}s | ${td}s):`);let d='';if(s.cuMay)d+=(cm3[s.cuMay]||s.cuMay)+'. ';if(s.lens)d+=s.lens+'. ';if(s.aperture)d+=s.aperture+'. ';if(s.moTa)d+=s.moTa.trim()+' ';const td2={'Không thoại':'no dialog','Thì thầm':'whispered','Giọng ngoài hình':'off-screen voice','Tiếng động':'SFX only'};if(s.thoai)d+=(td2[s.thoai]||s.thoai)+'.';
-    // Emotion → distilled concept cho Seedance (không dùng anatomy)
-    const emoKey = s.emotion||'';
-    const _SDEMO = {
-      joy:'genuine wide smile, bright eyes, warm open energy',
-      pride:'chin lifted, chest open, shoulders back, direct confident gaze',
-      fatigue:'heavy drooping eyelids, slumped spine, limp arms on desk, slack jaw',
-      fear:'eyes wide open, shoulders raised, body frozen, breath held',
-      anger:'jaw clenched, brows furrowed, rigid body, intense burning gaze',
-      grief:'face crumpled, eyes downcast, body collapsed inward, throat tight',
-      surprise:'eyes wide, mouth open, sharp inhale, body momentarily frozen',
-      contempt:'one-sided lip raised, slow deliberate blink, head slightly tilted away',
-      determination:'lips pressed firm, focused narrow gaze, spine fully erect, still hands',
-      shame:'head bowed, eyes averted, shoulders rolled inward, ears flushed',
-      longing:'soft unfocused gaze beyond frame, lips barely parted, slow quiet breath',
-      relief:'long slow exhale, shoulders drop, eyes close briefly then open soft',
-      love:'soft genuine smile, slow breathing, body leaning naturally toward subject',
-      tension:'shallow breathing, tight shoulders, fingers pressing surface, lip micro-sweat',
-      numbness:'blank expressionless face, unfocused middle-distance stare, total stillness',
-      confidence:'relaxed open stance, direct unhurried gaze, calm slow breathing'
-    };
-    const emoDistilled = emoKey && emoKey!=='custom' && _SDEMO[emoKey]
-      ? `[EMOTION] ${_SDEMO[emoKey]}`
-      : (s.emotionCustom ? `[EMOTION] ${s.emotionCustom.slice(0,100)}` : '');
-    L.push(d.trim()||'no description');
-    if(emoDistilled) L.push(emoDistilled);
-    L.push('');});}
+    L.push('[SHOTS]'); L.push('');
+    const cm3={'Máy tĩnh':'static locked-off camera','Dolly tiến':'slow dolly in','Dolly lùi':'slow dolly out','Orbital 360°':'smooth 360° orbital','Tracking':'tracking shot','Pan ngang':'lateral pan','Steadicam':'steadicam follow','Crane up':'crane up','Xoắn ốc':'spiral ascent','Fly-through':'glide-through','Rack focus':'rack focus pull','Dolly zoom':'dolly zoom vertigo effect'};
+    const td2={'Không thoại':'No dialogue.','Thì thầm':'Whispered.','Giọng ngoài hình':'Voice off-screen.','Tiếng động':'SFX only.'};
+    const SD_EMO={joy:'genuine wide smile, eyes crinkling at corners, open chest, warm energy',pride:'chin lifted, chest open, shoulders back, direct confident gaze',fatigue:'eyelids heavy and drooping, spine slumped forward, jaw slack, mouth barely open, arms limp',fear:'eyes wide open, shoulders hunched toward ears, breath held, body frozen',anger:'jaw clenched, brows pulled hard together, body rigid, eyes burning forward',grief:'face crumpled, eyes cast down, body caved inward, throat tight',surprise:'eyes wide, mouth open, sharp inhale, hands raised, body momentarily frozen',contempt:'one-sided smirk, slow deliberate blink, head tilted slightly away',determination:'lips pressed firm, jaw forward, eyes narrowed and focused, spine erect',shame:'head down, eyes averted to floor, shoulders rolled inward',longing:'soft unfocused gaze beyond frame, lips barely parted, slow quiet breath',relief:'long slow exhale, shoulders visibly drop, eyes close briefly then open soft',love:'soft smile, slow breathing, body naturally leaning toward subject',tension:'shallow rapid breath, shoulders tight, fingers pressing surface, lip micro-sweat',numbness:'blank face, unfocused middle-distance stare, completely still',confidence:'relaxed open stance, direct unhurried gaze, calm slow breathing'};
+    cacShot.forEach((s,i)=>{
+      const ts=s.start!==undefined?s.start:0;const te=s.end!==undefined?s.end:(ts+(s.tg||5));const dur=(te-ts).toFixed(1);
+      const cam=cm3[s.cuMay]||s.cuMay||'static';const lens=s.lens||'';const apt=s.aperture||'';
+      const sz=s.shotSize?s.shotSize.replace(/\s*—.*/,''):'MS';
+      const emo=s.emotion&&s.emotion!=='custom'&&SD_EMO[s.emotion]?SD_EMO[s.emotion]:(s.emotionCustom||'');
+      const action=(s.moTa||'').trim();const thoai=td2[s.thoai]||'';
+      const parts=[];
+      // Header line
+      parts.push(`Shot ${i+1} [${ts}s-${te}s | ${dur}s] ${sz}${lens?' '+lens:''}${apt?' '+apt:''}. ${cam}.`);
+      // Weave action + emotion into 1 natural description
+      if(action && emo){
+        parts.push(`${action} Character shows: ${emo}.`);
+      } else if(action){
+        parts.push(action);
+      } else if(emo){
+        parts.push(`Character: ${emo}.`);
+      }
+      if(thoai) parts.push(thoai);
+      L.push(parts.join(' '));L.push('');
+    });
+  }
   if(matRefs.length){L.push('[MATERIAL INTEGRATION]');matRefs.forEach(r=>L.push(`@material[${r.n}]: Apply ${r.t} reference characteristics.`));L.push('');}
   L.push('[OUTPUT]');L.push(`aspect_ratio: ${seedanceAR}. duration: ${seedanceDur}s. No text. No watermark. No extra people. Photorealistic.`);
   kqSD=L.join('\n');kqCG='';
-  const _hdr = '';
-  const _ml = '';
+  const _hdr = 'SEEDANCE 2.0 ON HIGGSFIELD — CINEMATIC PROMPT\n\n';
+  const _ml = masterLockText ? masterLockText + '\n\n' : '';
   const _ftr = '';
   kqSD = _hdr + _ml + kqSD + _ftr;
   hienKQ(kqSD,'sd','🎬 Seedance Prompt (EN)');
@@ -3639,7 +3636,7 @@ function taoCG(){
   const ql2=[];if(SS.res)ql2.push(SS.res.replace('720p Chuẩn','720p'));if(fps)ql2.push(fps);MM.grain.forEach(g=>ql2.push(g));MM.qtag.forEach(q=>ql2.push(q));
   ql2.push('No render artifacts. No visible computational errors. Professional quality output.');
   L.push('[QUALITY & TECHNICAL]');L.push(ql2.join(', ')+'.');L.push(`Duration: ${dur}. Frame rate: ${fps}.`);L.push('');
-  if(MM.prohibit.length||MM.consist.length||rb){L.push('[CONSTRAINTS]');if(MM.prohibit.length)L.push('Prohibited: '+MM.prohibit.join(', ')+'.');if(MM.consist.length)L.push('Consistency: '+MM.consist.join(', ')+'.');if(rb)L.push(rb);L.push('');}
+  // CONSTRAINTS already in Master Lock — not repeated here
   if(cacShot.length){L.push('[ANIMATION SEQUENCE]');L.push('');cacShot.forEach((s,i)=>{const cm5={'Máy tĩnh':'static hold','Dolly tiến':'smooth push-in dolly','Dolly lùi':'pull-back reveal','Orbital 360°':'slow orbital rotation 45°/sec ease','Tracking':'tracking shot parallax','Pan ngang':'smooth pan','Steadicam':'gimbal-smooth follow liquid motion','Crane up':'crane ascent revealing environment','Xoắn ốc':'spiral ascent corkscrew path','Fly-through':'high-speed glide-through geometry','Rack focus':'rack focus depth shift','Dolly zoom':'dolly zoom vertigo perspective distortion'};L.push(`Segment ${i+1} (${s.tg}s):`);let d=`Camera: ${cm5[s.cuMay]||s.cuMay||'smooth continuous'}. `;if(s.moTa)d+=s.moTa.trim()+' ';L.push(d.trim());L.push('');});}
   if(cgExtra){L.push('[ADDITIONAL NOTES]');L.push(cgExtra);L.push('');}
   L.push('[OUTPUT SPECIFICATIONS]');
@@ -4636,44 +4633,51 @@ async function phanTichKichBan(){
     ? 'Viết phân tích bằng tiếng Việt, prompt nháp bằng tiếng Anh.'
     : 'Viết toàn bộ bằng tiếng Việt, riêng các thuật ngữ điện ảnh giữ tiếng Anh.';
 
-  const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản và viết Seedance 2.0 prompt chuẩn sản xuất.
+  const systemPrompt = `Bạn là ANNAHOUSESTUDIO AI — chuyên gia phân tích kịch bản điện ảnh và shot breakdown cho Seedance 2.0 / Higgsfield.
 
 ${langInstruct}
 
-⛔ TỔNG THỜI LƯỢNG BẮT BUỘC: ${durSec} GIÂY. Tất cả shots cộng lại = ${durSec}s.
+⛔ TỔNG THỜI LƯỢNG BẮT BUỘC: ${durSec} GIÂY — KHÔNG ĐƯỢC VƯỢT QUÁ.
+Tất cả shots cộng lại phải đúng bằng ${durSec}s.
+Ví dụ hợp lệ với ${durSec}s và 3 shot: [0–5s] + [5–10s] + [10–15s] = ${durSec}s ✓
+Ví dụ SAI: [0–10s] + [10–20s] + [20–30s] = 30s ✗ — bị từ chối.
+Kiểm tra tổng thời gian trước khi output. Nhắc lại ở cuối: "Tổng: Xs / ${durSec}s".
+
+NHIỆM VỤ: Phân tích kịch bản thành shot breakdown với HÀNH ĐỘNG CỤ THỂ từng shot.
+
+QUY TẮC BẮT BUỘC:
+1. Mỗi shot PHẢI có hành động nhân vật rõ ràng — KHÔNG viết chung chung
+2. Hành động = động từ cụ thể + bộ phận cơ thể + tốc độ + cảm xúc qua vật lý
+   ĐÚNG: "Tay trái đặt nhẹ lên mặt bàn, ngón trỏ gõ nhịp chậm 1 lần rồi dừng"
+   SAI: "nhân vật ngồi ở bàn"
+3. Micro-expression: nét mặt thay đổi cụ thể từng cơ
+4. Cảm xúc thể hiện qua vật lý — KHÔNG nói thẳng cảm xúc
 
 ${shotInstruct}
 
-NGUYÊN TẮC SEEDANCE 2.0 (bắt buộc):
-• Max 2 hành động chính mỗi shot
-• Max 1 camera move mỗi shot
-• CẢM XÚC = visual behavior, KHÔNG dùng từ cảm xúc trừu tượng
-  ✓ "heavy drooping eyelids, slumped spine, limp arms on desk"
-  ✗ "mệt mỏi, buồn ngủ, cảm thấy kiệt sức"
-  ✓ "genuine wide smile, bright eyes, warm open energy"
-  ✗ "vui vẻ, hạnh phúc, phấn khích"
-• KHÔNG dùng số liệu anatomy (mm, degrees, %)
-• NHẤT QUÁN xuyên suốt: cùng nhân vật, cùng trang phục, cùng hướng sáng, cùng Kelvin
-• Seedance prompt mỗi shot: 40-80 từ tiếng Anh
+⚠️ NẾU CÓ "CÚ MÁY ĐÃ XÁC ĐỊNH" → BẮT BUỘC giữ nguyên, KHÔNG thay đổi.
 
-FORMAT MỖI SHOT:
+FORMAT TỪNG SHOT:
 
 ═══ SỰ KIỆN [N] ═══
-⏱ [Xs – Ys | Zs]
-📷 [Shot type] | [Camera move] | [Lens]
+⏱ Thời gian: [Xs – Ys (Zs)] ← tổng tất cả shots = ${durSec}s
+🎯 Vai trò: [1 câu — shot này phục vụ gì]
+📷 Cú máy: [nếu đã xác định ghi "GIỮ NGUYÊN: ..."]
+🔭 Tiêu cự: [mm + lý do]
+🎬 Khung hình: [ECU/CU/MCU/MS/WS/ELS + lý do]
+💡 Ánh sáng: [Kelvin + hướng + tỷ lệ]
 
-🎭 SEEDANCE PROMPT (EN — dùng trực tiếp):
-[Style]. [Character: appearance 10w max].
-([Xs-Ys]) [Shot type]. [1 main action] + [emotion as visual behavior].
-[Camera if any]. [Environment + light tone].
-No text, no extra people, photorealistic.
+🎭 HÀNH ĐỘNG CHI TIẾT:
+[Từng giây: ai làm gì, bộ phận nào, tốc độ, hướng]
+[Micro-expression: cơ mặt nào thay đổi, mắt nhìn đâu]
+[Nhịp thở, độ căng vai, tư thế]
 
-🎬 PHÂN TÍCH (VI):
-[Ý đồ đạo diễn, cảm xúc, kỹ thuật — cho DOP]
+🎙 ÂM THANH/THOẠI: [nếu có]
 
-⚠️ NẾU CÓ "CÚ MÁY ĐÃ XÁC ĐỊNH" → BẮT BUỘC giữ nguyên.
+PROMPT NHÁP (EN):
+[Prompt tiếng Anh đầy đủ sẵn dùng cho Seedance — gồm hành động chi tiết]
 
-CUỐI: "✓ Tổng: ${durSec}s / ${durSec}s" + 1 dòng lưu ý kỹ thuật.`
+CUỐI CÙNG: 1-2 dòng "LƯU Ý KỸ THUẬT" cho DOP. + "✓ Tổng: ${durSec}s / ${durSec}s"`;
 
 
   // Build Khung Sườn context
@@ -7661,7 +7665,7 @@ OUTPUT FORMAT — use these exact sections in order:
 
 [SKIN] SSS: warm pink-red at ear edges, nostrils, inner eye corners. Micro-pore topology: nose bridge, cheekbones. Vellus hair catching rim light. Capillary flush undertone. T-zone oil sheen. NO AI smoothing. Biological imperfection = cinematic truth.
 
-[LIGHTING] {exact Kelvin}K {direction}° key — match scene lighting temperature exactly. {ratio} fill. {rim color} rim from {practical source}. Consistent light direction throughout. Motivated by scene light source.
+[LIGHTING] {Kelvin}K {direction}° key. {ratio} fill. {rim color} rim. Practical: {source}. Shadow: {density}% under {location}. Motivated by: {light source in scene}.
 
 [DEPTH] FG: {foreground element 0–1m}. MG: {subject + immediate environment 1–4m}. BG: {background 4m+, bokeh level}.
 
@@ -7686,7 +7690,7 @@ ${face ? 'FACE: ' + face.slice(0,120) : ''}
 ${eyes ? 'EYES: ' + eyes.slice(0,80) : ''}
 EMOTION: ${emo || 'quiet controlled tension'}
 SCENE: ${sceneCtx}
-LIGHTING SETUP: ${lightType}${lightColor ? ' | Color: ' + lightColor : ''}${SS.light_kelvin ? ' | ' + SS.light_kelvin + 'K' : ''} — LOCK light direction and Kelvin across all shots
+LIGHTING SETUP: ${lightType}${lightColor ? ' | Color: ' + lightColor : ''}
 COLOR PALETTE: ${colorPal}
 GENRE: ${genre}
 ${director ? 'DIRECTOR REF: ' + director : ''}
@@ -8354,60 +8358,28 @@ function taoSBGridPrompt(){
   L.push('');
 
   // The actual GPT Image 2 prompt
-  // Character anchor — ngắn gọn cho GPT Image 2
-  const charAnchor = [
-    nat,
-    nv ? nv.slice(0,60) : '',
-    face ? face.slice(0,50) : '',
-    costume ? costume.slice(0,60) : ''
-  ].filter(Boolean).join(', ');
-
-  // Panel descriptions — cực ngắn, GPT Image 2 đọc tốt nhất
-  const panelLines = shots.map((s,i) => {
-    const size = s.shotSize ? s.shotSize.replace(/\s*—.*/,'').trim() : 'MS';
-    const cam  = s.cuMay || 'static';
-    const startT = typeof s.start==='number'?s.start:0;
-    const endT   = typeof s.end==='number'?s.end:(startT+(s.tg||5));
-    // Emotion distill
-    const SD_EMO_SB = {
-      joy:'smiling, bright eyes',pride:'chin up, confident',fatigue:'drooping, slumped',
-      fear:'wide eyes, frozen',anger:'clenched jaw, tense',grief:'downcast, collapsed',
-      surprise:'eyes wide, mouth open',contempt:'one-sided smirk',
-      determination:'focused, jaw set',shame:'head down, averted',
-      longing:'distant gaze',relief:'exhaling, releasing',
-      love:'soft smile, leaning',tension:'tight, shallow breath',
-      numbness:'blank, still',confidence:'open, direct gaze'
-    };
-    const emoTag = s.emotion && s.emotion!=='custom' && SD_EMO_SB[s.emotion]
-      ? ` [${SD_EMO_SB[s.emotion]}]` : '';
-    // Action — max 30 chars
-    const action = (s.moTa||'').slice(0,50);
-    return `PANEL ${i+1} [${startT}s-${endT}s] ${size} ${cam}${emoTag}${action?' — '+action:''}`;
-  });
-
   const gptPrompt = [
-    // Layout instruction — critical for GPT Image 2
-    `${layout.cols > 0 ? layout.cols+'×'+layout.rows : totalPanels+'-panel'} storyboard grid. EXACTLY ${totalPanels} numbered panels. Black 2px borders. White margins. Panel numbers top-left.`,
+    `Create a professional storyboard grid with exactly ${totalPanels} panels${layout.cols > 0 ? ` arranged in ${layout.cols} columns × ${layout.rows} rows` : ''}. Each panel is clearly numbered 1–${totalPanels}. Thin black 2px border between panels. White 8px margin. Panel number in top-left corner of each panel.`,
+    `Style: ${styleDesc}.`,
+    `IMPORTANT: Generate EXACTLY ${totalPanels} panels — no more, no less. Do not add extra panels or repeat content.`,
     '',
-    // Style
-    sbStyle==='sketch'   ? 'Style: Black ink sketch on white paper. Fast gestural lines.' :
-    sbStyle==='noir'     ? 'Style: High contrast B&W film noir. Deep shadows.' :
-    sbStyle==='anime'    ? 'Style: Clean anime keyframe. Flat cel shading.' :
-    `Style: Photorealistic cinematic still. ${pal||'Muted tones'}. Film grain. No motion blur.`,
+    nv ? `CONSISTENT CHARACTER ACROSS ALL ${totalPanels} PANELS: ${nat ? nat + ', ' : ''}${nv}${face ? '. Face: ' + face.slice(0,80) : ''}${costume ? '. Costume: ' + costume.slice(0,80) : ''}. SAME face, SAME costume in every panel — zero variation.` : '',
     '',
-    // Character lock — short
-    charAnchor ? `CHARACTER (identical in ALL ${totalPanels} panels): ${charAnchor}. Same face, same costume, zero variation.` : '',
+    `COLOR GRADE: ${pal}.${director ? ' Director reference: ' + director + '.' : ''}`,
+    `TECHNICAL: ${styleDesc}. Each panel = frozen single frame. No motion blur. Cinematic composition.`,
     '',
-    // Director ref
-    director ? `Visual reference: ${director}.` : '',
+    `--- PANEL DESCRIPTIONS (${totalPanels} panels total) ---`,
     '',
-    // Panels — one line each
-    `PANELS:`,
-    ...panelLines,
+    ...panelDescs.map(p => p + '\n'),
+    `--- END (${totalPanels} panels) ---`,
     '',
-    // Hard rules
-    `RULES: ${totalPanels} panels total. Each = frozen single frame. No motion blur. No extra people. No text overlays.`,
-  ].filter(v => v !== null && v !== undefined && v !== '').join('\n');
+    `RULES:`,
+    `1. EXACTLY ${totalPanels} panels in ONE image — not ${totalPanels+1}, not ${totalPanels-1}`,
+    `2. Number each panel clearly (1 through ${totalPanels})`,
+    `3. Each panel shows the ACTION at the specified TIMECODE`,
+    nv ? `4. Character face and costume MUST be identical across all panels` : '4. Maintain consistent visual style across all panels',
+    `5. ${sbStyle === 'sketch' ? 'Black ink on white paper.' : sbStyle === 'noir' ? 'High contrast black and white only.' : sbStyle === 'anime' ? 'Clean anime keyframe style.' : 'Photorealistic cinematic stills.'}`,
+  ].filter(v => v !== null && v !== undefined).join('\n');
 
   L.push(gptPrompt);
   L.push('');
