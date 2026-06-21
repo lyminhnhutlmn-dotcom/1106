@@ -315,7 +315,17 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <div class="fw-head" onclick="moRong('subject')"><span class="fw-num">01</span><span class="fw-key" data-en="CHARACTER">NHÂN VẬT</span><span class="fw-desc">Tuổi · Giới tính · Đặc điểm nhận dạng</span><span class="fw-check" id="ck-subject">○</span></div>
   <div class="fw-body" id="fb-subject">
     <div class="r2">
-      <div><div class="lbl"><span class="lbl-tag" data-en="Gender">Giới tính</span></div><div class="chips"><span class="chip s" data-g="gender" data-en="Male">Nam</span><span class="chip s" data-g="gender" data-en="Female">Nữ</span><span class="chip s" data-g="gender">Trung tính</span><span class="chip s" data-g="gender">Robot / AI</span><span class="chip s" data-g="gender">Vật thể / Sản phẩm</span></div></div>
+      <div><div class="lbl"><span class="lbl-tag" data-en="Gender">Giới tính</span></div><div class="chips"><span class="chip s" data-g="gender" data-en="Male" onclick="capNhatMakeupUI()">Nam</span><span class="chip s" data-g="gender" data-en="Female" onclick="capNhatMakeupUI()">Nữ</span><span class="chip s" data-g="gender" onclick="capNhatMakeupUI()">Trung tính</span><span class="chip s" data-g="gender" onclick="capNhatMakeupUI()">Robot / AI</span><span class="chip s" data-g="gender" onclick="capNhatMakeupUI()">Vật thể / Sản phẩm</span></div></div>
+
+      <!-- MAKEUP — chỉ hiện khi chọn Nữ -->
+      <div id="makeup-panel" style="display:none;margin-top:6px">
+        <div class="lbl"><span class="lbl-tag" data-en="Makeup level">Mức độ makeup</span></div>
+        <div class="chips">
+          <span class="chip s" data-g="makeup_level" data-v="none" onclick="SS.makeup_level='none'">😐 Không makeup</span>
+          <span class="chip s" data-g="makeup_level" data-v="light" onclick="SS.makeup_level='light'" style="border-color:#a78bfa;color:#a78bfa">💄 Nhẹ tự nhiên</span>
+          <span class="chip s" data-g="makeup_level" data-v="full" onclick="SS.makeup_level='full'">💋 Full glam</span>
+        </div>
+      </div>
       <div><div class="lbl"><span class="lbl-tag" data-en="Age">Độ tuổi</span></div><div class="chips"><span class="chip s" data-g="age">Thiếu niên (~16)</span><span class="chip s" data-g="age">Thanh niên (~25)</span><span class="chip s" data-g="age">Trung niên (~40)</span><span class="chip s" data-g="age">Cao tuổi (~60+)</span><span class="chip s" data-g="age">Không áp dụng</span></div></div>
     </div>
     <div><div class="lbl"><span class="lbl-tag" data-en="Main character / subject description">Mô tả nhân vật / đối tượng chính</span><span class="lbl-req"> * bắt buộc</span></div><textarea id="subject-desc" rows="3" placeholder="Ví dụ: Robot sinh học lớp vỏ titan bóng loáng, cao 2 mét, mắt phát sáng xanh... / Đồng hồ luxury mạ vàng 18k, mặt số đen, dây da cognac..." oninput="capNhat()"></textarea><p class="hint">Mô tả chi tiết → AI ít bịa. Dùng cho cả nhân vật người lẫn sản phẩm 3D.</p></div>
@@ -2781,6 +2791,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <script>
 // ===== STATE =====
 const SS={};const MM={};
+SS.makeup_level = 'light'; // default
 ['gender','age','inex','timeofday','genre','pal','shot_size','movement','res','thoai_format','cg_anim','cg_duration','cg_fps','light_setup','layout','char_dist','kb_dur','kb_shots','kb_lang','skin_level','emo_intensity','img_ratio','img_style','face_shape','skin_tone','eye_color','eye_shape','hair_color','hair_style','char_img_angle','char_img_bg','bm_profile'].forEach(k=>SS[k]='');
 ['weather','light_color','director','filmstock','visual','grain','qtag','prohibit','consist','emo','sub','body','colorgrade','render_engine','cg_material','cg_light_fx','cg_particle','cg_comp','cg_atmo','skin_detail','kb_style','emo_arc','special_fx','kb_fx','dv_node','chaos_water','chaos_breath','chaos_env','chaos_water_int','chaos_breath_int','chaos_env_int'].forEach(k=>MM[k]=[]);
 let cacShot=[],soId=0,dsThoai=[],thoaiId=0;
@@ -2835,7 +2846,8 @@ function initCards(sel,callback){
     });
   });
 }
-initCards('.card[data-g="light_setup"]',c=>{const v=c.dataset.v;if(SS.light_setup===v)SS.light_setup='';else{SS.light_setup=v;c.classList.add('on');}});
+// Old light_setup cards disabled — replaced by 25 Lighting Styles above
+// initCards('.card[data-g="light_setup"]',c=>{const v=c.dataset.v;if(SS.light_setup===v)SS.light_setup='';else{SS.light_setup=v;c.classList.add('on');}});
 initCards('.card[data-g="movement"]',c=>{const v=c.dataset.v;if(SS.movement===v)SS.movement='';else{SS.movement=v;c.classList.add('on');}});
 initCards('.card[data-g="lens"]',c=>{const v=c.dataset.v;if(SS.lens===v)SS.lens='';else{SS.lens=v;c.classList.add('on');}});
 
@@ -2986,7 +2998,14 @@ function veHooks(){
 }
 
 // ===== ACCORDION =====
-function moRong(k){const el=document.getElementById('fb-'+k);if(el)el.style.display=el.style.display==='none'?'':'none';}
+function capNhatMakeupUI(){
+  setTimeout(()=>{
+    const panel = document.getElementById('makeup-panel');
+    if(panel) panel.style.display = SS.gender==='Nữ' ? '' : 'none';
+  }, 50);
+}
+
+
 
 // ===== TIẾN ĐỘ =====
 function capNhat(){
@@ -9162,19 +9181,35 @@ function _distillScene(text){
 
 function _distillSkin(text){
   if(!text) return '';
-  // Condense to 1 punchy line
+  const isFemale = SS.gender === 'Nữ';
+  const isMale   = SS.gender === 'Nam' || !SS.gender;
+
   const hasPores = /pore|micro-pore/i.test(text);
   const hasSSS   = /SSS|subsurface/i.test(text);
-  const hasGrain = /peach fuzz|vellus/i.test(text);
   const hasOil   = /oil|sheen/i.test(text);
   const noSmooth = /no.*smooth|no.*porcelain|no.*plastic/i.test(text);
+
   const parts = ['Photorealistic skin'];
-  if(hasSSS)   parts.push('SSS warmth at ears and nostrils');
-  if(hasPores) parts.push('visible micro-pores');
-  if(hasGrain) parts.push('peach fuzz');
+  if(hasSSS) parts.push(isFemale
+    ? 'SSS warmth at ears, nostrils and lips'
+    : 'SSS warmth at ears and nostrils');
+  if(hasPores) parts.push('visible micro-pores on nose and cheeks');
+  if(isFemale) parts.push('soft peach fuzz catching rim light');
   if(hasOil)   parts.push('natural T-zone sheen');
-  if(noSmooth) parts.push('no AI smoothing');
-  return parts.join(', ')+'.';
+
+  // Makeup level for female
+  if(isFemale){
+    const makeupLevel = SS.makeup_level || 'light';
+    const makeupMap = {
+      'none':   'bare skin, no cosmetics, natural flush only',
+      'light':  'light natural makeup — subtle tinted lip, soft eye definition',
+      'full':   'full makeup — defined brows, eye shadow, bold lip, contoured cheeks'
+    };
+    parts.push(makeupMap[makeupLevel] || makeupMap['light']);
+  }
+
+  if(noSmooth) parts.push('no AI smoothing, no porcelain finish');
+  return parts.join('. ')+'.';
 }
 
 
@@ -10235,27 +10270,29 @@ function dirPromptToOutput(){
 
 // ===== 25 LIGHTING STYLES =====
 function chonLighting(el, promptText){
-  // Deselect all
+  // Deselect all 25 cards + old light_setup cards
   document.querySelectorAll('.light-card').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('.card[data-g="light_setup"]').forEach(c => c.classList.remove('on'));
   el.classList.add('selected');
 
-  // Save to SS
-  SS.light_setup = promptText;
-  const name = el.querySelector('.lc-name')?.textContent || '';
-  SS.light_name = name;
+  const name = el.querySelector('.lc-name')?.textContent?.trim() || '';
 
-  // Show selected
+  // Set SS.light_setup — same key buildSceneBlock + taoSD [LIGHTING ANCHOR] reads
+  SS.light_setup = name + ': ' + promptText;
+  SS.light_name  = name;
+
+  // Show selected preview
   const sel = document.getElementById('lighting-selected');
   if(sel){
     sel.style.display = '';
-    sel.innerHTML = `<span style="color:#f59e0b;font-weight:600">${el.querySelector('.lc-num')?.textContent} ${name}</span><br><span style="color:var(--muted);font-size:9px">${promptText}</span>`;
+    sel.innerHTML = `<span style="color:#f59e0b;font-weight:600;font-family:'IBM Plex Mono',monospace">${el.querySelector('.lc-num')?.textContent} ${name}</span><br><span style="color:var(--muted);font-size:9px;font-family:'IBM Plex Mono',monospace">${promptText}</span>`;
   }
 
-  // Update master lock indicator
   capNhat();
   const ind = document.getElementById('autosave-indicator');
-  if(ind){ ind.textContent=`✓ ${name} đã chọn`; ind.style.color='#f59e0b'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},2000); }
+  if(ind){ ind.textContent=`✓ ${name} → đã vào LIGHTING ANCHOR`; ind.style.color='#f59e0b'; setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},2500); }
 }
+
 
 
 const AUTOSAVE_INTERVAL = 30000;
