@@ -60,6 +60,12 @@ select option{background:var(--card)}
 .lc-num{font-size:11px;color:#f59e0b;font-weight:700;margin-bottom:2px}
 .lc-name{font-size:10px;font-weight:600;color:var(--ink);margin-bottom:2px;line-height:1.3}
 .lc-desc{font-size:8.5px;color:var(--muted);line-height:1.4}
+.scene-preset-card{padding:7px 9px;border-radius:7px;border:1px solid #0e2a1a;background:#030d07;cursor:pointer;transition:all .15s}
+.scene-preset-card:hover{border-color:#06b6d4;background:#031014}
+.scene-preset-card.selected{border-color:#06b6d4;background:#031014;box-shadow:0 0 0 1px #06b6d4}
+.sp-icon{font-size:16px;margin-bottom:3px}
+.sp-name{font-size:10px;font-weight:600;color:#06b6d4;margin-bottom:2px}
+.sp-desc{font-size:8.5px;color:var(--muted);line-height:1.4}
 .emo-phy-card{padding:8px 9px;border-radius:8px;border:1px solid #2a0040;background:#0a0010;cursor:pointer;transition:all .15s}
 .emo-phy-card:hover{border-color:#7c3aed;background:#0d0014}
 .emo-phy-card.selected{border-color:#a855f7;background:#0d0014;box-shadow:0 0 0 1px #a855f7}
@@ -543,6 +549,99 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <div class="fw-block">
   <div class="fw-head" onclick="moRong('scene')"><span class="fw-num">04</span><span class="fw-key" data-en="SCENE">BỐI CẢNH</span><span class="fw-desc">Địa điểm · Thời tiết · Không gian nền</span><span class="fw-check" id="ck-scene">○</span></div>
   <div class="fw-body" id="fb-scene">
+
+    <!-- SCENE PRESETS -->
+    <div style="margin-bottom:10px">
+      <div class="lbl" style="margin-bottom:5px"><span class="lbl-tag" data-en="Scene Presets">⚡ Scene Presets — click để fill nhanh</span></div>
+      <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(145px,1fr));gap:4px" id="scene-preset-grid">
+
+        <div class="scene-preset-card" onclick="chonScenePreset('office')">
+          <div class="sp-icon">🏢</div>
+          <div class="sp-name">Corporate Office</div>
+          <div class="sp-desc">Văn phòng hiện đại, cửa kính, ánh sáng ban ngày</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('ledwall')">
+          <div class="sp-icon">🎬</div>
+          <div class="sp-name">LED Wall Stage</div>
+          <div class="sp-desc">Sân khấu LED, studio ảo, không gian điện ảnh</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('concert')">
+          <div class="sp-icon">🎤</div>
+          <div class="sp-name">Concert Stage</div>
+          <div class="sp-desc">Sân khấu concert, đám đông, spotlight, khói sân khấu</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('studio_white')">
+          <div class="sp-icon">⬜</div>
+          <div class="sp-name">White Studio</div>
+          <div class="sp-desc">Phòng trắng vô cực, nền sạch, không shadow</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('studio_black')">
+          <div class="sp-icon">⬛</div>
+          <div class="sp-name">Black Void</div>
+          <div class="sp-desc">Nền đen tuyệt đối, subject nổi bật trên darkness</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('cyberpunk')">
+          <div class="sp-icon">🌆</div>
+          <div class="sp-name">Cyberpunk City</div>
+          <div class="sp-desc">Đô thị tương lai, neon, mưa đêm, phản chiếu</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('nature')">
+          <div class="sp-icon">🌿</div>
+          <div class="sp-name">Nature / Forest</div>
+          <div class="sp-desc">Rừng, thiên nhiên, ánh sáng tự nhiên, organic</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('rooftop')">
+          <div class="sp-icon">🌃</div>
+          <div class="sp-name">Rooftop Night</div>
+          <div class="sp-desc">Sân thượng, đêm đô thị, skyline, gió</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('desert')">
+          <div class="sp-icon">🏜️</div>
+          <div class="sp-name">Desert / Open</div>
+          <div class="sp-desc">Sa mạc, không gian mở, horizon, ánh sáng golden</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('cafe')">
+          <div class="sp-icon">☕</div>
+          <div class="sp-name">Café / Interior</div>
+          <div class="sp-desc">Quán cà phê, ánh đèn ấm, bàn gỗ, cửa sổ</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('ledwall')">
+          <div class="sp-icon">🎭</div>
+          <div class="sp-name">LED Wall Stage</div>
+          <div class="sp-desc">Sân khấu LED Wall, ánh sáng dynamic, haze sân khấu</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('concert')">
+          <div class="sp-icon">🎤</div>
+          <div class="sp-name">Concert / Live</div>
+          <div class="sp-desc">Sân khấu concert lớn, khán giả, spotlight, smoke</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('studio_dark')">
+          <div class="sp-icon">🎬</div>
+          <div class="sp-name">Dark Studio</div>
+          <div class="sp-desc">Studio tối, background đen, chỉ có ánh sáng chủ đề</div>
+        </div>
+
+        <div class="scene-preset-card" onclick="chonScenePreset('nebula')">
+          <div class="sp-icon">🌌</div>
+          <div class="sp-name">Space / Nebula</div>
+          <div class="sp-desc">LED Wall không gian vũ trụ, tinh vân, deep space</div>
+        </div>
+
+      </div>
+    </div>
+
     <div class="r2">
       <div><div class="lbl"><span class="lbl-tag" data-en="Interior / Exterior">Trong / Ngoài</span></div><div class="chips"><span class="chip s" data-g="inex">Trong nhà (INT.)</span><span class="chip s" data-g="inex">Ngoài trời (EXT.)</span><span class="chip s" data-g="inex">Hỗn hợp</span><span class="chip s" data-g="inex">Không gian ảo / Studio</span></div></div>
       <div><div class="lbl"><span class="lbl-tag" data-en="Time of day">Thời điểm</span></div><div class="chips"><span class="chip s" data-g="timeofday" data-en="Daytime">Ban ngày</span><span class="chip s" data-g="timeofday" data-en="Nighttime">Ban đêm</span><span class="chip s" data-g="timeofday">Hoàng hôn</span><span class="chip s" data-g="timeofday">Bình minh</span><span class="chip s" data-g="timeofday">Không xác định</span></div></div>
@@ -648,47 +747,47 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <div class="lbl" style="margin-bottom:6px"><span class="lbl-tag" data-en="25 Cinematic Lighting Styles (choose one)">25 Phong Cách Ánh Sáng Điện Ảnh</span> <span style="font-size:9px;color:var(--muted)">— click để chọn</span></div>
     <div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(130px,1fr));gap:5px;margin-bottom:10px" id="lighting-25-grid">
 
-      <div class="light-card" onclick="chonLighting(this,'Soft even light from window left, 5500K daylight, no direct source. Shadow edges soft and diffused. Gentle sky fill from right side. Subtle catchlight in eyes from window. Skin warm and natural. No harsh contrast.')" data-num="1">
+      <div class="light-card" onclick="chonLighting(this,'Soft even light from window left, 5500K daylight, no direct source. Shadow edges soft and diffused. Gentle sky fill from right side. Subtle catchlight in eyes from window. Skin warm and natural. No harsh contrast. Ambient room light fills shadows gently.')" data-num="1">
         <div class="lc-num">①</div><div class="lc-name">Natural Light</div>
         <div class="lc-desc">Soft, even light from window or open shade</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Warm golden backlight 2800K entering from behind subject at low angle. Long horizontal shadows stretching forward. Skin glowing amber-orange. Soft halo rim around hair and shoulders. Lens flare bloom in upper corner. Sky fill 30% from front.')" data-num="2">
+      <div class="light-card" onclick="chonLighting(this,'Warm golden backlight 2800K entering from behind subject at low angle. Long horizontal shadows stretching forward. Skin glowing amber-orange. Soft halo rim around hair and shoulders. Lens flare bloom in upper corner. Sky fill 30% from front. Deep warm shadows under chin and eyes.')"" data-num="2">
         <div class="lc-num">②</div><div class="lc-name">Golden Hour</div>
         <div class="lc-desc">Warm soft sunlight during sunrise or sunset</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Cool blue-indigo ambient 4000K, sky transitioning from dusk to night. No direct light source. Soft even illumination from open sky above. Low contrast, deep blue shadows. Skin takes on cool blue-violet undertone. Mood: quiet, melancholy.')" data-num="3">
+      <div class="light-card" onclick="chonLighting(this,'Cool blue-indigo ambient 4000K, sky transitioning from dusk to night. No direct light source. Soft even illumination from open sky above. Low contrast, deep blue shadows. City lights beginning to glow in background. Skin takes on cool blue-violet undertone. Mood: quiet, melancholy, transitional.')"" data-num="3">
         <div class="lc-num">③</div><div class="lc-name">Blue Hour</div>
         <div class="lc-desc">Cool soft ambient light just before night</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Single direct hard light source 5600K from upper left 45°, no diffusion. Sharp crisp shadow edges on face — deep shadow under nose, strong cheekbone shadow. 8:1 ratio, dark side nearly black. No fill light. Skin texture and pores highly visible.')" data-num="4">
+      <div class="light-card" onclick="chonLighting(this,'Single direct hard light source 5600K from upper left 45°, no diffusion. Sharp crisp shadow edges on face — deep shadow under nose, strong cheekbone shadow. 8:1 lighting ratio, dark side nearly black. No fill light. Skin texture and pores highly visible under harsh direct illumination.')"" data-num="4">
         <div class="lc-num">④</div><div class="lc-name">Hard Light</div>
         <div class="lc-desc">Direct, harsh light with strong shadows</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Large softbox key light 5600K from front-left, heavily diffused. Shadow edges barely visible, extremely gradual transition. 2:1 ratio, generous fill from right. Skin even and flattering. Clean commercial beauty quality.')" data-num="5">
+      <div class="light-card" onclick="chonLighting(this,'Large softbox key light 5600K from front-left, heavily diffused. Shadow edges barely visible, extremely gradual transition. 2:1 ratio, generous fill from right. Skin even and flattering. Even catchlight spread across eyes. Clean commercial beauty quality.')" data-num="5">
         <div class="lc-num">⑤</div><div class="lc-name">Soft Light</div>
         <div class="lc-desc">Diffused light with soft, subtle shadows</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Strong light source directly behind subject, background overexposed bright. Subject face nearly silhouetted — very dark frontal plane. Glowing bright rim around head and shoulders. Zero front fill. Mood: mysterious, cinematic, emotional.')" data-num="6">
+      <div class="light-card" onclick="chonLighting(this,'Strong light source directly behind subject, background overexposed bright. Subject face nearly silhouetted — very dark frontal plane. Glowing bright rim around head and shoulders separating from blown-out background. Zero front fill. Dramatic separation. Mood: mysterious, cinematic, emotional.')"" data-num="6">
         <div class="lc-num">⑥</div><div class="lc-name">Backlight</div>
         <div class="lc-desc">Light from behind the subject</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Rim light 6500K from behind subject slightly right, highlighting edge of face. Bright crisp line of light along jaw, cheekbone, and shoulder. Dark background — subject separated by glowing edge light only. Minimal front fill. High contrast.')" data-num="7">
+      <div class="light-card" onclick="chonLighting(this,'Rim light 6500K from behind subject slightly right, highlighting edge of face. Bright crisp line of light along jaw, cheekbone, and shoulder. Dark background — subject separated by glowing edge light only. Minimal front fill. High contrast. Cinematic depth and dimension.')" data-num="7">
         <div class="lc-num">⑦</div><div class="lc-name">Rim Light</div>
         <div class="lc-desc">Highlights edges, separating from background</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Hard key light exactly 90° from left side, 4:1 ratio. Left half of face fully lit, right half in deep shadow. Strong nose shadow cast across cheek. Defined cheekbone and jaw structure. No fill on shadow side. Powerful and dramatic.')" data-num="8">
+      <div class="light-card" onclick="chonLighting(this,'Hard key light exactly 90° from left side, 4:1 ratio. Left half of face fully lit, right half in deep shadow. Strong nose shadow cast across cheek. Defined cheekbone and jaw structure. No fill on shadow side. Textural and dimensional. Mood: powerful, dramatic.')" data-num="8">
         <div class="lc-num">⑧</div><div class="lc-name">Side Lighting</div>
         <div class="lc-desc">Light from the side for depth and dimension</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Single light directly overhead pointing straight down, 5600K. Deep dark shadows under brow ridge, eye sockets nearly black. Heavy shadow under nose pointing down. Dark under chin. Oppressive institutional feeling. No fill from sides.')" data-num="9">
+      <div class="light-card" onclick="chonLighting(this,'Single light directly overhead pointing straight down, 5600K. Deep dark shadows under brow ridge, eye sockets nearly black. Heavy shadow under nose pointing down. Dark under chin. Oppressive institutional feeling. No fill from sides. Uncomfortable, harsh.')" data-num="9">
         <div class="lc-num">⑨</div><div class="lc-name">Top Light</div>
         <div class="lc-desc">Light from above the subject</div>
       </div>
@@ -698,77 +797,77 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <div class="lc-desc">Light from below for dramatic effect</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Key light on the wider side of face closest to camera, 4000K warm. Most of face is illuminated — open friendly look. Broad shadow on smaller far side. 3:1 ratio. Good fill on shadow side. Commercial and approachable. Natural warmth.')" data-num="11">
+      <div class="light-card" onclick="chonLighting(this,'Key light on the wider side of face closest to camera, 4000K warm. Most of face is illuminated — open friendly look, accessible. Broad shadow on smaller far side of face. 3:1 ratio. Good fill on shadow side. Commercial and approachable. Natural warmth.')" data-num="11">
         <div class="lc-num">⑪</div><div class="lc-name">Broad Light</div>
         <div class="lc-desc">Light on the side facing the camera</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Key light on the narrow side of face away from camera, 4200K. Shadow falls on the broader camera-facing side. More dramatic and slimming. 4:1 ratio. Narrow strip of light on far cheek visible. Editorial, moody, mysterious quality.')" data-num="12">
+      <div class="light-card" onclick="chonLighting(this,'Key light on the narrow side of face away from camera, 4200K. Shadow falls on the broader camera-facing side. More dramatic, slimming. 4:1 ratio. Narrow strip of light on far cheek visible. Editorial, moody, mysterious quality. Deeper shadow toward camera.')" data-num="12">
         <div class="lc-num">⑫</div><div class="lc-name">Short Light</div>
         <div class="lc-desc">Light on the side away from the camera</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Hard light exactly 90° to right side. Hard vertical dividing line down center of nose. Right side of face bright white, left side completely black. 8:1 ratio. No fill whatsoever. Mood: conflict, duality, psychological tension.')" data-num="13">
+      <div class="light-card" onclick="chonLighting(this,'Hard light exactly 90° to right side. Hard vertical dividing line down center of nose. Right side of face bright white, left side completely black. 8:1 ratio. No fill whatsoever. Zero transition zone. Mood: conflict, duality, psychological tension, decisive moment.')" data-num="13">
         <div class="lc-num">⑬</div><div class="lc-name">Split Light</div>
         <div class="lc-desc">Half the face lit, half in shadow</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Key light upper left 45° angle and 45° above eye level, warm 3200K. Small triangle of light appearing on shadowed right cheek below eye. 3:1 ratio. Shadow side dark but not complete black. Rim on shoulder. Classic cinematic portrait depth.')" data-num="14">
+      <div class="light-card" onclick="chonLighting(this,'Key light upper left 45° angle and 45° above eye level, warm 3200K. Small triangle of light appearing on shadowed right cheek below eye. 3:1 ratio. Shadow side dark but not complete black. Rim on shoulder. Classic cinematic portrait depth. Rich, painterly, timeless quality.')" data-num="14">
         <div class="lc-num">⑭</div><div class="lc-name">Rembrandt Light</div>
         <div class="lc-desc">Triangle of light on the shadowed cheek</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Key light directly above and slightly in front of face, pointing down 45°. Symmetrical butterfly-shaped shadow directly under nose. Cheekbones highlighted. 5600K. Fill at 50% below. Glamour and beauty quality. Classic Hollywood lighting.')" data-num="15">
+      <div class="light-card" onclick="chonLighting(this,'Key light directly above and slightly in front of face, pointing down 45°. Symmetrical butterfly-shaped shadow directly under nose. Cheekbones highlighted. Slight shadow under lower lip. 5600K. Glamour and beauty quality. Fill at 50% below. Classic Hollywood lighting.')" data-num="15">
         <div class="lc-num">⑮</div><div class="lc-name">Butterfly Light</div>
         <div class="lc-desc">Light above and in front, shadow like a butterfly</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Key light 30-45° to side and slightly above eye level, 4000K warm. Small loop shadow falling from bottom of nose onto cheek — not touching lip. 3:1 ratio. Fill at 50% from opposite side. Most common TVC and commercial lighting setup.')" data-num="16">
+      <div class="light-card" onclick="chonLighting(this,'Key light 30-45° to side and slightly above eye level, 4000K warm. Small loop shadow falling from bottom of nose onto cheek — not touching lip. 3:1 ratio. Natural and versatile. Fill at 50% from opposite side. Most common TVC and commercial lighting setup. Friendly and professional.')"" data-num="16">
         <div class="lc-num">⑯</div><div class="lc-name">Loop Light</div>
         <div class="lc-desc">Shadow from nose forms a loop</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Very large diffused light source through softbox or silk, 5600K. No distinct source direction — light seems to come from everywhere. Extremely soft shadows, almost shadowless. Even across entire face. Clean modern fashion quality. 1:1 ratio.')" data-num="17">
+      <div class="light-card" onclick="chonLighting(this,'Very large diffused light source through softbox or silk, 5600K. No distinct source direction — light seems to come from everywhere. Extremely soft shadows, almost shadowless. Even across entire face. Clean and modern. Fashion and beauty commercial quality. 1:1 ratio.')" data-num="17">
         <div class="lc-num">⑰</div><div class="lc-name">Diffused Light</div>
         <div class="lc-desc">Light spread through a diffuser or softbox</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Narrow focused spotlight beam from above, 5600K hard source. Subject lit in tight pool of light, surrounding environment in deep darkness. Sharp edge where light meets shadow. Theatrical dramatic intensity. Rest of frame near black.')" data-num="18">
+      <div class="light-card" onclick="chonLighting(this,'Narrow focused spotlight beam from above, 5600K hard source. Subject lit in tight pool of light, surrounding environment in deep darkness. Sharp edge where light meets shadow. Theatrical, dramatic intensity. Hard specular highlight on nose and forehead. Rest of frame near black.')"" data-num="18">
         <div class="lc-num">⑱</div><div class="lc-name">Spotlight</div>
         <div class="lc-desc">Narrow, focused light on the subject</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Key light with warm amber gel from left, fill light with cool blue gel from right. Two complementary colors painting opposite sides of face. Skin takes vivid color on each side. Mood: vibrant, artistic, stylized, editorial. High saturation color contrast.')" data-num="19">
+      <div class="light-card" onclick="chonLighting(this,'Key light with warm amber gel from left, fill light with cool blue gel from right. Two complementary colors painting opposite sides of face. Skin takes vivid color on each side — unnatural but stylized beauty. Mood: vibrant, artistic, stylized, editorial. High saturation color contrast.')"" data-num="19">
         <div class="lc-num">⑲</div><div class="lc-name">Colored Light</div>
         <div class="lc-desc">Using colored lights for mood and style</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Multiple neon sign sources — cyan, magenta, pink, purple light. No white light anywhere. Urban night environment. Colorful shadows in complementary colors. Skin color shifts by angle. Cyberpunk atmosphere. Mood: edgy, urban, electric.')" data-num="20">
+      <div class="light-card" onclick="chonLighting(this,'Multiple neon sign sources — cyan, magenta, pink, purple light sources. No white light anywhere. Urban night environment. Colorful shadows in complementary colors. Skin color shifts by angle. Cyberpunk atmosphere. Vibrant and saturated. Mood: edgy, urban, electric.')" data-num="20">
         <div class="lc-num">⑳</div><div class="lc-name">Neon Light</div>
         <div class="lc-desc">Neon sources for vibrant atmosphere</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Single candle flame 1800K warm orange point source, very close to face. Flame visible in frame, dancing light creating organic movement on skin. Deep warm shadows surrounding. Everything beyond arm's reach in darkness. Skin glows amber-orange.')" data-num="21">
+      <div class="light-card" onclick="chonLighting(this,'Single candle flame 1800K warm orange point source, very close to face. Flame visible in frame, dancing light creating organic movement on skin. Deep warm shadows surrounding. Everything beyond arm\'s reach in darkness. Intimate, primal. Skin glows amber-orange. Slight flicker visible.')"" data-num="21">
         <div class="lc-num">㉑</div><div class="lc-name">Candle Light</div>
         <div class="lc-desc">Warm, flickering light for intimate mood</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Fire source 2000K dynamic warm orange-red from below and front. Moving flickering illumination — light constantly shifting on face. Deep dramatic shadows shifting with flame. Strong orange-red color on lit side, deep shadow on opposite side.')" data-num="22">
+      <div class="light-card" onclick="chonLighting(this,'Fire source 2000K dynamic warm orange-red from below and front. Moving flickering illumination — light constantly shifting on face. Deep dramatic shadows shifting with flame movement. Raw and primal. Strong orange-red color on lit side, deep shadow on opposite side.')" data-num="22">
         <div class="lc-num">㉒</div><div class="lc-name">Fire Light</div>
         <div class="lc-desc">Warm, dynamic light from fire sources</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Directional natural light streaming through window frame from left 5500K. Window frame shadow pattern casting defined bands of light on face and wall. Architectural structural feel. Strong directional key. Shadow side gets soft ambient fill from room.')" data-num="23">
+      <div class="light-card" onclick="chonLighting(this,'Directional natural light streaming through window frame from left 5500K. Window frame shadow pattern casting defined bands of light on face and wall. Architectural, structural feel. Light and shadow have clear geometry. Strong directional key. Shadow side gets soft ambient fill from room.')"" data-num="23">
         <div class="lc-num">㉓</div><div class="lc-name">Window Light</div>
         <div class="lc-desc">Directional light through a window</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Single hard light source, 8:1 ratio, 80% of frame in shadow. Minimal fill — only enough to keep shadow side not pure black. Deep rich blacks dominating composition. Small bright area on face. Mood: tense, secretive, intense, cinematic.')" data-num="24">
+      <div class="light-card" onclick="chonLighting(this,'Single hard light source, 8:1 ratio, 80% of frame in shadow. Minimal fill — only enough to keep shadow side not pure black. Deep rich blacks dominating composition. Small bright area on face. Maximum drama and mystery. Mood: tense, secretive, intense, cinematic.')" data-num="24">
         <div class="lc-num">㉔</div><div class="lc-name">Moody / Low Key</div>
         <div class="lc-desc">Dark shadows, minimal light for drama</div>
       </div>
 
-      <div class="light-card" onclick="chonLighting(this,'Multiple lights creating extremely bright even illumination, 1:1 ratio. White or near-white background. Minimal shadows anywhere. 5600K clean daylight. Everything bright and open. Mood: happy, fresh, optimistic, product-ready commercial.')" data-num="25">
+      <div class="light-card" onclick="chonLighting(this,'Multiple lights creating extremely bright even illumination, 1:1 ratio. White or near-white background. Minimal shadows anywhere. 5600K clean daylight color. Everything bright and open. Commercial, positive, energetic. Mood: happy, fresh, optimistic, product-ready.')" data-num="25">
         <div class="lc-num">㉕</div><div class="lc-name">High Key</div>
         <div class="lc-desc">Bright, even light with minimal shadows</div>
       </div>
@@ -3003,6 +3102,48 @@ function capNhatMakeupUI(){
     const panel = document.getElementById('makeup-panel');
     if(panel) panel.style.display = SS.gender==='Nữ' ? '' : 'none';
   }, 50);
+}
+
+// ===== SCENE PRESETS =====
+const SCENE_PRESETS = {
+  office:       { inex:'Trong nhà (INT.)', timeofday:'Ban ngày', genre:'Quảng cáo sản phẩm', location:'Văn phòng hiện đại mở, tòa cao tầng', desc:'Modern open-plan corporate office, high-rise building, daytime. Floor-to-ceiling glass curtain wall windows on left flooding space with warm 5600K daylight. Exposed concrete ceiling with linear LED strips. Walnut-tone oak desks, black ergonomic chairs. Green tropical plants along window line. Polished dark concrete floor reflecting ambient light.', light:'Window Light: Directional natural light streaming through window frame from left 5500K. Architectural feel. Strong directional key. Shadow side gets soft ambient fill from room.' },
+  ledwall:      { inex:'Không gian ảo / Studio', timeofday:'Không xác định', genre:'Khoa học viễn tưởng', location:'LED Wall Stage — sân khấu studio ảo', desc:'Vast LED Wall stage, curved seamless display wall 20m wide 6m tall. LED content: deep space nebula, glowing cosmic clouds in deep blue-purple-magenta. Stage floor dark matte black, slightly reflective. Theatrical haze filling stage volume — spotlight beam shafts cutting through haze at 45° angles. Subject standing in center pool of warm spotlight, LED glow surrounding.', light:'Spotlight: Narrow focused spotlight beam from above, 5600K hard source. Subject lit in tight pool of light. Stage LED ambient fill from screen — cool blue-purple 6500K from behind. Rim light from LED wall separating subject from background. Haze makes beam shafts visible.' },
+  concert:      { inex:'Ngoài trời (EXT.)', timeofday:'Ban đêm', genre:'Hành động', location:'Sân khấu concert lớn ngoài trời, đêm', desc:'Large outdoor concert stage at night. Massive LED screen backdrop with dynamic visuals. Stage width 40m, elevated 2m from ground. Crowd of thousands in darkness beyond stage edge. Multiple follow spotlights from above. Stage haze running — light beams cutting through at multiple angles. PA speaker towers left and right.', light:'Rim Light: Multiple spotlight beams 5600K hard sources from above and sides. Subject rimmed by cross-lighting. Dynamic colored backlight from LED backdrop. Crowd darkness creates silhouette potential. Haze makes all light sources visible as beam shafts.' },
+  studio_white: { inex:'Không gian ảo / Studio', timeofday:'Không xác định', genre:'Quảng cáo sản phẩm', location:'White infinity studio — cyc wall', desc:'Seamless white infinity cyc wall studio. Floor and background merge with no visible corner — infinite white extends in all directions. Pure matte white #FAFAFA, no texture. Zero shadow on background. Clean clinical environment.', light:'High Key: Multiple lights creating extremely bright even illumination, 1:1 ratio. White background. Minimal shadows anywhere. 5600K clean daylight. Everything bright and open.' },
+  studio_black: { inex:'Không gian ảo / Studio', timeofday:'Không xác định', genre:'Tâm lý', location:'Black void studio — infinite darkness', desc:'Infinite black void. No visible floor, wall, or ceiling — pure darkness surrounding subject. Subject exists in absolute black space. High contrast isolation.', light:'Moody / Low Key: Single hard light source, 8:1 ratio, 80% of frame in shadow. Minimal fill. Deep rich blacks dominating. Small bright area on face. Mood: intense, cinematic.' },
+  cyberpunk:    { inex:'Ngoài trời (EXT.)', timeofday:'Ban đêm', genre:'Khoa học viễn tưởng', location:'Đô thị cyberpunk đêm mưa', desc:'Futuristic cyberpunk city street at night, heavy rain. Wet asphalt reflecting neon signs — cyan, magenta, purple, red. Tall dense buildings with holographic advertisements. Steam rising from street grates. Puddles catching neon reflections.', light:'Neon Light: Multiple neon sign sources — cyan, magenta, pink, purple. No white light anywhere. Colorful shadows in complementary colors. Cyberpunk atmosphere. Mood: edgy, urban, electric.' },
+  nature:       { inex:'Ngoài trời (EXT.)', timeofday:'Ban ngày', genre:'Tình cảm', location:'Rừng cổ đại, thiên nhiên nguyên sơ', desc:'Ancient forest, old-growth trees 30m tall. Filtered dappled sunlight through forest canopy. Mossy forest floor, ferns, roots. Mist in forest depth creating atmospheric perspective. Soft organic environment.', light:'Natural Light: Soft even light from forest canopy, 5500K. Shadow edges soft and diffused. Gentle sky fill. Dappled light patches on ground. Skin warm and natural. No harsh contrast.' },
+  rooftop:      { inex:'Ngoài trời (EXT.)', timeofday:'Ban đêm', genre:'Tâm lý', location:'Sân thượng đô thị đêm khuya', desc:'Urban rooftop at night, high-rise building. City skyline stretching in all directions. Wind visible — hair and clothes moving. Low concrete parapet wall at roof edge. Clear sky with moon visible. Distant city hum.', light:'Blue Hour: Cool blue-indigo ambient 4000K. No direct light source. Soft even illumination from open sky. City lights glowing warm in background. Skin takes on cool blue-violet undertone.' },
+  desert:       { inex:'Ngoài trời (EXT.)', timeofday:'Hoàng hôn', genre:'Hành động', location:'Sa mạc, không gian mở rộng lớn', desc:'Vast desert landscape, completely flat horizon. Fine sand surface. Sky: gradient from deep orange-red at horizon to deep blue above. No other structures visible. Infinite open space. Wind creating subtle sand drift at ground level.', light:'Golden Hour: Warm golden backlight 2800K from behind at low angle. Long horizontal shadows. Skin glowing amber-orange. Soft halo rim around hair and shoulders. Lens flare bloom. Sky fill 30% from front.' },
+  studio_dark:  { inex:'Không gian ảo / Studio', timeofday:'Không xác định', genre:'Tâm lý', location:'Dark studio — tối tăm, chỉ ánh sáng chủ đề', desc:'Dark studio environment. Background pure black, no visible walls or floor. Subject isolated in darkness. Single or minimal light sources creating dramatic contrast. High contrast isolation — subject emerges from black void.', light:'Moody / Low Key: Single hard light source, 8:1 ratio, 80% of frame in deep shadow. Minimal fill — shadow side nearly black. Maximum drama and mystery. Mood: tense, secretive, intense.' },
+  nebula:       { inex:'Không gian ảo / Studio', timeofday:'Không xác định', genre:'Khoa học viễn tưởng', location:'LED Wall — deep space nebula, vũ trụ', desc:'Vast LED Wall stage displaying deep space nebula. Cosmic clouds in deep blue-purple-magenta-gold swirling behind subject. Stage floor dark matte black. Theatrical haze filling stage volume — spotlight beam shafts cutting through at 45° angles. Subject standing center stage, LED glow wrapping around from behind. Stars visible in nebula depth.', light:'Rim Light: LED Wall ambient 6500K cool blue-purple from behind creating natural rim. Subject separated from cosmic background. Warm spotlight 5600K from above. Stage haze makes beam shafts visible. Two-tone: warm front, cool cosmic back.' },
+  cafe:         { inex:'Trong nhà (INT.)', timeofday:'Ban ngày', genre:'Tình cảm', location:'Quán cà phê ấm cúng, nội thất gỗ', desc:'Cozy café interior. Warm oak wood tables and chairs. Window light from left casting soft afternoon sun patches. Brick wall texture. Hanging Edison bulb lights above. Coffee cups, books, plants in background. Warm intimate atmosphere.', light:'Window Light: Directional natural light from window left 5500K. Warm afternoon quality. Strong directional key. Shadow side filled by warm Edison bulbs 2700K.' }
+};
+
+function chonScenePreset(key){
+  const p = SCENE_PRESETS[key]; if(!p) return;
+  document.querySelectorAll('.scene-preset-card').forEach(c=>c.classList.remove('selected'));
+  event.currentTarget.classList.add('selected');
+  // Fill chips
+  ['inex','timeofday','genre'].forEach(g=>{
+    document.querySelectorAll(`.chip[data-g="${g}"]`).forEach(c=>{
+      const match = c.textContent.trim()===p[g]||c.dataset.en===p[g];
+      c.classList.toggle('on',match);
+      if(match) SS[g]=p[g];
+    });
+  });
+  const locEl=document.getElementById('location'); if(locEl) locEl.value=p.location;
+  const descEl=document.getElementById('scene-desc'); if(descEl) descEl.value=p.desc;
+  const promptEl=document.getElementById('scene-prompt-direct'); if(promptEl) promptEl.value=p.desc;
+  if(p.light){
+    SS.light_setup=p.light; SS.light_name=p.light.split(':')[0].trim();
+    const sel=document.getElementById('lighting-selected');
+    if(sel){sel.style.display='';sel.innerHTML=`<span style="color:#f59e0b;font-weight:600;font-family:'IBM Plex Mono',monospace">💡 ${SS.light_name}</span><br><span style="color:var(--muted);font-size:9px;font-family:'IBM Plex Mono',monospace">${p.light.slice(0,120)}...</span>`;}
+    document.querySelectorAll('.light-card').forEach(c=>c.classList.remove('selected'));
+  }
+  capNhat();
+  const ind=document.getElementById('autosave-indicator');
+  if(ind){ind.textContent=`✓ Scene: ${event.currentTarget.querySelector('.sp-name')?.textContent} đã fill`;ind.style.color='#06b6d4';setTimeout(()=>{ind.style.color='var(--muted)';ind.textContent='';},2500);}
 }
 
 
