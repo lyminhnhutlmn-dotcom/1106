@@ -3792,17 +3792,16 @@ function taoVI(){
 function taoSD(){
   sw('out');
   const{dd,nv,nvp,hd,mt,as,pc,rb,wardrobe}=layChung();
-  const matImg=document.getElementById('mat-image').value.trim();
-  const matVid=document.getElementById('mat-video').value.trim();
-  const matAud=document.getElementById('mat-audio').value.trim();
-  const sAm=document.getElementById('snd-ambient').value.trim();
-  const sFo=document.getElementById('snd-foley').value.trim();
-  const sMu=document.getElementById('snd-music').value.trim();
-  const sSf=document.getElementById('snd-sfx').value.trim();
-  const sSi=document.getElementById('snd-silence').value.trim();
-  const hookTxt=selNoHookSD ? '__NOHOOK__' : (selHook||document.getElementById('hook-custom').value.trim());
+  const matImg=gVal('mat-image');
+  const matVid=gVal('mat-video');
+  const matAud=gVal('mat-audio');
+  const sAm=gVal('snd-ambient');
+  const sFo=gVal('snd-foley');
+  const sMu=gVal('snd-music');
+  const sSf=gVal('snd-sfx');
+  const sSi=gVal('snd-silence');
+  const hookTxt=selNoHookSD ? '__NOHOOK__' : (selHook||gVal('hook-custom'));
   const L=[];
-  L.push('SEEDANCE 2.0 ON HIGGSFIELD — CINEMATIC PROMPT');L.push('');
 
 
   const matRefs=[];
@@ -3941,11 +3940,11 @@ function taoSD(){
 function taoCG(){
   sw('out');
   const{dd,nv,nvp,hd,mt,as,pc,rb,wardrobe}=layChung();
-  const cgMatC=document.getElementById('cg-material-custom').value.trim();
-  const cgPartC=document.getElementById('cg-particle-custom').value.trim();
-  const cgAnimD=document.getElementById('cg-animation-desc').value.trim();
-  const cgExtra=document.getElementById('cg-extra').value.trim();
-  const cgHookTxt=selNoHookCG ? '__NOHOOK__' : (selCGHook||document.getElementById('cg-hook-custom').value.trim());
+  const cgMatC=gVal('cg-material-custom');
+  const cgPartC=gVal('cg-particle-custom');
+  const cgAnimD=gVal('cg-animation-desc');
+  const cgExtra=gVal('cg-extra');
+  const cgHookTxt=selNoHookCG ? '__NOHOOK__' : (selCGHook||gVal('cg-hook-custom'));
   const dur=SS.cg_duration||'6s — Standard';const fps=SS.cg_fps||'24fps cinematic';
   const L=[];
   L.push('SEEDANCE 2.0 ON HIGGSFIELD — 3D CGI RENDER PROMPT');L.push('');
