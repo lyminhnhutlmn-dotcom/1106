@@ -17,5 +17,13 @@
     "body_left": "characters/van-anh/van-anh-body-left.jpg",
     "body_right": "characters/van-anh/van-anh-body-right.jpg",
     "body_back": "characters/van-anh/van-anh-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "makeup",
+      "script": "Kịch bản khóa nghề make up, 32 tuổi, ngồi tẩy trang. Không mô tả áo.",
+      "plate": "Áo thun đen, quần jean đen, giày sneaker đen. Màu là khóa sản xuất.",
+      "file": "characters/van-anh/van-anh-body-front.jpg"
+    }
+  ]
 }

@@ -134,5 +134,32 @@
         "Sau khi thấy giày hoặc nghe tên Mỹ Duyên: nụ cười giữ nguyên một nhịp rồi tắt. Không trợn mắt, không lùi."
       ]
     }
-  ]
+  ],
+  "costumes": [
+    {
+      "id": "suit",
+      "script": "Ngày đến và chỗ đông người: suit sang, giày tây bóng. Minh Châu cài lại áo vest. Đêm chung kết: trang phục đi dự đêm chung kết, kịch bản không mô tả một bộ khác.",
+      "plate": "Vest đen, gile đen, sơ mi trắng không cà vạt, giày tây đen, nhẫn ngón trỏ, đồng hồ.",
+      "file": "characters/james-full-body.jpg"
+    },
+    {
+      "id": "photo-2024",
+      "script": "Ảnh photobooth: đội nón, kính râm, khoác vai, đồng hồ và nhẫn ngón trỏ. Ảnh ban tổ chức: vest đen, nhẫn ngón trỏ.",
+      "plate": "Cùng bộ vest, thêm nón đen và kính râm. Một mình. Mỹ Duyên không có trong ảnh.",
+      "file": "characters/james-2024.jpg"
+    },
+    {
+      "id": "pool",
+      "script": "Chiều hồ bơi: đang bơi, lên bờ, xăm sau lưng lộ, Nam choàng khăn. Kịch bản không mô tả họa tiết xăm.",
+      "plate": "Áo thể thao đen kín, quần thể thao, khăn trắng. Lưng trần và hình xăm không có ảnh.",
+      "file": "characters/james-pool.jpg"
+    },
+    {
+      "id": "boxing",
+      "script": "Phòng tập: găng và đồ bảo hộ, rồi vào sàn chỉ mang găng. Trong kho cũng đeo găng, sau đó cởi găng.",
+      "plate": "Áo ba lỗ đen, quần boxing, găng đen, không mũ bảo hộ, đứng yên. Áo là khóa sản xuất. Không đối thủ.",
+      "file": "characters/james-boxing.jpg"
+    }
+  ],
+  "not_imaged": "Đêm chung kết dùng cùng bộ vest. Xe S-Class là shot xe, không phải trang phục. Không có ảnh: lưng trần, họa tiết xăm, áo bị chém rách, cảnh giấu mặt ở bãi đất."
 }

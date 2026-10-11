@@ -16,5 +16,38 @@
     "body_left": "characters/nam/nam-body-left.jpg",
     "body_right": "characters/nam/nam-body-right.jpg",
     "body_back": "characters/nam/nam-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "arrival",
+      "script": "Ngày đến: thư sinh, mở cốp, xách vali, đi theo James.",
+      "plate": "Sơ mi trắng, quần than, giày tây. Không vest.",
+      "file": "characters/nam/nam-body-front.jpg"
+    },
+    {
+      "id": "black",
+      "script": "Flashback: mặc đồ đen, đội nón, trùm kín mặt.",
+      "plate": "Áo đen, quần đen, nón, khăn kéo xuống cằm để giữ mặt. Trong cảnh mặt được trùm kín. Không gậy, không lửa.",
+      "file": "characters/nam/nam-black.jpg"
+    },
+    {
+      "id": "hold",
+      "script": "Phòng hỏi cung: trang phục tạm giam màu xanh dương đậm.",
+      "plate": "Bộ xanh navy đậm, không số, không còng.",
+      "file": "characters/nam/nam-hold.jpg"
+    },
+    {
+      "id": "prison",
+      "script": "Phòng thăm nuôi: đã mặc đồ phạm nhân. Kịch bản không ghi màu.",
+      "plate": "Bộ màu nâu xám trơn. Màu là khóa sản xuất. Không số, không còng.",
+      "file": "characters/nam/nam-prison.jpg"
+    },
+    {
+      "id": "blue",
+      "script": "Flashback hành lang: mặc váy xanh, đội tóc giả.",
+      "plate": "Váy satin xanh, tóc giả dài, giày trắng. Mặt vẫn là Nam.",
+      "file": "characters/nam/nam-blue.jpg"
+    }
+  ],
+  "not_imaged": "Quần áo lấm bùn ở nhà kho là bộ đang mặc bị bẩn, không phải một bộ mới. Không có ảnh đào hố, không có ảnh đưa thuốc vào nước."
 }

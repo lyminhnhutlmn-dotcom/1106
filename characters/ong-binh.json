@@ -15,5 +15,13 @@
     "body_left": "characters/ong-binh/ong-binh-body-left.jpg",
     "body_right": "characters/ong-binh/ong-binh-body-right.jpg",
     "body_back": "characters/ong-binh/ong-binh-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "suit",
+      "script": "Ngồi khu VIP. Kịch bản không ghi màu vest.",
+      "plate": "Vest navy, đồng hồ vàng. Màu là khóa sản xuất.",
+      "file": "characters/ong-binh/ong-binh-body-front.jpg"
+    }
+  ]
 }

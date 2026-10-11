@@ -15,5 +15,13 @@
     "body_left": "characters/ong-kim/ong-kim-body-left.jpg",
     "body_right": "characters/ong-kim/ong-kim-body-right.jpg",
     "body_back": "characters/ong-kim/ong-kim-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "suit",
+      "script": "Mặc vest, ngồi ghế nhung.",
+      "plate": "Vest than, cà vạt xám.",
+      "file": "characters/ong-kim/ong-kim-body-front.jpg"
+    }
+  ]
 }

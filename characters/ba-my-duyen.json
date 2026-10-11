@@ -16,5 +16,13 @@
     "body_left": "characters/ba-my-duyen/ba-my-duyen-body-left.jpg",
     "body_right": "characters/ba-my-duyen/ba-my-duyen-body-right.jpg",
     "body_back": "characters/ba-my-duyen/ba-my-duyen-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "home",
+      "script": "Ở nhà, 60 tuổi. Ống quần còn ướt.",
+      "plate": "Sơ mi tay ngắn xanh xám, quần tối. Quần ướt không tách thành bộ mới.",
+      "file": "characters/ba-my-duyen/ba-my-duyen-body-front.jpg"
+    }
+  ]
 }

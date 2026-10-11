@@ -16,5 +16,20 @@
     "body_left": "characters/quan/quan-body-left.jpg",
     "body_right": "characters/quan/quan-body-right.jpg",
     "body_back": "characters/quan/quan-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "press",
+      "script": "Ngày đón: dáng roi, kính gọng đen, máy ảnh.",
+      "plate": "Sơ mi than, quần đen, kính gọng đen, máy ảnh.",
+      "file": "characters/quan/quan-body-front.jpg"
+    },
+    {
+      "id": "school",
+      "script": "Ảnh cũ: Quân đứng với Minh Châu và Mỹ Duyên trong trang phục học sinh. Ảnh lớp 12A3 không dùng.",
+      "plate": "Áo sơ mi trắng tay ngắn, quần navy, giày da đen, kính gọng đen. Không máy ảnh.",
+      "file": "characters/quan/quan-school.jpg"
+    }
+  ],
+  "not_imaged": "Trong kho anh vẫn bộ phóng viên, cởi kính, nhận găng rồi găng bị ném xuống. Không tách thành một bộ boxing."
 }

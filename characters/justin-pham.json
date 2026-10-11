@@ -15,5 +15,13 @@
     "body_left": "characters/justin-pham/justin-pham-body-left.jpg",
     "body_right": "characters/justin-pham/justin-pham-body-right.jpg",
     "body_back": "characters/justin-pham/justin-pham-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "white",
+      "script": "Ăn mặc đồ hiệu style white luxury.",
+      "plate": "Vest trắng, sơ mi trắng, quần trắng, giày trắng.",
+      "file": "characters/justin-pham/justin-pham-body-front.jpg"
+    }
+  ]
 }

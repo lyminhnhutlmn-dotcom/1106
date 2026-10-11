@@ -16,5 +16,19 @@
     "body_left": "characters/hao/hao-body-left.jpg",
     "body_right": "characters/hao/hao-body-right.jpg",
     "body_back": "characters/hao/hao-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "driver",
+      "script": "Ngày đến: nghiêm nghị, mở cửa xe. Túi áo khoác có đèn pin.",
+      "plate": "Vest đen, sơ mi trắng không cà vạt, không huy hiệu.",
+      "file": "characters/hao/hao-body-front.jpg"
+    },
+    {
+      "id": "police",
+      "script": "Ngày đào bãi đất: trang phục cảnh sát.",
+      "plate": "Áo và quần xanh navy, cầu vai trơn, không chữ, không số. Không vũ khí, không hiện trường.",
+      "file": "characters/hao/hao-police.jpg"
+    }
+  ]
 }

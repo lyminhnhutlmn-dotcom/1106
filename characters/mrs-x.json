@@ -27,5 +27,19 @@
     "body_right": "characters/mrs-x/mrs-x-body-right.jpg",
     "body_back": "characters/mrs-x/mrs-x-body-back.jpg"
   },
-  "lock_en": "[CHARACTER LOCK — MRS. X]\nVietnamese woman, about 47. Same face as characters/mrs-x/mrs-x-front.jpg. Sharp, calm, cold eyes. Closed mouth. Fair luminous skin, faint lines only. Low black bun, small pearl studs, black tailored suit, black silk turtleneck, black trousers, black pointed pumps. No glasses in this sheet.\nDO NOT GENERATE: surgery, a courtroom, the LED deepfake, or a confrontation with James."
+  "lock_en": "[CHARACTER LOCK — MRS. X]\nVietnamese woman, about 47. Same face as characters/mrs-x/mrs-x-front.jpg. Sharp, calm, cold eyes. Closed mouth. Fair luminous skin, faint lines only. Low black bun, small pearl studs, black tailored suit, black silk turtleneck, black trousers, black pointed pumps. No glasses in this sheet.\nDO NOT GENERATE: surgery, a courtroom, the LED deepfake, or a confrontation with James.",
+  "costumes": [
+    {
+      "id": "revealed",
+      "script": "Sau khi cởi kính: lộ mặt thật.",
+      "plate": "Vest đen, cổ lụa đen, quần đen, giày đen, búi thấp, không kính.",
+      "file": "characters/mrs-x/mrs-x-body-front.jpg"
+    },
+    {
+      "id": "vip",
+      "script": "Khu VIP: đeo kính đen, vỗ tay từ tốn.",
+      "plate": "Cùng bộ vest, thêm kính đen.",
+      "file": "characters/mrs-x/mrs-x-vip.jpg"
+    }
+  ]
 }

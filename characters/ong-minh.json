@@ -15,5 +15,13 @@
     "body_left": "characters/ong-minh/ong-minh-body-left.jpg",
     "body_right": "characters/ong-minh/ong-minh-body-right.jpg",
     "body_back": "characters/ong-minh/ong-minh-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "suit",
+      "script": "Mặc vest. Có vết trên trán.",
+      "plate": "Vest than, cà vạt navy. Không có ảnh cảnh cởi áo.",
+      "file": "characters/ong-minh/ong-minh-body-front.jpg"
+    }
+  ]
 }

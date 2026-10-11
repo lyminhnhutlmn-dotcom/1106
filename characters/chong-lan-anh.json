@@ -15,5 +15,13 @@
     "body_left": "characters/chong-lan-anh/chong-lan-anh-body-left.jpg",
     "body_right": "characters/chong-lan-anh/chong-lan-anh-body-right.jpg",
     "body_back": "characters/chong-lan-anh/chong-lan-anh-body-back.jpg"
-  }
+  },
+  "costumes": [
+    {
+      "id": "home",
+      "script": "Bộ dạng nhếch nhác. Kịch bản không ghi tên và tuổi.",
+      "plate": "Áo thun xám, quần jean, tóc rối. Một mình.",
+      "file": "characters/chong-lan-anh/chong-lan-anh-body-front.jpg"
+    }
+  ]
 }
