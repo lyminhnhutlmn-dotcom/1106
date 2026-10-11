@@ -1,0 +1,20 @@
+{
+  "id": "hao",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Hào",
+  "age": 33,
+  "function": "Người mở cửa xe cho James, nghiêm nghị. Danh tính công an không in lên trang phục. Sheet khóa diện tài xế.",
+  "script_lock": "33 tuổi, nghiêm nghị. Bước xuống trước, mở cửa xe. Có áo khoác, túi áo đựng đèn pin. Hút thuốc. Chắn ống kính của Quân.",
+  "costume_lock": "Vest đen, sơ mi trắng không cà vạt, quần đen, giày tây đen. Tóc húi ngắn. Không cười, không kính, không huy hiệu.",
+  "views": {
+    "portrait_front": "characters/hao/hao-front.jpg",
+    "portrait_three_quarter_a": "characters/hao/hao-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/hao/hao-portrait-b.jpg",
+    "portrait_profile": "characters/hao/hao-portrait-profile.jpg",
+    "body_front": "characters/hao/hao-body-front.jpg",
+    "body_left": "characters/hao/hao-body-left.jpg",
+    "body_right": "characters/hao/hao-body-right.jpg",
+    "body_back": "characters/hao/hao-body-back.jpg"
+  }
+}
