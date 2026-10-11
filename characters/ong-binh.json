@@ -1,0 +1,19 @@
+{
+  "id": "ong-binh",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Ông Bình",
+  "function": "Khách VIP, cổ vũ Lan Anh, trả 450 triệu lúc 23:45. Sheet khóa vest xanh navy.",
+  "script_lock": "Ngồi khu VIP. Kịch bản không ghi tuổi hay màu vest.",
+  "costume_lock": "Vest xanh navy, sơ mi trắng, cà vạt navy, đồng hồ vàng, giày tây đen. Tóc bạc, mặt đầy đặn. Không vết trán. Tuổi khoảng 60 và màu vest là khóa sản xuất.",
+  "views": {
+    "portrait_front": "characters/ong-binh/ong-binh-front.jpg",
+    "portrait_three_quarter_a": "characters/ong-binh/ong-binh-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/ong-binh/ong-binh-portrait-b.jpg",
+    "portrait_profile": "characters/ong-binh/ong-binh-portrait-profile.jpg",
+    "body_front": "characters/ong-binh/ong-binh-body-front.jpg",
+    "body_left": "characters/ong-binh/ong-binh-body-left.jpg",
+    "body_right": "characters/ong-binh/ong-binh-body-right.jpg",
+    "body_back": "characters/ong-binh/ong-binh-body-back.jpg"
+  }
+}
