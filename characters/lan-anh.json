@@ -9,7 +9,39 @@
   "dob_on_sole": "22.08.1996",
   "function": "Top 1 Miss Trending Global 2026, SBD 012. Đối trọng cùng tuổi với Minh Châu: một bên vì công lý, một bên vì danh vọng và tiền.",
   "script_lock": "Kịch bản mở bằng dòng (26), vẻ sắc xảo, gương mặt trải đời. Đêm chung kết: váy trắng lệch vai. Giày cao gót đính hạt, James nhìn thấy đôi giày đen. Đế khắc ĐINH THỊ LAN ANH 22.08.1996. Chữ trên đế không hiện khi cô đứng.",
-  "production_lock": "Khóa sản xuất mới: 24–26 tuổi, trẻ hơn sheet ~28 và trẻ hơn gương mặt trải đời. Cùng thế hệ Minh Châu (26) nhưng ăn diện hơn, khoe giàu hơn. Mặt giữ từ sheet trước. Da trắng sáng kiểu da Hàn. Vòng một đầy hơn một chút.",
+  "production_lock": "Khóa sản xuất: 24–26 tuổi, ăn diện hơn Minh Châu. Mặt giữ từ sheet trước. Da trắng sáng kiểu da Hàn. Vòng một đầy hơn một chút. Cao khoảng 175 cm, chân dài, dáng thẳng. Kịch bản không ghi chiều cao.",
+  "costumes": [
+    {
+      "id": "arrival",
+      "script": "Ngày đến: top 25 mặc áo thun sát nách.",
+      "plate": "Áo thun trắng sát nách, quần jean, giày sneaker trắng, đuôi ngựa. Quần và giày là khóa sản xuất.",
+      "file": "characters/lan-anh/lan-anh-tank.jpg"
+    },
+    {
+      "id": "swim",
+      "script": "Ngày 2 cô mở màn áo tắm, body chắc, hất tà. Lời thoại gọi vòng bikini. Giày trắng tài trợ.",
+      "plate": "Bộ thi ngà kín, váy ngắn để hất tà, viền đá, giày trắng. Bộ hai mảnh không có ảnh.",
+      "file": "characters/lan-anh/lan-anh-swim.jpg"
+    },
+    {
+      "id": "night-robe",
+      "script": "Đêm ra sảnh: áo choàng ngủ, đội nón, đi lén.",
+      "plate": "Choàng lụa champagne cột eo, nón bucket đen, giày bệt. Một mình. Không có trẻ em.",
+      "file": "characters/lan-anh/lan-anh-robe-hat.jpg"
+    },
+    {
+      "id": "hotel-robe",
+      "script": "Trong phòng trước chung kết: áo choàng khách sạn, tập catwalk. Cô cởi choàng khi mang giày mới.",
+      "plate": "Áo choàng tắm trắng của khách sạn, dép bông, đuôi ngựa. Ảnh khóa lúc choàng còn đóng.",
+      "file": "characters/lan-anh/lan-anh-hotel-robe.jpg"
+    },
+    {
+      "id": "finale",
+      "script": "Đêm chung kết: váy trắng lệch vai, giày đen đính hạt. Đế khắc ĐINH THỊ LAN ANH 22.08.1996, không hiện khi đứng.",
+      "plate": "Váy satin ngà lệch vai đính đá, đuôi ngựa, khuyên và vòng cổ, giày đen đính đá.",
+      "file": "characters/lan-anh/lan-anh-body-front.jpg"
+    }
+  ],
   "costume_lock": "Váy satin ngà dài, lệch một vai, viền và dây đính đá. Vai còn lại để trần, vòng đá trên bắp tay trần. Tóc đen búi đuôi ngựa cao, kẹp đá. Khuyên tai giọt nước, vòng cổ tennis. Giày cao gót đen mũi nhọn đính đá. Lưng: dây đá chéo, phần lưng trên hở một khoảng, phần dưới phủ satin. Một bộ cho cả tám góc.",
   "look": "Xinh, nóng, sang và đắt tiền. Trang phục và phụ kiện được chăm kỹ để khoe đẳng cấp. Tự tin thái quá, cười khẩy.",
   "style": "Thích khoe giàu. Bề ngoài hào nhoáng. Bên trong ghen, đố kỵ, tính toán.",
