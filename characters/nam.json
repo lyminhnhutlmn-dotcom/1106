@@ -1,0 +1,20 @@
+{
+  "id": "nam",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Nam",
+  "age": 26,
+  "function": "Trợ lý của James. Sheet khóa diện thư sinh khi theo xe và xách vali. Không phải đồ đen trùm mặt, không phải đồ phạm nhân.",
+  "script_lock": "26 tuổi, thư sinh. Ra sau cùng, mở cốp, xách vali, đi theo James.",
+  "costume_lock": "Sơ mi trắng, không cà vạt, không vest. Quần xám than, giày tây đen. Tóc đen ngắn gọn. Mặt hiền. Bỏ vest để tách khỏi James. Kịch bản chỉ khóa thư sinh.",
+  "views": {
+    "portrait_front": "characters/nam/nam-front.jpg",
+    "portrait_three_quarter_a": "characters/nam/nam-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/nam/nam-portrait-b.jpg",
+    "portrait_profile": "characters/nam/nam-portrait-profile.jpg",
+    "body_front": "characters/nam/nam-body-front.jpg",
+    "body_left": "characters/nam/nam-body-left.jpg",
+    "body_right": "characters/nam/nam-body-right.jpg",
+    "body_back": "characters/nam/nam-body-back.jpg"
+  }
+}
