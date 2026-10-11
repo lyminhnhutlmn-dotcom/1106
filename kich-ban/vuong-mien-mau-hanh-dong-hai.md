@@ -64,9 +64,48 @@ Cô trong team ông Minh mở ghế xếp. Ghế cắn một cái vào ngón ôn
 
 ## 45 và cửa sân, trước cảnh 47
 
-Đặt vào lúc Hào giơ điện thoại ngang, trước khi James bước ra cổng.
+Đặt vào lúc Hào giơ điện thoại ngang, trước khi James bước ra cổng. Thân hình là khóa mới: mập, cao 1,6 m.
 
-Hào thắng một ván. Anh giơ điện thoại. Máy trượt khỏi tay. Anh kẹp máy vào ngực bằng hai bàn tay, thở ra một cái. Cửa sân mở. Điện thoại đã ở trong túi. Hai tay buông dọc thân. Anh là tài xế.
+Hào thắng một ván. Anh giơ điện thoại. Máy trượt, kẹt vào khe giữa bụng và vô-lăng trong trí nhớ tay anh. Anh kẹp máy vào bụng bằng cả hai cẳng tay, thở ra một cái. Cửa sân mở. Điện thoại đã ở trong túi. Hai tay buông. Anh là tài xế.
+
+---
+
+# Tuyến hài — Hào
+
+Một tuyến. Hào 33 tuổi, mập, cao 1,6 m, cười dễ. James thấy một tài xế vụng. Đêm chung kết, cùng thân hình đó khống chế James. Danh tính công an là điểm cuối, đã có ở cảnh 96 và cảnh 101.
+
+Kịch bản gốc ghi “nghiêm nghị”. Khóa này đổi dáng và nhịp hài. Không đổi tội danh, không đổi câu “anh Bùi Văn Mót”.
+
+## 10 · Sân khách sạn
+
+Hào bước xuống trước, người ngắn, bụng làm hàng nút vest căng nhẹ. Anh mở cửa. James bước ra. Quân giơ máy. Hào chắn khung bằng cả tấm lưng. Nắp ống kính đập gọng kính Quân. Hào không nhích, miệng vẫn một nụ cười nhỏ như đang xin lỗi đường.
+
+## 45 · Ngoài sân pickleball
+
+Anh chơi game, thắng, điện thoại trượt, kẹp vào bụng. James ra tới cổng thì nụ cười đã cất. Chỉ còn tài xế.
+
+## Nghe lén cửa phòng James
+
+Anh áp tai vào cửa. Vest ngắn, bụng chạm cửa một cái khe khẽ. Anh kéo áo xuống, suýt mất một câu. Anh nghe lại từ đầu, miệng mím, mắt vẫn vui.
+
+## 96 · NỘI. BACKSTAGE - ĐÊM — trận đánh
+
+Đây là cảnh hành động của tuyến. James lảo đảo, gọi “Hào! Mau đưa tao ra xe.” Đưa tay tới.
+
+Hào chụp cổ tay. Bụng anh thúc James vào tường trước khi James hiểu. Còng vào một tay.
+
+James vùng ra, thủ thế boxing, đấm. Cú đấm đi qua vai Hào vì Hào thấp. Hào né vào trong, một cú đá thấp. James té sấp. Hào đè, hơi thở nặng, kéo quần lên một cái, rồi mới tra còng vào tay còn lại.
+
+Nụ cười hết từ câu này:
+
+HÀO
+Anh bị bắt vì tội cố ý giết người và lừa đảo chiếm đoạt tài sản. Bây giờ thì anh có thêm tội chống người thi hành công vụ đó, anh Bùi Văn Mót.
+
+Trận boxing của James với đối thủ ở phòng tập, và trận James với Quân trong kho, giữ nguyên. Hai trận đó không phải trận của Hào.
+
+## 101 · Bãi đất
+
+Hào trong trang phục cảnh sát. Cùng khuôn mặt, cùng người mập cao 1,6 m. Không còn nụ cười. Cảnh vật chứng giữ nguyên Draft 10.
 
 ## 75 · NỘI. SÂN KHẤU REHEARSAL - NGÀY
 

@@ -4,45 +4,40 @@
   "draft": "10 — 24DEC2025",
   "title": "Hào",
   "age": "33",
-  "function": "Điều tra viên thâm nhập vai tài xế của James. Sheet mặc định là tài xế. Danh tính công an không in lên bộ đó.",
-  "comedy_action": "Điện thoại game trượt, kẹp vào ngực, thở ra một cái. Cửa mở thì máy đã trong túi, hai tay buông, trở lại tài xế. Chắn máy Quân thì không nhích.",
-  "script_lock": "Kịch bản ghi 33 tuổi, nghiêm nghị. Bước xuống trước, mở cửa xe. Áo khoác, túi có đèn pin. Hút thuốc. Chắn ống kính của Quân. Sau đó mặc trang phục cảnh sát ở bãi đất.",
-  "costume_lock": "Sheet mặc định: vest đen đơn giản, sơ mi trắng không cà vạt, quần đen, giày tây đen. Không gile, không huy hiệu, không chữ. Bộ cảnh sát là trạng thái riêng.",
+  "height_cm": 160,
+  "function": "Tuyến hài. Tài xế mập, cao 1,6 m, cười dễ. Cuối phim là công an, và là người đánh khống chế James ở hậu trường.",
+  "comedy_action": "Điện thoại game trượt, kẹp vào bụng. Chắn máy Quân bằng cả tấm lưng, miệng như đang xin lỗi. Nghe lén thì bụng chạm cửa. Trận cảnh 96: đòn của James đi qua vai vì anh thấp, một cú đá thấp, rồi mới hết cười.",
+  "script_lock": "Kịch bản ghi 33 tuổi và chữ nghiêm nghị. Mở cửa xe, hút thuốc, chắn ống kính Quân, nghe lén, rồi bắt James ở hậu trường đêm chung kết. Cảnh 101 mặc trang phục cảnh sát. Câu bắt giữ gọi đúng tên Bùi Văn Mót.",
+  "production_lock": "Khóa mới: mập, cao 1,6 m, hài hước. Chữ nghiêm nghị của draft nhường cho nụ cười tài xế. Nụ cười tắt ở câu bắt giữ.",
+  "costume_lock": "Sheet mặc định: vest đen căng nhẹ ở bụng, sơ mi trắng không cà vạt, quần đen, giày tây đen. Không huy hiệu. Bộ cảnh sát là trạng thái riêng, cùng thân hình.",
+  "face_lock": "Hào, 33 tuổi. Mặt tròn, má đầy, ngấn cổ nhỏ, tóc đen ngắn. Da tự nhiên. Nụ cười nhỏ, mắt hiền. Không kính.",
+  "look": "Người ngắn và nặng. Bụng tròn, vai rộng mềm, chân ngắn. Đầu khớp với thân, khoảng 6,5 đến 7 đầu. Trông như tài xế hay cười, không phải người đánh đấm.",
+  "personality": "Vụng đúng lúc, cười đúng lúc, nghe đủ câu. Kiên nhẫn trong vai tài xế. Khi ra tay thì ngắn, thấp, và chính xác.",
+  "role": "Tuyến hài đi suốt cuộc thi. Ghế lái đưa anh sát James. Đêm chung kết, chính người mà James gọi ra xe là người còng anh. Công an có mặt vì Hào đã ở trong xe từ đầu.",
+  "relations": {
+    "james": "James khóa 38–40. James tưởng Hào là tài xế. Cảnh 96, James đánh, Hào khống chế. Trên sheet của James, anh chưa biết Hào là công an cho tới câu bắt giữ.",
+    "nam": "Hào là phía công an nghe lời khai. Một bên thi hành pháp luật, một bên phạm tội nhưng giúp vạch tội lớn hơn.",
+    "mrs_x": "Hào là công an. Mrs. X là tiền và quan hệ. Hai người không cùng phe."
+  },
   "views": {
     "portrait_front": "characters/hao/hao-front.jpg",
-    "portrait_three_quarter_a": "characters/hao/hao-portrait-a.jpg",
-    "portrait_three_quarter_b": "characters/hao/hao-portrait-b.jpg",
-    "portrait_profile": "characters/hao/hao-portrait-profile.jpg",
-    "body_front": "characters/hao/hao-body-front.jpg",
-    "body_left": "characters/hao/hao-body-left.jpg",
-    "body_right": "characters/hao/hao-body-right.jpg",
-    "body_back": "characters/hao/hao-body-back.jpg"
+    "body_front": "characters/hao/hao-body-front.jpg"
   },
   "costumes": [
     {
       "id": "driver",
-      "script": "Ngày đến: nghiêm nghị, mở cửa xe. Túi áo khoác có đèn pin.",
-      "plate": "Vest đen, sơ mi trắng không cà vạt, không huy hiệu.",
+      "script": "Mở cửa xe, chắn ống kính, chơi game, nghe lén. Kịch bản không ghi thân hình.",
+      "plate": "Vest đen, sơ mi trắng, người mập cao 1,6 m, nụ cười nhỏ. Không huy hiệu.",
       "file": "characters/hao/hao-body-front.jpg"
     },
     {
       "id": "police",
-      "script": "Ngày đào bãi đất: trang phục cảnh sát.",
-      "plate": "Áo và quần xanh navy, cầu vai trơn, không chữ, không số. Không vũ khí, không hiện trường.",
+      "script": "Cảnh 101: trang phục cảnh sát.",
+      "plate": "Áo và quần xanh navy, cùng thân hình 1,6 m. Miệng khép. Không chữ, không số, không vũ khí.",
       "file": "characters/hao/hao-police.jpg"
     }
   ],
-  "production_lock": "Khóa sản xuất: khoảng 33 tuổi. Bình thường, không nổi bật, phong trần, ít nói, mắt sắc và kiên. Da tự nhiên. Bộ tài xế đơn giản, không huy hiệu.",
-  "face_lock": "Hào, khoảng 33. Mặt thường, phong trần, tóc đen ngắn thực dụng. Miệng khép. Mắt sắc, nhìn lâu. Không cười. Không kính.",
-  "look": "Trông bình thường để dễ hòa vào vai tài xế. Phong trần, ít nói. Ánh mắt sắc và kiên nghị. Khi lái xe, ăn mặc đơn giản, đúng vai. Khi làm nhiệm vụ, mặc trang phục điều tra.",
-  "personality": "Kiên nhẫn, cẩn trọng. Chờ bằng chứng xác thực, không hành động vội. Chính trực, bền bỉ, không bỏ vụ Mỹ Duyên. Nhanh thấy chỗ bất thường và nối các manh mối. Giỏi đứng trong vai tài xế mà không bị nghi.",
-  "role": "Ghế tài xế đưa anh lại gần James, nghe được những cuộc nói chuyện và nhìn các động thái đáng ngờ. Vì vậy công an có mặt kịp ở đêm chung kết. Trong một chuyện đầy thao túng, Hào là phía công lý.",
-  "relations": {
-    "james": "James khóa 38–40. Trên sheet của James, anh chưa biết Hào là công an. Hào ở gần anh trong vai tài xế.",
-    "nam": "Hào là người bắt Nam, cũng là người nghe lời khai của Nam và từ đó tới mô đất chôn Mỹ Duyên. Một bên thi hành pháp luật, một bên phạm tội nhưng giúp vạch tội lớn hơn.",
-    "mrs_x": "Hào là công lý của công an. Mrs. X là tiền và quan hệ. Hai người không cùng một phe trên giấy."
-  },
-  "not_imaged": "Không có ảnh hiện trường bãi đất, không có vũ khí, không có cảnh bắt người.",
-  "lock_en": "[CHARACTER LOCK — HÀO]\nVietnamese man, about 33. Ordinary, weathered, easy to overlook, not a striking face. Short practical black hair. Natural warm skin. Quiet closed mouth. Sharp, steady, resolute eyes. No smile, no glasses, no scar.\nDEFAULT WARDROBE, driver only: simple black suit, white shirt, no tie, no waistcoat, black trousers, black shoes. No badge, no text.\nSEPARATE STATE: dark navy police uniform, empty hands, no weapon, no name tag. Do not mix with the driver suit.\nDO NOT GENERATE: the grave, a weapon, or an arrest.",
-  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao."
+  "not_imaged": "Không có ảnh trận đánh, không có còng, không có vũ khí, không có hiện trường bãi đất.",
+  "lock_en": "[CHARACTER LOCK — HÀO]\nVietnamese man, 33, heavy-set, 160 cm. Round face, soft cheeks, small double chin, thick neck, short black hair, natural warm skin, small easy smile.\nBODY: short legs, round belly, broad soft shoulders. Head matches the body, about 6.5 to 7 heads. Not tall.\nDEFAULT: black suit strained slightly over the belly, white open-collar shirt, no tie, black shoes. No badge.\nPOLICE STATE: same body, dark navy uniform, closed mouth, empty hands, no weapon, no text.\nDO NOT GENERATE: the fight, handcuffs, a weapon, or the grave.",
+  "height": "Cao 1,6 m. Mập. Đầu khớp thân, khoảng 6,5 đến 7 đầu. Chân ngắn, bụng tròn. Đây là khóa chiều cao, khác các nhân vật còn lại."
 }
