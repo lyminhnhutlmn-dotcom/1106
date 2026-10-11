@@ -10,7 +10,51 @@
   "face_lock": "Mặt trái xoan, phúc hậu, dễ nhìn. Cằm mềm, má dịu, mắt hạnh nhân nâu ấm, nhìn thông minh và kiên định. Nụ cười khép nhỏ. Da trắng sáng kiểu da Hàn. Vòng một đầy hơn một chút.",
   "personality": "Can đảm, mưu trí, tình nghĩa, tinh thần thép. Đủ trẻ để liều vào một cuộc thi đầy thị phi, đủ trưởng thành để lập kế hoạch thâm nhập và điều tra. Có mục tiêu rõ, sẵn sàng đương đầu với nguy hiểm.",
   "style_arc": "Lúc mới vào có thể ăn mặc như thí sinh bình thường nhưng có gu. Dần dần tự tin và có cá tính. Sau khi thoát nạn, vẻ ngoài kiên cường hơn. Ba trạng thái này không trộn trong một shot.",
-  "costume_lock": "Sheet khóa đêm tiệc, lúc cá tính đã rõ: váy satin đỏ dài, hai dây, cổ đổ, hở lưng, giày cao gót trắng mũi nhọn, khuyên ngọc nhỏ. Tóc đen ngang vai, rẽ ngôi, xõa, không búi. Không phải búi tóc ở nhà. Không phải váy xanh giả Mỹ Duyên.",
+  "costume_lock": "Sheet mặc định là đêm tiệc: váy satin đỏ dài, hai dây, cổ đổ, hở lưng, giày trắng mũi nhọn, khuyên ngọc. Tóc đen ngang vai. Bảy diện bên dưới không trộn trong một shot.",
+  "costumes": [
+    {
+      "id": "home",
+      "script": "Nhà Mỹ Duyên: ăn mặc giản dị, tóc búi cao.",
+      "plate": "Áo linen xám, quần đen, giày bệt. Búi cao. Màu áo là khóa sản xuất.",
+      "file": "characters/minh-chau/minh-chau-home.jpg"
+    },
+    {
+      "id": "arrival",
+      "script": "Xuống xe: áo thun sát nách, cùng top 25.",
+      "plate": "Áo thun trắng sát nách, quần jean, giày sneaker trắng. Quần và giày là khóa sản xuất. Không chữ trên áo.",
+      "file": "characters/minh-chau/minh-chau-tank.jpg"
+    },
+    {
+      "id": "gala",
+      "script": "Đêm tiệc: váy đỏ hở lưng, giày trắng.",
+      "plate": "Váy satin đỏ, cổ đổ, hở lưng, khuyên ngọc, giày trắng mũi nhọn.",
+      "file": "characters/minh-chau/minh-chau-body-front.jpg"
+    },
+    {
+      "id": "swim",
+      "script": "Ngày 2: trang phục áo tắm. Lời thoại gọi vòng đó là bikini. Giày trắng của nhà tài trợ.",
+      "plate": "Ảnh là bộ thi đen kín, có váy ngắn, giày trắng. Bộ hai mảnh không có ảnh.",
+      "file": "characters/minh-chau/minh-chau-swimsuit.jpg"
+    },
+    {
+      "id": "jacket",
+      "script": "Đêm 21:50: mặc vội áo khoác rồi lên taxi.",
+      "plate": "Áo khoác đen, áo trong đen, quần jean, giày đen. Lớp trong là khóa sản xuất.",
+      "file": "characters/minh-chau/minh-chau-jacket.jpg"
+    },
+    {
+      "id": "blue",
+      "script": "Đêm chung kết: đầm xanh, tóc che mặt, rồi lộ ra là Minh Châu. Đạo cụ có váy xanh và tóc giả.",
+      "plate": "Váy satin xanh cổ thẳng, tóc dài, giày trắng đính đá. Mặt vẫn là Minh Châu.",
+      "file": "characters/minh-chau/minh-chau-blue.jpg"
+    },
+    {
+      "id": "school",
+      "script": "Ảnh cũ: Minh Châu, Mỹ Duyên và Quân trong trang phục học sinh.",
+      "plate": "Áo dài trắng học sinh, quần trắng, tóc buộc thấp. Ảnh lớp 12A3 không dùng vì lệch năm sinh.",
+      "file": "characters/minh-chau/minh-chau-school.jpg"
+    }
+  ],
   "relations": {
     "my_duyen": "Hồ sơ sản xuất khóa bạn thân, cùng thế hệ: Mỹ Duyên 23–25, Minh Châu 24–26. Đế giày Mỹ Duyên vẫn khắc 13.09.2002. Cái chết của Mỹ Duyên là động lực. Kịch bản gọi Minh Châu là chị họ. Ảnh lớp 12A3 không dùng, vì lệch năm sinh.",
     "james": "James khóa 40 tuổi trên sheet của anh. Tương phản quyền lực và tuổi: người đàn ông dày dạn đối đầu một phụ nữ trẻ thông minh.",
