@@ -3,10 +3,10 @@
   "project": "Vương Miện Máu",
   "draft": "10 — 24DEC2025",
   "title": "Nam",
-  "age": 26,
-  "function": "Trợ lý của James. Sheet khóa diện thư sinh khi theo xe và xách vali. Không phải đồ đen trùm mặt, không phải đồ phạm nhân.",
-  "script_lock": "26 tuổi, thư sinh. Ra sau cùng, mở cốp, xách vali, đi theo James.",
-  "costume_lock": "Sơ mi trắng, không cà vạt, không vest. Quần xám than, giày tây đen. Tóc đen ngắn gọn. Mặt hiền. Bỏ vest để tách khỏi James. Kịch bản chỉ khóa thư sinh.",
+  "age": "26-28",
+  "function": "Trợ lý thân cận của James. Sheet mặc định là sơ mi trắng, gọn, không phô trương.",
+  "script_lock": "Kịch bản ghi 26 tuổi, thư sinh. Ra sau cùng, mở cốp, xách vali, đi theo James.",
+  "costume_lock": "Sheet mặc định: sơ mi trắng, không cà vạt, không vest, quần xám than, giày tây đen. Tóc đen ngắn gọn. Bốn bộ kia không trộn vào shot này.",
   "views": {
     "portrait_front": "characters/nam/nam-front.jpg",
     "portrait_three_quarter_a": "characters/nam/nam-portrait-a.jpg",
@@ -49,5 +49,16 @@
       "file": "characters/nam/nam-blue.jpg"
     }
   ],
-  "not_imaged": "Quần áo lấm bùn ở nhà kho là bộ đang mặc bị bẩn, không phải một bộ mới. Không có ảnh đào hố, không có ảnh đưa thuốc vào nước."
+  "not_imaged": "Quần áo lấm bùn ở nhà kho là bộ đang mặc bị bẩn, không phải một bộ mới. Không có ảnh đào hố, không có ảnh đưa thuốc vào nước.",
+  "production_lock": "Khóa sản xuất: 26–28 tuổi. Trẻ, thư sinh, trầm, dễ bị đánh giá thấp. Mắt lo và giằng xé, miệng khép, kiên. Da tự nhiên, không phải da sứ.",
+  "face_lock": "Nam, 26–28. Tóc đen ngắn gọn. Mắt lo, một nếp giữa mày. Miệng khép, cằm chắc. Không cười. Không giận dữ.",
+  "look": "Trẻ trung. Vẻ ngoài hơi thư sinh hoặc trầm tính, dễ bị đánh giá thấp. Nét mặt vừa lo âu, giằng xé, vừa kiên định. Ăn mặc như trợ lý bình thường: gọn, không phô trương.",
+  "personality": "Hiếu thảo tột độ. Động lực then chốt là cứu mẹ, và động lực đó cắt nghĩa mọi việc anh làm. Thông minh, mưu mẹo, lập kế hoạch chi tiết, giỏi quan sát điểm yếu. Bị buộc làm đồng phạm, đồng thời muốn chuộc tội. Khi đã quyết, anh lạnh và dứt khoát, kể cả việc đẩy James vào tù và nhận phần của mình.",
+  "motive": "Ở tuổi này, một người con trai gánh mẹ già bệnh là điều khán giả Việt nhận ra ngay. Áp lực tiền và tình cảm giải thích lựa chọn sai lúc đầu. Không vẽ bệnh viện, không vẽ đưa thuốc vào nước.",
+  "relations": {
+    "james": "James khóa 38–40. Chênh tuổi làm rõ sếp và cấp dưới. Nam đủ trẻ để bị James coi thường và ép, đủ kinh nghiệm để hiểu guồng việc, và đủ bị dồn để lật người bề trên.",
+    "mrs_x": "Bà lo chi phí chữa trị cho mẹ Nam. Nam là người thực hiện. Sheet này không vẽ ca bệnh và không vẽ phiên tòa.",
+    "minh_chau_quan": "Anh cứu Minh Châu và Quân khỏi hố giả, rồi nhận phần của mình."
+  },
+  "lock_en": "[CHARACTER LOCK — NAM]\nVietnamese man, 26 to 28. Youthful, bookish, quiet, easy to underestimate. Neat short black hair. Natural warm skin, not porcelain. Worried eyes, a small line between the brows, closed mouth, jaw set with quiet determination. No smile.\nDEFAULT WARDROBE: plain white dress shirt, no tie, no jacket, charcoal trousers, black oxfords. Neat assistant, nothing flashy.\nDO NOT MIX: black hat clothes, detention uniform, prison uniform, or the blue dress and wig. Do not show the burial, a hospital bed, or anything poured into a drink."
 }
