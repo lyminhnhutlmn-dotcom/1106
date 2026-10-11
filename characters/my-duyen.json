@@ -3,13 +3,21 @@
   "project": "Vương Miện Máu",
   "draft": "10 — 24DEC2025",
   "title": "Cao Thị Mỹ Duyên",
-  "age": 21,
+  "age": "23-25",
   "sbd": 20,
-  "dob": "13.09.2002",
-  "function": "Thí sinh Hoa Khôi Tri Thức 2024, SBD 20. Sheet này khóa diện còn sống, đêm nhận giày và đi dọc hành lang. Không phải thi thể, không phải tóc bết bùn, không phải mặt trên màn hình LED.",
-  "script_lock": "Màn hình điện thoại gọi cô là cô gái xinh đẹp tầm 20 tuổi. Bản tin sau này nói thi thể khoảng 22 tuổi. Sinh 13.09.2002, flashback tháng 8 năm 2024, nên sheet khóa 21 tuổi. Váy màu xanh dương. Giày cao gót trắng đính đá, đế khắc CAO THỊ MỸ DUYÊN 13.09.2002.",
-  "costume_lock": "Váy satin xanh dương dài, hai dây, cổ thẳng, lưng kín có khóa kéo. Giày cao gót trắng mũi nhọn, vài viên đá ở mũi. Tóc đen dài tới giữa lưng, rẽ giữa. Không khuyên tai. Kiểu cổ, lưng kín và độ dài tóc là khóa sản xuất; kịch bản chỉ khóa màu váy và đôi giày.",
-  "skin_lock": "Da trắng sáng, đều, sang, kiểu da Hàn hiện nay. Mặt giữ nguyên. Vòng một đầy hơn một chút, cùng cổ vuông.",
+  "dob_on_sole": "13.09.2002",
+  "function": "Thí sinh Hoa Khôi Tri Thức 2024, SBD 20. Cái chết của cô là viên gạch đầu của Vương Miện Máu. Sheet này khóa diện còn sống, đêm nhận giày và đi dọc hành lang.",
+  "script_lock": "Điện thoại gọi cô là cô gái xinh đẹp tầm 20 tuổi. Bản tin sau nói thi thể khoảng 22 tuổi. Đế giày khắc CAO THỊ MỸ DUYÊN 13.09.2002. Chữ trên đế không hiện khi cô đứng. Váy xanh dương. Giày trắng đính đá.",
+  "production_lock": "Khóa sản xuất: 23–25 tuổi, cùng thế hệ Minh Châu và Quân. Xinh, mong manh, ngây thơ, vẻ đẹp thuần khiết, trong mắt còn khát vọng đổi đời. Sheet trước khóa 21 tuổi cho flashback tháng 8 năm 2024.",
+  "look": "Xinh đẹp, mong manh, ngây thơ. Vẻ thuần khiết dễ bị lời hứa hào nhoáng kéo đi. Bên trong có ước mơ một cuộc sống tốt hơn.",
+  "personality": "Ban đầu tin người. Tin lời James về danh vọng và tình yêu, nhận chi tiền để vào cuộc thi. Khi bị phản bội và bị dồn vào đường cùng, phẫn nộ và kiên quyết tố cáo, dù phải trả giá bằng mạng sống. Đời cô là bi kịch của sự tin lầm và bị lợi dụng.",
+  "costume_lock": "Váy satin xanh dương dài, hai dây, cổ thẳng, lưng kín có khóa kéo giữa. Giày cao gót trắng mũi nhọn, vài viên đá ở mũi. Tóc đen dài tới giữa lưng, rẽ giữa. Không khuyên tai. Một bộ cho cả tám góc.",
+  "skin_lock": "Da trắng sáng, đều, sang, kiểu da Hàn hiện nay. Vòng một đầy hơn một chút, cùng cổ thẳng.",
+  "relations": {
+    "james": "James khóa 40 tuổi trên sheet của anh. Chênh tuổi và kinh nghiệm khiến cô dễ tin cả tình lẫn tiền. Ký ức về cô ám ảnh anh. Sheet này chỉ khóa lúc cô còn sống và còn hy vọng. Không vẽ thi thể, không vẽ tóc bết bùn, không vẽ mặt trên màn hình LED.",
+    "minh_chau": "Minh Châu khóa 24–26. Hồ sơ sản xuất khóa hai người là bạn thân, cùng thanh xuân. Cái chết của Mỹ Duyên là động lực Minh Châu tìm công lý. Kịch bản gọi Minh Châu là chị họ. Ảnh lớp 12A3 không dùng.",
+    "quan": "Quân khóa 26 tuổi. Cùng độ tuổi, tình bạn ba người gần và thật. Tình cảm của Quân với Mỹ Duyên chỉ được nói ở phần mộ."
+  },
   "views": {
     "portrait_front": "characters/my-duyen/my-duyen-front.jpg",
     "portrait_three_quarter_a": "characters/my-duyen/my-duyen-portrait-a.jpg",
@@ -19,5 +27,6 @@
     "body_left": "characters/my-duyen/my-duyen-body-left.jpg",
     "body_right": "characters/my-duyen/my-duyen-body-right.jpg",
     "body_back": "characters/my-duyen/my-duyen-body-back.jpg"
-  }
+  },
+  "lock_en": "[CHARACTER LOCK — CAO THỊ MỸ DUYÊN / HOA KHÔI TRI THỨC 2024 / SBD 20]\nVietnamese woman, 23 to 25. Soft oval face, large dark-brown eyes, small nose, gentle hopeful closed smile. Fragile, innocent, pure. Fair, bright, luminous Korean-luxury skin. Slightly fuller bust.\nLIVING WARDROBE ONLY: floor-length royal-blue satin, thin straps, straight square neckline, closed back with a center zipper, long jet-black hair center-parted to mid-back, no earrings, white pointed stilettos with a few crystals on the toe. No text on the shoes. Sole engraving CAO THỊ MỸ DUYÊN 13.09.2002 stays off standing shots.\nDO NOT GENERATE: the body, muddy hair, the LED deepfake face, the burial, or a money handover."
 }
