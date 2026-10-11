@@ -7,6 +7,12 @@
   "age": 40,
   "function": "Mặt điều hành và giám khảo Miss Trending Global 2026. Cùng hệ thống với Hoa Khôi Tri Thức 2024.",
   "logline": "Đàn ông 40 tuổi, đẹp và lịch sự trên sàn hoa hậu. Tên thật là Bùi Văn Mót. Anh giữ cuộc thi như một bàn cờ, quân của mình là vua đen.",
+  "reference": {
+    "source": "Seedream",
+    "file": "characters/james-seedream.jpg",
+    "frame": "Nửa người, chính diện, Miss Trending 2026",
+    "rule": "Ảnh này là khóa mặt. Mọi lần tạo sau dùng làm reference. Không tạo một khuôn mặt khác."
+  },
   "form": {
     "gender": "Nam",
     "age_chip": "Trung niên (~40)",
@@ -38,6 +44,7 @@
       "h": "Khóa hình",
       "items": [
         "Kịch bản đã khóa: 40 tuổi, điển trai, suit sang, giày tây bóng, xăm sau lưng, cười trước đám đông, mặt mệt sau đêm không ngủ.",
+        "Khóa mặt Seedream: characters/james-seedream.jpg. Nửa người, vest đen, gile, sơ mi trắng không cà vạt, nhẫn ngón trỏ, đồng hồ, cười nhỏ. Mọi ảnh sau bám mặt này.",
         "Khóa sản xuất, thay khi có ảnh diễn viên: mặt oval, da vàng ấm, mắt hạnh nhân đen, tóc đen ngắn rẽ ngôi, vest đen gile đen sơ mi trắng không cà vạt, nhẫn ngón trỏ tay phải. Kịch bản chỉ nói ngón trỏ, không nói tay nào.",
         "Cấm bịa: họa tiết hình xăm, sẹo, râu, kính ở năm 2026, chiều cao, màu mắt khác đen."
       ]
