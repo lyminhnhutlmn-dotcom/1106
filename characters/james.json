@@ -10,8 +10,9 @@
   "reference": {
     "source": "Seedream",
     "file": "characters/james-seedream.jpg",
-    "frame": "Nửa người, chính diện, Miss Trending 2026",
-    "rule": "Ảnh này là khóa mặt. Mọi lần tạo sau dùng làm reference. Không tạo một khuôn mặt khác."
+    "full_body": "characters/james-full-body.jpg",
+    "frame": "Nửa người Seedream là khóa mặt. Toàn thân là khóa đầu-đến-chân: vest, gile, quần đen, giày tây bóng.",
+    "rule": "Ảnh nửa người là khóa mặt. Ảnh toàn thân là khóa dáng và trang phục. Không tạo một khuôn mặt khác."
   },
   "form": {
     "gender": "Nam",
