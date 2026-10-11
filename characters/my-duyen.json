@@ -1,0 +1,22 @@
+{
+  "id": "my-duyen",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Cao Thị Mỹ Duyên",
+  "age": 21,
+  "sbd": 20,
+  "dob": "13.09.2002",
+  "function": "Thí sinh Hoa Khôi Tri Thức 2024, SBD 20. Sheet này khóa diện còn sống, đêm nhận giày và đi dọc hành lang. Không phải thi thể, không phải tóc bết bùn, không phải mặt trên màn hình LED.",
+  "script_lock": "Màn hình điện thoại gọi cô là cô gái xinh đẹp tầm 20 tuổi. Bản tin sau này nói thi thể khoảng 22 tuổi. Sinh 13.09.2002, flashback tháng 8 năm 2024, nên sheet khóa 21 tuổi. Váy màu xanh dương. Giày cao gót trắng đính đá, đế khắc CAO THỊ MỸ DUYÊN 13.09.2002.",
+  "costume_lock": "Váy satin xanh dương dài, hai dây, cổ thẳng, lưng kín có khóa kéo. Giày cao gót trắng mũi nhọn, vài viên đá ở mũi. Tóc đen dài tới giữa lưng, rẽ giữa. Không khuyên tai. Kiểu cổ, lưng kín và độ dài tóc là khóa sản xuất; kịch bản chỉ khóa màu váy và đôi giày.",
+  "views": {
+    "portrait_front": "characters/my-duyen/my-duyen-front.jpg",
+    "portrait_three_quarter_a": "characters/my-duyen/my-duyen-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/my-duyen/my-duyen-portrait-b.jpg",
+    "portrait_profile": "characters/my-duyen/my-duyen-portrait-profile.jpg",
+    "body_front": "characters/my-duyen/my-duyen-body-front.jpg",
+    "body_left": "characters/my-duyen/my-duyen-body-left.jpg",
+    "body_right": "characters/my-duyen/my-duyen-body-right.jpg",
+    "body_back": "characters/my-duyen/my-duyen-body-back.jpg"
+  }
+}
