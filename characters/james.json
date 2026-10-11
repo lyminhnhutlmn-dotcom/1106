@@ -11,8 +11,10 @@
     "source": "Seedream",
     "file": "characters/james-seedream.jpg",
     "full_body": "characters/james-full-body.jpg",
-    "frame": "Nửa người Seedream là khóa mặt. Toàn thân là khóa đầu-đến-chân: vest, gile, quần đen, giày tây bóng.",
-    "rule": "Ảnh nửa người là khóa mặt. Ảnh toàn thân là khóa dáng và trang phục. Không tạo một khuôn mặt khác."
+    "vehicle": "characters/james-s-class.jpg",
+    "vehicle_full": "characters/james-with-car.jpg",
+    "frame": "Nửa người Seedream là khóa mặt. Toàn thân không xe là khóa vest. Ảnh bên Mercedes-Benz S-Class đen là shot xe, không trộn với hồ bơi hay boxing.",
+    "rule": "Ảnh nửa người là khóa mặt. Không tạo một khuôn mặt khác. Xe là trạng thái riêng."
   },
   "form": {
     "gender": "Nam",
@@ -119,7 +121,7 @@
       "h": "Bề ngoài",
       "items": [
         "Phong độ, điển trai, lịch lãm như một doanh nhân đã thành. Sơ mi cao cấp, vest sang. Bộ mặc định của sheet vẫn là vest đen, gile, sơ mi trắng, không cà vạt.",
-        "Xe là shot riêng: Mercedes-Benz S-Class đen. BMW 7 Series hoặc Porsche Panamera chỉ thay khi shot đó chỉ định một xe. Vẻ xe và vest làm Mỹ Duyên, Lan Anh, và ông Bình tin rằng anh điều khiển được kết quả cuộc thi.",
+        "Xe là shot riêng: characters/james-s-class.jpg và characters/james-with-car.jpg. Mercedes-Benz S-Class đen, biển không đọc được. BMW 7 Series hoặc Porsche Panamera chỉ thay khi shot đó chỉ định một xe. Vẻ xe và vest làm Mỹ Duyên, Lan Anh, và ông Bình tin rằng anh điều khiển được kết quả cuộc thi.",
         "Bề ngoài đó là mặt nạ. Bên trong là người lừa tình, lừa tiền, và người đã gây ra cái chết của Mỹ Duyên. Không vẽ cảnh giết. Không vẽ cảnh mua bán người."
       ]
     },
