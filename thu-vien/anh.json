@@ -1,0 +1,900 @@
+{
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "note": "Mặt và từng trang phục đã khóa. Góc nghiêng và lưng nằm trong thư mục nhân vật, không lặp trên bảng này. Bối cảnh là plate trống.",
+  "cast": [
+    {
+      "id": "james",
+      "title": "James",
+      "shots": [
+        {
+          "label": "Mặt khóa",
+          "file": "characters/james-seedream.jpg",
+          "note": "Seedream. Mọi ảnh sau bám mặt này."
+        },
+        {
+          "label": "Vest",
+          "file": "characters/james-full-body.jpg",
+          "note": "Vest đen, gile đen, sơ mi trắng không cà vạt, giày tây đen, nhẫn ngón trỏ, đồng hồ."
+        },
+        {
+          "label": "Ảnh 2024",
+          "file": "characters/james-2024.jpg",
+          "note": "Cùng bộ vest, thêm nón đen và kính râm. Một mình. Mỹ Duyên không có trong ảnh."
+        },
+        {
+          "label": "Hồ bơi",
+          "file": "characters/james-pool.jpg",
+          "note": "Áo thể thao đen kín, quần thể thao, khăn trắng. Lưng trần và hình xăm không có ảnh."
+        },
+        {
+          "label": "Boxing",
+          "file": "characters/james-boxing.jpg",
+          "note": "Áo ba lỗ đen, quần boxing, găng đen, không mũ bảo hộ, đứng yên. Áo là khóa sản xuất. Không đối thủ."
+        },
+        {
+          "label": "Nội thất xe",
+          "file": "characters/james-s-class.jpg",
+          "note": "Shot xe. Không trộn với hồ bơi hay boxing."
+        },
+        {
+          "label": "Bên xe",
+          "file": "characters/james-with-car.jpg",
+          "note": "Shot xe. Không trộn với hồ bơi hay boxing."
+        }
+      ]
+    },
+    {
+      "id": "minh-chau",
+      "title": "Ngô Ngọc Minh Châu",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/minh-chau/minh-chau-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Ở nhà",
+          "file": "characters/minh-chau/minh-chau-home.jpg",
+          "note": "Áo linen xám, quần đen, giày bệt. Búi cao. Màu áo là khóa sản xuất."
+        },
+        {
+          "label": "Xuống xe",
+          "file": "characters/minh-chau/minh-chau-tank.jpg",
+          "note": "Áo thun trắng sát nách, quần jean, giày sneaker trắng. Quần và giày là khóa sản xuất. Không chữ trên áo."
+        },
+        {
+          "label": "Đêm tiệc",
+          "file": "characters/minh-chau/minh-chau-body-front.jpg",
+          "note": "Váy satin đỏ, cổ đổ, hở lưng, khuyên ngọc, giày trắng mũi nhọn."
+        },
+        {
+          "label": "Vòng áo thi",
+          "file": "characters/minh-chau/minh-chau-swimsuit.jpg",
+          "note": "Ảnh là bộ thi đen kín, có váy ngắn, giày trắng. Bộ hai mảnh không có ảnh."
+        },
+        {
+          "label": "Áo khoác",
+          "file": "characters/minh-chau/minh-chau-jacket.jpg",
+          "note": "Áo khoác đen, áo trong đen, quần jean, giày đen. Lớp trong là khóa sản xuất."
+        },
+        {
+          "label": "Váy xanh",
+          "file": "characters/minh-chau/minh-chau-blue.jpg",
+          "note": "Váy satin xanh cổ thẳng, tóc dài, giày trắng đính đá. Mặt vẫn là Minh Châu."
+        },
+        {
+          "label": "Học sinh",
+          "file": "characters/minh-chau/minh-chau-school.jpg",
+          "note": "Áo dài trắng học sinh, quần trắng, tóc buộc thấp. Ảnh lớp 12A3 không dùng vì lệch năm sinh."
+        }
+      ]
+    },
+    {
+      "id": "my-duyen",
+      "title": "Cao Thị Mỹ Duyên",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/my-duyen/my-duyen-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Váy xanh",
+          "file": "characters/my-duyen/my-duyen-body-front.jpg",
+          "note": "Váy satin xanh dương dài, hai dây, cổ thẳng, lưng kín, tóc rẽ giữa, giày trắng đính đá ở mũi. Ảnh khóa lúc còn sống."
+        },
+        {
+          "label": "Học sinh",
+          "file": "characters/my-duyen/my-duyen-school.jpg",
+          "note": "Áo dài trắng học sinh, quần trắng, tóc buộc thấp, giày bệt đen. Mặt vẫn là mặt chữ điền."
+        }
+      ]
+    },
+    {
+      "id": "lan-anh",
+      "title": "Đinh Thị Lan Anh",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/lan-anh/lan-anh-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Xuống xe",
+          "file": "characters/lan-anh/lan-anh-tank.jpg",
+          "note": "Áo thun trắng sát nách, quần jean, giày sneaker trắng, đuôi ngựa. Quần và giày là khóa sản xuất."
+        },
+        {
+          "label": "Vòng áo thi",
+          "file": "characters/lan-anh/lan-anh-swim.jpg",
+          "note": "Bộ thi ngà kín, váy ngắn để hất tà, viền đá, giày trắng. Bộ hai mảnh không có ảnh."
+        },
+        {
+          "label": "Đêm, mũ đen",
+          "file": "characters/lan-anh/lan-anh-robe-hat.jpg",
+          "note": "Choàng lụa champagne cột eo, nón bucket đen, giày bệt. Một mình. Không có trẻ em."
+        },
+        {
+          "label": "Áo choàng trắng",
+          "file": "characters/lan-anh/lan-anh-hotel-robe.jpg",
+          "note": "Áo choàng tắm trắng của khách sạn, dép bông, đuôi ngựa. Ảnh khóa lúc choàng còn đóng."
+        },
+        {
+          "label": "Chung kết",
+          "file": "characters/lan-anh/lan-anh-body-front.jpg",
+          "note": "Váy satin ngà lệch vai đính đá, đuôi ngựa, khuyên và vòng cổ, giày đen đính đá."
+        }
+      ]
+    },
+    {
+      "id": "nam",
+      "title": "Nam",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/nam/nam-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Xuống xe",
+          "file": "characters/nam/nam-body-front.jpg",
+          "note": "Sơ mi trắng, quần than, giày tây. Không vest."
+        },
+        {
+          "label": "Đen",
+          "file": "characters/nam/nam-black.jpg",
+          "note": "Áo đen, quần đen, nón, khăn kéo xuống cằm để giữ mặt. Trong cảnh mặt được trùm kín. Không gậy, không lửa."
+        },
+        {
+          "label": "Tạm giữ",
+          "file": "characters/nam/nam-hold.jpg",
+          "note": "Bộ xanh navy đậm, không số, không còng."
+        },
+        {
+          "label": "Trại giam",
+          "file": "characters/nam/nam-prison.jpg",
+          "note": "Bộ màu nâu xám trơn. Màu là khóa sản xuất. Không số, không còng."
+        },
+        {
+          "label": "Váy xanh",
+          "file": "characters/nam/nam-blue.jpg",
+          "note": "Váy satin xanh, tóc giả dài, giày trắng. Mặt vẫn là Nam."
+        }
+      ]
+    },
+    {
+      "id": "quan",
+      "title": "Quân",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/quan/quan-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Phóng viên",
+          "file": "characters/quan/quan-body-front.jpg",
+          "note": "Sơ mi than, quần đen, kính gọng đen, máy ảnh."
+        },
+        {
+          "label": "Học sinh",
+          "file": "characters/quan/quan-school.jpg",
+          "note": "Áo sơ mi trắng tay ngắn, quần navy, giày da đen, kính gọng đen. Không máy ảnh."
+        }
+      ]
+    },
+    {
+      "id": "hao",
+      "title": "Hào",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/hao/hao-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Tài xế",
+          "file": "characters/hao/hao-body-front.jpg",
+          "note": "Vest đen, sơ mi trắng, 1,6 m, 90 kg, nụ cười nhỏ. Không huy hiệu."
+        },
+        {
+          "label": "Công an",
+          "file": "characters/hao/hao-police.jpg",
+          "note": "Áo và quần xanh navy, cùng thân hình 1,6 m và 90 kg. Miệng khép. Không chữ, không số, không vũ khí."
+        }
+      ]
+    },
+    {
+      "id": "mrs-x",
+      "title": "Mrs. X",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/mrs-x/mrs-x-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Vest",
+          "file": "characters/mrs-x/mrs-x-body-front.jpg",
+          "note": "Vest đen, cổ lụa đen, quần đen, giày đen, búi thấp, không kính."
+        },
+        {
+          "label": "Kính VIP",
+          "file": "characters/mrs-x/mrs-x-vip.jpg",
+          "note": "Cùng bộ vest, thêm kính đen."
+        }
+      ]
+    },
+    {
+      "id": "ba-my-duyen",
+      "title": "Ba Mỹ Duyên",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/ba-my-duyen/ba-my-duyen-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Ở nhà",
+          "file": "characters/ba-my-duyen/ba-my-duyen-body-front.jpg",
+          "note": "Sơ mi tay ngắn xanh xám, quần tối. Quần ướt không tách thành bộ mới."
+        }
+      ]
+    },
+    {
+      "id": "van-anh",
+      "title": "Vân Anh",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/van-anh/van-anh-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Trang điểm",
+          "file": "characters/van-anh/van-anh-body-front.jpg",
+          "note": "Áo thun đen, quần jean đen, giày sneaker đen. Màu là khóa sản xuất."
+        }
+      ]
+    },
+    {
+      "id": "ong-minh",
+      "title": "Ông Minh",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/ong-minh/ong-minh-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Vest",
+          "file": "characters/ong-minh/ong-minh-body-front.jpg",
+          "note": "Vest than, cà vạt navy. Không có ảnh cảnh cởi áo."
+        }
+      ]
+    },
+    {
+      "id": "ong-kim",
+      "title": "Ông Kim",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/ong-kim/ong-kim-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Vest",
+          "file": "characters/ong-kim/ong-kim-body-front.jpg",
+          "note": "Vest than, cà vạt xám."
+        }
+      ]
+    },
+    {
+      "id": "ong-binh",
+      "title": "Ông Bình",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/ong-binh/ong-binh-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Vest",
+          "file": "characters/ong-binh/ong-binh-body-front.jpg",
+          "note": "Vest navy, đồng hồ vàng. Màu là khóa sản xuất."
+        }
+      ]
+    },
+    {
+      "id": "justin-pham",
+      "title": "Justin Phạm",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/justin-pham/justin-pham-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Toàn trắng",
+          "file": "characters/justin-pham/justin-pham-body-front.jpg",
+          "note": "Vest trắng, sơ mi trắng, quần trắng, giày trắng."
+        }
+      ]
+    },
+    {
+      "id": "chong-lan-anh",
+      "title": "Chồng Lan Anh",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/chong-lan-anh/chong-lan-anh-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Ở nhà",
+          "file": "characters/chong-lan-anh/chong-lan-anh-body-front.jpg",
+          "note": "Áo thun xám, quần jean, tóc rối. Một mình."
+        }
+      ]
+    },
+    {
+      "id": "hai-an",
+      "title": "Hoàng Hải An",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/hai-an/hai-an-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Váy",
+          "file": "characters/hai-an/hai-an-body-front.jpg",
+          "note": "Váy đỏ sequin, giày đỏ. Tay buông."
+        }
+      ]
+    },
+    {
+      "id": "thuy-hang",
+      "title": "Nguyễn Thúy Hằng",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/thuy-hang/thuy-hang-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Váy",
+          "file": "characters/thuy-hang/thuy-hang-body-front.jpg",
+          "note": "Váy ngọc bích, một đường xẻ đùi, giày cùng màu. Tay buông, không sash, không hoa."
+        }
+      ]
+    },
+    {
+      "id": "bao-vy",
+      "title": "Bảo Vy",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/bao-vy/bao-vy-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Váy",
+          "file": "characters/bao-vy/bao-vy-body-front.jpg",
+          "note": "Váy satin bạc, giày sandal bạc. Màu là khóa sản xuất."
+        }
+      ]
+    },
+    {
+      "id": "do-duc",
+      "title": "Đỗ Đức",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/do-duc/do-duc-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Áo đen",
+          "file": "characters/do-duc/do-duc-body-front.jpg",
+          "note": "Sơ mi đen, quần đen. Tay buông, không bàn điều khiển trong khung."
+        }
+      ]
+    },
+    {
+      "id": "thuy-trang",
+      "title": "Thùy Trang",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/thuy-trang/thuy-trang-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Áo navy",
+          "file": "characters/thuy-trang/thuy-trang-body-front.jpg",
+          "note": "Áo navy, quần than, tay không. Không túi tiền."
+        }
+      ]
+    },
+    {
+      "id": "giam-khao-nu",
+      "title": "Giám khảo nữ",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/giam-khao-nu/giam-khao-nu-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Ghế giám khảo",
+          "file": "characters/giam-khao-nu/giam-khao-nu-body-front.jpg",
+          "note": "Vest trắng nguyên bộ, kính, tay không."
+        }
+      ]
+    },
+    {
+      "id": "giam-khao-khach",
+      "title": "Giám khảo khách mời",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/giam-khao-khach/giam-khao-khach-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Ghế giám khảo",
+          "file": "characters/giam-khao-khach/giam-khao-khach-body-front.jpg",
+          "note": "Váy đen. Màu là khóa sản xuất. Tay không."
+        }
+      ]
+    },
+    {
+      "id": "me-nam",
+      "title": "Mẹ Nam",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/me-nam/me-nam-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Đứng",
+          "file": "characters/me-nam/me-nam-body-front.jpg",
+          "note": "Blouse xanh xám, đứng, tay không. Không giường, không ống."
+        }
+      ]
+    },
+    {
+      "id": "linh-san",
+      "title": "Lê Linh San",
+      "shots": [
+        {
+          "label": "Mặt",
+          "file": "characters/linh-san/linh-san-front.jpg",
+          "note": ""
+        },
+        {
+          "label": "Đứng",
+          "file": "characters/linh-san/linh-san-body-front.jpg",
+          "note": "Áo kem, quần than, đứng, tay không. Mặt và áo là khóa sản xuất."
+        }
+      ]
+    }
+  ],
+  "places": [
+    {
+      "id": "bai-dat-dem",
+      "title": "Bãi đất đêm",
+      "scenes": [
+        1
+      ],
+      "file": "boi-canh/bai-dat-dem.jpg",
+      "note": "Sương, sấm, đèn xe xa. Không hố, không người."
+    },
+    {
+      "id": "bai-dat-ngay",
+      "title": "Bãi đất ngày",
+      "scenes": [
+        101
+      ],
+      "file": "boi-canh/bai-dat-ngay.jpg",
+      "note": "Cùng con đường đất, trời nắng, một cây. Mặt đất không đào."
+    },
+    {
+      "id": "nha-my-duyen",
+      "title": "Nhà Mỹ Duyên",
+      "scenes": [
+        2
+      ],
+      "file": "boi-canh/nha-my-duyen.jpg",
+      "note": "Bàn gỗ, bằng khen, ảnh gia đình, điện thoại bàn. Chữ trên khung là nhiễu."
+    },
+    {
+      "id": "nha-tro-minh-chau",
+      "title": "Nhà trọ Minh Châu",
+      "scenes": [
+        3,
+        5
+      ],
+      "file": "boi-canh/nha-tro-minh-chau.jpg",
+      "note": "Phòng livestream: đèn ring, chân máy, mỹ phẩm."
+    },
+    {
+      "id": "duong-pho",
+      "title": "Đường phố gần khách sạn",
+      "scenes": [
+        8
+      ],
+      "file": "boi-canh/duong-pho.jpg",
+      "note": "Hai xe buýt, cổng khách sạn phía xa."
+    },
+    {
+      "id": "xe-bus",
+      "title": "Xe bus Miss Trending",
+      "scenes": [
+        9
+      ],
+      "file": "boi-canh/xe-bus.jpg",
+      "note": "Khoang xe trống, ngày."
+    },
+    {
+      "id": "san-khach-san",
+      "title": "Sân khách sạn",
+      "scenes": [
+        10,
+        35
+      ],
+      "file": "boi-canh/san-khach-san.jpg",
+      "note": "Sảnh trước, ngày. Tên EMI không in lên biển."
+    },
+    {
+      "id": "lobby",
+      "title": "Lobby khách sạn",
+      "scenes": [
+        11,
+        34
+      ],
+      "file": "boi-canh/lobby.jpg",
+      "note": "Sảnh đá, quầy lễ tân."
+    },
+    {
+      "id": "phong-minh-chau",
+      "title": "Phòng Minh Châu",
+      "scenes": [
+        12,
+        14,
+        16
+      ],
+      "file": "boi-canh/phong-minh-chau.jpg",
+      "note": "Phòng khách sạn sáng, gọn."
+    },
+    {
+      "id": "ho-boi",
+      "title": "Hồ bơi",
+      "scenes": [
+        13
+      ],
+      "file": "boi-canh/ho-boi.jpg",
+      "note": "Hồ chiều, ghế, một chân máy."
+    },
+    {
+      "id": "phong-tam",
+      "title": "Phòng tắm Minh Châu",
+      "scenes": [
+        15
+      ],
+      "file": "boi-canh/phong-tam.jpg",
+      "note": "Phòng tắm khách sạn, hơi nước."
+    },
+    {
+      "id": "sanh-tiec",
+      "title": "Sảnh tiệc",
+      "scenes": [
+        17
+      ],
+      "file": "boi-canh/sanh-tiec.jpg",
+      "note": "Cầu thang, bàn tiệc, sân khấu nhỏ."
+    },
+    {
+      "id": "quay-bar",
+      "title": "Quầy bar",
+      "scenes": [
+        18
+      ],
+      "file": "boi-canh/quay-bar.jpg",
+      "note": "Quầy tối, ly trống."
+    },
+    {
+      "id": "hanh-lang",
+      "title": "Hành lang khách sạn",
+      "scenes": [
+        19,
+        36,
+        38,
+        39,
+        41
+      ],
+      "file": "boi-canh/hanh-lang.jpg",
+      "note": "Hành lang đêm, lỗ mèo trên một cửa."
+    },
+    {
+      "id": "makeup",
+      "title": "Backstage makeup",
+      "scenes": [
+        22,
+        25
+      ],
+      "file": "boi-canh/makeup.jpg",
+      "note": "Dãy gương, ghế, hộp giày."
+    },
+    {
+      "id": "san-khau-swimsuit",
+      "title": "Sân khấu áo tắm",
+      "scenes": [
+        23,
+        24,
+        26
+      ],
+      "file": "boi-canh/san-khau-swimsuit.jpg",
+      "note": "Catwalk ngày, bàn giám khảo trống."
+    },
+    {
+      "id": "phong-james",
+      "title": "Phòng James",
+      "scenes": [
+        28,
+        31,
+        40,
+        44,
+        50,
+        76
+      ],
+      "file": "boi-canh/phong-james.jpg",
+      "note": "Đêm, bàn cờ, két đóng, bảng thẻ phòng trống chữ."
+    },
+    {
+      "id": "phong-livestream",
+      "title": "Phòng livestream",
+      "scenes": [
+        29,
+        30
+      ],
+      "file": "boi-canh/phong-livestream.jpg",
+      "note": "Dãy ô livestream, đèn đỏ."
+    },
+    {
+      "id": "phong-boxing",
+      "title": "Phòng tập boxing",
+      "scenes": [
+        33
+      ],
+      "file": "boi-canh/phong-boxing.jpg",
+      "note": "Sàn đấu đêm, không đối thủ."
+    },
+    {
+      "id": "san-pickleball",
+      "title": "Sân pickleball",
+      "scenes": [
+        45,
+        46
+      ],
+      "file": "boi-canh/san-pickleball.jpg",
+      "note": "Sân ngày, ghế xếp, khay nước."
+    },
+    {
+      "id": "xe-james",
+      "title": "Xe James",
+      "scenes": [
+        47
+      ],
+      "file": "boi-canh/xe-james.jpg",
+      "note": "Nội thất sedan đen, ngày."
+    },
+    {
+      "id": "phong-lan-anh",
+      "title": "Phòng Lan Anh",
+      "scenes": [
+        51,
+        79
+      ],
+      "file": "boi-canh/phong-lan-anh.jpg",
+      "note": "Phòng đêm, bàn trang điểm."
+    },
+    {
+      "id": "phong-quan",
+      "title": "Phòng Quân",
+      "scenes": [
+        43,
+        52
+      ],
+      "file": "boi-canh/phong-quan.jpg",
+      "note": "Phòng đêm, máy ảnh, laptop đóng."
+    },
+    {
+      "id": "nha-kho",
+      "title": "Nhà kho",
+      "scenes": [
+        53,
+        54,
+        58,
+        59,
+        70,
+        72,
+        73
+      ],
+      "file": "boi-canh/nha-kho.jpg",
+      "note": "Kho trống, một bóng đèn. Không hố."
+    },
+    {
+      "id": "phong-my-duyen-ks",
+      "title": "Phòng Mỹ Duyên ở khách sạn",
+      "scenes": [
+        60,
+        63,
+        65
+      ],
+      "file": "boi-canh/phong-my-duyen-ks.jpg",
+      "note": "Phòng đêm, váy xanh trên mắc, giày trắng dưới sàn."
+    },
+    {
+      "id": "phong-vip",
+      "title": "Phòng VIP",
+      "scenes": [
+        62
+      ],
+      "file": "boi-canh/phong-vip.jpg",
+      "note": "Suite đêm, trống. Không dựng việc trong phòng."
+    },
+    {
+      "id": "phong-bao-ve",
+      "title": "Phòng bảo vệ",
+      "scenes": [
+        66,
+        68
+      ],
+      "file": "boi-canh/phong-bao-ve.jpg",
+      "note": "Bàn, màn hình hành lang trống."
+    },
+    {
+      "id": "cau-dao",
+      "title": "Khu cầu dao",
+      "scenes": [
+        67
+      ],
+      "file": "boi-canh/cau-dao.jpg",
+      "note": "Tủ điện, bóng đèn trần."
+    },
+    {
+      "id": "san-khau-rehearsal",
+      "title": "Sân khấu rehearsal",
+      "scenes": [
+        75
+      ],
+      "file": "boi-canh/san-khau-rehearsal.jpg",
+      "note": "Sân khấu ngày, băng keo, đèn làm việc."
+    },
+    {
+      "id": "cong-san-khau",
+      "title": "Cổng sân khấu chung kết",
+      "scenes": [
+        80
+      ],
+      "file": "boi-canh/cong-san-khau.jpg",
+      "note": "Cổng đêm, không chữ trên phông."
+    },
+    {
+      "id": "loi-di-san-khau",
+      "title": "Lối đi vào sân khấu",
+      "scenes": [
+        81
+      ],
+      "file": "boi-canh/loi-di-san-khau.jpg",
+      "note": "Hành lang cánh gà, ánh sân khấu phía cuối."
+    },
+    {
+      "id": "san-khau-chung-ket",
+      "title": "Sân khấu chung kết",
+      "scenes": [
+        82,
+        83,
+        84,
+        85,
+        86,
+        87,
+        89,
+        91,
+        93,
+        98
+      ],
+      "file": "boi-canh/san-khau-chung-ket.jpg",
+      "note": "Đêm, LED trừu tượng, bục trống. Có bóng khán giả."
+    },
+    {
+      "id": "phong-control",
+      "title": "Phòng control",
+      "scenes": [
+        95,
+        110
+      ],
+      "file": "boi-canh/phong-control.jpg",
+      "note": "Bàn fader, nhìn ra sân khấu."
+    },
+    {
+      "id": "xe-ong",
+      "title": "Xe ông Minh và ông Kim",
+      "scenes": [
+        97
+      ],
+      "file": "boi-canh/xe-ong.jpg",
+      "note": "Hàng ghế sau, đêm."
+    },
+    {
+      "id": "phong-hoi-cung",
+      "title": "Phòng hỏi cung",
+      "scenes": [
+        100
+      ],
+      "file": "boi-canh/phong-hoi-cung.jpg",
+      "note": "Bàn, hai ghế, đèn trần."
+    },
+    {
+      "id": "tham-nuoi",
+      "title": "Phòng thăm nuôi",
+      "scenes": [
+        103
+      ],
+      "file": "boi-canh/tham-nuoi.jpg",
+      "note": "Vách kính, hai ghế."
+    },
+    {
+      "id": "benh-vien",
+      "title": "Hành lang bệnh viện",
+      "scenes": [
+        104,
+        105
+      ],
+      "file": "boi-canh/benh-vien.jpg",
+      "note": "Hành lang đêm, trống. Không giường, không người."
+    },
+    {
+      "id": "phong-nam",
+      "title": "Phòng Nam",
+      "scenes": [
+        106
+      ],
+      "file": "boi-canh/phong-nam.jpg",
+      "note": "Phòng nhỏ, đêm."
+    },
+    {
+      "id": "nghia-trang",
+      "title": "Nghĩa trang",
+      "scenes": [
+        111
+      ],
+      "file": "boi-canh/nghia-trang.jpg",
+      "note": "Mộ xây, nhang, hoa sứ. Không mộ mở."
+    }
+  ]
+}
