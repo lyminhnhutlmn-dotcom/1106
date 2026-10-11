@@ -1,0 +1,24 @@
+{
+  "id": "bao-vy",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Bảo Vy",
+  "function": "Thí sinh dạ hội. Sheet khóa bước đi tự tin và mắt long lanh.",
+  "script_lock": "THÍ SINH BẢO VY: mắt long lanh, sải bước đầy tự tin. Kịch bản không ghi họ, tuổi, và không ghi màu váy.",
+  "costume_lock": "Váy cột bạc là khóa sản xuất, vì kịch bản không ghi màu. Tóc dài giữa ngôi, nụ cười rộng. Mặt là khóa sản xuất.",
+  "skin_lock": "Da trắng sáng, đều, sang. Mặt giữ nguyên chân dung này.",
+  "views": {
+    "portrait_front": "characters/bao-vy/bao-vy-front.jpg",
+    "body_front": "characters/bao-vy/bao-vy-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "gown",
+      "script": "Mắt long lanh, sải bước đầy tự tin. Không mô tả váy.",
+      "plate": "Váy satin bạc, giày sandal bạc. Màu là khóa sản xuất.",
+      "file": "characters/bao-vy/bao-vy-body-front.jpg"
+    }
+  ],
+  "height": "Tỷ lệ cân đối khoảng 7,5 đầu. Vai vừa, hông gần bằng vai, chân không kéo dài. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Không bịa họ và tuổi. Không vẽ sân khấu."
+}

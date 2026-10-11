@@ -1,0 +1,24 @@
+{
+  "id": "thuy-hang",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Nguyễn Thúy Hằng",
+  "function": "Thí sinh top 3. Sheet khóa váy xẻ đùi màu ngọc bích và nụ cười biết ý.",
+  "script_lock": "NGUYỄN THUÝ HẰNG, top 3. Váy xẻ đùi màu ngọc bích, tay vẫy nhẹ. Ứng xử giọng sắc, nụ cười bí hiểm. Kịch bản không ghi tuổi.",
+  "costume_lock": "Váy satin ngọc bích, xẻ một bên tới đùi, giày cùng màu. Tóc bob đen. Mặt là khóa sản xuất.",
+  "skin_lock": "Da trắng sáng, đều, sang. Mặt giữ nguyên chân dung này.",
+  "views": {
+    "portrait_front": "characters/thuy-hang/thuy-hang-front.jpg",
+    "body_front": "characters/thuy-hang/thuy-hang-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "gown",
+      "script": "THÍ SINH THUÝ HẰNG: váy xẻ đùi màu ngọc bích.",
+      "plate": "Váy ngọc bích, một đường xẻ đùi, giày cùng màu. Tay buông, không sash, không hoa.",
+      "file": "characters/thuy-hang/thuy-hang-body-front.jpg"
+    }
+  ],
+  "height": "Tỷ lệ cân đối khoảng 7,5 đầu. Vai vừa, hông gần bằng vai, chân không kéo dài. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Vòng áo tắm không có mẫu áo riêng. Cảnh nhận sash và hoa không vẽ trên sheet."
+}

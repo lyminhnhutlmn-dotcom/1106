@@ -1,0 +1,24 @@
+{
+  "id": "thuy-trang",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Thùy Trang",
+  "age": 26,
+  "function": "Đi ra từ góc kho, cúi mặt, gật đầu, liếc xin lỗi Quân rồi rời đi.",
+  "script_lock": "THUỲ TRANG (26). Từ góc tối đi ra, cúi mặt, gật đầu, ánh mắt xin lỗi. Kịch bản không mô tả quần áo.",
+  "costume_lock": "Áo navy, quần than, giày bệt đen. Màu là khóa sản xuất. Mắt nhìn xuống. Da tự nhiên.",
+  "views": {
+    "portrait_front": "characters/thuy-trang/thuy-trang-front.jpg",
+    "body_front": "characters/thuy-trang/thuy-trang-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "warehouse",
+      "script": "26 tuổi, cúi mặt, gật đầu, ánh mắt xin lỗi. Không mô tả áo.",
+      "plate": "Áo navy, quần than, tay không. Không túi tiền.",
+      "file": "characters/thuy-trang/thuy-trang-body-front.jpg"
+    }
+  ],
+  "height": "Tỷ lệ cân đối khoảng 7,5 đầu. Vai vừa, hông gần bằng vai, chân không kéo dài. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Không vẽ túi nilon tiền, không vẽ cảnh đưa tiền, không vẽ nhà kho."
+}
