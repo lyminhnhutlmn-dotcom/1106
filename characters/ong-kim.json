@@ -1,0 +1,19 @@
+{
+  "id": "ong-kim",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Ông Kim",
+  "function": "Khách vòng phong hậu, ngồi cạnh ông Minh. Sheet tách mặt khỏi ông Minh: tóc chải ngược, cà vạt xám, không vết trán.",
+  "script_lock": "Mặc vest, ngồi ghế nhung, hay cười. Kịch bản không ghi tuổi, tóc, hay vết trên mặt.",
+  "costume_lock": "Vest than, sơ mi trắng, cà vạt xám bạc, giày tây đen. Tóc đen chải ngược, mặt hẹp hơn ông Minh, cười nhỏ. Không vết trán. Tuổi đứng tuổi là khóa sản xuất.",
+  "views": {
+    "portrait_front": "characters/ong-kim/ong-kim-front.jpg",
+    "portrait_three_quarter_a": "characters/ong-kim/ong-kim-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/ong-kim/ong-kim-portrait-b.jpg",
+    "portrait_profile": "characters/ong-kim/ong-kim-portrait-profile.jpg",
+    "body_front": "characters/ong-kim/ong-kim-body-front.jpg",
+    "body_left": "characters/ong-kim/ong-kim-body-left.jpg",
+    "body_right": "characters/ong-kim/ong-kim-body-right.jpg",
+    "body_back": "characters/ong-kim/ong-kim-body-back.jpg"
+  }
+}
