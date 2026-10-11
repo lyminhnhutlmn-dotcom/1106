@@ -64,7 +64,7 @@ Cô trong team ông Minh mở ghế xếp. Ghế cắn một cái vào ngón ôn
 
 ## 45 và cửa sân, trước cảnh 47
 
-Đặt vào lúc Hào giơ điện thoại ngang, trước khi James bước ra cổng. Thân hình là khóa mới: mập, cao 1,6 m.
+Đặt vào lúc Hào giơ điện thoại ngang, trước khi James bước ra cổng. Thân hình là khóa mới: cao 1,6 m, nặng 90 kg.
 
 Hào thắng một ván. Anh giơ điện thoại. Máy trượt, kẹt vào khe giữa bụng và vô-lăng trong trí nhớ tay anh. Anh kẹp máy vào bụng bằng cả hai cẳng tay, thở ra một cái. Cửa sân mở. Điện thoại đã ở trong túi. Hai tay buông. Anh là tài xế.
 
@@ -72,9 +72,9 @@ Hào thắng một ván. Anh giơ điện thoại. Máy trượt, kẹt vào khe
 
 # Tuyến hài — Hào
 
-Một tuyến. Hào 33 tuổi, mập, cao 1,6 m, cười dễ. James thấy một tài xế vụng. Đêm chung kết, cùng thân hình đó khống chế James. Danh tính công an là điểm cuối, đã có ở cảnh 96 và cảnh 101.
+Một tuyến. Hào 33 tuổi, cao 1,6 m, nặng 90 kg, bụng vừa, cười dễ. James thấy một tài xế vụng. Đêm chung kết, cùng thân hình đó khống chế James. Danh tính công an là điểm cuối, đã có ở cảnh 96 và cảnh 101.
 
-Kịch bản gốc ghi “nghiêm nghị”. Khóa này đổi dáng và nhịp hài. Không đổi tội danh, không đổi câu “anh Bùi Văn Mót”.
+Kịch bản gốc ghi “nghiêm nghị”. Khóa này đổi dáng và nhịp hài. Cân nặng dừng ở 90 kg. Không đổi tội danh, không đổi câu “anh Bùi Văn Mót”.
 
 ## 10 · Sân khách sạn
 
@@ -105,7 +105,7 @@ Trận boxing của James với đối thủ ở phòng tập, và trận James 
 
 ## 101 · Bãi đất
 
-Hào trong trang phục cảnh sát. Cùng khuôn mặt, cùng người mập cao 1,6 m. Không còn nụ cười. Cảnh vật chứng giữ nguyên Draft 10.
+Hào trong trang phục cảnh sát. Cùng khuôn mặt, cùng người cao 1,6 m, nặng 90 kg. Không còn nụ cười. Cảnh vật chứng giữ nguyên Draft 10.
 
 ## 75 · NỘI. SÂN KHẤU REHEARSAL - NGÀY
 
