@@ -42,5 +42,6 @@
     "mrs_x": "Hào là công lý của công an. Mrs. X là tiền và quan hệ. Hai người không cùng một phe trên giấy."
   },
   "not_imaged": "Không có ảnh hiện trường bãi đất, không có vũ khí, không có cảnh bắt người.",
-  "lock_en": "[CHARACTER LOCK — HÀO]\nVietnamese man, about 33. Ordinary, weathered, easy to overlook, not a striking face. Short practical black hair. Natural warm skin. Quiet closed mouth. Sharp, steady, resolute eyes. No smile, no glasses, no scar.\nDEFAULT WARDROBE, driver only: simple black suit, white shirt, no tie, no waistcoat, black trousers, black shoes. No badge, no text.\nSEPARATE STATE: dark navy police uniform, empty hands, no weapon, no name tag. Do not mix with the driver suit.\nDO NOT GENERATE: the grave, a weapon, or an arrest."
+  "lock_en": "[CHARACTER LOCK — HÀO]\nVietnamese man, about 33. Ordinary, weathered, easy to overlook, not a striking face. Short practical black hair. Natural warm skin. Quiet closed mouth. Sharp, steady, resolute eyes. No smile, no glasses, no scar.\nDEFAULT WARDROBE, driver only: simple black suit, white shirt, no tie, no waistcoat, black trousers, black shoes. No badge, no text.\nSEPARATE STATE: dark navy police uniform, empty hands, no weapon, no name tag. Do not mix with the driver suit.\nDO NOT GENERATE: the grave, a weapon, or an arrest.",
+  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao."
 }
