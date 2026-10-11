@@ -1,0 +1,20 @@
+{
+  "id": "ba-my-duyen",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Ba Mỹ Duyên",
+  "age": 60,
+  "function": "Cậu của Minh Châu, cha Mỹ Duyên. Sheet khóa ở nhà, quần áo khô. Ống quần ướt và móng tay dính đất là trạng thái cảnh mở đầu, không trộn vào sheet.",
+  "script_lock": "60 tuổi. Ngồi bàn gỗ, mặt nhiều u uất. Cầm điện thoại cục gạch. Hai năm không ngủ yên.",
+  "costume_lock": "Áo sơ mi tay ngắn xanh xám đã bạc, quần tối, giày da thường. Tóc muối tiêu. Gầy. Không vest.",
+  "views": {
+    "portrait_front": "characters/ba-my-duyen/ba-my-duyen-front.jpg",
+    "portrait_three_quarter_a": "characters/ba-my-duyen/ba-my-duyen-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/ba-my-duyen/ba-my-duyen-portrait-b.jpg",
+    "portrait_profile": "characters/ba-my-duyen/ba-my-duyen-portrait-profile.jpg",
+    "body_front": "characters/ba-my-duyen/ba-my-duyen-body-front.jpg",
+    "body_left": "characters/ba-my-duyen/ba-my-duyen-body-left.jpg",
+    "body_right": "characters/ba-my-duyen/ba-my-duyen-body-right.jpg",
+    "body_back": "characters/ba-my-duyen/ba-my-duyen-body-back.jpg"
+  }
+}
