@@ -1,0 +1,20 @@
+{
+  "id": "quan",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Quân",
+  "age": 26,
+  "function": "Phóng viên. Sheet khóa ngày đón thí sinh: dáng roi, kính gọng đen, máy ảnh.",
+  "script_lock": "26 tuổi, dáng người roi, kính gọng đen. Hạ máy, kiểm tra hình, bị Hào chắn khung.",
+  "costume_lock": "Áo sơ mi than, quần đen, giày tây đen, kính chữ nhật gọng đen, máy ảnh đeo dây. Tóc hơi rối. Không chữ trên dây máy.",
+  "views": {
+    "portrait_front": "characters/quan/quan-front.jpg",
+    "portrait_three_quarter_a": "characters/quan/quan-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/quan/quan-portrait-b.jpg",
+    "portrait_profile": "characters/quan/quan-portrait-profile.jpg",
+    "body_front": "characters/quan/quan-body-front.jpg",
+    "body_left": "characters/quan/quan-body-left.jpg",
+    "body_right": "characters/quan/quan-body-right.jpg",
+    "body_back": "characters/quan/quan-body-back.jpg"
+  }
+}
