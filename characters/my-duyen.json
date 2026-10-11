@@ -8,8 +8,9 @@
   "dob_on_sole": "13.09.2002",
   "function": "Thí sinh Hoa Khôi Tri Thức 2024, SBD 20. Cái chết của cô là viên gạch đầu của Vương Miện Máu. Sheet này khóa diện còn sống, đêm nhận giày và đi dọc hành lang.",
   "script_lock": "Điện thoại gọi cô là cô gái xinh đẹp tầm 20 tuổi. Bản tin sau nói thi thể khoảng 22 tuổi. Đế giày khắc CAO THỊ MỸ DUYÊN 13.09.2002. Chữ trên đế không hiện khi cô đứng. Váy xanh dương. Giày trắng đính đá.",
-  "production_lock": "Khóa sản xuất: 23–25 tuổi, cùng thế hệ Minh Châu và Quân. Xinh, mong manh, ngây thơ, vẻ đẹp thuần khiết, trong mắt còn khát vọng đổi đời. Sheet trước khóa 21 tuổi cho flashback tháng 8 năm 2024.",
-  "look": "Xinh đẹp, mong manh, ngây thơ. Vẻ thuần khiết dễ bị lời hứa hào nhoáng kéo đi. Bên trong có ước mơ một cuộc sống tốt hơn.",
+  "production_lock": "Khóa sản xuất: 23–25 tuổi, cùng thế hệ Minh Châu và Quân. Mặt chữ điền, ngây thơ, tách khỏi mặt trái xoan phúc hậu của Minh Châu. Sheet trước khóa 21 tuổi cho flashback tháng 8 năm 2024.",
+  "face_lock": "Mặt chữ điền: trán, gò má và hàm gần cùng độ rộng. Hàm ngang, góc hàm vuông, cằm rộng và phẳng. Mắt tròn, nhìn ngây thơ. Nụ cười nhỏ.",
+  "look": "Xinh đẹp, mong manh, ngây thơ, mặt chữ điền. Vẻ thuần khiết dễ bị lời hứa hào nhoáng kéo đi. Bên trong có ước mơ một cuộc sống tốt hơn.",
   "personality": "Ban đầu tin người. Tin lời James về danh vọng và tình yêu, nhận chi tiền để vào cuộc thi. Khi bị phản bội và bị dồn vào đường cùng, phẫn nộ và kiên quyết tố cáo, dù phải trả giá bằng mạng sống. Đời cô là bi kịch của sự tin lầm và bị lợi dụng.",
   "costume_lock": "Váy satin xanh dương dài, hai dây, cổ thẳng, lưng kín có khóa kéo giữa. Giày cao gót trắng mũi nhọn, vài viên đá ở mũi. Tóc đen dài tới giữa lưng, rẽ giữa. Không khuyên tai. Một bộ cho cả tám góc.",
   "skin_lock": "Da trắng sáng, đều, sang, kiểu da Hàn hiện nay. Vòng một đầy hơn một chút, cùng cổ thẳng.",
@@ -28,5 +29,5 @@
     "body_right": "characters/my-duyen/my-duyen-body-right.jpg",
     "body_back": "characters/my-duyen/my-duyen-body-back.jpg"
   },
-  "lock_en": "[CHARACTER LOCK — CAO THỊ MỸ DUYÊN / HOA KHÔI TRI THỨC 2024 / SBD 20]\nVietnamese woman, 23 to 25. Soft oval face, large dark-brown eyes, small nose, gentle hopeful closed smile. Fragile, innocent, pure. Fair, bright, luminous Korean-luxury skin. Slightly fuller bust.\nLIVING WARDROBE ONLY: floor-length royal-blue satin, thin straps, straight square neckline, closed back with a center zipper, long jet-black hair center-parted to mid-back, no earrings, white pointed stilettos with a few crystals on the toe. No text on the shoes. Sole engraving CAO THỊ MỸ DUYÊN 13.09.2002 stays off standing shots.\nDO NOT GENERATE: the body, muddy hair, the LED deepfake face, the burial, or a money handover."
+  "lock_en": "[CHARACTER LOCK — CAO THỊ MỸ DUYÊN / HOA KHÔI TRI THỨC 2024 / SBD 20]\nVietnamese woman, 23 to 25. Square chữ điền face: forehead, cheeks, and jaw nearly the same width, flat wide chin, square jaw corners. Large round dark-brown eyes, innocent small smile. Not an oval face. Fair, bright, luminous Korean-luxury skin. Slightly fuller bust.\nLIVING WARDROBE ONLY: floor-length royal-blue satin, thin straps, straight square neckline, closed back with a center zipper, long jet-black hair center-parted to mid-back, no earrings, white pointed stilettos with a few crystals on the toe. No text on the shoes. Sole engraving CAO THỊ MỸ DUYÊN 13.09.2002 stays off standing shots.\nDO NOT GENERATE: the body, muddy hair, the LED deepfake face, the burial, or a money handover."
 }
