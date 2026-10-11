@@ -2054,6 +2054,22 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <div style="font-size:13px;font-weight:500;color:#a78bfa;margin-bottom:3px">🔒 Nhân Vật Nhất Quán — Character Consistency</div>
     <div style="font-size:10px;color:var(--muted);line-height:1.7">Vấn đề lớn nhất của AI video: nhân vật thay đổi mặt/ngoại hình giữa các shot. Tab này giúp tạo <strong style="color:#a78bfa">Character Lock Prompt</strong> — đoạn mô tả cực chi tiết để "khóa" nhân vật nhất quán.</div>
   </div>
+
+  <div id="vmm-james-card" style="background:#10080a;border:1px solid #7f1d1d;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px;letter-spacing:1px;color:#fca5a5;text-transform:uppercase">Vương Miện Máu · Draft 10</div>
+        <div style="font-size:13px;font-weight:500;color:#fecaca;margin-top:2px">Hồ sơ James — Bùi Văn Mót</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5">Nạp vào khóa mặt, trang phục mặc định, và ô mô tả nhân vật. Phần mặt chưa có trong kịch bản được đánh dấu là khóa sản xuất.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" onclick="napHoSoJames()" style="padding:7px 12px;border-radius:7px;border:none;background:#b91c1c;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">Nạp hồ sơ James</button>
+        <button type="button" id="vmm-james-copy" onclick="copyHoSoJames()" style="display:none;padding:7px 12px;border-radius:7px;border:1px solid #fca5a5;background:transparent;color:#fca5a5;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer">Copy hồ sơ</button>
+      </div>
+    </div>
+    <div id="vmm-james-status" style="font-size:10px;color:var(--muted);margin-top:8px"></div>
+    <div id="vmm-james-dossier" style="display:none;margin-top:10px;background:#1a0c0e;border:1px solid #3f1d1d;border-radius:8px;padding:10px 12px;max-height:420px;overflow-y:auto"></div>
+  </div>
   <!-- UPLOAD ẢNH NHÂN VẬT → AI VIẾT LOCK -->
   <div style="background:#0d0016;border:1px solid #7c3aed;border-radius:10px;padding:12px 14px;margin-bottom:14px">
     <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:6px">
@@ -6531,6 +6547,110 @@ Bright light-grey seamless studio backdrop, no texture or props. Honest front fl
 
 
 
+
+let hoSoJames = null;
+let hoSoJamesText = '';
+
+function datChipDon(group, label){
+  if(!label) return;
+  let found = false;
+  document.querySelectorAll('[data-g="'+group+'"].s').forEach(el=>{
+    const on = el.textContent.trim() === label;
+    el.classList.toggle('on', on);
+    if(on) found = true;
+  });
+  if(!found) throw new Error('Không thấy chip ' + group + ': ' + label);
+  SS[group] = label;
+}
+
+function dienO(id, value){
+  const el = document.getElementById(id);
+  if(!el) throw new Error('Thiếu ô ' + id);
+  el.value = value || '';
+}
+
+function veHoSoJames(data){
+  const root = document.getElementById('vmm-james-dossier');
+  if(!root) return;
+  const esc = s => String(s).replace(/[&<>]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
+  root.innerHTML = '<div style="font-size:12px;color:#fecaca;margin-bottom:6px">' + esc(data.logline) + '</div>'
+    + data.sections.map(sec =>
+      '<div style="margin-top:10px"><div style="font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#fca5a5;margin-bottom:4px">' + esc(sec.h) + '</div>'
+      + sec.items.map(item => '<div style="font-size:11px;line-height:1.65;color:var(--ink);margin:0 0 4px 0">• ' + esc(item) + '</div>').join('')
+      + '</div>'
+    ).join('');
+  root.style.display = '';
+}
+
+function hoSoJamesPlain(data){
+  const lines = [
+    data.project + ' · ' + data.draft,
+    data.title + ' / ' + data.legal_name + ' · ' + data.age,
+    data.function,
+    '',
+    data.logline,
+    ''
+  ];
+  data.sections.forEach(sec => {
+    lines.push(sec.h.toUpperCase());
+    sec.items.forEach(item => lines.push('• ' + item));
+    lines.push('');
+  });
+  lines.push('CHARACTER LOCK');
+  lines.push(data.lock_en);
+  return lines.join('\n');
+}
+
+async function napHoSoJames(){
+  const status = document.getElementById('vmm-james-status');
+  if(status) status.textContent = 'Đang nạp hồ sơ...';
+  try{
+    const url = new URL('characters/james.json', window.location.href);
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('Không đọc được characters/james.json (' + res.status + ')');
+    const data = await res.json();
+    const f = data.form;
+    datChipDon('gender', f.gender);
+    datChipDon('age', f.age_chip);
+    datChipDon('nationality', f.nationality);
+    datChipDon('face_shape', f.face_shape);
+    datChipDon('skin_tone', f.skin_tone);
+    datChipDon('eye_color', f.eye_color);
+    datChipDon('eye_shape', f.eye_shape);
+    datChipDon('hair_color', f.hair_color);
+    MM.nationality = [f.nationality];
+    dienO('subject-desc', f.subject);
+    dienO('char-face', f.face);
+    dienO('char-eyes', f.eyes);
+    dienO('char-hair', f.hair);
+    dienO('char-costume', f.costume);
+    dienO('char-mark', f.mark);
+    const wardrobe = document.getElementById('wardrobe-lock');
+    if(wardrobe) wardrobe.value = f.costume;
+    hoSoJames = data;
+    hoSoJamesText = hoSoJamesPlain(data);
+    veHoSoJames(data);
+    charPromptText = data.lock_en;
+    const preview = document.getElementById('char-preview');
+    if(preview) preview.textContent = data.lock_en;
+    ['nut-cp-char','nut-add-char','nut-char-sheet','vmm-james-copy'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.style.display = '';
+    });
+    if(typeof capNhatMakeupUI === 'function') capNhatMakeupUI();
+    capNhat();
+    if(status) status.textContent = 'Đã nạp James. Khóa mặt nằm ở tab này. Ô mô tả nhân vật ở Khung Sườn đã được điền. Tên Bùi Văn Mót chỉ dùng sau đêm chung kết.';
+  }catch(e){
+    if(status) status.textContent = 'Lỗi: ' + e.message;
+  }
+}
+
+function copyHoSoJames(){
+  if(!hoSoJamesText) return;
+  robustCopy(hoSoJamesText);
+  const b = document.getElementById('vmm-james-copy');
+  if(b){ const o = b.textContent; b.textContent = 'Đã copy'; setTimeout(()=>{ b.textContent = o; }, 1600); }
+}
 
 function taoCharPrompt(){
   const {nv, wardrobe} = layChung();
