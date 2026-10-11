@@ -1,0 +1,20 @@
+{
+  "id": "van-anh",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Vân Anh",
+  "age": 32,
+  "function": "Nghệ sĩ trang điểm. Sheet khóa áo thun đen ở ghế makeup, không phải váy thí sinh.",
+  "script_lock": "Make up, 32 tuổi. Ngồi tẩy trang, nhớ mặt Mỹ Duyên.",
+  "costume_lock": "Áo thun đen, quần jean đen, giày sneaker đen. Tóc kẹp gọn, vài sợi rơi. Không váy dạ hội.",
+  "views": {
+    "portrait_front": "characters/van-anh/van-anh-front.jpg",
+    "portrait_three_quarter_a": "characters/van-anh/van-anh-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/van-anh/van-anh-portrait-b.jpg",
+    "portrait_profile": "characters/van-anh/van-anh-portrait-profile.jpg",
+    "body_front": "characters/van-anh/van-anh-body-front.jpg",
+    "body_left": "characters/van-anh/van-anh-body-left.jpg",
+    "body_right": "characters/van-anh/van-anh-body-right.jpg",
+    "body_back": "characters/van-anh/van-anh-body-back.jpg"
+  }
+}
