@@ -1,0 +1,167 @@
+{
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "note": "Một nhân vật, một trang phục đã khóa, đứng trong plate bối cảnh. Ánh sáng lấy hướng, màu và độ cứng từ plate trống. Cảm xúc đọc trên mặt và tay. Không bé, không mộ mở, không thi thể, không đánh nhau, không tiền, không còng. Bãi đất, nhà kho và bệnh viện để trống. Phòng VIP chỉ có Mrs X đứng một mình.",
+  "plates": [
+    {
+      "id": "james-san",
+      "character": "James",
+      "location": "san-khach-san",
+      "file": "boi-canh/trong-canh/james-san.jpg",
+      "light": "Nắng cứng sân trước, bóng đổ xuống gạch.",
+      "emotion": "Nụ cười nhỏ, kiểm soát. Một tay trong túi.",
+      "costume": "Vest đen, gile, sơ mi trắng mở cổ, không cà vạt.",
+      "note": "Mặt khóa Seedream."
+    },
+    {
+      "id": "minh-chau-tro",
+      "character": "Minh Châu",
+      "location": "nha-tro-minh-chau",
+      "file": "boi-canh/trong-canh/minh-chau-tro.jpg",
+      "light": "Đèn ring trắng bên phải, đèn bàn ấm phía cửa sổ đêm.",
+      "emotion": "Mày nhíu, miệng khép. Nụ cười host chưa mở — khoảnh khắc trước khi lên sóng.",
+      "costume": "Áo linen xám, búi cao.",
+      "note": "Mặt trái xoan giữ. Nụ cười chưa nở."
+    },
+    {
+      "id": "my-duyen-hanh-lang",
+      "character": "Mỹ Duyên",
+      "location": "hanh-lang",
+      "file": "boi-canh/trong-canh/my-duyen-hanh-lang.jpg",
+      "light": "Đèn tường ấm, hành lang tối dần về phía sau.",
+      "emotion": "Nụ cười nhỏ, mắt tròn, đứng yên.",
+      "costume": "Váy satin xanh royal, dây mảnh, cổ vuông.",
+      "note": "Mặt chữ điền giữ: trán, má, hàm cùng bề ngang."
+    },
+    {
+      "id": "lan-anh-chung-ket",
+      "character": "Lan Anh",
+      "location": "san-khau-chung-ket",
+      "file": "boi-canh/trong-canh/lan-anh-chung-ket.jpg",
+      "light": "Spotlight từ trên, LED tím phía sau.",
+      "emotion": "Nụ cười sáng, nước mắt trên má.",
+      "costume": "Váy một vai ngà, đá trên vai.",
+      "note": "Có bóng khán giả."
+    },
+    {
+      "id": "nam-phong-james",
+      "character": "Nam",
+      "location": "phong-james",
+      "file": "boi-canh/trong-canh/nam-phong-james.jpg",
+      "light": "Đèn bàn ấm bên phải, thành phố lạnh ngoài cửa.",
+      "emotion": "Mày khít, miệng khép, mắt lo.",
+      "costume": "Sơ mi trắng, không cà vạt, quần than.",
+      "note": "Bàn cờ, két đóng. Không tiền."
+    },
+    {
+      "id": "quan-bar",
+      "character": "Quân",
+      "location": "quay-bar",
+      "file": "boi-canh/trong-canh/quan-bar.jpg",
+      "light": "Đèn hổ phách quầy bar, đèn chùm xa.",
+      "emotion": "Đứng yên, nhìn thẳng, không cười.",
+      "costume": "Áo than, kính gọng đen, máy ảnh.",
+      "note": ""
+    },
+    {
+      "id": "hao-san",
+      "character": "Hào",
+      "location": "san-khach-san",
+      "file": "boi-canh/trong-canh/hao-san.jpg",
+      "light": "Nắng cứng sân trước, cùng hướng với James ở sân.",
+      "emotion": "Nụ cười nhỏ, dễ.",
+      "costume": "Vest đen tài xế, sơ mi trắng, không cà vạt, không phù hiệu.",
+      "note": "1,6 m, 90 kg, bụng vừa. Khung từ đầu đến giày."
+    },
+    {
+      "id": "mrs-x-vip-scene",
+      "character": "Mrs X",
+      "location": "phong-vip",
+      "file": "boi-canh/trong-canh/mrs-x-vip-scene.jpg",
+      "light": "Đèn bàn hổ phách, thành phố đêm ngoài cửa.",
+      "emotion": "Nụ cười nhỏ, hài lòng. Hai tay trong túi.",
+      "costume": "Vest đen, cổ lọ lụa, kính đen.",
+      "note": "Suite trống. Một mình. Không dựng việc trong phòng."
+    },
+    {
+      "id": "ba-nha",
+      "character": "Ba Mỹ Duyên",
+      "location": "nha-my-duyen",
+      "file": "boi-canh/trong-canh/ba-nha.jpg",
+      "light": "Ánh cửa mở bên trái, trong nhà mát.",
+      "emotion": "Mắt ướt, miệng khép, hai tay trên điện thoại bàn.",
+      "costume": "Áo sơ mi xanh bạc, tay ngắn.",
+      "note": "Một mình. Chữ trên bằng khen là nhiễu."
+    },
+    {
+      "id": "hai-an-san-khau",
+      "character": "Hải An",
+      "location": "san-khau-chung-ket",
+      "file": "boi-canh/trong-canh/hai-an-san-khau.jpg",
+      "light": "Spotlight từ trên, LED tím.",
+      "emotion": "Nụ cười kiêu, cằm hơi ngẩng.",
+      "costume": "Váy sequin đỏ.",
+      "note": "Có bóng khán giả."
+    },
+    {
+      "id": "thuy-hang-san-khau",
+      "character": "Thúy Hằng",
+      "location": "san-khau-chung-ket",
+      "file": "boi-canh/trong-canh/thuy-hang-san-khau.jpg",
+      "light": "Spotlight và LED tím. Khung ngang eo để mặt đọc được.",
+      "emotion": "Nụ cười biết, một bên miệng.",
+      "costume": "Váy emerald, tóc bob.",
+      "note": ""
+    },
+    {
+      "id": "do-duc-control",
+      "character": "Đỗ Đức",
+      "location": "phong-control",
+      "file": "boi-canh/trong-canh/do-duc-control.jpg",
+      "light": "Ánh màn hình tím-vàng, sân khấu ngoài kính.",
+      "emotion": "Mặt bình, một tay trên fader.",
+      "costume": "Áo đen, không vest. Màu áo là production fill.",
+      "note": ""
+    },
+    {
+      "id": "van-anh-makeup",
+      "character": "Vân Anh",
+      "location": "makeup",
+      "file": "boi-canh/trong-canh/van-anh-makeup.jpg",
+      "light": "Bóng đèn gương ấm. Phòng sáng hơn plate trống vì đèn và cửa sổ.",
+      "emotion": "Mắt nhìn xuống cọ, tập trung.",
+      "costume": "Áo thun đen, búi.",
+      "note": ""
+    },
+    {
+      "id": "minh-chau-nghia-trang",
+      "character": "Minh Châu",
+      "location": "nghia-trang",
+      "file": "boi-canh/trong-canh/minh-chau-nghia-trang.jpg",
+      "light": "Nắng xiên qua hoa sứ, bóng lá trên áo.",
+      "emotion": "Một giọt nước mắt, mắt nhìn vương miện giấy trong hai tay.",
+      "costume": "Áo khoác tối, búi thấp.",
+      "note": "Mộ xây, nhang. Không mộ mở."
+    },
+    {
+      "id": "lan-anh-phong",
+      "character": "Lan Anh",
+      "location": "phong-lan-anh",
+      "file": "boi-canh/trong-canh/lan-anh-phong.jpg",
+      "light": "Đèn bàn ấm trong phòng, ánh phố lạnh ngoài cửa kính.",
+      "emotion": "Hàm siết, mày nhíu, điện thoại ở tai.",
+      "costume": "Áo choàng khách sạn trắng và mũ bucket đen.",
+      "note": "Trạng thái đêm ra ngoài. Một mình, không bé."
+    },
+    {
+      "id": "nam-hoi-cung",
+      "character": "Nam",
+      "location": "phong-hoi-cung",
+      "file": "boi-canh/trong-canh/nam-hoi-cung.jpg",
+      "light": "Đèn huỳnh quang trần, cửa sổ lạnh bên trái.",
+      "emotion": "Cúi đầu, hai tay chắp trên đùi.",
+      "costume": "Áo cổ bẻ navy, quần navy. Trạng thái tạm giữ.",
+      "note": "Không còng."
+    }
+  ]
+}

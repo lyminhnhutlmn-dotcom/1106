@@ -2,6 +2,7 @@
   "project": "Vương Miện Máu",
   "draft": "10 — 24DEC2025",
   "note": "Ảnh bối cảnh trống. Không người, trừ bóng khán giả ở sân khấu chung kết. Không hố, không thi thể, không hành động ở phòng VIP, nhà kho, bệnh viện.",
+  "in_scene": "boi-canh/trong-canh/index.json",
   "locations": [
     {"id": "bai-dat-dem", "title": "Bãi đất đêm", "scenes": [1], "file": "boi-canh/bai-dat-dem.jpg", "plate": "Sương, sấm, đèn xe xa. Không hố, không người."},
     {"id": "bai-dat-ngay", "title": "Bãi đất ngày", "scenes": [101], "file": "boi-canh/bai-dat-ngay.jpg", "plate": "Cùng con đường đất, trời nắng, một cây. Mặt đất không đào."},
