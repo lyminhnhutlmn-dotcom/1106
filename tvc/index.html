@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Sổ dòng tiền sản xuất phim quảng cáo TVC: dự toán, thực chi, thu tiền, chia sẻ link.">
+<title>Sổ dòng tiền TVC</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect fill='%23141714' width='32' height='32' rx='6'/%3E%3Crect x='6' y='8' width='20' height='16' rx='2' fill='none' stroke='%23e0a24a' stroke-width='2'/%3E%3Cpath d='M6 14h20' stroke='%23e0a24a' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app no-print">
+  <header class="top">
+    <div class="brand">
+      <span class="slate" aria-hidden="true"></span>
+      <div>
+        <p class="eyebrow">ANNAHOUSE · sản xuất TVC</p>
+        <h1>Sổ dòng tiền</h1>
+        <p class="lede">Dự toán là kế hoạch, thực chi là tiền đã ra, thu tiền là tiền khách đã về. Số dư = đã thu − đã chi.</p>
+      </div>
+    </div>
+    <div class="top-actions">
+      <label class="project-pick">
+        <span>Dự án</span>
+        <select id="projectSelect"></select>
+      </label>
+      <button type="button" class="btn" id="btnNew">Dự án mới</button>
+      <button type="button" class="btn primary" id="btnShare">Chia sẻ</button>
+      <button type="button" class="btn" id="btnExport">Tải JSON</button>
+    </div>
+  </header>
+
+  <p id="syncStatus" class="sync" role="status" data-ok="1">Đã lưu trên máy này</p>
+  <div id="banner" class="banner" hidden></div>
+
+  <section class="kpis" id="kpis" aria-label="Số tổng">
+    <article class="kpi"><span>Hợp đồng</span><strong id="kpi-contract" data-out="kpi-contract" class="num">0</strong></article>
+    <article class="kpi"><span>Dự toán</span><strong id="kpi-budget" data-out="kpi-budget" class="num">0</strong></article>
+    <article class="kpi"><span>Đã chi</span><strong id="kpi-spent" data-out="kpi-spent" class="num">0</strong></article>
+    <article class="kpi"><span>Còn ngân sách</span><strong id="kpi-remain" data-out="kpi-remain" class="num">0</strong></article>
+    <article class="kpi"><span>Đã thu</span><strong id="kpi-received" data-out="kpi-received" class="num">0</strong></article>
+    <article class="kpi cash"><span>Số dư tiền</span><strong id="kpi-cash" data-out="kpi-cash" class="num">0</strong></article>
+  </section>
+  <p class="kpi-sub"><span data-out="kpi-sub"></span></p>
+
+  <nav class="tabs" aria-label="Phần sổ">
+    <button type="button" class="tab on" data-tab="overview">Tổng quan</button>
+    <button type="button" class="tab" data-tab="budget">Dự toán</button>
+    <button type="button" class="tab" data-tab="spend">Thực chi</button>
+    <button type="button" class="tab" data-tab="income">Thu tiền</button>
+    <button type="button" class="tab" data-tab="flow">Dòng tiền</button>
+  </nav>
+
+  <main id="main"></main>
+  <footer class="foot">Dữ liệu tự lưu trên trình duyệt này. Bản chia sẻ online được mã hóa; ai có link đều xem và sửa được. Hãy tải file JSON để giữ lâu.</footer>
+</div>
+
+<div id="printSheet"></div>
+<div id="modal" class="modal" hidden></div>
+<div id="toast" class="toast" hidden role="status"></div>
+<input type="file" id="fileJson" accept="application/json,.json" hidden>
+<datalist id="catList"></datalist>
+<datalist id="unitList"></datalist>
+
+<script type="module" src="app.mjs"></script>
+</body>
+</html>
