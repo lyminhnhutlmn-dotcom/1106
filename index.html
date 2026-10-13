@@ -2493,6 +2493,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
         <button class="btn-i" id="nut-json" onclick="xuatJSON()" style="display:none;border-color:#818cf8;color:#818cf8">💾 Lưu Project</button>
         <button class="btn-i" id="nut-veo3-json" onclick="xuatVeo3JSON()" style="display:none;border-color:#ec4899;color:#ec4899">🎬 Veo3 JSON</button>
         <button class="btn-i" id="nut-api-json" onclick="xuatAPIJSON()" style="display:none;border-color:#10b981;color:#10b981">⚡ API JSON</button>
+        <button class="btn-i" id="nut-ltx" onclick="moLTX()" style="display:none;border-color:#38bdf8;color:#38bdf8" title="Chuyển prompt sang chuẩn LTX-2.5 · xuất JSON · tạo video qua LTX API">🎞 LTX 2.5</button>
         <button class="btn-i" onclick="moKhungDan()" style="border-color:var(--green);color:var(--green)">📥 Dán Prompt</button>
         <button class="btn-i" id="nut-edit" onclick="batDauChinhSua()" style="border-color:#a855f7;color:#a855f7">✏️ Chỉnh sửa</button>
         <button class="btn-i" id="nut-optimize" onclick="moTouuHoa()" style="border-color:#f59e0b;color:#f59e0b;display:none">✂️ Tối ưu &lt;3500 ký tự</button>
@@ -2600,6 +2601,156 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
     <span id="opt-result-count" style="font-size:10px;color:var(--muted);margin-left:auto"></span>
   </div>
   </div><!-- end emo-nv1-panel -->
+
+<!-- LTX 2.5 — LIGHTRICKS -->
+<div id="ltx-panel" style="display:none;margin-top:10px;background:#02101a;border:1px solid #38bdf8;border-radius:9px;overflow:hidden">
+  <div style="padding:9px 13px;background:#031521;border-bottom:1px solid #0c3a52;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px">
+    <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+      <span style="font-size:11px;color:#38bdf8;letter-spacing:1px;text-transform:uppercase;font-weight:500" id="ltx-title">🎞 LTX 2.5 — Lightricks</span>
+      <span id="ltx-sub" style="font-size:10px;color:var(--muted)">Text-to-Video · Image-to-Video · có audio · tới 4K</span>
+    </div>
+    <div style="display:flex;gap:5px;align-items:center;flex-wrap:wrap">
+      <a href="https://docs.ltx.io/models/ltx-2-5" target="_blank" rel="noopener" class="btn-i" style="font-size:10px;text-decoration:none;border-color:#0c3a52;color:#7dd3fc">📖 Docs</a>
+      <button class="btn-i" onclick="dongLTX()" style="font-size:10px">✕</button>
+    </div>
+  </div>
+
+  <div style="padding:12px 13px;display:flex;flex-direction:column;gap:11px">
+
+    <!-- PROMPT -->
+    <div>
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:5px">
+        <span style="font-size:10px;color:#7dd3fc;font-weight:500">✍️ Prompt LTX (EN) — 1 đoạn văn liền mạch, thì hiện tại, có camera + âm thanh</span>
+        <span id="ltx-prompt-count" style="font-size:10px;color:var(--muted)"></span>
+      </div>
+      <textarea id="ltx-prompt" rows="7" placeholder="Prompt hiện tại sẽ được đưa vào đây. Nhấn ✨ để AI viết lại theo chuẩn LTX-2.5 (bỏ tag [CAM]/[SUBJECT], bỏ header, mô tả cut bằng văn xuôi, thoại trong ngoặc kép)..." oninput="ltxDemKyTu()" style="font-size:11px;line-height:1.7;border-color:#0c3a52;resize:vertical"></textarea>
+      <div style="display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;align-items:center">
+        <button id="ltx-btn-convert" onclick="ltxChuyenPrompt()" style="padding:5px 12px;border-radius:6px;border:1px solid #38bdf8;background:#38bdf8;color:#02101a;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">✨ Chuyển sang chuẩn LTX (AI)</button>
+        <button class="btn-i" id="ltx-btn-stop" onclick="ltxDungAI()" style="display:none;border-color:var(--red);color:var(--red);font-size:10px">⏹ Dừng</button>
+        <button class="btn-i" onclick="ltxLayPromptHienTai()" style="font-size:10px" title="Lấy lại prompt đang hiển thị ở Kết quả">↺ Lấy prompt hiện tại</button>
+        <button class="btn-i" onclick="ltxApDungPrompt()" style="font-size:10px;border-color:var(--green);color:var(--green)" title="Đưa prompt LTX này lên khung Kết quả">✓ Dùng làm prompt chính</button>
+        <button class="btn-i" onclick="robustCopy(document.getElementById('ltx-prompt').value, this)" style="font-size:10px">⊕ Copy</button>
+      </div>
+    </div>
+
+    <!-- SETTINGS -->
+    <div style="background:#010b12;border:1px solid #0c3a52;border-radius:7px;padding:10px">
+      <div style="font-size:10px;color:#7dd3fc;font-weight:500;margin-bottom:7px">⚙️ Thông số generation</div>
+      <div class="r4" style="gap:8px">
+        <div>
+          <div class="slbl">Model</div>
+          <select id="ltx-model" onchange="ltxCapNhatUI()">
+            <option value="ltx-2-5-fast">LTX-2.5 Fast — nhanh, rẻ</option>
+            <option value="ltx-2-5-pro">LTX-2.5 Pro — chất lượng cao</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl">Chế độ</div>
+          <select id="ltx-mode" onchange="ltxCapNhatUI()">
+            <option value="t2v">T2V — chỉ text</option>
+            <option value="i2v">I2V — từ ảnh frame đầu</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl">Độ phân giải</div>
+          <select id="ltx-res" onchange="ltxCapNhatUI()">
+            <option value="720p">720p</option>
+            <option value="1080p">1080p</option>
+            <option value="1440p">1440p</option>
+            <option value="4K">4K</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl">Khung hình</div>
+          <select id="ltx-orient" onchange="ltxCapNhatUI()">
+            <option value="16:9">16:9 — Ngang</option>
+            <option value="9:16">9:16 — Dọc</option>
+          </select>
+        </div>
+      </div>
+      <div class="r4" style="gap:8px;margin-top:8px">
+        <div>
+          <div class="slbl">FPS</div>
+          <select id="ltx-fps" onchange="ltxCapNhatUI()">
+            <option value="24">24 fps — cinema</option>
+            <option value="25">25 fps — PAL</option>
+            <option value="48">48 fps</option>
+            <option value="50">50 fps</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl">Thời lượng</div>
+          <select id="ltx-dur" onchange="ltxCapNhatUI()"></select>
+        </div>
+        <div>
+          <div class="slbl">Âm thanh</div>
+          <select id="ltx-audio" onchange="ltxCapNhatUI()">
+            <option value="1">Có — AI tạo audio</option>
+            <option value="0">Không — video câm</option>
+          </select>
+        </div>
+        <div>
+          <div class="slbl">Camera motion</div>
+          <select id="ltx-camera" onchange="ltxCapNhatUI()">
+            <option value="">Theo prompt</option>
+            <option value="static">Static — tĩnh</option>
+            <option value="dolly_in">Dolly in</option>
+            <option value="dolly_out">Dolly out</option>
+            <option value="dolly_left">Dolly left</option>
+            <option value="dolly_right">Dolly right</option>
+            <option value="jib_up">Jib up</option>
+            <option value="jib_down">Jib down</option>
+            <option value="focus_shift">Focus shift</option>
+          </select>
+        </div>
+      </div>
+      <div id="ltx-matrix-hint" style="font-size:9.5px;color:var(--muted);margin-top:7px;line-height:1.6"></div>
+
+      <!-- I2V IMAGES -->
+      <div id="ltx-i2v-wrap" style="display:none;margin-top:9px;padding-top:9px;border-top:1px solid #0c3a52">
+        <div class="r2" style="gap:10px">
+          <div>
+            <div class="slbl">🖼 Ảnh frame đầu <span style="color:var(--red)">*</span></div>
+            <div id="ltx-first-preview" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label class="btn-i" style="font-size:10px;cursor:pointer;border-color:#38bdf8;color:#38bdf8">📁 Chọn ảnh<input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="ltxChonAnh(this,'first')"></label>
+              <span style="font-size:9px;color:var(--muted)">PNG / JPG / WEBP · tự nén ≤ 3 MB</span>
+            </div>
+          </div>
+          <div>
+            <div class="slbl">🖼 Ảnh frame cuối (tuỳ chọn)</div>
+            <div id="ltx-last-preview" style="display:flex;gap:8px;align-items:center;flex-wrap:wrap">
+              <label class="btn-i" style="font-size:10px;cursor:pointer">📁 Chọn ảnh<input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="ltxChonAnh(this,'last')"></label>
+              <span style="font-size:9px;color:var(--muted)">Nội suy đầu → cuối · cần thời lượng cố định</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ACTIONS -->
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <button id="ltx-btn-gen" onclick="ltxTaoVideo()" style="padding:7px 16px;border-radius:7px;border:1px solid #38bdf8;background:linear-gradient(135deg,#0ea5e9,#6366f1);color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:600">🚀 Tạo video với LTX 2.5</button>
+      <button class="btn-i" id="ltx-btn-cancel" onclick="ltxHuy()" style="display:none;border-color:var(--red);color:var(--red)">⏹ Dừng theo dõi</button>
+      <button class="btn-i" onclick="ltxXuatJSON()" style="border-color:#38bdf8;color:#38bdf8" title="Tải file JSON request + cURL cho LTX API">💾 Tải JSON request</button>
+      <button class="btn-i" onclick="ltxCopyCurl(this)" title="Copy lệnh cURL gọi LTX API">⊕ Copy cURL</button>
+      <span style="font-size:9.5px;color:var(--muted);margin-left:auto">Cần <code style="color:#7dd3fc">LTX_API_KEY</code> trên Vercel · tính phí theo giây video</span>
+    </div>
+
+    <!-- STATUS / RESULT -->
+    <div id="ltx-status" style="display:none;font-size:11px;line-height:1.7;padding:9px 11px;border-radius:7px;background:#010b12;border:1px solid #0c3a52;color:var(--ink);white-space:pre-wrap;word-break:break-word"></div>
+    <div id="ltx-result" style="display:none;background:#010b12;border:1px solid #38bdf8;border-radius:7px;padding:10px">
+      <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:6px;margin-bottom:8px">
+        <span style="font-size:10px;color:#38bdf8;font-weight:500">🎬 Video đã tạo</span>
+        <div style="display:flex;gap:5px;flex-wrap:wrap">
+          <a id="ltx-download" href="#" target="_blank" rel="noopener" class="btn-i" style="font-size:10px;text-decoration:none;border-color:var(--green);color:var(--green)">⬇ Tải video</a>
+          <button class="btn-i" onclick="robustCopy(document.getElementById('ltx-download').href, this)" style="font-size:10px">⊕ Copy URL</button>
+        </div>
+      </div>
+      <video id="ltx-video" controls playsinline style="width:100%;max-height:480px;border-radius:6px;background:#000"></video>
+      <div id="ltx-result-meta" style="font-size:9.5px;color:var(--muted);margin-top:6px;line-height:1.6"></div>
+    </div>
+  </div>
+</div>
 </div>
 
   <!-- NV2 EMOTIONS -->
@@ -4006,7 +4157,7 @@ function hienKQ(nd,loai,label){
   if(_sbBtn) _sbBtn.style.display='';
     const nutJson = document.getElementById('nut-json');
     if(nutJson) nutJson.style.display='';
-    ['nut-veo3-json','nut-api-json'].forEach(id=>{
+    ['nut-veo3-json','nut-api-json','nut-ltx'].forEach(id=>{
       const el=document.getElementById(id);if(el)el.style.display='';
     });
   const nutOpt=document.getElementById('nut-optimize');if(nutOpt)nutOpt.style.display='';
@@ -7203,7 +7354,8 @@ function xuatAPIJSON() {
     _docs: {
       seedance: 'POST https://api.segmind.com/v1/seedance-2.0',
       higgsfield: 'POST https://cloud.higgsfield.ai/v1/run/bytedance/seedance/v1/lite',
-      veo3: 'POST https://generativelanguage.googleapis.com/v1beta/models/veo-3.0-generate-preview:predictLongRunning'
+      veo3: 'POST https://generativelanguage.googleapis.com/v1beta/models/veo-3.0-generate-preview:predictLongRunning',
+      ltx: 'POST https://api.ltx.io/v2/text-to-video (Bearer LTX_API_KEY) → poll GET /v2/text-to-video/{id}'
     },
 
     // Seedance / Segmind format
@@ -7239,7 +7391,10 @@ function xuatAPIJSON() {
         generateAudio: dsThoai && dsThoai.length > 0,
         sampleCount: 1
       }
-    }
+    },
+
+    // LTX-2.5 / Lightricks format (async v2) — thông số từ panel LTX (hoặc gợi ý từ Khung Sườn nếu chưa mở)
+    ltx: ltxPayloadChoAPIJSON(promptEN)
   };
 
   const jsonStr = JSON.stringify(apiJSON, null, 2);
@@ -7255,6 +7410,496 @@ function xuatAPIJSON() {
     btn.style.color = '#fff';
     setTimeout(() => { btn.innerHTML = o; btn.style.background = ''; btn.style.color = '#10b981'; }, 2500);
   }
+}
+
+
+// ===== LTX 2.5 — LIGHTRICKS =====
+// Docs: https://docs.ltx.io/models/ltx-2-5 · https://docs.ltx.io/async-jobs
+// Backend proxy: /api/ltx (cần LTX_API_KEY trên Vercel)
+const LTX_RES = {
+  '720p':  ['1280x720',  '720x1280'],
+  '1080p': ['1920x1080', '1080x1920'],
+  '1440p': ['2560x1440', '1440x2560'],
+  '4K':    ['3840x2160', '2160x3840']
+};
+const LTX_DUR_LONG  = [6, 8, 10, 12, 14, 16, 18, 20];
+const LTX_DUR_SHORT = [6, 8, 10];
+const LTX_SETTINGS_KEY = 'anna_ltx_settings';
+const LTX_POLL_MS = 5000;
+const LTX_MAX_WAIT_MS = 15 * 60 * 1000;
+const LTX_MAX_IMG_CHARS = 3 * 1024 * 1024; // data URI ≤ ~3 MB để qua giới hạn body của Vercel
+
+let ltxCtrl = null, ltxKetQua = '', ltxJob = null, ltxPollTimer = null, ltxPollStart = 0;
+let ltxFirstFrame = '', ltxLastFrame = '';
+
+function ltxV(id){ const e = document.getElementById(id); return e ? e.value : ''; }
+function ltxSet(id, val){ const e = document.getElementById(id); if(e && val !== undefined && val !== null) e.value = String(val); }
+
+// Prompt đang hiển thị ở khung Kết quả (ưu tiên theo loại đang xem)
+function ltxLayPromptGoc(){
+  const map = { en: (typeof kqEN !== 'undefined' ? kqEN : ''), vi: kqVI, sd: kqSD, cg: kqCG };
+  let nd = map[dangHien] || '';
+  if(!nd){
+    const t = document.getElementById('ket-qua')?.textContent || '';
+    if(!t.includes('Nhấn "Tạo Prompt"')) nd = t;
+  }
+  return (nd || '').trim();
+}
+
+function ltxDocCaiDat(){
+  return {
+    model:    ltxV('ltx-model') || 'ltx-2-5-fast',
+    mode:     ltxV('ltx-mode') === 'i2v' ? 'i2v' : 't2v',
+    tier:     LTX_RES[ltxV('ltx-res')] ? ltxV('ltx-res') : '720p',
+    orient:   ltxV('ltx-orient') === '9:16' ? '9:16' : '16:9',
+    fps:      parseInt(ltxV('ltx-fps')) || 24,
+    duration: ltxV('ltx-dur') || 'auto', // 'auto' hoặc số (string)
+    audio:    ltxV('ltx-audio') !== '0',
+    camera:   ltxV('ltx-camera') || ''
+  };
+}
+function ltxResolution(s){ return LTX_RES[s.tier][s.orient === '9:16' ? 1 : 0]; }
+function ltxThoiLuongChoPhep(s){
+  if(s.model === 'ltx-2-5-fast' && (s.tier === '720p' || s.tier === '1080p') && s.fps <= 25) return LTX_DUR_LONG;
+  return LTX_DUR_SHORT;
+}
+
+function ltxLuuCaiDat(){
+  try { localStorage.setItem(LTX_SETTINGS_KEY, JSON.stringify(ltxDocCaiDat())); } catch(e){}
+}
+function ltxNapCaiDat(){
+  let s = null;
+  try { s = JSON.parse(localStorage.getItem(LTX_SETTINGS_KEY) || 'null'); } catch(e){}
+  if(!s) return false;
+  ltxSet('ltx-model', s.model); ltxSet('ltx-mode', s.mode); ltxSet('ltx-res', s.tier);
+  ltxSet('ltx-orient', s.orient); ltxSet('ltx-fps', s.fps); ltxSet('ltx-audio', s.audio ? '1' : '0');
+  ltxSet('ltx-camera', s.camera);
+  ltxCapNhatUI(false);
+  ltxSet('ltx-dur', s.duration);
+  if(!ltxV('ltx-dur')) ltxCapNhatUI(false); // thời lượng đã lưu không còn hợp lệ → về mặc định
+  return true;
+}
+
+// Gợi ý thông số từ Khung Sườn (tỷ lệ + thời lượng + có thoại)
+function ltxGoiYTuKhungSuon(){
+  if(String(SS.res || '').includes('9:16')) ltxSet('ltx-orient', '9:16');
+  else if(SS.res) ltxSet('ltx-orient', '16:9');
+  ltxSet('ltx-audio', '1');
+  ltxCapNhatUI(false);
+  const sec = parseInt(SS.kb_dur) || 0;
+  if(sec){
+    const allowed = ltxThoiLuongChoPhep(ltxDocCaiDat());
+    const best = allowed.reduce((a, b) => Math.abs(b - sec) < Math.abs(a - sec) ? b : a, allowed[0]);
+    ltxSet('ltx-dur', String(best));
+  }
+}
+
+// Cập nhật danh sách thời lượng hợp lệ + hint + vùng I2V
+function ltxCapNhatUI(save = true){
+  const s = ltxDocCaiDat();
+  const durSel = document.getElementById('ltx-dur');
+  if(durSel){
+    const allowed = ltxThoiLuongChoPhep(s);
+    const prev = durSel.value;
+    const coLastFrame = s.mode === 'i2v' && !!ltxLastFrame;
+    const opts = [];
+    if(!coLastFrame) opts.push('<option value="auto">Tự động — theo prompt</option>');
+    allowed.forEach(d => opts.push(`<option value="${d}">${d} giây</option>`));
+    durSel.innerHTML = opts.join('');
+    if(prev && [...durSel.options].some(o => o.value === prev)) durSel.value = prev;
+    else durSel.value = coLastFrame ? '8' : (allowed.includes(8) ? '8' : String(allowed[0]));
+  }
+  const i2v = document.getElementById('ltx-i2v-wrap');
+  if(i2v) i2v.style.display = s.mode === 'i2v' ? '' : 'none';
+
+  const hint = document.getElementById('ltx-matrix-hint');
+  if(hint){
+    const res = ltxResolution(s);
+    const allowed = ltxThoiLuongChoPhep(s);
+    const parts = [
+      `Output: <span style="color:#7dd3fc">${res}</span> @ ${s.fps}fps`,
+      `thời lượng hỗ trợ: ${allowed[0]}–${allowed[allowed.length-1]}s`
+    ];
+    if(s.model === 'ltx-2-5-fast' && (s.tier === '720p' || s.tier === '1080p') && s.fps <= 25) parts.push('<span style="color:#4ade80">Fast @ 720p/1080p 24–25fps cho phép tới 20s</span>');
+    if(s.mode === 'i2v') parts.push('I2V: nên viết prompt 1 cú máy liên tục, không cắt cảnh');
+    if(ltxV('ltx-dur') === 'auto') parts.push('Tự động: model tự chọn độ dài từ nhịp hành động trong prompt');
+    hint.innerHTML = parts.join(' · ');
+  }
+  if(save) ltxLuuCaiDat();
+}
+
+function ltxDemKyTu(){
+  const ta = document.getElementById('ltx-prompt');
+  const c = document.getElementById('ltx-prompt-count');
+  if(!ta || !c) return;
+  const txt = ta.value.trim();
+  const sentences = txt ? txt.split(/[.!?]+\s/).filter(Boolean).length : 0;
+  c.textContent = txt ? `${txt.length} ký tự · ~${sentences} câu` : '';
+}
+
+function moLTX(){
+  const panel = document.getElementById('ltx-panel');
+  if(!panel) return;
+  if(panel.style.display !== 'none'){ panel.style.display = 'none'; return; }
+
+  const goc = ltxLayPromptGoc();
+  const ta = document.getElementById('ltx-prompt');
+  if(ta && !ta.value.trim()){
+    if(!goc){ alert('Tạo prompt trước rồi mới dùng LTX 2.5.'); return; }
+    ta.value = goc;
+  }
+  ltxDemKyTu();
+  if(!ltxNapCaiDat()) ltxGoiYTuKhungSuon();
+  else ltxCapNhatUI(false);
+
+  panel.style.display = '';
+  panel.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+}
+function dongLTX(){
+  const panel = document.getElementById('ltx-panel');
+  if(panel) panel.style.display = 'none';
+  ltxDungAI();
+}
+function ltxLayPromptHienTai(){
+  const goc = ltxLayPromptGoc();
+  if(!goc){ alert('Chưa có prompt ở khung Kết quả.'); return; }
+  const ta = document.getElementById('ltx-prompt');
+  if(ta){ ta.value = goc; ltxDemKyTu(); }
+}
+function ltxApDungPrompt(){
+  const txt = (document.getElementById('ltx-prompt')?.value || '').trim();
+  if(!txt){ alert('Prompt LTX đang trống.'); return; }
+  kqEN = txt;
+  hienKQ(txt, 'en', '🎞 LTX 2.5 Prompt (EN)');
+  const gc = document.getElementById('ghi-chu');
+  if(gc){ gc.textContent = '✦ Prompt theo chuẩn LTX-2.5 (Lightricks) — đoạn văn liền mạch, có camera + audio.'; gc.style.display = 'block'; }
+}
+
+// --- AI: viết lại prompt theo prompting guide của LTX-2.5 ---
+function ltxDungAI(){
+  if(ltxCtrl){ ltxCtrl.abort(); ltxCtrl = null; }
+  const stop = document.getElementById('ltx-btn-stop'); if(stop) stop.style.display = 'none';
+  const conv = document.getElementById('ltx-btn-convert'); if(conv){ conv.disabled = false; conv.textContent = '✨ Chuyển sang chuẩn LTX (AI)'; }
+}
+
+function ltxSystemPrompt(s){
+  const durLine = s.duration === 'auto'
+    ? 'Duration is AUTOMATIC: LTX sizes the clip to the action you describe, so pace every beat explicitly (write pauses like "she pauses", "a beat of silence").'
+    : `Target duration: about ${s.duration} seconds of screen time — pace the action to fit exactly that.`;
+  const modeLine = s.mode === 'i2v'
+    ? 'This is IMAGE-TO-VIDEO from a given first frame: write ONE continuous take, describe how the existing frame starts moving, do NOT describe a cut away from the opening image, do NOT re-describe static appearance that is already visible — focus on motion, camera and sound.'
+    : 'This is TEXT-TO-VIDEO. If the source describes several shots, write a MULTI-SHOT scene: one chronological paragraph, name every edit in prose ("A hard cut transitions to…", "The view cuts to a close-up of…", "The image dissolves into…"), re-establish framing/angle/lighting after each cut, reuse the same visual identifiers for recurring characters, and state audio continuity at each cut. Prefer 2–4 shots.';
+  const audioLine = s.audio
+    ? 'Audio is ON: clearly describe ambient sound, music, foley, and speech. Put every spoken line in quotation marks and name the language/accent if relevant.'
+    : 'Audio is OFF (silent video): do not describe sound or dialogue.';
+  const camLine = s.camera ? `A preset camera motion "${s.camera.replace('_',' ')}" will be applied by the API — keep the camera description consistent with it.` : '';
+  const res = ltxResolution(s);
+  return `You are an expert prompt writer for LTX-2.5 (Lightricks), an AI video+audio generation model.
+Rewrite the user's video prompt into LTX's preferred structure. Output ONLY the final prompt text — no title, no headers, no bullet points, no markdown, no explanations.
+
+LTX-2.5 PROMPT RULES
+1. Write a single flowing paragraph (or a short sequence of paragraphs for screenplay-style scenes). Present tense. Every sentence has a verb that does something.
+2. Establish the shot (shot scale, angle, lens feel), set the scene (lighting, palette, textures, atmosphere — one coherent light logic), describe the action as a chronological sequence, define characters (age, hair, wardrobe, distinguishing features, emotion through PHYSICAL cues), specify camera movement relative to the subject and what is visible after the move, and describe the audio.
+3. Keep a few clear characters and actions — do not crowd the frame.
+4. Single continuous take: roughly 4–8 descriptive sentences. Longer screenplay-style scenes may run longer only if every sentence adds concrete visual/audio detail.
+5. ${modeLine}
+6. ${durLine}
+7. ${audioLine}
+8. Output frame is ${res} (${s.orient}) — compose for that orientation.
+${camLine ? '9. ' + camLine : ''}
+
+STRIP FROM THE SOURCE (they hurt LTX): tag syntax like [CAM] [SUBJECT] [SCENE] [LIGHT] [QUALITY] [CONSTRAINTS], numbered shot lists, "Shot 1:" labels, Seedance/Higgsfield/Veo/MCP/character_id references, @mentions, weight syntax, negative-prompt lists, decorative headers/footers (ANNAHOUSESTUDIO, ═══ lines, URLs, "BY ..."), quality tags like 8K/masterpiece/ultra-detailed, and camera spec dumps (f-stops, Kelvin, mm) unless folded naturally into prose.
+KEEP the cinematic substance: character identity/wardrobe lock details, lighting direction and mood, color palette, key props, blocking, camera moves, dialogue and sound design. Translate any Vietnamese into natural English.
+Write for a filmmaker: concrete, visual, physical. Never invent on-screen text.`;
+}
+
+async function ltxChuyenPrompt(){
+  const ta = document.getElementById('ltx-prompt');
+  const src = (ta?.value || '').trim() || ltxLayPromptGoc();
+  if(!src){ alert('Chưa có prompt để chuyển.'); return; }
+
+  const s = ltxDocCaiDat();
+  const conv = document.getElementById('ltx-btn-convert');
+  const stop = document.getElementById('ltx-btn-stop');
+  if(conv){ conv.disabled = true; conv.textContent = '⏳ AI đang viết lại theo chuẩn LTX...'; }
+  if(stop) stop.style.display = '';
+
+  // Ngữ cảnh bổ sung: shot list + thoại để AI giữ đúng nhịp
+  const ctx = [];
+  if(cacShot && cacShot.length){
+    ctx.push('SHOT BREAKDOWN (for pacing only):');
+    cacShot.forEach((sh, i) => {
+      const cam = [sh.cuMay, sh.angle, sh.lens, sh.shotSize].filter(Boolean).join(', ');
+      ctx.push(`- Shot ${i+1} [${sh.start}s→${sh.end}s] ${cam || ''} ${sh.moTa ? '— ' + sh.moTa : ''}`.trim());
+    });
+  }
+  if(dsThoai && dsThoai.length){
+    ctx.push('DIALOGUE:');
+    dsThoai.forEach(t => { if(t.loi) ctx.push(`- ${t.ten || 'Character'}: "${t.loi}"`); });
+  }
+
+  ltxCtrl = new AbortController();
+  let acc = '';
+  try{
+    const res = await fetch((typeof BACKEND !== 'undefined' ? BACKEND : '') + '/api/claude', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({
+        system: ltxSystemPrompt(s),
+        message: `SOURCE PROMPT:\n${src}${ctx.length ? '\n\n' + ctx.join('\n') : ''}\n\nRewrite it as an LTX-2.5 prompt now.`,
+        max_tokens: 4000
+      }),
+      signal: ltxCtrl.signal
+    });
+    if(!res.ok){ const e = await res.json().catch(() => ({})); throw new Error(e.error?.message || e.error || ('Lỗi API ' + res.status)); }
+
+    if(ta) ta.value = '';
+    const reader = res.body.getReader(); const decoder = new TextDecoder('utf-8'); let buf = '';
+    while(true){
+      const { done, value } = await reader.read(); if(done) break;
+      buf += decoder.decode(value, { stream: true });
+      const lines = buf.split('\n'); buf = lines.pop();
+      for(const line of lines){
+        if(!line.startsWith('data: ')) continue;
+        const d = line.slice(6); if(d === '[DONE]') continue;
+        try{
+          const j = JSON.parse(d);
+          const chunk = j.text || (j.type === 'content_block_delta' && j.delta?.text);
+          if(chunk){ acc += chunk; if(ta){ ta.value = acc; ta.scrollTop = ta.scrollHeight; } ltxDemKyTu(); }
+        }catch(e){}
+      }
+    }
+    ltxKetQua = acc.trim();
+    if(ta) ta.value = ltxKetQua || src;
+    ltxDemKyTu();
+    if(conv){ conv.textContent = '✓ Đã chuyển chuẩn LTX'; setTimeout(() => { if(conv) conv.textContent = '✨ Chuyển sang chuẩn LTX (AI)'; }, 2500); }
+  }catch(e){
+    if(e.name !== 'AbortError'){
+      alert('Lỗi AI: ' + e.message);
+      if(ta && !ta.value.trim()) ta.value = src;
+    } else if(ta && !ta.value.trim()) ta.value = src;
+  }finally{
+    ltxCtrl = null;
+    if(stop) stop.style.display = 'none';
+    if(conv){ conv.disabled = false; if(conv.textContent.startsWith('⏳')) conv.textContent = '✨ Chuyển sang chuẩn LTX (AI)'; }
+  }
+}
+
+// --- Request builder / export ---
+function ltxBuildRequest(promptOverride){
+  const s = ltxDocCaiDat();
+  const prompt = (promptOverride != null ? promptOverride : (ltxV('ltx-prompt') || ltxLayPromptGoc())).trim();
+  const payload = {
+    prompt,
+    model: s.model,
+    duration: s.duration === 'auto' ? null : parseInt(s.duration),
+    resolution: ltxResolution(s),
+    fps: s.fps
+  };
+  if(!s.audio) payload.generate_audio = false;
+  if(s.camera) payload.camera_motion = s.camera;
+  if(s.mode === 'i2v'){
+    payload.image_uri = ltxFirstFrame || 'YOUR_IMAGE_URI';
+    if(ltxLastFrame) payload.last_frame_uri = ltxLastFrame;
+  }
+  return { mode: s.mode, endpoint: s.mode === 'i2v' ? 'image-to-video' : 'text-to-video', payload };
+}
+function ltxPayloadChoExport(payload){
+  // Không nhúng ảnh base64 vào file JSON / cURL — thay bằng placeholder
+  const p = { ...payload };
+  if(p.image_uri && p.image_uri.startsWith('data:')) p.image_uri = 'YOUR_IMAGE_URI (https URL · ltx:// · data URI ≤ 7 MB)';
+  if(p.last_frame_uri && p.last_frame_uri.startsWith('data:')) p.last_frame_uri = 'YOUR_LAST_FRAME_URI';
+  return p;
+}
+function ltxPayloadChoAPIJSON(promptEN){
+  if(!ltxV('ltx-dur') && !ltxNapCaiDat()) ltxGoiYTuKhungSuon();
+  return ltxPayloadChoExport(ltxBuildRequest(promptEN).payload);
+}
+function ltxCurl(req){
+  const body = JSON.stringify(ltxPayloadChoExport(req.payload), null, 2).replace(/'/g, "'\\''");
+  return `curl -X POST https://api.ltx.io/v2/${req.endpoint} \\\n  -H "Authorization: Bearer $LTX_API_KEY" \\\n  -H "Content-Type: application/json" \\\n  -d '${body}'\n\n# Poll:\ncurl https://api.ltx.io/v2/${req.endpoint}/JOB_ID -H "Authorization: Bearer $LTX_API_KEY"`;
+}
+function ltxXuatJSON(){
+  const req = ltxBuildRequest();
+  if(!req.payload.prompt){ alert('Chưa có prompt.'); return; }
+  const out = {
+    _comment: 'ANNAHOUSESTUDIO — LTX-2.5 (Lightricks) request by Lý Minh Nhựt',
+    _docs: {
+      model: 'https://docs.ltx.io/models/ltx-2-5',
+      submit: `POST https://api.ltx.io/v2/${req.endpoint}`,
+      poll: `GET https://api.ltx.io/v2/${req.endpoint}/{id} → status: pending | processing | completed | failed → result.video_url`,
+      auth: 'Authorization: Bearer LTX_API_KEY'
+    },
+    endpoint: req.endpoint,
+    request: ltxPayloadChoExport(req.payload),
+    curl: ltxCurl(req)
+  };
+  const jsonStr = JSON.stringify(out, null, 2);
+  robustDownloadJSON(jsonStr, `ANNA_ltx25_${new Date().toISOString().slice(0,10)}.json`);
+  robustCopy(jsonStr, null);
+  const btn = document.querySelector('#ltx-panel [onclick="ltxXuatJSON()"]');
+  if(btn){ const o = btn.innerHTML; btn.innerHTML = '✓ Đã tải + copy!'; setTimeout(() => btn.innerHTML = o, 2500); }
+}
+function ltxCopyCurl(btn){
+  const req = ltxBuildRequest();
+  if(!req.payload.prompt){ alert('Chưa có prompt.'); return; }
+  robustCopy(ltxCurl(req), btn);
+}
+
+// --- Ảnh I2V: đọc file → nén (canvas) → data URI ---
+function ltxNenAnh(file){
+  return new Promise((resolve, reject) => {
+    const img = new Image();
+    const url = URL.createObjectURL(file);
+    img.onload = () => {
+      URL.revokeObjectURL(url);
+      const MAX = 1920;
+      let w = img.naturalWidth, h = img.naturalHeight;
+      const scale = Math.min(1, MAX / Math.max(w, h));
+      w = Math.round(w * scale); h = Math.round(h * scale);
+      const cv = document.createElement('canvas'); cv.width = w; cv.height = h;
+      cv.getContext('2d').drawImage(img, 0, 0, w, h);
+      let q = 0.92, out = cv.toDataURL('image/jpeg', q);
+      while(out.length > LTX_MAX_IMG_CHARS && q > 0.4){ q -= 0.1; out = cv.toDataURL('image/jpeg', q); }
+      if(out.length > LTX_MAX_IMG_CHARS) return reject(new Error('Ảnh quá lớn, không nén xuống dưới 3 MB được.'));
+      resolve({ dataUri: out, w, h });
+    };
+    img.onerror = () => { URL.revokeObjectURL(url); reject(new Error('Không đọc được ảnh.')); };
+    img.src = url;
+  });
+}
+function ltxVePreview(which){
+  const wrap = document.getElementById(which === 'first' ? 'ltx-first-preview' : 'ltx-last-preview');
+  if(!wrap) return;
+  const data = which === 'first' ? ltxFirstFrame : ltxLastFrame;
+  const inputHtml = `<label class="btn-i" style="font-size:10px;cursor:pointer;${which==='first'?'border-color:#38bdf8;color:#38bdf8':''}">📁 ${data ? 'Đổi ảnh' : 'Chọn ảnh'}<input type="file" accept="image/png,image/jpeg,image/webp" style="display:none" onchange="ltxChonAnh(this,'${which}')"></label>`;
+  if(data){
+    wrap.innerHTML = `<img src="${data}" alt="${which} frame" style="height:64px;border-radius:5px;border:1px solid #0c3a52;object-fit:cover">${inputHtml}<button class="btn-i" onclick="ltxXoaAnh('${which}')" style="font-size:10px;border-color:var(--red);color:var(--red)">✕ Bỏ</button>`;
+  } else {
+    wrap.innerHTML = inputHtml + (which === 'first'
+      ? '<span style="font-size:9px;color:var(--muted)">PNG / JPG / WEBP · tự nén ≤ 3 MB</span>'
+      : '<span style="font-size:9px;color:var(--muted)">Nội suy đầu → cuối · cần thời lượng cố định</span>');
+  }
+}
+async function ltxChonAnh(input, which){
+  const file = input.files && input.files[0];
+  if(!file) return;
+  try{
+    const { dataUri } = await ltxNenAnh(file);
+    if(which === 'first') ltxFirstFrame = dataUri; else ltxLastFrame = dataUri;
+    ltxVePreview(which);
+    ltxCapNhatUI(false);
+  }catch(e){ alert(e.message); }
+  input.value = '';
+}
+function ltxXoaAnh(which){
+  if(which === 'first') ltxFirstFrame = ''; else ltxLastFrame = '';
+  ltxVePreview(which);
+  ltxCapNhatUI(false);
+}
+
+// --- Generate: submit → poll → hiển thị video ---
+function ltxStatus(html, color){
+  const el = document.getElementById('ltx-status');
+  if(!el) return;
+  el.style.display = html ? '' : 'none';
+  el.innerHTML = html || '';
+  el.style.borderColor = color || '#0c3a52';
+}
+function ltxHuy(){
+  if(ltxPollTimer){ clearTimeout(ltxPollTimer); ltxPollTimer = null; }
+  const gen = document.getElementById('ltx-btn-gen'); if(gen){ gen.disabled = false; gen.textContent = '🚀 Tạo video với LTX 2.5'; }
+  const c = document.getElementById('ltx-btn-cancel'); if(c) c.style.display = 'none';
+  if(ltxJob) ltxStatus(`⏹ Đã dừng theo dõi job <code>${ltxJob.id}</code>. Job vẫn chạy trên LTX — kết quả giữ 24h.\nCó thể kiểm tra bằng: GET https://api.ltx.io/v2/${ltxJob.endpoint}/${ltxJob.id}`, '#f59e0b');
+}
+function ltxFmtTime(ms){ const s = Math.round(ms / 1000); return s >= 60 ? `${Math.floor(s/60)}p${String(s%60).padStart(2,'0')}s` : `${s}s`; }
+
+async function ltxTaoVideo(){
+  const req = ltxBuildRequest();
+  if(!req.payload.prompt){ alert('Chưa có prompt.'); return; }
+  if(req.mode === 'i2v' && !ltxFirstFrame){ alert('Chế độ I2V cần ảnh frame đầu.'); return; }
+  if(req.mode === 'i2v' && ltxLastFrame && req.payload.duration === null){ alert('Có ảnh frame cuối → cần chọn thời lượng cố định.'); return; }
+
+  ltxHuy();
+  ltxJob = null;
+  const gen = document.getElementById('ltx-btn-gen'); if(gen){ gen.disabled = true; gen.textContent = '⏳ Đang gửi...'; }
+  const result = document.getElementById('ltx-result'); if(result) result.style.display = 'none';
+  ltxStatus(`📤 Đang gửi job <b>${req.endpoint}</b> · ${req.payload.model} · ${req.payload.resolution} @ ${req.payload.fps}fps · ${req.payload.duration === null ? 'thời lượng tự động' : req.payload.duration + 's'}...`);
+
+  try{
+    const res = await fetch((typeof BACKEND !== 'undefined' ? BACKEND : '') + '/api/ltx', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'submit', mode: req.mode, ...req.payload })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok || !data.id) throw new Error(data.error || ('Lỗi ' + res.status));
+
+    ltxJob = { id: data.id, mode: req.mode, endpoint: req.endpoint, request: req.payload };
+    ltxPollStart = Date.now();
+    if(gen) gen.textContent = '⏳ Đang render...';
+    const c = document.getElementById('ltx-btn-cancel'); if(c) c.style.display = '';
+    ltxStatus(`✅ Đã nhận job <code>${data.id}</code> — trạng thái: <b>pending</b>\n⏱ 0s · kiểm tra mỗi ${LTX_POLL_MS/1000}s (có thể mất vài phút tuỳ độ phân giải)`);
+    ltxPollTimer = setTimeout(ltxPoll, LTX_POLL_MS);
+  }catch(e){
+    ltxStatus('❌ Gửi job thất bại: ' + e.message, 'var(--red)');
+    if(gen){ gen.disabled = false; gen.textContent = '🚀 Tạo video với LTX 2.5'; }
+  }
+}
+
+async function ltxPoll(){
+  if(!ltxJob) return;
+  const elapsed = Date.now() - ltxPollStart;
+  try{
+    const res = await fetch((typeof BACKEND !== 'undefined' ? BACKEND : '') + '/api/ltx', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'status', mode: ltxJob.mode, id: ltxJob.id })
+    });
+    const data = await res.json().catch(() => ({}));
+    if(!res.ok){
+      // 5xx tạm thời → thử lại; 4xx → dừng
+      if(res.status >= 500 && elapsed < LTX_MAX_WAIT_MS){ ltxPollTimer = setTimeout(ltxPoll, LTX_POLL_MS * 2); return; }
+      throw new Error(data.error || ('Lỗi ' + res.status));
+    }
+
+    if(data.status === 'completed'){
+      const url = data.result?.video_url;
+      if(!url) throw new Error('Job hoàn tất nhưng không có video_url.');
+      ltxHienVideo(url, elapsed);
+      return;
+    }
+    if(data.status === 'failed'){
+      throw new Error(data.error?.message || data.error?.type || 'Job thất bại trên LTX.');
+    }
+    if(elapsed > LTX_MAX_WAIT_MS){
+      ltxStatus(`⚠️ Đã chờ ${ltxFmtTime(elapsed)} mà job <code>${ltxJob.id}</code> chưa xong. Ngừng theo dõi tự động — kiểm tra lại sau bằng GET https://api.ltx.io/v2/${ltxJob.endpoint}/${ltxJob.id}`, '#f59e0b');
+      ltxHuy(); return;
+    }
+    ltxStatus(`🎬 Job <code>${ltxJob.id}</code> — trạng thái: <b>${data.status === 'processing' ? 'processing (đang render)' : data.status}</b>\n⏱ ${ltxFmtTime(elapsed)} · ${ltxJob.request.model} · ${ltxJob.request.resolution} @ ${ltxJob.request.fps}fps`);
+    ltxPollTimer = setTimeout(ltxPoll, LTX_POLL_MS + Math.random() * 1000);
+  }catch(e){
+    ltxStatus('❌ ' + e.message, 'var(--red)');
+    const gen = document.getElementById('ltx-btn-gen'); if(gen){ gen.disabled = false; gen.textContent = '🚀 Tạo video với LTX 2.5'; }
+    const c = document.getElementById('ltx-btn-cancel'); if(c) c.style.display = 'none';
+    ltxPollTimer = null;
+  }
+}
+
+function ltxHienVideo(url, elapsed){
+  ltxPollTimer = null;
+  const gen = document.getElementById('ltx-btn-gen'); if(gen){ gen.disabled = false; gen.textContent = '🚀 Tạo video với LTX 2.5'; }
+  const c = document.getElementById('ltx-btn-cancel'); if(c) c.style.display = 'none';
+  ltxStatus(`✅ Hoàn tất sau ${ltxFmtTime(elapsed)} — URL video sẽ hết hạn, hãy tải về ngay.`, 'var(--green)');
+  const result = document.getElementById('ltx-result');
+  const video = document.getElementById('ltx-video');
+  const dl = document.getElementById('ltx-download');
+  const meta = document.getElementById('ltx-result-meta');
+  if(video){ video.src = url; video.load(); }
+  if(dl){ dl.href = url; dl.download = `ANNA_ltx25_${ltxJob.id.slice(0,8)}.mp4`; }
+  if(meta){
+    const r = ltxJob.request;
+    meta.textContent = `job ${ltxJob.id} · ${ltxJob.endpoint} · ${r.model} · ${r.resolution} @ ${r.fps}fps · ${r.duration === null ? 'auto' : r.duration + 's'} · audio ${r.generate_audio === false ? 'off' : 'on'}${r.camera_motion ? ' · ' + r.camera_motion : ''}`;
+  }
+  if(result){ result.style.display = ''; result.scrollIntoView({ behavior: 'smooth', block: 'nearest' }); }
 }
 
 
