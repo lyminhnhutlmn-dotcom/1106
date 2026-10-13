@@ -163,6 +163,33 @@ select option{background:var(--card)}
 .hang-toc{display:flex;align-items:center;gap:6px}
 .hang-toc label{font-size:11px;color:var(--muted);white-space:nowrap}
 input[type=range]{width:80px;accent-color:var(--gold);padding:0}
+/* ===== CHROMA KEY (PHÔNG XANH) ===== */
+.ck-box{background:#0b1a10;border:1px solid #1f4a2e;border-radius:9px;padding:12px;margin-bottom:12px}
+.ck-title{font-size:10px;color:#4ade80;letter-spacing:1px;text-transform:uppercase;margin-bottom:8px;font-weight:500;display:flex;align-items:center;gap:6px}
+.ck-drop{border:1px dashed #2a5a3a;border-radius:8px;padding:12px;text-align:center;cursor:pointer;background:var(--card);transition:all .15s;min-height:92px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px}
+.ck-drop:hover,.ck-drop.over{border-color:#4ade80;background:#0f2416}
+.ck-drop img,.ck-drop video{max-width:100%;max-height:120px;border-radius:6px;object-fit:contain}
+.ck-drop .ck-fn{font-size:10px;color:var(--muted);word-break:break-all}
+.ck-stage{position:relative;background:#000;border-radius:8px;overflow:hidden;border:1px solid var(--bdr);display:flex;align-items:center;justify-content:center;min-height:180px}
+.ck-stage canvas{max-width:100%;max-height:70vh;display:block;cursor:crosshair}
+.ck-stage.picking canvas{cursor:copy;outline:2px solid #4ade80;outline-offset:-2px}
+.ck-empty{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px;font-style:italic;text-align:center;padding:20px;pointer-events:none}
+.ck-ctl{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:8px 14px}
+.ck-sl{display:flex;flex-direction:column;gap:2px}
+.ck-sl .ck-lb{display:flex;justify-content:space-between;font-size:10px;color:var(--muted);letter-spacing:.5px;text-transform:uppercase}
+.ck-sl .ck-lb b{color:var(--ink);font-weight:500}
+.ck-range{width:100% !important;accent-color:#4ade80}
+.ck-trans{display:flex;align-items:center;gap:8px;margin-top:8px;flex-wrap:wrap}
+.ck-trans input[type=range]{flex:1;min-width:140px;accent-color:#4ade80}
+.ck-btn{padding:6px 11px;border-radius:7px;border:1px solid #2a5a3a;background:var(--card);color:#4ade80;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;transition:all .15s;white-space:nowrap}
+.ck-btn:hover{background:#0f2416;border-color:#4ade80}.ck-btn.on{background:#4ade80;color:#0d0d0d}
+.ck-btn:disabled{opacity:.4;cursor:not-allowed}
+.ck-btn-main{padding:9px 16px;border-radius:7px;border:1px solid #4ade80;background:#4ade80;color:#0d0d0d;font-size:11.5px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500;transition:opacity .15s}
+.ck-btn-main:hover{opacity:.85}.ck-btn-main:disabled{opacity:.4;cursor:not-allowed}
+.ck-prog{height:6px;background:var(--card);border-radius:3px;overflow:hidden;margin-top:8px;display:none}
+.ck-prog i{display:block;height:100%;width:0;background:#4ade80;transition:width .2s}
+.ck-color{width:34px;height:28px;padding:0;border:1px solid var(--bdr);border-radius:6px;background:var(--card);cursor:pointer}
+@media(max-width:640px){.ck-ctl{grid-template-columns:1fr 1fr}}
 .canh-bao{background:var(--card2);border:1px solid var(--red);border-radius:7px;padding:10px;font-size:11px;color:var(--red);line-height:1.7;margin-bottom:12px;display:none}
 .prog-wrap{background:var(--card);border:1px solid var(--bdr);border-radius:8px;padding:11px 13px;margin-bottom:14px}
 .prog-title{font-size:10px;color:var(--gold);letter-spacing:1.2px;text-transform:uppercase;margin-bottom:9px}
@@ -297,6 +324,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <button class="tab" onclick="sw('director')" style="border-color:#f59e0b;color:#f59e0b">🎬 Director</button>
   <button class="tab" onclick="sw('out')">📋 Xuất Prompt</button>
   <button class="tab" onclick="sw('lib')">📚 Thư Viện</button>
+  <button class="tab" onclick="sw('chroma')" style="color:#4ade80">🟩 Phông Xanh</button>
 </div>
 
 <!-- ===== KHUNG SƯỜN ===== -->
@@ -2882,6 +2910,155 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <!-- PROMPT CARDS -->
   <div id="lib-cards" style="display:flex;flex-direction:column;gap:8px">
     <div style="text-align:center;padding:40px;color:var(--muted);font-size:12px;font-style:italic">Đang tải thư viện...</div>
+  </div>
+
+</div>
+
+<!-- ===== CHROMA KEY — GHÉP VIDEO PHÔNG XANH VÀO ẢNH NỀN ===== -->
+<div class="pane" id="p-chroma">
+
+  <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px;margin-bottom:14px">
+    <div>
+      <div style="font-size:13px;font-weight:500;color:var(--ink);margin-bottom:2px">🟩 Ghép Video Phông Xanh vào Ảnh Nền</div>
+      <div style="font-size:10px;color:var(--muted)">Chroma key chạy ngay trên trình duyệt (WebGL) · Hỗ trợ phông xanh lá &amp; xanh dương · Không upload lên server</div>
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <button class="ck-btn" onclick="ckReset()">↺ Đặt lại thông số</button>
+    </div>
+  </div>
+
+  <!-- INPUTS -->
+  <div class="r2" style="gap:10px;margin-bottom:12px">
+    <div class="ck-box" style="margin:0">
+      <div class="ck-title">① Video phông xanh <span class="lbl-req">*bắt buộc</span></div>
+      <div class="ck-drop" id="ck-drop-video" onclick="document.getElementById('ck-file-video').click()">
+        <div style="font-size:22px">🎬</div>
+        <div style="font-size:11px;color:var(--ink)">Chọn hoặc kéo-thả video (.mp4 / .mov / .webm)</div>
+        <div class="ck-fn" id="ck-video-info">Quay trước phông xanh lá hoặc xanh dương</div>
+      </div>
+      <input type="file" id="ck-file-video" accept="video/*" style="display:none" onchange="ckNapVideo(this.files[0]);this.value=''">
+    </div>
+    <div class="ck-box" style="margin:0">
+      <div class="ck-title">② Ảnh nền <span class="lbl-req">*bắt buộc</span></div>
+      <div class="ck-drop" id="ck-drop-bg" onclick="document.getElementById('ck-file-bg').click()">
+        <div style="font-size:22px">🖼️</div>
+        <div style="font-size:11px;color:var(--ink)">Chọn hoặc kéo-thả ảnh nền (.jpg / .png / .webp)</div>
+        <div class="ck-fn" id="ck-bg-info">Có thể dùng ảnh bối cảnh đã tạo ở tab Dựng Cảnh</div>
+      </div>
+      <input type="file" id="ck-file-bg" accept="image/*" style="display:none" onchange="ckNapAnhNen(this.files[0]);this.value=''">
+    </div>
+  </div>
+
+  <!-- PREVIEW -->
+  <div class="ck-box">
+    <div class="ck-title" style="justify-content:space-between">
+      <span>③ Xem trước kết quả</span>
+      <span style="display:flex;gap:5px;flex-wrap:wrap">
+        <button class="ck-btn" id="ck-btn-pick" onclick="ckBatHutMau()" title="Bấm rồi click vào vùng phông trong khung hình để lấy màu key">💧 Hút màu phông</button>
+        <button class="ck-btn" onclick="ckTuDongMau()" title="Tự dò màu phông từ viền khung hình">🎯 Tự dò màu</button>
+        <button class="ck-btn" id="ck-btn-matte" onclick="ckToggleMatte()" title="Xem mặt nạ alpha (trắng = giữ, đen = bỏ)">◐ Xem matte</button>
+      </span>
+    </div>
+    <div class="ck-stage" id="ck-stage">
+      <canvas id="ck-canvas" width="640" height="360"></canvas>
+      <div class="ck-empty" id="ck-empty">Chọn video phông xanh và ảnh nền để bắt đầu.<br>Mẹo: bấm <b>💧 Hút màu phông</b> rồi click vào vùng phông trên khung hình nếu màu key chưa đúng.</div>
+    </div>
+    <div class="ck-trans">
+      <button class="ck-btn" id="ck-btn-play" onclick="ckPlayPause()" disabled>▶ Phát</button>
+      <input type="range" id="ck-seek" min="0" max="1000" value="0" oninput="ckTua(this.value)" disabled>
+      <span id="ck-time" style="font-size:10px;color:var(--muted);min-width:90px;text-align:right">0:00.0 / 0:00.0</span>
+      <button class="ck-btn" id="ck-btn-mute" onclick="ckToggleMute()" disabled>🔊</button>
+    </div>
+    <div id="ck-status" style="font-size:10px;color:var(--muted);margin-top:6px;min-height:14px"></div>
+  </div>
+
+  <!-- CONTROLS -->
+  <div class="r2" style="gap:10px;margin-bottom:12px">
+    <div class="ck-box" style="margin:0">
+      <div class="ck-title">④ Key màu &amp; viền</div>
+      <div class="ck-ctl">
+        <div class="ck-sl">
+          <div class="ck-lb"><span>Màu phông (key)</span><b id="ck-key-hex">#00B140</b></div>
+          <div style="display:flex;gap:6px;align-items:center">
+            <input type="color" class="ck-color" id="ck-key" value="#00b140" oninput="ckDatMauKey(this.value)">
+            <span class="chip" onclick="ckDatMauKey('#00b140')" style="border-color:#1f4a2e;color:#4ade80">Xanh lá</span>
+            <span class="chip" onclick="ckDatMauKey('#0047bb')" style="border-color:#1f2f5a;color:#5b9cf6">Xanh dương</span>
+          </div>
+        </div>
+        <div class="ck-sl"><div class="ck-lb"><span>Ngưỡng key (thấp = key mạnh)</span><b id="ck-v-sim">0.50</b></div><input type="range" class="ck-range" id="ck-sim" min="0.05" max="0.95" step="0.01" value="0.50" oninput="ckThamSo('sim',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Độ mềm viền (smoothness)</span><b id="ck-v-smooth">0.25</b></div><input type="range" class="ck-range" id="ck-smooth" min="0" max="0.6" step="0.01" value="0.25" oninput="ckThamSo('smooth',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Khử ám màu (spill)</span><b id="ck-v-spill">0.60</b></div><input type="range" class="ck-range" id="ck-spill" min="0" max="1" step="0.01" value="0.60" oninput="ckThamSo('spill',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Co viền (choke)</span><b id="ck-v-choke">0.00</b></div><input type="range" class="ck-range" id="ck-choke" min="0" max="0.5" step="0.01" value="0" oninput="ckThamSo('choke',this.value)"></div>
+      </div>
+    </div>
+    <div class="ck-box" style="margin:0">
+      <div class="ck-title">⑤ Vị trí nhân vật &amp; cắt viền</div>
+      <div class="ck-ctl">
+        <div class="ck-sl"><div class="ck-lb"><span>Phóng to / thu nhỏ</span><b id="ck-v-scale">1.00×</b></div><input type="range" class="ck-range" id="ck-scale" min="0.3" max="3" step="0.01" value="1" oninput="ckThamSo('scale',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Dịch ngang</span><b id="ck-v-x">0%</b></div><input type="range" class="ck-range" id="ck-x" min="-1" max="1" step="0.005" value="0" oninput="ckThamSo('x',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Dịch dọc</span><b id="ck-v-y">0%</b></div><input type="range" class="ck-range" id="ck-y" min="-1" max="1" step="0.005" value="0" oninput="ckThamSo('y',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Lật ngang</span></div><div><button class="ck-btn" id="ck-btn-flip" onclick="ckToggleFlip()">↔ Lật</button></div></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Cắt trái</span><b id="ck-v-cl">0%</b></div><input type="range" class="ck-range" id="ck-cl" min="0" max="0.9" step="0.005" value="0" oninput="ckThamSo('cl',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Cắt phải</span><b id="ck-v-cr">0%</b></div><input type="range" class="ck-range" id="ck-cr" min="0" max="0.9" step="0.005" value="0" oninput="ckThamSo('cr',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Cắt trên</span><b id="ck-v-ct">0%</b></div><input type="range" class="ck-range" id="ck-ct" min="0" max="0.9" step="0.005" value="0" oninput="ckThamSo('ct',this.value)"></div>
+        <div class="ck-sl"><div class="ck-lb"><span>Cắt dưới</span><b id="ck-v-cb">0%</b></div><input type="range" class="ck-range" id="ck-cb" min="0" max="0.9" step="0.005" value="0" oninput="ckThamSo('cb',this.value)"></div>
+      </div>
+      <div class="hint" style="margin-top:6px">Dùng “Cắt viền” để loại bỏ marker tracking, chân đèn, mép phông… nằm ngoài nhân vật.</div>
+    </div>
+  </div>
+
+  <!-- OUTPUT -->
+  <div class="ck-box">
+    <div class="ck-title">⑥ Khung hình &amp; xuất file</div>
+    <div class="ck-ctl" style="margin-bottom:10px">
+      <div class="ck-sl">
+        <div class="ck-lb"><span>Tỉ lệ khung xuất</span></div>
+        <select id="ck-aspect" onchange="ckDoiKhung()">
+          <option value="video">Theo video gốc</option>
+          <option value="bg">Theo ảnh nền</option>
+          <option value="16:9">16:9 — Ngang</option>
+          <option value="9:16">9:16 — Dọc (Reels / TikTok)</option>
+          <option value="1:1">1:1 — Vuông</option>
+          <option value="4:5">4:5 — Instagram</option>
+          <option value="21:9">21:9 — Anamorphic</option>
+        </select>
+      </div>
+      <div class="ck-sl">
+        <div class="ck-lb"><span>Độ phân giải</span></div>
+        <select id="ck-res" onchange="ckDoiKhung()">
+          <option value="1080">1080p (Full HD)</option>
+          <option value="720">720p</option>
+          <option value="1440">1440p (2K)</option>
+          <option value="2160">2160p (4K)</option>
+          <option value="src">Theo video gốc</option>
+        </select>
+      </div>
+      <div class="ck-sl">
+        <div class="ck-lb"><span>Ảnh nền hiển thị</span></div>
+        <select id="ck-bgfit" onchange="ckThamSo('bgfit',this.value)">
+          <option value="0">Phủ kín khung (cover)</option>
+          <option value="1">Vừa khung (contain)</option>
+          <option value="2">Kéo giãn (stretch)</option>
+        </select>
+      </div>
+      <div class="ck-sl">
+        <div class="ck-lb"><span>Chất lượng video xuất</span></div>
+        <select id="ck-bitrate">
+          <option value="8">Chuẩn — 8 Mbps</option>
+          <option value="16" selected>Cao — 16 Mbps</option>
+          <option value="30">Rất cao — 30 Mbps</option>
+        </select>
+      </div>
+    </div>
+    <div style="display:flex;gap:7px;flex-wrap:wrap;align-items:center">
+      <button class="ck-btn-main" id="ck-btn-export" onclick="ckXuatVideo()" disabled>🎬 Xuất Video Đã Ghép</button>
+      <button class="ck-btn" id="ck-btn-stop" onclick="ckDungXuat()" style="display:none">■ Dừng</button>
+      <button class="ck-btn" id="ck-btn-png" onclick="ckXuatPNG()" disabled>🖼 Xuất ảnh khung hình (PNG)</button>
+      <span id="ck-export-info" style="font-size:10px;color:var(--muted)"></span>
+    </div>
+    <div class="ck-prog" id="ck-prog"><i id="ck-prog-bar"></i></div>
+    <div id="ck-export-result" style="margin-top:10px;display:none"></div>
+    <div class="hint" style="margin-top:8px">Video được render theo thời gian thực trong trình duyệt (video 3 giây → chờ ~3 giây). Định dạng xuất: MP4 (Safari / Chrome mới) hoặc WebM (Chrome / Firefox) — đều upload được lên Higgsfield, CapCut, Premiere. Giữ tab này mở trong lúc xuất.</div>
   </div>
 
 </div>
@@ -10451,6 +10628,509 @@ themShot();
       <button onclick="boQuaKhoiPhuc()" style="flex:1;padding:9px;border-radius:7px;border:1px solid var(--bdr);background:transparent;color:var(--muted);font-size:12px;font-family:'IBM Plex Mono',monospace;cursor:pointer">✕ Bỏ qua</button>
     </div>
   </div>
+
+<script>
+// =====================================================================
+// CHROMA KEY — GHÉP VIDEO PHÔNG XANH VÀO ẢNH NỀN (WebGL, chạy client-side)
+// =====================================================================
+const CK = {
+  video: null, videoUrl: null, videoName: '', vw: 0, vh: 0, fps: 25,
+  bgImg: null, bgUrl: null, bgName: '',
+  gl: null, prog: null, texVideo: null, texBg: null, uni: {},
+  pickCanvas: null, pickCtx: null,
+  raf: 0, lastT: -1, dirty: true, picking: false, showMatte: false, muted: false, flip: false,
+  recorder: null, recChunks: [], recording: false, recMime: '',
+  p: { key: [0, 177/255, 64/255], sim: 0.50, smooth: 0.25, spill: 0.60, choke: 0,
+       scale: 1, x: 0, y: 0, cl: 0, cr: 0, ct: 0, cb: 0, bgfit: 0 }
+};
+const CK_DEFAULTS = JSON.parse(JSON.stringify(CK.p));
+
+const CK_VS = `attribute vec2 aPos;varying vec2 vUv;void main(){vUv=aPos*0.5+0.5;gl_Position=vec4(aPos,0.0,1.0);}`;
+const CK_FS = `
+precision mediump float;
+varying vec2 vUv;
+uniform sampler2D uVideo, uBg;
+uniform vec3 uKey;
+uniform float uSim, uSmooth, uSpill, uChoke;
+uniform vec2 uOutSize, uVidSize, uBgSize;
+uniform vec4 uCrop;          /* left, bottom, right, top (0..1), GL y-up */
+uniform float uFgScale, uFlip, uBgFit, uHasBg, uHasVid, uShowMatte;
+uniform vec2 uFgOffset;
+
+/* scale factor to map output uv -> image uv for cover(0) / contain(1) / stretch(2) */
+vec2 fitScale(vec2 outS, vec2 imgS, float mode){
+  if(mode > 1.5) return vec2(1.0);
+  float outA = outS.x / outS.y, imgA = imgS.x / imgS.y;
+  vec2 s = vec2(1.0);
+  if(mode < 0.5){ if(imgA > outA) s.x = outA / imgA; else s.y = imgA / outA; }
+  else          { if(imgA > outA) s.y = imgA / outA; else s.x = outA / imgA; }
+  return s;
+}
+bool inside01(vec2 p){ return p.x >= 0.0 && p.x <= 1.0 && p.y >= 0.0 && p.y <= 1.0; }
+float colorDiff(vec3 c, vec3 key){
+  if(key.g >= key.r && key.g >= key.b) return c.g - max(c.r, c.b);
+  if(key.b >= key.r && key.b >= key.g) return c.b - max(c.r, c.g);
+  return c.r - max(c.g, c.b);
+}
+vec3 despill(vec3 c, vec3 key, float amt){
+  if(key.g >= key.r && key.g >= key.b){ float m = max(c.r, c.b); c.g = mix(c.g, min(c.g, m), amt); }
+  else if(key.b >= key.r && key.b >= key.g){ float m = max(c.r, c.g); c.b = mix(c.b, min(c.b, m), amt); }
+  else { float m = max(c.g, c.b); c.r = mix(c.r, min(c.r, m), amt); }
+  return c;
+}
+void main(){
+  /* --- background --- */
+  vec3 bg;
+  if(uHasBg > 0.5){
+    vec2 buv = (vUv - 0.5) * fitScale(uOutSize, uBgSize, uBgFit) + 0.5;
+    bg = inside01(buv) ? texture2D(uBg, buv).rgb : vec3(0.0);
+  } else {
+    /* checkerboard = transparent */
+    vec2 g = floor(vUv * uOutSize / 24.0);
+    float ch = mod(g.x + g.y, 2.0);
+    bg = mix(vec3(0.10), vec3(0.16), ch);
+  }
+  /* --- foreground (video) --- */
+  float alpha = 0.0; vec3 fg = vec3(0.0);
+  if(uHasVid > 0.5){
+    vec2 fuv = (vUv - 0.5 - uFgOffset) / uFgScale;
+    fuv = fuv * fitScale(uOutSize, uVidSize, 1.0) + 0.5;
+    if(uFlip > 0.5) fuv.x = 1.0 - fuv.x;
+    bool inCrop = fuv.x >= uCrop.x && fuv.x <= 1.0 - uCrop.z && fuv.y >= uCrop.y && fuv.y <= 1.0 - uCrop.w;
+    if(inside01(fuv) && inCrop){
+      fg = texture2D(uVideo, fuv).rgb;
+      /* colour-difference key (Keylight style): how strongly the pixel leans toward the
+         screen's dominant channel, normalised by the key colour itself. ~1 = screen, <=0 = subject.
+         Robust for dark clothing, which a plain chroma-distance key tends to eat. */
+      float t = colorDiff(fg, uKey) / max(colorDiff(uKey, uKey), 0.02);
+      alpha = 1.0 - smoothstep(uSim, uSim + max(uSmooth, 0.001), t);
+      /* choke: push partially transparent edge pixels further toward transparent */
+      alpha = clamp((alpha - uChoke) / max(1.0 - uChoke, 0.001), 0.0, 1.0);
+      fg = despill(fg, uKey, uSpill);
+    }
+  }
+  vec3 col = mix(bg, fg, alpha);
+  if(uShowMatte > 0.5) col = vec3(alpha);
+  gl_FragColor = vec4(col, 1.0);
+}`;
+
+function ckStatus(msg, color){
+  const el = document.getElementById('ck-status');
+  if(el){ el.textContent = msg || ''; el.style.color = color || 'var(--muted)'; }
+}
+
+function ckInitGL(){
+  if(CK.gl) return true;
+  const canvas = document.getElementById('ck-canvas');
+  const gl = canvas.getContext('webgl', { preserveDrawingBuffer: true, premultipliedAlpha: false, antialias: false })
+          || canvas.getContext('experimental-webgl', { preserveDrawingBuffer: true });
+  if(!gl){ ckStatus('❌ Trình duyệt không hỗ trợ WebGL.', 'var(--red)'); return false; }
+  const mk = (type, src) => {
+    const s = gl.createShader(type); gl.shaderSource(s, src); gl.compileShader(s);
+    if(!gl.getShaderParameter(s, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(s));
+    return s;
+  };
+  const prog = gl.createProgram();
+  gl.attachShader(prog, mk(gl.VERTEX_SHADER, CK_VS));
+  gl.attachShader(prog, mk(gl.FRAGMENT_SHADER, CK_FS));
+  gl.linkProgram(prog);
+  if(!gl.getProgramParameter(prog, gl.LINK_STATUS)) throw new Error(gl.getProgramInfoLog(prog));
+  gl.useProgram(prog);
+  const buf = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1,-1, 1,-1, -1,1, 1,1]), gl.STATIC_DRAW);
+  const aPos = gl.getAttribLocation(prog, 'aPos');
+  gl.enableVertexAttribArray(aPos);
+  gl.vertexAttribPointer(aPos, 2, gl.FLOAT, false, 0, 0);
+  ['uVideo','uBg','uKey','uSim','uSmooth','uSpill','uChoke','uOutSize','uVidSize','uBgSize','uCrop','uFgScale','uFlip','uBgFit','uHasBg','uHasVid','uShowMatte','uFgOffset']
+    .forEach(n => CK.uni[n] = gl.getUniformLocation(prog, n));
+  const mkTex = (unit) => {
+    const t = gl.createTexture();
+    gl.activeTexture(gl.TEXTURE0 + unit); gl.bindTexture(gl.TEXTURE_2D, t);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0,0,0,255]));
+    return t;
+  };
+  CK.texVideo = mkTex(0); CK.texBg = mkTex(1);
+  gl.uniform1i(CK.uni.uVideo, 0); gl.uniform1i(CK.uni.uBg, 1);
+  gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+  CK.gl = gl; CK.prog = prog;
+  CK.pickCanvas = document.createElement('canvas');
+  CK.pickCtx = CK.pickCanvas.getContext('2d', { willReadFrequently: true });
+  return true;
+}
+
+function ckUploadBg(){
+  if(!CK.gl || !CK.bgImg) return;
+  const gl = CK.gl;
+  gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, CK.texBg);
+  gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, CK.bgImg);
+  CK.dirty = true;
+}
+
+function ckUploadVideoFrame(force){
+  const v = CK.video, gl = CK.gl;
+  if(!v || !gl || v.readyState < 2) return false;
+  if(!force && v.currentTime === CK.lastT && !v.seeking) return false;
+  gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, CK.texVideo);
+  try { gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, v); }
+  catch(e){ return false; }
+  CK.lastT = v.currentTime;
+  return true;
+}
+
+function ckRender(){
+  const gl = CK.gl; if(!gl) return;
+  const canvas = gl.canvas, p = CK.p;
+  gl.viewport(0, 0, canvas.width, canvas.height);
+  gl.uniform3f(CK.uni.uKey, p.key[0], p.key[1], p.key[2]);
+  gl.uniform1f(CK.uni.uSim, p.sim); gl.uniform1f(CK.uni.uSmooth, p.smooth);
+  gl.uniform1f(CK.uni.uSpill, p.spill); gl.uniform1f(CK.uni.uChoke, p.choke);
+  gl.uniform2f(CK.uni.uOutSize, canvas.width, canvas.height);
+  gl.uniform2f(CK.uni.uVidSize, CK.vw || 16, CK.vh || 9);
+  gl.uniform2f(CK.uni.uBgSize, CK.bgImg ? CK.bgImg.naturalWidth : 16, CK.bgImg ? CK.bgImg.naturalHeight : 9);
+  gl.uniform4f(CK.uni.uCrop, p.cl, p.cb, p.cr, p.ct);
+  gl.uniform1f(CK.uni.uFgScale, p.scale);
+  gl.uniform2f(CK.uni.uFgOffset, p.x * 0.5, -p.y * 0.5);
+  gl.uniform1f(CK.uni.uFlip, CK.flip ? 1 : 0);
+  gl.uniform1f(CK.uni.uBgFit, p.bgfit);
+  gl.uniform1f(CK.uni.uHasBg, CK.bgImg ? 1 : 0);
+  gl.uniform1f(CK.uni.uHasVid, (CK.video && CK.video.readyState >= 2) ? 1 : 0);
+  gl.uniform1f(CK.uni.uShowMatte, CK.showMatte ? 1 : 0);
+  gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
+  CK.dirty = false;
+}
+
+function ckLoop(){
+  CK.raf = requestAnimationFrame(ckLoop);
+  const v = CK.video;
+  const newFrame = ckUploadVideoFrame(false);
+  if(newFrame || CK.dirty) ckRender();
+  if(v && v.currentTime !== CK.shownT){
+    CK.shownT = v.currentTime;
+    const seek = document.getElementById('ck-seek');
+    if(seek && !seek.matches(':active') && v.duration) seek.value = Math.round(v.currentTime / v.duration * 1000);
+    const t = document.getElementById('ck-time');
+    if(t) t.textContent = ckFmtTime(v.currentTime) + ' / ' + ckFmtTime(v.duration || 0);
+  }
+}
+function ckStartLoop(){ if(!CK.raf) ckLoop(); }
+function ckFmtTime(s){ const m = Math.floor(s / 60), r = s - m * 60; return m + ':' + (r < 10 ? '0' : '') + r.toFixed(1); }
+
+/* ---------- Inputs ---------- */
+function ckNapVideo(file){
+  if(!file) return;
+  if(!ckInitGL()) return;
+  if(CK.videoUrl) URL.revokeObjectURL(CK.videoUrl);
+  if(CK.video){ CK.video.pause(); CK.video.removeAttribute('src'); CK.video.load(); }
+  const v = document.createElement('video');
+  v.playsInline = true; v.preload = 'auto'; v.crossOrigin = 'anonymous'; v.muted = CK.muted; v.loop = false;
+  CK.video = v; CK.videoName = file.name; CK.videoUrl = URL.createObjectURL(file); CK.lastT = -1;
+  ckStatus('⏳ Đang nạp video...');
+  v.addEventListener('loadedmetadata', () => {
+    CK.vw = v.videoWidth; CK.vh = v.videoHeight;
+    document.getElementById('ck-video-info').textContent = file.name + ' — ' + CK.vw + '×' + CK.vh + ' · ' + ckFmtTime(v.duration);
+    const drop = document.getElementById('ck-drop-video');
+    drop.innerHTML = '<video src="' + CK.videoUrl + '" muted playsinline></video><div class="ck-fn">' + file.name + ' — ' + CK.vw + '×' + CK.vh + ' · ' + ckFmtTime(v.duration) + '</div>';
+    ['ck-btn-play','ck-seek','ck-btn-mute','ck-btn-png'].forEach(id => document.getElementById(id).disabled = false);
+    document.getElementById('ck-btn-export').disabled = !CK.bgImg;
+    document.getElementById('ck-empty').style.display = 'none';
+    ckDoiKhung();
+  });
+  v.addEventListener('loadeddata', () => {
+    ckUploadVideoFrame(true); CK.dirty = true; ckStartLoop();
+    ckTuDongMau(true);
+    ckStatus('✅ Video đã sẵn sàng. Màu phông được dò tự động từ viền khung hình — chỉnh lại bằng 💧 nếu cần.', 'var(--green)');
+  });
+  v.addEventListener('seeked', () => { ckUploadVideoFrame(true); CK.dirty = true; });
+  v.addEventListener('play', () => { document.getElementById('ck-btn-play').textContent = '❚❚ Dừng'; });
+  v.addEventListener('pause', () => { document.getElementById('ck-btn-play').textContent = '▶ Phát'; });
+  v.addEventListener('ended', () => { if(CK.recording) ckKetThucGhi(); });
+  v.addEventListener('error', () => ckStatus('❌ Không đọc được video này. Thử xuất lại sang MP4 (H.264).', 'var(--red)'));
+  v.src = CK.videoUrl;
+  v.load();
+}
+
+function ckNapAnhNen(file){
+  if(!file) return;
+  if(!ckInitGL()) return;
+  if(CK.bgUrl) URL.revokeObjectURL(CK.bgUrl);
+  const img = new Image();
+  CK.bgUrl = URL.createObjectURL(file); CK.bgName = file.name;
+  img.onload = () => {
+    CK.bgImg = img;
+    document.getElementById('ck-drop-bg').innerHTML = '<img src="' + CK.bgUrl + '"><div class="ck-fn">' + file.name + ' — ' + img.naturalWidth + '×' + img.naturalHeight + '</div>';
+    document.getElementById('ck-empty').style.display = 'none';
+    document.getElementById('ck-btn-export').disabled = !(CK.video && CK.video.readyState >= 1);
+    ckUploadBg();
+    ckDoiKhung();
+    ckStartLoop();
+  };
+  img.onerror = () => ckStatus('❌ Không đọc được ảnh nền.', 'var(--red)');
+  img.src = CK.bgUrl;
+}
+
+/* ---------- Output frame size ---------- */
+function ckDoiKhung(){
+  if(!CK.gl) return;
+  const asp = document.getElementById('ck-aspect').value;
+  const res = document.getElementById('ck-res').value;
+  let ratio;
+  if(asp === 'video') ratio = (CK.vw && CK.vh) ? CK.vw / CK.vh : 16/9;
+  else if(asp === 'bg') ratio = CK.bgImg ? CK.bgImg.naturalWidth / CK.bgImg.naturalHeight : 16/9;
+  else { const [a,b] = asp.split(':').map(Number); ratio = a / b; }
+  let shortSide = res === 'src' ? Math.min(CK.vw || 1080, CK.vh || 1920) : parseInt(res, 10);
+  let w, h;
+  if(ratio >= 1){ h = shortSide; w = Math.round(h * ratio); } else { w = shortSide; h = Math.round(w / ratio); }
+  w -= w % 2; h -= h % 2;
+  const max = Math.min(CK.gl.getParameter(CK.gl.MAX_TEXTURE_SIZE), CK.gl.getParameter(CK.gl.MAX_RENDERBUFFER_SIZE), 4096);
+  if(w > max || h > max){ const k = max / Math.max(w, h); w = Math.floor(w * k / 2) * 2; h = Math.floor(h * k / 2) * 2; }
+  const canvas = CK.gl.canvas;
+  canvas.width = w; canvas.height = h;
+  canvas.style.aspectRatio = w + ' / ' + h;
+  document.getElementById('ck-export-info').textContent = 'Khung xuất: ' + w + '×' + h;
+  CK.dirty = true;
+}
+
+/* ---------- Params ---------- */
+function ckThamSo(k, val){
+  const v = parseFloat(val);
+  CK.p[k] = v;
+  const lbl = document.getElementById('ck-v-' + k);
+  if(lbl){
+    if(k === 'scale') lbl.textContent = v.toFixed(2) + '×';
+    else if(['x','y','cl','cr','ct','cb'].includes(k)) lbl.textContent = Math.round(v * 100) + '%';
+    else lbl.textContent = v.toFixed(2);
+  }
+  CK.dirty = true;
+}
+function ckHexToRgb01(hex){ const n = parseInt(hex.replace('#',''), 16); return [((n>>16)&255)/255, ((n>>8)&255)/255, (n&255)/255]; }
+function ckRgbToHex(r,g,b){ return '#' + [r,g,b].map(x => Math.round(Math.max(0, Math.min(255, x))).toString(16).padStart(2,'0')).join('').toUpperCase(); }
+function ckDatMauKey(hex){
+  CK.p.key = ckHexToRgb01(hex);
+  document.getElementById('ck-key').value = hex.toLowerCase();
+  document.getElementById('ck-key-hex').textContent = hex.toUpperCase();
+  CK.dirty = true;
+}
+function ckToggleFlip(){ CK.flip = !CK.flip; document.getElementById('ck-btn-flip').classList.toggle('on', CK.flip); CK.dirty = true; }
+function ckToggleMatte(){ CK.showMatte = !CK.showMatte; document.getElementById('ck-btn-matte').classList.toggle('on', CK.showMatte); CK.dirty = true; }
+function ckToggleMute(){
+  CK.muted = !CK.muted; if(CK.video) CK.video.muted = CK.muted;
+  document.getElementById('ck-btn-mute').textContent = CK.muted ? '🔇' : '🔊';
+}
+function ckReset(){
+  Object.assign(CK.p, JSON.parse(JSON.stringify(CK_DEFAULTS)));
+  CK.flip = false; CK.showMatte = false;
+  document.getElementById('ck-btn-flip').classList.remove('on');
+  document.getElementById('ck-btn-matte').classList.remove('on');
+  [['sim',CK.p.sim],['smooth',CK.p.smooth],['spill',CK.p.spill],['choke',CK.p.choke],['scale',CK.p.scale],['x',0],['y',0],['cl',0],['cr',0],['ct',0],['cb',0]]
+    .forEach(([k,v]) => { const el = document.getElementById('ck-' + k); if(el){ el.value = v; } ckThamSo(k, v); });
+  document.getElementById('ck-bgfit').value = '0';
+  ckDatMauKey('#00b140');
+  if(CK.video && CK.video.readyState >= 2) ckTuDongMau(true);
+}
+
+/* ---------- Key colour sampling ---------- */
+function ckVeFramePick(){
+  const v = CK.video; if(!v || v.readyState < 2) return null;
+  const W = 256, H = Math.max(1, Math.round(256 * CK.vh / CK.vw));
+  CK.pickCanvas.width = W; CK.pickCanvas.height = H;
+  CK.pickCtx.drawImage(v, 0, 0, W, H);
+  return CK.pickCtx.getImageData(0, 0, W, H);
+}
+/* Auto-detect: mode of hue-quantised border pixels (border = outer 8% ring) */
+function ckTuDongMau(silent){
+  const id = ckVeFramePick(); if(!id) return;
+  const { width: W, height: H, data } = id;
+  const bx = Math.max(2, Math.round(W * 0.08)), by = Math.max(2, Math.round(H * 0.08));
+  const bins = new Map();
+  for(let y = 0; y < H; y++) for(let x = 0; x < W; x++){
+    if(x >= bx && x < W - bx && y >= by && y < H - by) continue;
+    const i = (y * W + x) * 4, r = data[i], g = data[i+1], b = data[i+2];
+    const mx = Math.max(r,g,b), mn = Math.min(r,g,b);
+    if(mx - mn < 40) continue;                 // skip grey / white / black (not a screen)
+    const key = (r>>5) + ',' + (g>>5) + ',' + (b>>5);
+    const e = bins.get(key) || { n:0, r:0, g:0, b:0 };
+    e.n++; e.r += r; e.g += g; e.b += b; bins.set(key, e);
+  }
+  let best = null;
+  bins.forEach(e => { if(!best || e.n > best.n) best = e; });
+  if(!best){ if(!silent) ckStatus('⚠️ Không tìm thấy màu phông rõ ràng ở viền. Hãy dùng 💧 Hút màu phông.', '#f59e0b'); return; }
+  const hex = ckRgbToHex(best.r / best.n, best.g / best.n, best.b / best.n);
+  ckDatMauKey(hex);
+  if(!silent) ckStatus('🎯 Đã dò màu phông: ' + hex, 'var(--green)');
+}
+function ckBatHutMau(){
+  if(!CK.video){ ckStatus('Hãy nạp video trước.', '#f59e0b'); return; }
+  CK.picking = !CK.picking;
+  document.getElementById('ck-stage').classList.toggle('picking', CK.picking);
+  document.getElementById('ck-btn-pick').classList.toggle('on', CK.picking);
+  ckStatus(CK.picking ? '💧 Click vào vùng phông trên khung hình để lấy màu key (Esc để huỷ).' : '');
+}
+document.addEventListener('keydown', e => { if(e.key === 'Escape' && CK.picking) ckBatHutMau(); });
+document.getElementById('ck-canvas').addEventListener('click', e => {
+  if(!CK.picking || !CK.video) return;
+  const canvas = e.currentTarget, rect = canvas.getBoundingClientRect();
+  const ux = (e.clientX - rect.left) / rect.width, uy = 1 - (e.clientY - rect.top) / rect.height;   // GL uv (y up)
+  // Inverse of the shader mapping: output uv -> video uv
+  const outA = canvas.width / canvas.height, vidA = CK.vw / CK.vh;
+  let sx = 1, sy = 1; if(vidA > outA) sy = vidA / outA; else sx = outA / vidA;
+  let fx = (ux - 0.5 - CK.p.x * 0.5) / CK.p.scale * sx + 0.5;
+  let fy = (uy - 0.5 + CK.p.y * 0.5) / CK.p.scale * sy + 0.5;
+  if(CK.flip) fx = 1 - fx;
+  if(fx < 0 || fx > 1 || fy < 0 || fy > 1){ ckStatus('⚠️ Điểm này nằm ngoài video. Click vào vùng phông của video.', '#f59e0b'); return; }
+  const id = ckVeFramePick(); if(!id) return;
+  const px = Math.min(id.width - 1, Math.floor(fx * id.width)), py = Math.min(id.height - 1, Math.floor((1 - fy) * id.height));
+  // average 3x3 neighbourhood for stability
+  let r = 0, g = 0, b = 0, n = 0;
+  for(let dy = -1; dy <= 1; dy++) for(let dx = -1; dx <= 1; dx++){
+    const x = px + dx, y = py + dy; if(x < 0 || y < 0 || x >= id.width || y >= id.height) continue;
+    const i = (y * id.width + x) * 4; r += id.data[i]; g += id.data[i+1]; b += id.data[i+2]; n++;
+  }
+  const hex = ckRgbToHex(r/n, g/n, b/n);
+  ckDatMauKey(hex);
+  ckBatHutMau();
+  ckStatus('💧 Màu key: ' + hex, 'var(--green)');
+});
+
+/* ---------- Transport ---------- */
+function ckPlayPause(){
+  const v = CK.video; if(!v) return;
+  if(v.paused){ if(v.ended) v.currentTime = 0; v.play().catch(e => ckStatus('❌ ' + e.message, 'var(--red)')); } else v.pause();
+}
+function ckTua(val){
+  const v = CK.video; if(!v || !v.duration) return;
+  v.currentTime = val / 1000 * v.duration;
+}
+
+/* ---------- Drag & drop ---------- */
+[['ck-drop-video', ckNapVideo, 'video/'], ['ck-drop-bg', ckNapAnhNen, 'image/']].forEach(([id, fn, type]) => {
+  const el = document.getElementById(id); if(!el) return;
+  el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('over'); });
+  el.addEventListener('dragleave', () => el.classList.remove('over'));
+  el.addEventListener('drop', e => {
+    e.preventDefault(); el.classList.remove('over');
+    const f = [...(e.dataTransfer.files || [])].find(f => f.type.startsWith(type)) || e.dataTransfer.files[0];
+    if(f) fn(f);
+  });
+});
+
+/* ---------- Export ---------- */
+function ckChonMime(){
+  const cands = ['video/mp4;codecs=avc1.640028', 'video/mp4;codecs=avc1', 'video/mp4', 'video/webm;codecs=vp9', 'video/webm;codecs=vp8', 'video/webm'];
+  return cands.find(m => window.MediaRecorder && MediaRecorder.isTypeSupported(m)) || '';
+}
+async function ckXuatVideo(){
+  const v = CK.video;
+  if(!v || !CK.bgImg){ ckStatus('Cần cả video phông xanh và ảnh nền.', '#f59e0b'); return; }
+  if(CK.recording) return;
+  if(!window.MediaRecorder){ ckStatus('❌ Trình duyệt không hỗ trợ MediaRecorder. Hãy dùng Chrome / Edge / Safari mới.', 'var(--red)'); return; }
+  const mime = ckChonMime();
+  if(!mime){ ckStatus('❌ Không tìm thấy codec video được hỗ trợ.', 'var(--red)'); return; }
+  const canvas = CK.gl.canvas;
+  if(CK.picking) ckBatHutMau();
+  v.pause();
+  v.currentTime = 0;
+  await new Promise(r => { if(v.seeking) v.addEventListener('seeked', r, { once: true }); else r(); });
+  ckUploadVideoFrame(true); ckRender();
+
+  // Prefer manual frame pushing (one output frame per decoded video frame); fall back to
+  // automatic capture on browsers without requestFrame (Safari).
+  let stream = canvas.captureStream(0);
+  let vTrack = stream.getVideoTracks()[0];
+  if(!vTrack || !vTrack.requestFrame){ stream = canvas.captureStream(30); vTrack = stream.getVideoTracks()[0]; }
+  // audio passthrough from the source video (not supported everywhere)
+  try {
+    const cs = v.captureStream ? v.captureStream() : (v.mozCaptureStream ? v.mozCaptureStream() : null);
+    if(cs) cs.getAudioTracks().forEach(t => stream.addTrack(t));
+  } catch(e) {}
+
+  const bps = parseInt(document.getElementById('ck-bitrate').value, 10) * 1e6;
+  let rec;
+  try { rec = new MediaRecorder(stream, { mimeType: mime, videoBitsPerSecond: bps, audioBitsPerSecond: 192000 }); }
+  catch(e){ rec = new MediaRecorder(stream, { mimeType: mime }); }
+  CK.recorder = rec; CK.recChunks = []; CK.recording = true; CK.recMime = mime;
+  rec.ondataavailable = e => { if(e.data && e.data.size) CK.recChunks.push(e.data); };
+  rec.onstop = ckHoanTatXuat;
+
+  // push a frame to the stream every time the video produces one
+  const pump = () => {
+    if(!CK.recording) return;
+    ckUploadVideoFrame(true); ckRender();
+    if(vTrack.requestFrame) vTrack.requestFrame();
+    if(v.requestVideoFrameCallback) v.requestVideoFrameCallback(pump); else CK.pumpRaf = requestAnimationFrame(pump);
+  };
+
+  document.getElementById('ck-btn-export').disabled = true;
+  document.getElementById('ck-btn-stop').style.display = '';
+  document.getElementById('ck-prog').style.display = 'block';
+  document.getElementById('ck-export-result').style.display = 'none';
+  ckStatus('🎬 Đang render & ghi video... giữ tab này mở.', '#f59e0b');
+
+  CK.progTimer = setInterval(() => {
+    const pct = v.duration ? Math.min(100, v.currentTime / v.duration * 100) : 0;
+    document.getElementById('ck-prog-bar').style.width = pct.toFixed(1) + '%';
+    document.getElementById('ck-export-info').textContent = 'Đang xuất: ' + pct.toFixed(0) + '% · ' + ckFmtTime(v.currentTime) + ' / ' + ckFmtTime(v.duration || 0);
+  }, 100);
+
+  rec.start(250);
+  pump();
+  try { await v.play(); }
+  catch(e){ ckStatus('❌ Không phát được video: ' + e.message, 'var(--red)'); ckKetThucGhi(); }
+}
+function ckKetThucGhi(){
+  if(!CK.recording) return;
+  CK.recording = false;
+  if(CK.pumpRaf) cancelAnimationFrame(CK.pumpRaf);
+  clearInterval(CK.progTimer);
+  if(CK.video) CK.video.pause();
+  // flush the last rendered frame before stopping
+  ckUploadVideoFrame(true); ckRender();
+  setTimeout(() => { try { if(CK.recorder && CK.recorder.state !== 'inactive') CK.recorder.stop(); } catch(e){} }, 150);
+}
+function ckDungXuat(){ ckKetThucGhi(); ckStatus('■ Đã dừng — file chứa phần đã render.', '#f59e0b'); }
+function ckHoanTatXuat(){
+  const blob = new Blob(CK.recChunks, { type: CK.recMime.split(';')[0] });
+  const ext = CK.recMime.startsWith('video/mp4') ? 'mp4' : 'webm';
+  const url = URL.createObjectURL(blob);
+  const base = (CK.videoName || 'video').replace(/\.[^.]+$/, '');
+  const fname = base + '_ghep-nen.' + ext;
+  const mb = (blob.size / 1048576).toFixed(1);
+  const box = document.getElementById('ck-export-result');
+  box.style.display = 'block';
+  box.innerHTML =
+    '<div style="display:flex;gap:10px;flex-wrap:wrap;align-items:flex-start">' +
+      '<video src="' + url + '" controls playsinline style="max-width:360px;width:100%;border-radius:7px;border:1px solid var(--bdr);background:#000"></video>' +
+      '<div style="flex:1;min-width:180px">' +
+        '<div style="font-size:11px;color:var(--green);margin-bottom:6px">✅ Xuất xong — ' + fname + ' (' + mb + ' MB, ' + ext.toUpperCase() + ')</div>' +
+        '<a class="ck-btn-main" download="' + fname + '" href="' + url + '" style="display:inline-block;text-decoration:none">⬇ Tải video về</a>' +
+      '</div>' +
+    '</div>';
+  document.getElementById('ck-btn-export').disabled = false;
+  document.getElementById('ck-btn-stop').style.display = 'none';
+  document.getElementById('ck-prog').style.display = 'none';
+  document.getElementById('ck-prog-bar').style.width = '0%';
+  document.getElementById('ck-export-info').textContent = 'Khung xuất: ' + CK.gl.canvas.width + '×' + CK.gl.canvas.height;
+  ckStatus('✅ Đã xuất video (' + mb + ' MB).', 'var(--green)');
+  CK.recorder = null; CK.recChunks = [];
+}
+function ckXuatPNG(){
+  if(!CK.gl || !CK.video) return;
+  ckUploadVideoFrame(true); ckRender();
+  CK.gl.canvas.toBlob(blob => {
+    if(!blob) return;
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url; a.download = (CK.videoName || 'frame').replace(/\.[^.]+$/, '') + '_frame_' + ckFmtTime(CK.video.currentTime).replace(':','m') + 's.png';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 5000);
+    ckStatus('🖼 Đã xuất ảnh khung hình PNG.', 'var(--green)');
+  }, 'image/png');
+}
+</script>
 
 </body>
 </html>
