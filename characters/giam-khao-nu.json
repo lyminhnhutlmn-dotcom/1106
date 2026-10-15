@@ -1,0 +1,24 @@
+{
+  "id": "giam-khao-nu",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Giám khảo nữ",
+  "function": "Giám khảo đeo kính, vest trắng. Không phải Mrs X, không phải giám khảo khách mời.",
+  "script_lock": "Người phụ nữ đeo kính, vest trắng, mắt sắc sảo, cầm bảng điểm. Gương mặt thân thiện, nụ cười thành thật. Kịch bản không ghi tên và tuổi.",
+  "costume_lock": "Kính kim loại mỏng, búi thấp, vest trắng, áo trong trắng, quần trắng, giày trắng. Tuổi khoảng 45 là khóa sản xuất. Tay buông, không bảng điểm trên sheet.",
+  "skin_lock": "Da trắng sáng, đều, sang. Mặt và kính giữ nguyên.",
+  "views": {
+    "portrait_front": "characters/giam-khao-nu/giam-khao-nu-front.jpg",
+    "body_front": "characters/giam-khao-nu/giam-khao-nu-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "panel",
+      "script": "Đeo kính, vest trắng, mắt sắc, bảng điểm, mặt thân thiện.",
+      "plate": "Vest trắng nguyên bộ, kính, tay không.",
+      "file": "characters/giam-khao-nu/giam-khao-nu-body-front.jpg"
+    }
+  ],
+  "height": "Đầu khớp với thân, khoảng 7,5 đầu. Vai khoảng hai bề ngang đầu, hông gần bằng vai, cổ và chân dài vừa. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Không vẽ bảng điểm. Không trộn với kính đen của Mrs X hay váy đen của giám khảo khách mời."
+}

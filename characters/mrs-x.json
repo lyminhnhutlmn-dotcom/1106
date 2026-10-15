@@ -1,0 +1,46 @@
+{
+  "id": "mrs-x",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Mrs. X",
+  "age": 47,
+  "function": "Nguồn lực đứng sau Nam. Bà trả thù James bằng kế hoạch, tiền và quan hệ, không phải bằng công lý của Hào.",
+  "script_lock": "Kịch bản ghi 50 tuổi. Ở khu VIP bà đeo kính đen, vỗ tay từ tốn. Sau đó cởi kính, lộ mặt thật.",
+  "production_lock": "Hồ sơ nêu khoảng 50–60 vì bà từng bị James lừa tình và tiền trong quá khứ. Sheet trước khóa khoảng 40. Lệnh mới kéo trẻ hơn 2–3 tuổi so với mốc 50. Sheet này khóa khoảng 47. Mặt bám sheet trước, nếp sâu bỏ bớt.",
+  "look": "Thanh lịch, quý phái, quyền lực và giàu. Ánh mắt sắc, điềm tĩnh, lạnh. Trang phục đắt tiền, phụ kiện tinh, không phô trương.",
+  "personality": "Giàu, quan hệ rộng. Lạnh, tính toán, thù dai, kiên nhẫn. Bà không nổi giận nóng. Bà chờ thời cơ và trả thù qua Nam. Tiền và quyền lực là công cụ. Động cơ cá nhân, cách làm bài bản.",
+  "power": "Bà lo chi phí chữa trị cho mẹ Nam và đường giảm án cho Nam, từ đó Nam hành động. Nguồn lực của bà cắt nghĩa video deepfake phát ngay đêm chung kết. Sheet này không vẽ ca mổ, không vẽ phiên tòa, không vẽ mặt trên màn hình LED.",
+  "relations": {
+    "james": "James từng lừa tình và tiền của bà. Hắn không chỉ nhắm các cô gái trẻ. Trên sheet của James, anh chưa biết bà. Bà không đối mặt anh trên giấy.",
+    "nam": "Nam là người thực hiện kế hoạch. Bà là nguồn tiền và quan hệ phía sau.",
+    "hao": "Hào là công lý của công an. Bà là một thứ quyền lực khác: tiền và mối quan hệ. Hai người không cùng một phe trên giấy.",
+    "ong_kim_ong_minh": "Cùng thế giới giải trí thối. Hồ sơ ghi sự phức tạp đó. Không thêm cảnh bà đứng cùng túi tiền của hai ông nếu trang kịch bản chưa có."
+  },
+  "costume_lock": "Vest đen may sắc, cổ lụa đen cao, quần đen, giày cao gót đen mũi nhọn, khuyên ngọc nhỏ, tóc búi thấp. Không kính trên mặt. Kính đen chỉ là đạo cụ chỗ đông, không trộn vào sheet này. Da trắng sáng. Vòng một đầy hơn một chút dưới áo kín.",
+  "views": {
+    "portrait_front": "characters/mrs-x/mrs-x-front.jpg",
+    "portrait_three_quarter_a": "characters/mrs-x/mrs-x-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/mrs-x/mrs-x-portrait-b.jpg",
+    "portrait_profile": "characters/mrs-x/mrs-x-portrait-profile.jpg",
+    "body_front": "characters/mrs-x/mrs-x-body-front.jpg",
+    "body_left": "characters/mrs-x/mrs-x-body-left.jpg",
+    "body_right": "characters/mrs-x/mrs-x-body-right.jpg",
+    "body_back": "characters/mrs-x/mrs-x-body-back.jpg"
+  },
+  "lock_en": "[CHARACTER LOCK — MRS. X]\nVietnamese woman, about 47. Same face as characters/mrs-x/mrs-x-front.jpg. Sharp, calm, cold eyes. Closed mouth. Fair luminous skin, faint lines only. Low black bun, small pearl studs, black tailored suit, black silk turtleneck, black trousers, black pointed pumps. No glasses in this sheet.\nDO NOT GENERATE: surgery, a courtroom, the LED deepfake, or a confrontation with James.",
+  "costumes": [
+    {
+      "id": "revealed",
+      "script": "Sau khi cởi kính: lộ mặt thật.",
+      "plate": "Vest đen, cổ lụa đen, quần đen, giày đen, búi thấp, không kính.",
+      "file": "characters/mrs-x/mrs-x-body-front.jpg"
+    },
+    {
+      "id": "vip",
+      "script": "Khu VIP: đeo kính đen, vỗ tay từ tốn.",
+      "plate": "Cùng bộ vest, thêm kính đen.",
+      "file": "characters/mrs-x/mrs-x-vip.jpg"
+    }
+  ],
+  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao."
+}

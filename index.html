@@ -22,6 +22,26 @@ h1{font-family:'Playfair Display',serif;font-size:22px;font-weight:500;margin-bo
 .tab.sd{color:var(--purple)}.tab.sd.on{color:var(--purple);border-bottom-color:var(--purple)}
 .tab.cg{color:var(--teal)}.tab.cg.on{color:var(--teal);border-bottom-color:var(--teal)}
 .pane{display:none}.pane.on{display:block}
+.wrap.wide{max-width:1440px}
+.board-bar{display:flex;gap:6px;flex-wrap:wrap;align-items:center;margin:10px 0 14px}
+.board-bar button{padding:5px 10px;border-radius:20px;border:1px solid var(--bdr);background:var(--card);color:var(--muted);font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer}
+.board-bar button.on{background:var(--gold);color:#0d0d0d;border-color:var(--gold)}
+.board-jump{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px}
+.board-jump button{padding:3px 8px;border-radius:6px;border:1px solid #3f1d1d;background:#10080a;color:#fecaca;font-size:10px;font-family:'IBM Plex Mono',monospace;cursor:pointer}
+.board-person{border:1px solid var(--bdr);border-radius:10px;padding:12px;background:var(--card);margin-bottom:14px}
+.board-name{font-size:13px;color:var(--gold);margin-bottom:10px}
+.board-row{display:flex;flex-wrap:wrap;gap:12px;align-items:flex-start}
+.board-shot{width:220px;cursor:zoom-in}
+.board-shot img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid #2a2a2a;background:#0a0a0a}
+.board-cap{font-size:11px;color:var(--ink);margin-top:5px}
+.board-note{font-size:9px;color:var(--muted);line-height:1.4;margin-top:2px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.board-locs{display:grid;grid-template-columns:repeat(auto-fill,minmax(420px,1fr));gap:14px}
+.board-loc{cursor:zoom-in}
+.board-loc img{width:100%;height:auto;display:block;border-radius:8px;border:1px solid #2a2a2a;background:#0a0a0a}
+#board-light{display:none;position:fixed;inset:0;background:rgba(0,0,0,.9);z-index:10000;align-items:center;justify-content:center;padding:24px}
+#board-light.on{display:flex}
+#board-light img{max-width:94vw;max-height:90vh;object-fit:contain}
+@media(max-width:720px){.board-shot{width:46%}.board-locs{grid-template-columns:1fr}}
 .sec{margin-bottom:14px}
 .lbl{font-size:10px;font-weight:500;color:var(--gold);letter-spacing:1.3px;text-transform:uppercase;margin-bottom:5px;display:flex;align-items:center;gap:6px}
 .lbl-p{color:var(--purple)}.lbl-t{color:var(--teal)}
@@ -236,7 +256,7 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 </style>
 </head>
 <body>
-<div class="wrap">
+<div class="wrap wide">
 
 <!-- LICENSE BANNER (trial mode) -->
 <div id="license-banner" style="display:none;background:linear-gradient(135deg,#1a0a00,#2a1500);border:1px solid #f59e0b;border-radius:8px;padding:9px 14px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:8px">
@@ -289,7 +309,8 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
 <p class="sub" id="app-sub">// Nhân Vật · Khung Sườn · Kịch Bản AI · Dựng Cảnh · Cảm Xúc · AI Dịch & Cải Thiện</p>
   <div id="autosave-indicator" style="font-size:9px;color:var(--muted);font-family:'IBM Plex Mono',monospace;margin-top:3px;height:14px;transition:color .3s"></div>
 <div class="tabs">
-  <button class="tab on" onclick="sw('char')" id="tab-char">🔒 Nhân Vật</button>
+  <button class="tab on" onclick="sw('board')" id="tab-board">Ảnh</button>
+  <button class="tab" onclick="sw('char')" id="tab-char">🔒 Nhân Vật</button>
   <button class="tab" onclick="sw('fw')">① Khung Sườn</button>
   <button class="tab" onclick="sw('shots')">🎥 Dựng Cảnh</button>
   <button class="tab" onclick="sw('thoai')">💬 Lời Thoại</button>
@@ -298,6 +319,25 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   <button class="tab" onclick="sw('out')">📋 Xuất Prompt</button>
   <button class="tab" onclick="sw('lib')">📚 Thư Viện</button>
 </div>
+
+<!-- ===== BẢNG ẢNH ===== -->
+<div class="pane on" id="p-board">
+  <div style="font-size:13px;font-weight:500;color:var(--gold)">Vương Miện Máu — ảnh khóa</div>
+  <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.6">24 nhân vật, mặt và từng trang phục. 39 bối cảnh trống. Bấm ảnh để xem lớn.</div>
+  <div class="board-bar">
+    <button type="button" class="on" id="board-all" onclick="locBang('all',this)">Tất cả</button>
+    <button type="button" id="board-cast" onclick="locBang('cast',this)">Nhân vật</button>
+    <button type="button" id="board-place" onclick="locBang('place',this)">Bối cảnh</button>
+    <span id="board-count" style="font-size:10px;color:var(--muted)"></span>
+  </div>
+  <div class="board-jump" id="board-jump"></div>
+  <div id="board-cast-wrap"></div>
+  <div id="board-place-wrap" style="margin-top:8px">
+    <div class="board-name">Bối cảnh</div>
+    <div class="board-locs" id="board-locs"></div>
+  </div>
+</div>
+<div id="board-light" onclick="dongAnhLon()"><img id="board-light-img" alt=""></div>
 
 <!-- ===== KHUNG SƯỜN ===== -->
 <!-- KỊCH BẢN AI -->
@@ -2048,11 +2088,31 @@ input[type=range]{width:80px;accent-color:var(--gold);padding:0}
   </div><!-- end emo-nv2-panel -->
 </div>
 <!-- ===== NHÂN VẬT NHẤT QUÁN ===== -->
-<div class="pane on" id="p-char">
+<div class="pane" id="p-char">
 
   <div style="background:linear-gradient(135deg,#0a0a1a,#120a1a);border:1px solid #7c3aed;border-radius:10px;padding:13px 15px;margin-bottom:16px">
     <div style="font-size:13px;font-weight:500;color:#a78bfa;margin-bottom:3px">🔒 Nhân Vật Nhất Quán — Character Consistency</div>
     <div style="font-size:10px;color:var(--muted);line-height:1.7">Vấn đề lớn nhất của AI video: nhân vật thay đổi mặt/ngoại hình giữa các shot. Tab này giúp tạo <strong style="color:#a78bfa">Character Lock Prompt</strong> — đoạn mô tả cực chi tiết để "khóa" nhân vật nhất quán.</div>
+  </div>
+
+  <div id="vmm-james-card" style="background:#10080a;border:1px solid #7f1d1d;border-radius:10px;padding:12px 14px;margin-bottom:14px">
+    <div style="display:flex;align-items:flex-start;justify-content:space-between;gap:8px;flex-wrap:wrap">
+      <div>
+        <div style="font-size:10px;letter-spacing:1px;color:#fca5a5;text-transform:uppercase">Vương Miện Máu · Draft 10</div>
+        <div style="font-size:13px;font-weight:500;color:#fecaca;margin-top:2px">Hồ sơ James — Bùi Văn Mót</div>
+        <div style="font-size:10px;color:var(--muted);margin-top:3px;line-height:1.5">Nạp vào khóa mặt, trang phục mặc định, và ô mô tả nhân vật. Ảnh Seedream bên dưới là khóa mặt. Không tạo một khuôn mặt khác.</div>
+      </div>
+      <div style="display:flex;gap:6px;flex-wrap:wrap">
+        <button type="button" onclick="napHoSoJames()" style="padding:7px 12px;border-radius:7px;border:none;background:#b91c1c;color:#fff;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer;font-weight:500">Nạp hồ sơ James</button>
+        <button type="button" id="vmm-james-copy" onclick="copyHoSoJames()" style="display:none;padding:7px 12px;border-radius:7px;border:1px solid #fca5a5;background:transparent;color:#fca5a5;font-size:11px;font-family:'IBM Plex Mono',monospace;cursor:pointer">Copy hồ sơ</button>
+      </div>
+    </div>
+    <div style="display:flex;gap:10px;align-items:flex-start;flex-wrap:wrap;margin-top:12px">
+      <img src="characters/james-seedream.jpg" alt="James, khóa mặt Seedream, nửa người vest đen" style="display:block;width:min(220px,46%);border-radius:8px;border:1px solid #3f1d1d">
+      <img src="characters/james-full-body.jpg" alt="James toàn thân, từ đầu đến mũi giày" style="display:block;width:min(180px,40%);border-radius:8px;border:1px solid #3f1d1d">
+    </div>
+    <div id="vmm-james-status" style="font-size:10px;color:var(--muted);margin-top:8px">Khóa mặt: Seedream. Khóa toàn thân: vest đen, gile, quần đen, giày tây, từ đỉnh đầu tới mũi giày.</div>
+    <div id="vmm-james-dossier" style="display:none;margin-top:10px;background:#1a0c0e;border:1px solid #3f1d1d;border-radius:8px;padding:10px 12px;max-height:420px;overflow-y:auto"></div>
   </div>
   <!-- UPLOAD ẢNH NHÂN VẬT → AI VIẾT LOCK -->
   <div style="background:#0d0016;border:1px solid #7c3aed;border-radius:10px;padding:12px 14px;margin-bottom:14px">
@@ -2901,7 +2961,10 @@ let kqVI='',kqSD='',kqCG='',dangHien='';
 // ===== TABS =====
 function sw(n){
   if(n==='lib')loadLib();
+  if(n==='board')veBangAnh();
   if(n==='thoai')capNhatTenNhanh();
+  const wrap=document.querySelector('.wrap');
+  if(wrap) wrap.classList.toggle('wide', n==='board');
   // Highlight correct tab by matching onclick attribute
   document.querySelectorAll('.tab').forEach(t=>{
     const fn = t.getAttribute('onclick')||'';
@@ -2911,6 +2974,78 @@ function sw(n){
   // Show correct pane by id
   document.querySelectorAll('.pane').forEach(p=>p.classList.toggle('on',p.id==='p-'+n));
 }
+
+let bangAnh=null;
+function moAnhLon(src, alt){
+  const box=document.getElementById('board-light');
+  const img=document.getElementById('board-light-img');
+  if(!box||!img) return;
+  img.src=src;
+  img.alt=alt||'';
+  box.classList.add('on');
+}
+function dongAnhLon(){
+  const box=document.getElementById('board-light');
+  if(box) box.classList.remove('on');
+}
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') dongAnhLon(); });
+
+function locBang(mode, btn){
+  document.querySelectorAll('.board-bar button').forEach(b=>b.classList.remove('on'));
+  if(btn) btn.classList.add('on');
+  const cast=document.getElementById('board-cast-wrap');
+  const place=document.getElementById('board-place-wrap');
+  const jump=document.getElementById('board-jump');
+  if(cast) cast.style.display = mode==='place' ? 'none' : '';
+  if(place) place.style.display = mode==='cast' ? 'none' : '';
+  if(jump) jump.style.display = mode==='place' ? 'none' : '';
+}
+
+async function veBangAnh(){
+  if(bangAnh) return;
+  const castWrap=document.getElementById('board-cast-wrap');
+  const locWrap=document.getElementById('board-locs');
+  const jump=document.getElementById('board-jump');
+  const count=document.getElementById('board-count');
+  try{
+    const res=await fetch('thu-vien/anh.json');
+    if(!res.ok) throw new Error('Không đọc được thư viện ảnh');
+    bangAnh=await res.json();
+  }catch(e){
+    if(castWrap) castWrap.textContent=e.message;
+    return;
+  }
+  const shots=bangAnh.cast.reduce((n,c)=>n+c.shots.length,0);
+  if(count) count.textContent=bangAnh.cast.length+' nhân vật · '+shots+' ảnh · '+bangAnh.places.length+' bối cảnh';
+  if(jump){
+    jump.innerHTML=bangAnh.cast.map(c=>'<button type="button" onclick="document.getElementById(\'board-'+c.id+'\').scrollIntoView({behavior:\'smooth\',block:\'start\'})">'+c.title+'</button>').join('');
+  }
+  if(castWrap){
+    castWrap.innerHTML=bangAnh.cast.map(c=>{
+      const figs=c.shots.map(s=>{
+        const alt=(c.title+' — '+s.label).replace(/"/g,'');
+        return '<figure class="board-shot" onclick="moAnhLon(this.querySelector(\'img\').src, this.querySelector(\'img\').alt)">'
+          +'<img src="'+s.file+'" alt="'+alt+'" loading="lazy">'
+          +'<figcaption class="board-cap">'+s.label+'</figcaption>'
+          +(s.note?'<div class="board-note">'+s.note+'</div>':'')
+          +'</figure>';
+      }).join('');
+      return '<section class="board-person" id="board-'+c.id+'"><div class="board-name">'+c.title+'</div><div class="board-row">'+figs+'</div></section>';
+    }).join('');
+  }
+  if(locWrap){
+    locWrap.innerHTML=bangAnh.places.map(p=>{
+      const sc=(p.scenes||[]).join(', ');
+      const alt=(p.title+' · cảnh '+sc).replace(/"/g,'');
+      return '<figure class="board-loc" onclick="moAnhLon(this.querySelector(\'img\').src, this.querySelector(\'img\').alt)">'
+        +'<img src="'+p.file+'" alt="'+alt+'" loading="lazy">'
+        +'<figcaption class="board-cap">'+p.title+' · cảnh '+sc+'</figcaption>'
+        +(p.note?'<div class="board-note">'+p.note+'</div>':'')
+        +'</figure>';
+    }).join('');
+  }
+}
+veBangAnh();
 
 // ===== CHIP HANDLERS =====
 document.querySelectorAll('.chip.s,.chip-p.s,.chip-t.s').forEach(c=>{
@@ -6531,6 +6666,110 @@ Bright light-grey seamless studio backdrop, no texture or props. Honest front fl
 
 
 
+
+let hoSoJames = null;
+let hoSoJamesText = '';
+
+function datChipDon(group, label){
+  if(!label) return;
+  let found = false;
+  document.querySelectorAll('[data-g="'+group+'"].s').forEach(el=>{
+    const on = el.textContent.trim() === label;
+    el.classList.toggle('on', on);
+    if(on) found = true;
+  });
+  if(!found) throw new Error('Không thấy chip ' + group + ': ' + label);
+  SS[group] = label;
+}
+
+function dienO(id, value){
+  const el = document.getElementById(id);
+  if(!el) throw new Error('Thiếu ô ' + id);
+  el.value = value || '';
+}
+
+function veHoSoJames(data){
+  const root = document.getElementById('vmm-james-dossier');
+  if(!root) return;
+  const esc = s => String(s).replace(/[&<>]/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;'}[ch]));
+  root.innerHTML = '<div style="font-size:12px;color:#fecaca;margin-bottom:6px">' + esc(data.logline) + '</div>'
+    + data.sections.map(sec =>
+      '<div style="margin-top:10px"><div style="font-size:10px;letter-spacing:.8px;text-transform:uppercase;color:#fca5a5;margin-bottom:4px">' + esc(sec.h) + '</div>'
+      + sec.items.map(item => '<div style="font-size:11px;line-height:1.65;color:var(--ink);margin:0 0 4px 0">• ' + esc(item) + '</div>').join('')
+      + '</div>'
+    ).join('');
+  root.style.display = '';
+}
+
+function hoSoJamesPlain(data){
+  const lines = [
+    data.project + ' · ' + data.draft,
+    data.title + ' / ' + data.legal_name + ' · ' + data.age,
+    data.function,
+    '',
+    data.logline,
+    ''
+  ];
+  data.sections.forEach(sec => {
+    lines.push(sec.h.toUpperCase());
+    sec.items.forEach(item => lines.push('• ' + item));
+    lines.push('');
+  });
+  lines.push('CHARACTER LOCK');
+  lines.push(data.lock_en);
+  return lines.join('\n');
+}
+
+async function napHoSoJames(){
+  const status = document.getElementById('vmm-james-status');
+  if(status) status.textContent = 'Đang nạp hồ sơ...';
+  try{
+    const url = new URL('characters/james.json', window.location.href);
+    const res = await fetch(url);
+    if(!res.ok) throw new Error('Không đọc được characters/james.json (' + res.status + ')');
+    const data = await res.json();
+    const f = data.form;
+    datChipDon('gender', f.gender);
+    datChipDon('age', f.age_chip);
+    datChipDon('nationality', f.nationality);
+    datChipDon('face_shape', f.face_shape);
+    datChipDon('skin_tone', f.skin_tone);
+    datChipDon('eye_color', f.eye_color);
+    datChipDon('eye_shape', f.eye_shape);
+    datChipDon('hair_color', f.hair_color);
+    MM.nationality = [f.nationality];
+    dienO('subject-desc', f.subject);
+    dienO('char-face', f.face);
+    dienO('char-eyes', f.eyes);
+    dienO('char-hair', f.hair);
+    dienO('char-costume', f.costume);
+    dienO('char-mark', f.mark);
+    const wardrobe = document.getElementById('wardrobe-lock');
+    if(wardrobe) wardrobe.value = f.costume;
+    hoSoJames = data;
+    hoSoJamesText = hoSoJamesPlain(data);
+    veHoSoJames(data);
+    charPromptText = data.lock_en;
+    const preview = document.getElementById('char-preview');
+    if(preview) preview.textContent = data.lock_en;
+    ['nut-cp-char','nut-add-char','nut-char-sheet','vmm-james-copy'].forEach(id=>{
+      const el = document.getElementById(id);
+      if(el) el.style.display = '';
+    });
+    if(typeof capNhatMakeupUI === 'function') capNhatMakeupUI();
+    capNhat();
+    if(status) status.textContent = 'Đã nạp James. Khóa mặt nằm ở tab này. Ô mô tả nhân vật ở Khung Sườn đã được điền. Tên Bùi Văn Mót chỉ dùng sau đêm chung kết.';
+  }catch(e){
+    if(status) status.textContent = 'Lỗi: ' + e.message;
+  }
+}
+
+function copyHoSoJames(){
+  if(!hoSoJamesText) return;
+  robustCopy(hoSoJamesText);
+  const b = document.getElementById('vmm-james-copy');
+  if(b){ const o = b.textContent; b.textContent = 'Đã copy'; setTimeout(()=>{ b.textContent = o; }, 1600); }
+}
 
 function taoCharPrompt(){
   const {nv, wardrobe} = layChung();

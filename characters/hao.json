@@ -1,0 +1,44 @@
+{
+  "id": "hao",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Hào",
+  "age": "33",
+  "height_cm": 160,
+  "weight_kg": 90,
+  "function": "Tuyến hài. Tài xế cao 1,6 m, nặng 90 kg, cười dễ. Cuối phim là công an, và là người đánh khống chế James ở hậu trường.",
+  "comedy_action": "Điện thoại game trượt, kẹp vào bụng. Chắn máy Quân bằng cả tấm lưng, miệng như đang xin lỗi. Nghe lén thì bụng chạm cửa. Trận cảnh 96: đòn của James đi qua vai vì anh thấp, một cú đá thấp, rồi mới hết cười.",
+  "script_lock": "Kịch bản ghi 33 tuổi và chữ nghiêm nghị. Mở cửa xe, hút thuốc, chắn ống kính Quân, nghe lén, rồi bắt James ở hậu trường đêm chung kết. Cảnh 101 mặc trang phục cảnh sát. Câu bắt giữ gọi đúng tên Bùi Văn Mót.",
+  "production_lock": "Khóa mới: cao 1,6 m, nặng 90 kg, bụng vừa, hài hước. Không nặng hơn 90 kg. Chữ nghiêm nghị của draft nhường cho nụ cười tài xế. Nụ cười tắt ở câu bắt giữ.",
+  "costume_lock": "Sheet mặc định: vest đen hơi chật ở bụng, sơ mi trắng không cà vạt, quần đen, giày tây đen. Không huy hiệu. Bộ cảnh sát là trạng thái riêng, cùng thân hình 90 kg.",
+  "face_lock": "Hào, 33 tuổi. Mặt tròn, má đầy, ngấn cổ nhỏ, tóc đen ngắn. Da tự nhiên. Nụ cười nhỏ, mắt hiền. Không kính.",
+  "look": "Cao 1,6 m, nặng 90 kg. Bụng vừa, ngực đầy, cổ dày, chân ngắn. Đầu khớp với thân. Trông như tài xế hay cười, không phải người đánh đấm.",
+  "personality": "Vụng đúng lúc, cười đúng lúc, nghe đủ câu. Kiên nhẫn trong vai tài xế. Khi ra tay thì ngắn, thấp, và chính xác.",
+  "role": "Tuyến hài đi suốt cuộc thi. Ghế lái đưa anh sát James. Đêm chung kết, chính người mà James gọi ra xe là người còng anh. Công an có mặt vì Hào đã ở trong xe từ đầu.",
+  "relations": {
+    "james": "James khóa 38–40. James tưởng Hào là tài xế. Cảnh 96, James đánh, Hào khống chế. Trên sheet của James, anh chưa biết Hào là công an cho tới câu bắt giữ.",
+    "nam": "Hào là phía công an nghe lời khai. Một bên thi hành pháp luật, một bên phạm tội nhưng giúp vạch tội lớn hơn.",
+    "mrs_x": "Hào là công an. Mrs. X là tiền và quan hệ. Hai người không cùng phe."
+  },
+  "views": {
+    "portrait_front": "characters/hao/hao-front.jpg",
+    "body_front": "characters/hao/hao-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "driver",
+      "script": "Mở cửa xe, chắn ống kính, chơi game, nghe lén. Kịch bản không ghi thân hình.",
+      "plate": "Vest đen, sơ mi trắng, 1,6 m, 90 kg, nụ cười nhỏ. Không huy hiệu.",
+      "file": "characters/hao/hao-body-front.jpg"
+    },
+    {
+      "id": "police",
+      "script": "Cảnh 101: trang phục cảnh sát.",
+      "plate": "Áo và quần xanh navy, cùng thân hình 1,6 m và 90 kg. Miệng khép. Không chữ, không số, không vũ khí.",
+      "file": "characters/hao/hao-police.jpg"
+    }
+  ],
+  "not_imaged": "Không có ảnh trận đánh, không có còng, không có vũ khí, không có hiện trường bãi đất.",
+  "lock_en": "[CHARACTER LOCK — HÀO]\nVietnamese man, 33, 160 cm, 90 kg, no heavier. Round face, soft cheeks, short black hair, natural warm skin, small easy smile.\nBODY: stocky, moderate belly, thick neck, short legs. Head matches the body. Not extremely obese.\nDEFAULT: black suit with a little strain at the belly, white open-collar shirt, no tie, black shoes. No badge.\nPOLICE STATE: same 90 kg body, dark navy uniform, closed mouth, empty hands, no weapon, no text.\nDO NOT GENERATE: the fight, handcuffs, a weapon, or the grave.",
+  "height": "Cao 1,6 m. Nặng 90 kg, không hơn. Bụng vừa, chân ngắn, đầu khớp thân. Đây là khóa số đo của Hào."
+}

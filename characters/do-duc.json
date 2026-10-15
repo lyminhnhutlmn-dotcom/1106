@@ -1,0 +1,25 @@
+{
+  "id": "do-duc",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Đỗ Đức",
+  "age": 40,
+  "function": "Đạo diễn. Đứng ở bàn control, trao đổi ánh mắt với James.",
+  "comedy_action": "Fader nhảy một nấc. Hạ bằng một ngón trỏ, mắt không rời sân khấu, không giải thích.",
+  "script_lock": "ĐẠO DIỄN ĐỨC ĐỖ (40), cũng gọi Đỗ Đức. Đứng bàn control. Kịch bản không mô tả quần áo.",
+  "costume_lock": "Sơ mi đen, quần đen, giày tây đen, không vest, không cà vạt. Màu là khóa sản xuất. Da tự nhiên, không phải da sứ.",
+  "views": {
+    "portrait_front": "characters/do-duc/do-duc-front.jpg",
+    "body_front": "characters/do-duc/do-duc-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "control",
+      "script": "Đứng ở bàn control, 40 tuổi. Không mô tả áo.",
+      "plate": "Sơ mi đen, quần đen. Tay buông, không bàn điều khiển trong khung.",
+      "file": "characters/do-duc/do-duc-body-front.jpg"
+    }
+  ],
+  "height": "Đầu khớp với thân, khoảng 7,5 đầu. Vai khoảng hai bề ngang đầu, hông gần bằng vai, cổ và chân dài vừa. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Không vẽ bàn control, không trộn với vest của James."
+}

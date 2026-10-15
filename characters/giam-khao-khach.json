@@ -1,0 +1,24 @@
+{
+  "id": "giam-khao-khach",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Giám khảo khách mời",
+  "function": "Celeb hạng A. Trao sash và hoa cho Thúy Hằng. Mặt thân thiện, không đeo kính.",
+  "script_lock": "Giám Khảo Khách Mời Nữ là celeb hạng A. Tập trung, chuyên nghiệp, gương mặt thân thiện. Lên trao sash và hoa. Kịch bản không ghi tên, tuổi, và không mô tả váy.",
+  "costume_lock": "Váy đen cột, búi thấp, khuyên nhỏ, không kính. Màu váy và tuổi khoảng 38 là khóa sản xuất. Tay buông, không sash, không hoa, không vương miện.",
+  "skin_lock": "Da trắng sáng, đều, sang. Mặt giữ nguyên, tách khỏi giám khảo vest trắng.",
+  "views": {
+    "portrait_front": "characters/giam-khao-khach/giam-khao-khach-front.jpg",
+    "body_front": "characters/giam-khao-khach/giam-khao-khach-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "panel",
+      "script": "Celeb hạng A, mặt thân thiện. Không mô tả áo.",
+      "plate": "Váy đen. Màu là khóa sản xuất. Tay không.",
+      "file": "characters/giam-khao-khach/giam-khao-khach-body-front.jpg"
+    }
+  ],
+  "height": "Đầu khớp với thân, khoảng 7,5 đầu. Vai khoảng hai bề ngang đầu, hông gần bằng vai, cổ và chân dài vừa. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Không vẽ sash, hoa, hay giây phút trao giải."
+}

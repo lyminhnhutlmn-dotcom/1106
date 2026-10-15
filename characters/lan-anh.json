@@ -1,0 +1,63 @@
+{
+  "id": "lan-anh",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Đinh Thị Lan Anh",
+  "age": "24-26",
+  "sbd": "012",
+  "hometown": "Đồng Tháp",
+  "dob_on_sole": "22.08.1996",
+  "function": "Top 1 Miss Trending Global 2026, SBD 012. Đối trọng cùng tuổi với Minh Châu: một bên vì công lý, một bên vì danh vọng và tiền.",
+  "script_lock": "Kịch bản mở bằng dòng (26), vẻ sắc xảo, gương mặt trải đời. Đêm chung kết: váy trắng lệch vai. Giày cao gót đính hạt, James nhìn thấy đôi giày đen. Đế khắc ĐINH THỊ LAN ANH 22.08.1996. Chữ trên đế không hiện khi cô đứng.",
+  "production_lock": "Khóa sản xuất: 24–26 tuổi, ăn diện hơn Minh Châu. Mặt giữ từ sheet trước. Da trắng sáng kiểu da Hàn. Vòng một đầy hơn một chút. Cao khoảng 175 cm, chân dài, dáng thẳng. Kịch bản không ghi chiều cao.",
+  "costumes": [
+    {
+      "id": "arrival",
+      "script": "Ngày đến: top 25 mặc áo thun sát nách.",
+      "plate": "Áo thun trắng sát nách, quần jean, giày sneaker trắng, đuôi ngựa. Quần và giày là khóa sản xuất.",
+      "file": "characters/lan-anh/lan-anh-tank.jpg"
+    },
+    {
+      "id": "swim",
+      "script": "Ngày 2 cô mở màn áo tắm, body chắc, hất tà. Lời thoại gọi vòng bikini. Giày trắng tài trợ.",
+      "plate": "Bộ thi ngà kín, váy ngắn để hất tà, viền đá, giày trắng. Bộ hai mảnh không có ảnh.",
+      "file": "characters/lan-anh/lan-anh-swim.jpg"
+    },
+    {
+      "id": "night-robe",
+      "script": "Đêm ra sảnh: áo choàng ngủ, đội nón, đi lén.",
+      "plate": "Choàng lụa champagne cột eo, nón bucket đen, giày bệt. Một mình. Không có trẻ em.",
+      "file": "characters/lan-anh/lan-anh-robe-hat.jpg"
+    },
+    {
+      "id": "hotel-robe",
+      "script": "Trong phòng trước chung kết: áo choàng khách sạn, tập catwalk. Cô cởi choàng khi mang giày mới.",
+      "plate": "Áo choàng tắm trắng của khách sạn, dép bông, đuôi ngựa. Ảnh khóa lúc choàng còn đóng.",
+      "file": "characters/lan-anh/lan-anh-hotel-robe.jpg"
+    },
+    {
+      "id": "finale",
+      "script": "Đêm chung kết: váy trắng lệch vai, giày đen đính hạt. Đế khắc ĐINH THỊ LAN ANH 22.08.1996, không hiện khi đứng.",
+      "plate": "Váy satin ngà lệch vai đính đá, đuôi ngựa, khuyên và vòng cổ, giày đen đính đá.",
+      "file": "characters/lan-anh/lan-anh-body-front.jpg"
+    }
+  ],
+  "costume_lock": "Váy satin ngà dài, lệch một vai, viền và dây đính đá. Vai còn lại để trần, vòng đá trên bắp tay trần. Tóc đen búi đuôi ngựa cao, kẹp đá. Khuyên tai giọt nước, vòng cổ tennis. Giày cao gót đen mũi nhọn đính đá. Lưng: dây đá chéo, phần lưng trên hở một khoảng, phần dưới phủ satin. Một bộ cho cả tám góc.",
+  "look": "Xinh, nóng, sang và đắt tiền. Trang phục và phụ kiện được chăm kỹ để khoe đẳng cấp. Tự tin thái quá, cười khẩy.",
+  "style": "Thích khoe giàu. Bề ngoài hào nhoáng. Bên trong ghen, đố kỵ, tính toán.",
+  "personality": "Tham vọng, thực dụng, ích kỷ. Dùng tiền để lấy thứ mình muốn. Mất tiền là điều cô sợ nhất.",
+  "foil": "Minh Châu cùng độ tuổi, váy đỏ hở lưng, khuyên ngọc, tóc ngang vai, đi vì công lý. Lan Anh váy ngà đính đá, kim cương đầy người, đi vì danh và tiền. Hai đường của người trẻ trong showbiz.",
+  "money": "Hồ sơ tâm lý: sẵn sàng chi 900 triệu để đổi đời nhanh. Trên trang kịch bản: tài khoản còn 50 nghìn, chồng nhận hơn 100 triệu, ông Bình trả 450 triệu, séc top 1 là 500 triệu, hợp đồng 3 năm được đọc thành 10 tỷ. Không vẽ cảnh đưa tiền.",
+  "views": {
+    "portrait_front": "characters/lan-anh/lan-anh-front.jpg",
+    "portrait_three_quarter_a": "characters/lan-anh/lan-anh-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/lan-anh/lan-anh-portrait-b.jpg",
+    "portrait_profile": "characters/lan-anh/lan-anh-portrait-profile.jpg",
+    "body_front": "characters/lan-anh/lan-anh-body-front.jpg",
+    "body_left": "characters/lan-anh/lan-anh-body-left.jpg",
+    "body_right": "characters/lan-anh/lan-anh-body-right.jpg",
+    "body_back": "characters/lan-anh/lan-anh-body-back.jpg"
+  },
+  "lock_en": "[CHARACTER LOCK — ĐINH THỊ LAN ANH / MISS TRENDING GLOBAL 2026]\nVietnamese woman, 24 to 26, pageant contestant SBD 012, Đồng Tháp. Same face as characters/lan-anh/lan-anh-front.jpg. Fair, bright, even, luminous Korean-luxury skin. Slightly fuller bust. Confident, slightly smug closed-mouth smile.\nWARDROBE, one state only: floor-length ivory satin one-shoulder gown, crystal strap and crystal neckline border, opposite shoulder bare with a diamond arm cuff, glossy black high ponytail with a diamond hair cuff, teardrop diamond earrings, diamond tennis choker, black crystal pointed stilettos. Upper back partly open under the diagonal crystal strap; lower back covered. No text on the shoes. Sole engraving ĐINH THỊ LAN ANH 22.08.1996 stays off standing shots.\nDO NOT MIX: swimsuit catwalk, hotel robe and hat, the night she meets her husband. No child in frame. No money handover.",
+  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao."
+}

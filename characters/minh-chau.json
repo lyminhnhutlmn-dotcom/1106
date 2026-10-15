@@ -1,0 +1,76 @@
+{
+  "id": "minh-chau",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Ngô Ngọc Minh Châu",
+  "age": "24-26",
+  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao.",
+  "sbd": "26",
+  "handle": "CHÂU NGÔ",
+  "function": "Livestreamer vào Miss Trending Global 2026 để điều tra. Đối trọng cùng tuổi với Lan Anh: một bên vì công lý, một bên vì danh và tiền.",
+  "face_lock": "Mặt trái xoan, phúc hậu, dễ nhìn. Cằm mềm, má dịu, mắt hạnh nhân nâu ấm, nhìn thông minh và kiên định. Nụ cười khép nhỏ. Da trắng sáng kiểu da Hàn. Vòng một đầy hơn một chút.",
+  "personality": "Can đảm, mưu trí, tình nghĩa, tinh thần thép. Đủ trẻ để liều vào một cuộc thi đầy thị phi, đủ trưởng thành để lập kế hoạch thâm nhập và điều tra. Có mục tiêu rõ, sẵn sàng đương đầu với nguy hiểm.",
+  "style_arc": "Lúc mới vào có thể ăn mặc như thí sinh bình thường nhưng có gu. Dần dần tự tin và có cá tính. Sau khi thoát nạn, vẻ ngoài kiên cường hơn. Ba trạng thái này không trộn trong một shot.",
+  "costume_lock": "Sheet mặc định là đêm tiệc: váy satin đỏ dài, hai dây, cổ đổ, hở lưng, giày trắng mũi nhọn, khuyên ngọc. Tóc đen ngang vai. Bảy diện bên dưới không trộn trong một shot.",
+  "costumes": [
+    {
+      "id": "home",
+      "script": "Nhà Mỹ Duyên: ăn mặc giản dị, tóc búi cao.",
+      "plate": "Áo linen xám, quần đen, giày bệt. Búi cao. Màu áo là khóa sản xuất.",
+      "file": "characters/minh-chau/minh-chau-home.jpg"
+    },
+    {
+      "id": "arrival",
+      "script": "Xuống xe: áo thun sát nách, cùng top 25.",
+      "plate": "Áo thun trắng sát nách, quần jean, giày sneaker trắng. Quần và giày là khóa sản xuất. Không chữ trên áo.",
+      "file": "characters/minh-chau/minh-chau-tank.jpg"
+    },
+    {
+      "id": "gala",
+      "script": "Đêm tiệc: váy đỏ hở lưng, giày trắng.",
+      "plate": "Váy satin đỏ, cổ đổ, hở lưng, khuyên ngọc, giày trắng mũi nhọn.",
+      "file": "characters/minh-chau/minh-chau-body-front.jpg"
+    },
+    {
+      "id": "swim",
+      "script": "Ngày 2: trang phục áo tắm. Lời thoại gọi vòng đó là bikini. Giày trắng của nhà tài trợ.",
+      "plate": "Ảnh là bộ thi đen kín, có váy ngắn, giày trắng. Bộ hai mảnh không có ảnh.",
+      "file": "characters/minh-chau/minh-chau-swimsuit.jpg"
+    },
+    {
+      "id": "jacket",
+      "script": "Đêm 21:50: mặc vội áo khoác rồi lên taxi.",
+      "plate": "Áo khoác đen, áo trong đen, quần jean, giày đen. Lớp trong là khóa sản xuất.",
+      "file": "characters/minh-chau/minh-chau-jacket.jpg"
+    },
+    {
+      "id": "blue",
+      "script": "Đêm chung kết: đầm xanh, tóc che mặt, rồi lộ ra là Minh Châu. Đạo cụ có váy xanh và tóc giả.",
+      "plate": "Váy satin xanh cổ thẳng, tóc dài, giày trắng đính đá. Mặt vẫn là Minh Châu.",
+      "file": "characters/minh-chau/minh-chau-blue.jpg"
+    },
+    {
+      "id": "school",
+      "script": "Ảnh cũ: Minh Châu, Mỹ Duyên và Quân trong trang phục học sinh.",
+      "plate": "Áo dài trắng học sinh, quần trắng, tóc buộc thấp. Ảnh lớp 12A3 không dùng vì lệch năm sinh.",
+      "file": "characters/minh-chau/minh-chau-school.jpg"
+    }
+  ],
+  "relations": {
+    "my_duyen": "Hồ sơ sản xuất khóa bạn thân, cùng thế hệ: Mỹ Duyên 23–25, Minh Châu 24–26. Đế giày Mỹ Duyên vẫn khắc 13.09.2002. Cái chết của Mỹ Duyên là động lực. Kịch bản gọi Minh Châu là chị họ. Ảnh lớp 12A3 không dùng, vì lệch năm sinh.",
+    "james": "James khóa 40 tuổi trên sheet của anh. Tương phản quyền lực và tuổi: người đàn ông dày dạn đối đầu một phụ nữ trẻ thông minh.",
+    "quan": "Quân cùng độ tuổi, bạn thân. Tin nhau và hỗ trợ nhau.",
+    "lan_anh": "Cùng khóa 24–26. Lan Anh khoe giàu, váy ngà đính đá. Minh Châu váy đỏ, mặt phúc hậu, đi vì công lý."
+  },
+  "views": {
+    "portrait_front": "characters/minh-chau/minh-chau-front.jpg",
+    "portrait_three_quarter_a": "characters/minh-chau/minh-chau-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/minh-chau/minh-chau-portrait-b.jpg",
+    "portrait_profile": "characters/minh-chau/minh-chau-portrait-profile.jpg",
+    "body_front": "characters/minh-chau/minh-chau-body-front.jpg",
+    "body_left": "characters/minh-chau/minh-chau-body-left.jpg",
+    "body_right": "characters/minh-chau/minh-chau-body-right.jpg",
+    "body_back": "characters/minh-chau/minh-chau-body-back.jpg"
+  },
+  "lock_en": "[CHARACTER LOCK — NGÔ NGỌC MINH CHÂU / CHÂU NGÔ / SBD 26]\nVietnamese woman, 24 to 26. Soft oval face, kind and easy to look at, rounded chin, gentle cheeks, warm almond dark-brown eyes, intelligent steady gaze, small closed smile. Fair, bright, luminous Korean-luxury skin. Slightly fuller bust.\nDEFAULT WARDROBE, gala night only: floor-length deep red satin, thin straps, cowl neck, open back, white pointed stilettos, small pearl studs. Jet-black hair just below the shoulders, side part, worn down. No text on clothing.\nDO NOT MIX: home bun, the blue dress she wears as Mỹ Duyên, a plain early-contestant outfit, or the harder look after she escapes."
+}

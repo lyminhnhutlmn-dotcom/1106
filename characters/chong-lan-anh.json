@@ -1,0 +1,28 @@
+{
+  "id": "chong-lan-anh",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Chồng Lan Anh",
+  "function": "Chồng cờ bạc của Lan Anh. Sheet khóa một mình, bộ dạng nhếch nhác. Không có trẻ em trong khung.",
+  "script_lock": "Bộ dạng nhếch nhác. Kịch bản không ghi tên và tuổi.",
+  "costume_lock": "Áo thun xám bạc màu, quần jean sẫm, giày sneaker mòn. Tóc rối, râu lún phún. Một mình. Tuổi ngoài ba mươi là khóa sản xuất.",
+  "views": {
+    "portrait_front": "characters/chong-lan-anh/chong-lan-anh-front.jpg",
+    "portrait_three_quarter_a": "characters/chong-lan-anh/chong-lan-anh-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/chong-lan-anh/chong-lan-anh-portrait-b.jpg",
+    "portrait_profile": "characters/chong-lan-anh/chong-lan-anh-portrait-profile.jpg",
+    "body_front": "characters/chong-lan-anh/chong-lan-anh-body-front.jpg",
+    "body_left": "characters/chong-lan-anh/chong-lan-anh-body-left.jpg",
+    "body_right": "characters/chong-lan-anh/chong-lan-anh-body-right.jpg",
+    "body_back": "characters/chong-lan-anh/chong-lan-anh-body-back.jpg"
+  },
+  "costumes": [
+    {
+      "id": "home",
+      "script": "Bộ dạng nhếch nhác. Kịch bản không ghi tên và tuổi.",
+      "plate": "Áo thun xám, quần jean, tóc rối. Một mình.",
+      "file": "characters/chong-lan-anh/chong-lan-anh-body-front.jpg"
+    }
+  ],
+  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao."
+}

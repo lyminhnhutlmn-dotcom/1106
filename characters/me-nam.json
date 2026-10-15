@@ -1,0 +1,23 @@
+{
+  "id": "me-nam",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Mẹ Nam",
+  "function": "Mẹ của Nam. Sheet là chân dung sống, đứng, bình tĩnh.",
+  "script_lock": "Mẹ Nam ngủ say, Nam nắm tay bà. Kịch bản không ghi tên, tuổi, và không mô tả áo.",
+  "costume_lock": "Áo blouse xanh xám, quần than, giày bệt đen. Màu là khóa sản xuất. Tuổi cuối ngũ tuần là khóa sản xuất. Da tự nhiên, tóc có sợi bạc, búi thấp.",
+  "views": {
+    "portrait_front": "characters/me-nam/me-nam-front.jpg",
+    "body_front": "characters/me-nam/me-nam-body-front.jpg"
+  },
+  "costumes": [
+    {
+      "id": "living",
+      "script": "Ngủ say, Nam nắm tay. Không mô tả áo.",
+      "plate": "Blouse xanh xám, đứng, tay không. Không giường, không ống.",
+      "file": "characters/me-nam/me-nam-body-front.jpg"
+    }
+  ],
+  "height": "Đầu khớp với thân, khoảng 7,5 đầu. Vai khoảng hai bề ngang đầu, hông gần bằng vai, cổ và chân dài vừa. Kịch bản không ghi chiều cao.",
+  "not_imaged": "Không vẽ giường bệnh, ống truyền, hay cảnh nằm."
+}

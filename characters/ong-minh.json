@@ -1,0 +1,29 @@
+{
+  "id": "ong-minh",
+  "project": "Vương Miện Máu",
+  "draft": "10 — 24DEC2025",
+  "title": "Ông Minh",
+  "function": "Khách vòng phong hậu, ngồi ban giám khảo. Sheet khóa vest tối. Không dựng lại đêm Mỹ Duyên phản kháng.",
+  "comedy_action": "Ghế xếp cắn ngón một cái rồi bật ra. Cười, xua vợt quạt, ngồi xuống.",
+  "script_lock": "Mặc vest. Có vết trên trán từ đêm Mỹ Duyên phản kháng. Kịch bản không ghi tuổi.",
+  "costume_lock": "Vest than, sơ mi trắng, cà vạt xanh navy, giày tây đen. Tóc hớt mái, mặt rộng, không cười. Vết trán nhỏ, đã lành, không máu. Tuổi đứng tuổi là khóa sản xuất.",
+  "views": {
+    "portrait_front": "characters/ong-minh/ong-minh-front.jpg",
+    "portrait_three_quarter_a": "characters/ong-minh/ong-minh-portrait-a.jpg",
+    "portrait_three_quarter_b": "characters/ong-minh/ong-minh-portrait-b.jpg",
+    "portrait_profile": "characters/ong-minh/ong-minh-portrait-profile.jpg",
+    "body_front": "characters/ong-minh/ong-minh-body-front.jpg",
+    "body_left": "characters/ong-minh/ong-minh-body-left.jpg",
+    "body_right": "characters/ong-minh/ong-minh-body-right.jpg",
+    "body_back": "characters/ong-minh/ong-minh-body-back.jpg"
+  },
+  "costumes": [
+    {
+      "id": "suit",
+      "script": "Mặc vest. Có vết trên trán.",
+      "plate": "Vest than, cà vạt navy. Không có ảnh cảnh cởi áo.",
+      "file": "characters/ong-minh/ong-minh-body-front.jpg"
+    }
+  ],
+  "height": "Tỷ lệ khoảng 8 đầu: đầu nhỏ, cổ dài, chân dài, dáng thẳng. Ảnh toàn thân dựng lại theo tỷ lệ này. Kịch bản không ghi chiều cao."
+}
